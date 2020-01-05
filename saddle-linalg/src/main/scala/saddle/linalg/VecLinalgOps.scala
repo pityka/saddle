@@ -17,8 +17,9 @@ package org.saddle.linalg
 
 import org.saddle.Vec
 import NetLib._
+import org.saddle.vec.VecDefault
 
-class VecPimp(val self: Vec[Double]) {
+final class VecPimp(val self: Vec[Double]) {
   type B = Vec[Double]
 
   def linalg = this
@@ -30,6 +31,32 @@ class VecPimp(val self: Vec[Double]) {
     assert(a.length > 0)
     BLAS.ddot(a.length, a.toArray, 1, b.toArray, 1)
 
+  }
+  def vv2(other: Vec[Double]): Double = {
+    if (other.isInstanceOf[VecDefault[Double]] && self
+          .isInstanceOf[VecDefault[Double]])
+      vv_spec(other.asInstanceOf[VecDefault[Double]])
+    else {
+      var i = 0
+      var s = 0d
+      val N = self.length
+      while (i < N) {
+        s += self.raw(i) * other.raw(i)
+        i += 1
+      }
+      s
+    }
+  }
+  private def vv_spec(other: VecDefault[Double]): Double = {
+    var i = 0
+    var s = 0d
+    val N = self.length
+    val selfD = self.asInstanceOf[VecDefault[Double]]
+    while (i < N) {
+      s += selfD.raw(i) * other.raw(i)
+      i += 1
+    }
+    s
   }
 
 }

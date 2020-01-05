@@ -6,7 +6,7 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
     "-opt:l:method",
     "-opt:l:inline",
-    "-opt-inline-from:org.saddle.**",
+    "-opt-inline-from:**",
     "-opt-warnings",
     "-deprecation", // Emit warning and location for usages of deprecated APIs.
     "-encoding",
@@ -107,7 +107,7 @@ lazy val bench =
     .in(file("saddle-jmh"))
     .settings(commonSettings: _*)
     .settings(skip in publish := true)
-    .dependsOn(core, inlinedOps)
+    .dependsOn(core, inlinedOps, linalg)
     .enablePlugins(JmhPlugin)
 
 lazy val time = project

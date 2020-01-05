@@ -23,11 +23,72 @@ import org.saddle.index.Slice
 import org.saddle.index.IndexIntRange
 import java.io.OutputStream
 
-class VecDefault[@spec(Boolean, Int, Long, Double) T](
-    values: Array[T],
+final class VecDefault[@spec(Boolean, Int, Long, Double) T](
+    val values: Array[T],
     val scalarTag: ST[T]
-) extends NumericOps[Vec[T]]
+) extends Vec1[T] {
+
+  /**
+    * The number of elements in the container                                                  F
+    */
+  @inline def length = values.length
+
+  /**
+    * Access an unboxed element of a Vec[A] at a single location
+    * @param loc offset into Vec
+    */
+  @inline def raw(loc: Int): T = values(loc)
+
+  @inline def update(offset: Int, value: T) =
+    if (needsCopy) throw new RuntimeException("Update not implemented")
+    else {
+      values(offset) = value
+    }
+
+}
+
+final class VecSlice[@spec(Boolean, Int, Long, Double) T](
+    self: Vec1[T],
+    e: Int,
+    b: Int,
+    stride: Int
+) extends Vec1[T] {
+  val values: Array[T] = self.values
+  val scalarTag: ST[T] = self.scalarTag
+  private val ub = math.min(self.length, e)
+
+  @inline def length =
+    org.saddle.util.dividePositiveRoundUp(ub - b, stride)
+
+  @inline def raw(i: Int): T = {
+    val loc = b + i * stride
+    if (loc >= ub)
+      throw new ArrayIndexOutOfBoundsException(
+        "Cannot access location %d >= length %d".format(loc, ub)
+      )
+    self.raw(loc)
+  }
+
+  @inline override def needsCopy = true
+
+  @inline def update(offset: Int, value: T) = {
+    val loc = b + offset * stride
+    if (loc >= ub)
+      throw new ArrayIndexOutOfBoundsException(
+        "Cannot access location %d >= length %d".format(loc, ub)
+      )
+    self.update(loc, value)
+  }
+
+}
+
+trait Vec1[@spec(Boolean, Int, Long, Double) T]
+    extends NumericOps[Vec[T]]
     with Vec[T] { self =>
+
+  def values: Array[T]
+  def scalarTag: ST[T]
+
   implicit private[this] def st: ST[T] = scalarTag
 
   /**
@@ -36,17 +97,6 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     * false iff 0 until length map raw toArray structurally equals the backing array
     */
   override def needsCopy: Boolean = false
-
-  /**
-    * The number of elements in the container                                                  F
-    */
-  def length = values.length
-
-  /**
-    * Access an unboxed element of a Vec[A] at a single location
-    * @param loc offset into Vec
-    */
-  def raw(loc: Int): T = values(loc)
 
   /** Returns an array containing the elements of this Vec in contiguous order
     *
@@ -228,34 +278,8 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     val e = math.min(until, self.length)
 
     if (e <= b) Vec.empty
-    else
-      new VecDefault(values, scalarTag) {
-        private val ub = math.min(self.length, e)
+    else new VecSlice(self, e = e, b = b, stride = stride)
 
-        override def length =
-          org.saddle.util.dividePositiveRoundUp(ub - b, stride)
-
-        override def raw(i: Int): T = {
-          val loc = b + i * stride
-          if (loc >= ub)
-            throw new ArrayIndexOutOfBoundsException(
-              "Cannot access location %d >= length %d".format(loc, ub)
-            )
-          self.raw(loc)
-        }
-
-        override def needsCopy = true
-
-        override def update(offset: Int, value: T) = {
-          val loc = b + offset * stride
-          if (loc >= ub)
-            throw new ArrayIndexOutOfBoundsException(
-              "Cannot access location %d >= length %d".format(loc, ub)
-            )
-          self.update(loc, value)
-        }
-
-      }
   }
 
   /**
@@ -272,7 +296,9 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     val b = -m
     val e = self.length - m
 
-    new VecDefault(values, scalarTag) {
+    new Vec1[T] {
+      val values = self.values
+      val scalarTag = self.scalarTag
       override def length = self.length
 
       override def raw(i: Int): T = {
@@ -870,12 +896,6 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     * Returns a Vec with the last `i` elements removed
     */
   def dropRight(i: Int) = take(array.range(0, math.max(0, length - i)))
-
-  def update(offset: Int, value: T) =
-    if (needsCopy) throw new RuntimeException("Update not implemented")
-    else {
-      values(offset) = value
-    }
 
   def update(slice: Slice[Int], value: T) = {
     val (from, until) = slice(IndexIntRange(length))
