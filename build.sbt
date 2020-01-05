@@ -6,7 +6,7 @@ lazy val commonSettings = Seq(
   scalacOptions ++= Seq(
     "-opt:l:method",
     "-opt:l:inline",
-    "-opt-inline-from:**",
+    "-opt-inline-from:org.saddle.**",
     "-opt-warnings",
     "-deprecation", // Emit warning and location for usages of deprecated APIs.
     "-encoding",
