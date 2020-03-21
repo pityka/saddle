@@ -1,7 +1,7 @@
 lazy val scalaTestVersion = "3.1.1"
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.10",
+  scalaVersion := "2.12.11",
   parallelExecution in Test := false,
   scalacOptions ++= Seq(
     "-opt:l:method",
