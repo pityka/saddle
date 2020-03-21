@@ -45,11 +45,12 @@ Slicing:
 ```scala mdoc:reset
 import org.saddle._
 import org.saddle.ops.BinOps._
-Vec(1,2,3).at(2)
+Vec(1,2,3).at(2) // Boxes and keeps NA
 Vec(1,2,3).raw(2)  
-Vec(1,2,3).apply(0,2)
-Vec(1,2,3).apply(1 -> *)
-Vec(1,2,3).apply(* -> 1)
+Vec(1,2,3).apply(2) // same as raw
+Vec(1,2,3).take(0,2)
+Vec(1,2,3).take(1 -> *)
+Vec(1,2,3).take(* -> 1)
 ```
 
 ### 1D vector with index: Series[K,V]
