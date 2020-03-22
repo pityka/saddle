@@ -23,11 +23,14 @@ import org.scalacheck.Prop._
 import org.saddle.framework._
 import org.saddle.scalar.{ScalarTagLong => stL, ScalarTagInt => stI}
 import org.saddle.ops.BinOps._
+import org.specs2.scalacheck.Parameters
 
 /**
   * Test Mat
   */
 class MatCheck extends Specification with ScalaCheck {
+
+  implicit val params = Parameters(minTestsOk = 20)
 
   "Elementwise matrix operations with scalar (D,D) => B" in {
     "op < works" in {
