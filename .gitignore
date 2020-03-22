@@ -4,6 +4,7 @@
 saddle.sublime-workspace
 project/target/
 target/
+targetJS/
 !*api*
 .metals/
 .bloop/

@@ -18,35 +18,11 @@ package org.saddle.csv
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
 import org.saddle.{Index, Vec, Frame, na, ST}
-import java.nio.charset.Charset
 
 class CsvCheck extends Specification with ScalaCheck {
   val crlf = "\r\n"
   val lf = "\n"
-  "file reading works" in {
-    val tmp = java.io.File.createTempFile("test", "test")
-    val os = new java.io.FileOutputStream(tmp)
-    val text = "abcdefgh"
-    os.write(text.getBytes("US-ASCII"))
-    os.close
-    val text2 = CsvParser
-      .readFile(tmp, bufferSize = 2)
-      .map(_.toString)
-      .mkString
-    text must_== text2
-  }
-  "file reading works, utf16" in {
-    val tmp = java.io.File.createTempFile("test", "test")
-    val os = new java.io.FileOutputStream(tmp)
-    val text = "abcdefgh…πœ"
-    os.write(text.getBytes("UTF-16"))
-    os.close
-    val text2 = CsvParser
-      .readFile(tmp, bufferSize = 2, Charset.forName("UTF-16"))
-      .map(_.toString)
-      .mkString
-    text must_== text2
-  }
+
   "csv string parsing and writing works" in {
 
     val expect = Frame(

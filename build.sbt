@@ -85,11 +85,29 @@ lazy val core = project
     name := "saddle-core",
     libraryDependencies ++= Seq(
       "org.typelevel" %% "spire" % "0.17.0-M1",
-      "org.apache.commons" % "commons-math" % "2.2" % "test",
       "org.specs2" %% "specs2-core" % "4.9.2" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.9.2" % "test"
     )
   )
+
+lazy val coreJVMTests = project
+  .in(file("saddle-core-jvm-test"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "saddle-core-jvm-test",
+    publishArtifact := false,
+    skip in publish := true
+  )
+  .settings(
+    libraryDependencies ++= Seq(
+      "org.typelevel" %% "spire" % "0.17.0-M1",
+      "org.specs2" %% "specs2-core" % "4.9.2" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.9.2" % "test",
+      "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
+    )
+  )
+  .dependsOn(core, binary)
+
 lazy val inlinedOps = project
   .in(file("saddle-ops-inlined"))
   .settings(commonSettings: _*)
@@ -175,6 +193,49 @@ lazy val circe = project
   )
   .dependsOn(core)
 
+lazy val coreJS = project
+  .in(file("saddle-core"))
+  .settings(commonSettings)
+  .settings(
+    name := "saddle-core",
+    target := file("saddle-core/targetJS"),
+    fork := false,
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "spire" % "0.17.0-M1",
+      "org.specs2" %%% "specs2-core" % "4.8.3" % "test",
+      "org.specs2" %%% "specs2-scalacheck" % "4.8.3" % "test"
+    )
+  )
+  .enablePlugins(ScalaJSPlugin)
+
+lazy val binaryJS = project
+  .in(file("saddle-binary"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "saddle-binary",
+    libraryDependencies ++= Seq(
+      "com.lihaoyi" %%% "ujson" % "1.0.0",
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+    )
+  )
+  .settings(target := file("saddle-binary/targetJS"), fork := false)
+  .dependsOn(coreJS)
+  .enablePlugins(ScalaJSPlugin)
+
+lazy val circeJS = project
+  .in(file("saddle-circe"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "saddle-circe",
+    libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-core" % "0.13.0",
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+    )
+  )
+  .settings(target := file("saddle-circe/targetJS"), fork := false)
+  .dependsOn(coreJS)
+  .enablePlugins(ScalaJSPlugin)
+
 lazy val docs = project
   .in(file("saddle-docs"))
   .dependsOn(core, linalg, circe, binary)
@@ -197,6 +258,19 @@ lazy val root = (project in file("."))
   .settings(
     git.remoteRepo := ""
   )
-  .aggregate(core, time, stats, linalg, binary, circe, docs, inlinedOps)
+  .aggregate(
+    core,
+    coreJVMTests,
+    time,
+    stats,
+    linalg,
+    binary,
+    circe,
+    docs,
+    inlinedOps,
+    coreJS,
+    binaryJS,
+    circeJS
+  )
 
 parallelExecution in ThisBuild := false

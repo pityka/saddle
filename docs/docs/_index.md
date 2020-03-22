@@ -19,4 +19,5 @@ Major changes in this fork:
 - Addition of `saddle-linalg`, an interface to native BLAS (thanks to netlib-java)
 - Revised core APIs (e.g. no implicit conversions)
 - Artifacts are published under io.github.pityka organization name
+- Scala-js artifacts
 

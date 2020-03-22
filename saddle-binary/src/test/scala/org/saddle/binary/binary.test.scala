@@ -99,39 +99,39 @@ class BinarySuite extends AnyFunSuite {
     val deser = Reader.readFrameFromArray[Double](binary)
     assert(deser.right.get == frame)
   }
-  test("frame into file") {
-    val frame = Frame(
-      Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)).map(_.toLong),
-      Index("r1", "r2"),
-      Index("c1", "c2", "c3")
-    )
-    val file = java.io.File.createTempFile("saddletest", "saddle")
-    val os = new java.io.FileOutputStream(file)
-    val writableChannel = os.getChannel
-    Writer.writeFrameIntoChannel(frame, writableChannel).right.get
-    writableChannel.close
-    val is = new java.io.FileInputStream(file)
-    val readableChannel = is.getChannel
-    val deserFrame = Reader.readFrameFromChannel[Long](readableChannel)
-    readableChannel.close
-    assert(deserFrame.right.get == frame)
-  }
-  test("mat into file") {
-    val frame = Frame(
-      Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)).map(_.toLong),
-      Index("r1", "r2"),
-      Index("c1", "c2", "c3")
-    )
-    val file = java.io.File.createTempFile("saddletest", "saddle")
-    val os = new java.io.FileOutputStream(file)
-    val writableChannel = os.getChannel
-    Writer.writeMatIntoChannel(frame.toMat, writableChannel).right.get
-    writableChannel.close
-    val is = new java.io.FileInputStream(file)
-    val readableChannel = is.getChannel
-    val deser = Reader.readMatFromChannel[Long](readableChannel)
-    readableChannel.close
-    assert(deser.right.get == frame.toMat)
-  }
+  // test("frame into file") {
+  //   val frame = Frame(
+  //     Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)).map(_.toLong),
+  //     Index("r1", "r2"),
+  //     Index("c1", "c2", "c3")
+  //   )
+  //   val file = java.io.File.createTempFile("saddletest", "saddle")
+  //   val os = new java.io.FileOutputStream(file)
+  //   val writableChannel = os.getChannel
+  //   Writer.writeFrameIntoChannel(frame, writableChannel).right.get
+  //   writableChannel.close
+  //   val is = new java.io.FileInputStream(file)
+  //   val readableChannel = is.getChannel
+  //   val deserFrame = Reader.readFrameFromChannel[Long](readableChannel)
+  //   readableChannel.close
+  //   assert(deserFrame.right.get == frame)
+  // }
+  // test("mat into file") {
+  //   val frame = Frame(
+  //     Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)).map(_.toLong),
+  //     Index("r1", "r2"),
+  //     Index("c1", "c2", "c3")
+  //   )
+  //   val file = java.io.File.createTempFile("saddletest", "saddle")
+  //   val os = new java.io.FileOutputStream(file)
+  //   val writableChannel = os.getChannel
+  //   Writer.writeMatIntoChannel(frame.toMat, writableChannel).right.get
+  //   writableChannel.close
+  //   val is = new java.io.FileInputStream(file)
+  //   val readableChannel = is.getChannel
+  //   val deser = Reader.readMatFromChannel[Long](readableChannel)
+  //   readableChannel.close
+  //   assert(deser.right.get == frame.toMat)
+  // }
 
 }
