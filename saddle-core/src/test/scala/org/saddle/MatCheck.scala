@@ -20,7 +20,6 @@ import org.specs2.mutable.Specification
 import org.specs2.ScalaCheck
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Prop._
-import org.saddle.array._
 import org.saddle.framework._
 import org.saddle.scalar.{ScalarTagLong => stL, ScalarTagInt => stI}
 import org.saddle.ops.BinOps._
@@ -963,16 +962,27 @@ class MatCheck extends Specification with ScalaCheck {
 
     "cov works" in {
       forAll { (ma: Mat[Double]) =>
-        import org.apache.commons.math.stat.correlation.Covariance
-
         if (ma.numRows < 2 || ma.numCols < 2) {
           MatMath.cov(ma) must throwAn[IllegalArgumentException]
         } else {
-          val aCov = new Covariance(ma.rows().map(_.toArray).toArray)
-          val exp = aCov.getCovarianceMatrix
-          val res = MatMath.cov(ma).contents
 
-          Vec(res) must BeCloseToVec(Vec(flatten(exp.getData)), 1e-9)
+          val exp = {
+            val m = mat.zeros(ma.numCols, ma.numCols)
+            for {
+              i <- 0 until m.numRows
+              j <- 0 until m.numCols
+            } {
+              m(i, j) = ma
+                .col(i)
+                .demeaned
+                .zipMap(ma.col(j).demeaned)(_ * _)
+                .sum * 1d / (ma.numRows - 1)
+            }
+            m
+          }
+          val res = MatMath.cov(ma)
+
+          res.toVec must BeCloseToVec(exp.toVec, 1e-9)
         }
       }
     }
