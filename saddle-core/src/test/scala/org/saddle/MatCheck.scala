@@ -768,6 +768,25 @@ class MatCheck extends Specification with ScalaCheck {
       }
     }
 
+    "row by SliceDefault works" in {
+      forAll { (m: Mat[Double]) =>
+        (m.numRows > 0) ==> {
+          val idx = Gen.listOfN(3, Gen.choose[Int](0, m.numRows - 1))
+          forAll(idx) { i1 =>
+            if (i1.nonEmpty) {
+              val i2 = i1.distinct.sorted
+              val a = i2.head
+              val b = i2.last
+              val i = a to b toList
+              val res = m.row(a -> b)
+              res.numRows must_== i.size
+              val exp = for (j <- i) yield m.row(j)
+              res must_== Mat(exp: _*).T
+            } else true must_== true
+          }
+        }
+      }
+    }
     "takeRows works" in {
       forAll { (m: Mat[Double]) =>
         (m.numRows > 0) ==> {

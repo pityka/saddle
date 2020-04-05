@@ -101,6 +101,21 @@ class FrameCheck extends Specification with ScalaCheck {
 
       }
     }
+    "row SliceDefault" in {
+      forAll { (f: Frame[Int, Int, Double], a: Int, b: Int) =>
+        val min = math.min(math.max(0, if (a < b) a else b), f.numRows)
+        val max = math.min(math.max(0, if (a < b) b else a), f.numRows)
+        val rx = min to max toSeq
+
+        (f.row(min -> max).rowIx must_== rx
+          .flatMap(c => f.toRowSeq.find(v => v._1 == c))
+          .toFrame
+          .T
+          .rowIx) and
+          (f.row(rx: _*).colIx must_== f.colIx)
+
+      }
+    }
     "colAt" in {
       forAll { (f: Frame[Int, Int, Double], cx: Seq[Int]) =>
         f.colAt(cx.filter(c => c >= 0 && c < f.numCols): _*) must_== cx
@@ -159,9 +174,7 @@ class FrameCheck extends Specification with ScalaCheck {
     "frame sortedRowsBy" in {
       forAll { (f: Frame[Int, Int, Double]) =>
         if (f.numCols > 0) {
-          val res = f.sortedRowsBy { x =>
-            x.at(0)
-          }
+          val res = f.sortedRowsBy { x => x.at(0) }
           val ord = array.argsort(f.colAt(0).toVec)
           val exp = f.rowAt(ord)
           res must_== exp

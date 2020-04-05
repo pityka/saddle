@@ -374,7 +374,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     * @param slice a slice specifier
     */
   def row(slice: Slice[Int]): Mat[T] = {
-    val (a, b) = slice(IndexIntRange(numCols))
+    val (a, b) = slice(IndexIntRange(numRows))
     takeRows(a until b toArray)
   }
 
