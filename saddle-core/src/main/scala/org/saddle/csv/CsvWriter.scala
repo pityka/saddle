@@ -134,7 +134,8 @@ object CsvWriter {
       if (settings.useQuote)
         seq.map { s =>
           if (s.contains(separ)) "%s%s%s".format(quote, s, quote) else s
-        } else
+        }
+      else
         seq
     }
 
@@ -169,7 +170,7 @@ object CsvWriter {
 
     def writeRows(rsm: ScalarTag[RX]) = {
       // now write each row of the frame
-      frame.toRowSeq.foreach {
+      frame.rowIterator.foreach {
         case (ridx, row) =>
           stream write {
             val seq =

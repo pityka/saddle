@@ -983,7 +983,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     val reindexer = colIx.join(other.colIx, how)
 
     val left = reindexer.lTake.map(x => values.take(x)) getOrElse values
-    val right = reindexer.rTake.map(x => other.values.take(x)) getOrElse other.values
+    val right =
+      reindexer.rTake.map(x => other.values.take(x)) getOrElse other.values
 
     val data = (left zip right).map { case (top, bot) => top concat bot }
     val rowIdx = rowIx concat other.rowIx
@@ -1060,9 +1061,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       windowSize: Int,
       f: Series[RX, T] => B
   ): Frame[RX, CX, B] = {
-    val tmp = values.map { v =>
-      Series(v, rowIx).rolling(windowSize, f).values
-    }
+    val tmp = values.map { v => Series(v, rowIx).rolling(windowSize, f).values }
     Frame(tmp, rowIx.slice(windowSize - 1, values.numRows), colIx)
   }
 
@@ -1361,9 +1360,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * See mapVec; operates row-wise
     */
   def rmapVec[U: ST](f: Vec[T] => Vec[U]): Frame[RX, CX, U] = {
-    val vecs = 0 until numRows map { i =>
-      f(values.rowAt(i))
-    }
+    val vecs = 0 until numRows map { i => f(values.rowAt(i)) }
 
     Frame(vecs, colIx, rowIx).T
   }
@@ -1372,9 +1369,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * See reduce; operates row-wise
     */
   def rreduce[U: ST](f: Series[CX, T] => U): Series[RX, U] = {
-    val vec = 0 until numRows map { i =>
-      f(Series(values.rowAt(i), colIx))
-    } toVec
+    val vec = 0 until numRows map { i => f(Series(values.rowAt(i), colIx)) } toVec
 
     Series(vec, rowIx)
   }
@@ -1405,7 +1400,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     val reindexer = rowIx.join(other.rowIx, how)
 
     val left = reindexer.lTake.map(x => values.takeRows(x)) getOrElse values
-    val right = reindexer.rTake.map(x => other.values.takeRows(x)) getOrElse other.values
+    val right =
+      reindexer.rTake.map(x => other.values.takeRows(x)) getOrElse other.values
 
     val data = left ++ right
     val colIdx = colIx concat other.colIx
@@ -1541,6 +1537,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     */
   def toRowSeq: IndexedSeq[(RX, Series[CX, T])] =
     for (i <- array.range(0, numRows)) yield (rowIx.raw(i), rowAt(i))
+
+  def rowIterator: Iterator[(RX, Series[CX, T])] =
+    for (i <- (0 until numRows).iterator) yield (rowIx.raw(i), rowAt(i))
 
   /**
     * Produce an indexed sequence of pairs of column index value and
