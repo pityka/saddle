@@ -23,6 +23,14 @@ class CsvCheck extends Specification with ScalaCheck {
   val crlf = "\r\n"
   val lf = "\n"
 
+  "csv writer with composite index" in {
+
+    new String(
+      CsvWriter.writeFrameToArray(Frame("a" -> Series(("a", "b") -> 1)))
+    ) must_== s""",,a${crlf}a,b,1${crlf}"""
+
+  }
+
   "csv with many empty fields" in {
     val data =
       s"""a,b,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o"""

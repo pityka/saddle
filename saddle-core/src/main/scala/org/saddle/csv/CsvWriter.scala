@@ -180,7 +180,7 @@ object CsvWriter {
               if (!withRowIx)
                 row.values.toSeq.map(stT.asString)
               else
-                List(rsm.asString(ridx)) ++: row.values.toSeq.map(stT.asString)
+                rsm.strList(ridx) ++: row.values.toSeq.map(stT.asString)
 
             quotify(seq).mkString(separ).getBytes(settings.encoding)
           }
