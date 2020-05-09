@@ -207,8 +207,8 @@ object CsvParser {
       recordSeparator: String = "\r\n",
       maxLines: Long = Long.MaxValue,
       header: Boolean = false
-  )(
-      implicit st: ST[T]
+  )(implicit
+      st: ST[T]
   ): Either[String, (Frame[Int, Int, T], Option[Index[String]])] =
     if (fieldSeparator == quoteChar)
       Left("Separator character and quote character cannot be the same")
@@ -249,10 +249,11 @@ object CsvParser {
         if (locs.length == 0) locs = (0 until firstLine.length).toArray
 
         // set up buffers to store parsed data
-        val bufdata = for { _ <- locs } yield new Buffer[T](
-          Array.ofDim[T](1024),
-          0
-        )
+        val bufdata =
+          for { _ <- locs } yield new Buffer[T](
+            Array.ofDim[T](1024),
+            0
+          )
 
         def addToBuffer(s: String, buf: Int) = {
           import scala.Predef.{wrapRefArray => _}
