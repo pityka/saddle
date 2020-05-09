@@ -23,6 +23,31 @@ class CsvCheck extends Specification with ScalaCheck {
   val crlf = "\r\n"
   val lf = "\n"
 
+  "csv with many empty fields" in {
+    val data =
+      s"""a,b,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o"""
+
+    val src = scala.io.Source.fromString(data)
+    val frame =
+      CsvParser
+        .parseSource[String](src, bufferSize = 2)
+        .right
+        .get
+    frame.colAt(0) must_== Series("a", "", "")
+  }
+  "csv with many empty fields LF" in {
+    val data =
+      s"""a,b,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,${lf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o${lf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o"""
+
+    val src = scala.io.Source.fromString(data)
+    val frame =
+      CsvParser
+        .parseSource[String](src, bufferSize = 2, recordSeparator = lf)
+        .right
+        .get
+    frame.colAt(0) must_== Series("a", "", "")
+  }
+
   "csv write string NAs (represented as nulls) " in {
     val expect = Frame("abc" -> Series("a", null, "b"))
     val parsedBack = CsvParser

@@ -372,6 +372,7 @@ object CsvParser {
       val chr = data.next
       if (state == 0) { // init
         if (chr == separChar) {
+          open(0)
           emit(1)
           close()
           openNext()
@@ -380,6 +381,7 @@ object CsvParser {
           open(0)
         } else if (chr == CR) {
           if (singleRecordSeparator) {
+            open(0)
             emit(1)
             close()
             newline()
