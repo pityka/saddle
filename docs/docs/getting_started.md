@@ -24,7 +24,7 @@ libraryDependencies += "io.github.pityka" % "saddle-stats" % "@VERSION@"
 ### Dependencies
 The actively maintained artifacts have minimal dependencies:
 
-- `saddle-core` depends on [spire](https://github.com/typelevel/spire), thereby transitively on cats-2
+- `saddle-core` depends on [cats-kernel](https://github.com/typelevel/cats)
 - `saddle-linalg` depends on [netlib-java](https://github.com/fommil/netlib-java)
 - `saddle-binary` depends on [ujson](http://www.lihaoyi.com/upickle/)
 - `saddle-circe` depends on [circe](https://github.com/circe/circe)

@@ -61,7 +61,7 @@ package object saddle {
   /**
     * Shorthand for numeric typeclass
     */
-  type NUM[C] = spire.math.Numeric[C]
+  type NUM[C] = org.saddle.Numeric[C]
 
   /**
     * Shorthand for class manifest typeclass
@@ -72,6 +72,12 @@ package object saddle {
     * Shorthand for scalar tag typeclass
     */
   type ST[C] = ScalarTag[C]
+
+  // *********************
+  implicit val doubleOrd = doubleIsNumeric
+  implicit val floatOrd = floatIsNumeric
+  implicit val intOrd = intIsNumeric
+  implicit val longOrd = longIsNumeric
 
   // **********************
 
@@ -296,10 +302,11 @@ package object saddle {
   implicit class OptionToScalar[
       @specialized(Boolean, Int, Long, Float, Double) T
   ](p: Option[T])(implicit st: ST[T]) {
-    def toScalar = p match {
-      case None    => org.saddle.scalar.NA
-      case Some(v) => org.saddle.scalar.Scalar(v)
-    }
+    def toScalar =
+      p match {
+        case None    => org.saddle.scalar.NA
+        case Some(v) => org.saddle.scalar.Scalar(v)
+      }
   }
 
   /**

@@ -16,14 +16,14 @@
 package org.saddle
 
 import scala.{specialized => spec}
-import spire.random.rng.Well19937c
+import spireshaded.random.rng.Cmwc5
 
 /**
   * This package contains utilities for working with arrays that
   * are specialized for numeric types.
   */
 package object array {
-  import spire.random.Generator
+  import spireshaded.random.Generator
 
   /**
     * Create a new array consisting of a range of numbers from a lower bound up to, but
@@ -99,7 +99,7 @@ package object array {
   }
 
   // *** random number generators
-  private val defaultRandom = Well19937c.fromTime()
+  private val defaultRandom = Cmwc5.fromTime()
 
   /**
     * Generate an array of random integers

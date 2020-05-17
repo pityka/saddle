@@ -4,6 +4,9 @@ import org.saddle.ORD
 import cats.kernel.Order
 import cats.kernel.Hash
 
+object DoubleTotalOrder extends DoubleTotalOrderTrait
+object FloatTotalOrder extends FloatTotalOrderTrait
+
 /**
   * An Order[Double] instance which produces a total order by ordering NaNs above
   * all other Doubles
@@ -18,7 +21,7 @@ import cats.kernel.Hash
   * See https://github.com/scala/scala/blob/39e82c3f904380f0b40d106723747faf881640d4/src/library/scala/math/Ordering.scala#L465
   *
   */
-object DoubleTotalOrder extends Order[Double] with Hash[Double] {
+trait DoubleTotalOrderTrait extends Order[Double] with Hash[Double] {
 
   def hash(x: Double): Int = x.hashCode()
   def compare(x: Double, y: Double): Int =
@@ -39,7 +42,7 @@ object DoubleTotalOrder extends Order[Double] with Hash[Double] {
 
 /** See DoubleTotalOrder
   */
-object FloatTotalOrder extends Order[Float] with Hash[Float] {
+trait FloatTotalOrderTrait extends Order[Float] with Hash[Float] {
 
   def hash(x: Float): Int = x.hashCode()
   def compare(x: Float, y: Float): Int =

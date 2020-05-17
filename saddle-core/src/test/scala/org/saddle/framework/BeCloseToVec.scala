@@ -32,8 +32,8 @@ class BeCloseToVec[T: Numeric: ClassTag](v: Vec[T], delta: T)
       v.length == 0 || {
         val res = v.toSeq.zipWithIndex map {
           case (n, i) =>
-            num.lteq(num.minus(n, delta), x.value.raw(i)) &&
-              num.lteq(x.value.raw(i), num.plus(n, delta))
+            num.lteqv(num.minus(n, delta), x.value.raw(i)) &&
+              num.lteqv(x.value.raw(i), num.plus(n, delta))
         }
         Vec(res: _*).all
       },

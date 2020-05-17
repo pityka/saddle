@@ -1,7 +1,8 @@
 lazy val scalaTestVersion = "3.1.2"
+lazy val scalaVersionInBuild = "2.12.11"
 
 lazy val commonSettings = Seq(
-  scalaVersion := "2.12.11",
+  scalaVersion := scalaVersionInBuild,
   parallelExecution in Test := false,
   scalacOptions ++= Seq(
     "-opt:l:method",
@@ -84,11 +85,13 @@ lazy val core = project
   .settings(
     name := "saddle-core",
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "spire" % "0.17.0-M1",
+      "org.typelevel" %% "cats-kernel" % "2.1.1",
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %% "specs2-core" % "4.9.4" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.9.4" % "test"
     )
   )
+  .dependsOn(spire)
 
 lazy val coreJVMTests = project
   .in(file("saddle-core-jvm-test"))
@@ -100,7 +103,7 @@ lazy val coreJVMTests = project
   )
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "spire" % "0.17.0-M1",
+      "org.typelevel" %% "cats-core" % "2.1.1",
       "org.specs2" %% "specs2-core" % "4.9.4" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.9.4" % "test",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
@@ -193,6 +196,25 @@ lazy val circe = project
   )
   .dependsOn(core)
 
+lazy val spire = project
+  .in(file("spire-prng"))
+  .settings(
+    name := "saddle-spire-prng",
+    scalaVersion := scalaVersionInBuild
+  )
+
+lazy val spireJS = project
+  .in(file("spire-prng"))
+  .settings(
+    name := "saddle-spire-prng-js",
+    scalaVersion := scalaVersionInBuild
+  )
+  .settings(
+    target := file("spire-prng/targetJS"),
+    fork := false
+  )
+  .enablePlugins(ScalaJSPlugin)
+
 lazy val coreJS = project
   .in(file("saddle-core"))
   .settings(commonSettings)
@@ -201,11 +223,13 @@ lazy val coreJS = project
     target := file("saddle-core/targetJS"),
     fork := false,
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "spire" % "0.17.0-M1",
+      "org.typelevel" %%% "cats-core" % "2.1.1",
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %%% "specs2-core" % "4.8.3" % "test",
       "org.specs2" %%% "specs2-scalacheck" % "4.8.3" % "test"
     )
   )
+  .dependsOn(spireJS)
   .enablePlugins(ScalaJSPlugin)
 
 lazy val binaryJS = project

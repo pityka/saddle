@@ -17,8 +17,8 @@ class BeCloseToMat[T: Numeric: ClassTag](m: Mat[T], delta: T)
       m.length == 0 || {
         val res = m.contents.zipWithIndex map {
           case (n, i) =>
-            num.lteq(num.minus(n, delta), x.value.contents(i)) &&
-              num.lteq(x.value.contents(i), num.plus(n, delta))
+            num.lteqv(num.minus(n, delta), x.value.contents(i)) &&
+              num.lteqv(x.value.contents(i), num.plus(n, delta))
         }
         Vec(res: _*).all
       },

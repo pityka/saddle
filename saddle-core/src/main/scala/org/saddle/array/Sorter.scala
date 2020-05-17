@@ -18,8 +18,6 @@ package org.saddle.array
 import org.saddle.vec.VecBool
 import org.saddle.ORD
 
-import spire.math.MergeSort
-
 /**
   * Typeclass interface for sorting implementations
   */
@@ -136,23 +134,24 @@ object Sorter {
     }
   }
 
-  def anySorter[T] = new Sorter[T] {
-    def argSorted(arr: Array[T])(implicit ord: ORD[T]) = {
-      val res = range(0, arr.length)
-      PermuteMergeSort.sort(arr, res)
-      res
-    }
-
-    def sorted(arr: Array[T])(implicit ord: ORD[T]) = {
-      val res = arr.clone
-      val offsets = argSorted(arr)
-      var i = 0
-      while (i < offsets.length) {
-        val idx = offsets(i)
-        res(i) = arr(idx)
-        i += 1
+  def anySorter[T] =
+    new Sorter[T] {
+      def argSorted(arr: Array[T])(implicit ord: ORD[T]) = {
+        val res = range(0, arr.length)
+        PermuteMergeSort.sort(arr, res)
+        res
       }
-      res
+
+      def sorted(arr: Array[T])(implicit ord: ORD[T]) = {
+        val res = arr.clone
+        val offsets = argSorted(arr)
+        var i = 0
+        while (i < offsets.length) {
+          val idx = offsets(i)
+          res(i) = arr(idx)
+          i += 1
+        }
+        res
+      }
     }
-  }
 }

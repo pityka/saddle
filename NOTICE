@@ -3,7 +3,7 @@ Saddle: Scala Data Library
 ==========================
 
 Saddle is distributed under the Apache License Version 2.0 (see LICENSE file), except where the 
-copyright header of the source file indicates otherwise. 
+copyright header of the source file or the copyright file in a subdirectory indicates.
 
 Copyright
 =========
@@ -11,10 +11,12 @@ Copyright
 Copyright (c) 2013 Novus Partners, Inc.
 Copyright (c) 2013 The Saddle Development Team
 Except when otherwise noted:
-- Code in saddle-core/src/main/scala/org/saddle/util/LongMap.scala has different copyright terms,
+- Code in saddle-core/src/main/scala/org/saddle/util/LongMap.scala has different copyright holders,
 see its header.
-- Code in saddle-core/src/main/scala/org/saddle/Buffer.scala has different copyright terms,
+- Code in saddle-core/src/main/scala/org/saddle/Buffer.scala has different copyright holders,
 see its header. This file has code distributed under MIT license. 
+- Code in saddle-core/src/main/scala/org/saddle/array/Sort.scala has different copyright holders, see its header. This file has code distributed under MIT license.
+- Code in spire-prng/ is a derivative of the spire project, see the license in spire-core/COPYING.
 
 
 All rights reserved.
