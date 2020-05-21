@@ -5,6 +5,7 @@ import scalar.Scalar
 import org.saddle.scalar.ScalarTagInt
 import cats.kernel.Order
 import org.saddle.order._
+import org.saddle.index.OuterJoin
 
 /**
   * User: Adam Klein
@@ -13,6 +14,12 @@ import org.saddle.order._
   */
 class IndexSpec extends Specification {
   "Index methods" should {
+    "over flow in join" in {
+      val ix1 = Index(array.randInt(1000000, 0, 3): _*)
+      val ix2 = Index(array.randInt(10000, 0, 3): _*)
+
+      ix1.join(ix2, OuterJoin) must throwA[RuntimeException]
+    }
     "next works" in {
       Index(1, 2, 2, 2, 3).next(Scalar(2)) must_== Scalar(3)
       Index(1, 2, 2, 2, 3).next(Scalar(3)) must_== Scalar(3)
@@ -33,6 +40,7 @@ class IndexSpec extends Specification {
     }
   }
   "Index Joins" should {
+
     "Unique sorted left join" in {
       val ix1 = Index(0, 1, 2)
       val ix2 = Index(1, 2, 3)

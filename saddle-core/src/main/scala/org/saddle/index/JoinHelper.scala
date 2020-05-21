@@ -177,17 +177,31 @@ private[saddle] object JoinHelper {
   }
 
   private object ijCounter extends JoinCounter {
-    def apply(lc: Int, rc: Int, count: Int): Int = count + lc * rc
+    def apply(lc: Int, rc: Int, count: Int): Int = {
+      val asLong = count.toLong + lc.toLong * rc.toLong
+      if (asLong > Int.MaxValue) throw new RuntimeException("overflow in join")
+      else asLong.toInt
+    }
   }
 
   private object ojCounter extends JoinCounter {
-    def apply(lc: Int, rc: Int, count: Int): Int =
-      if (rc > 0 && lc > 0) count + lc * rc else count + lc + rc
+    def apply(lc: Int, rc: Int, count: Int): Int = {
+      val asLong =
+        if (rc > 0 && lc > 0) count.toLong + lc.toLong * rc.toLong
+        else count.toLong + lc.toLong + rc.toLong
+      if (asLong > Int.MaxValue) throw new RuntimeException("overflow in join")
+      else asLong.toInt
+    }
   }
 
   private object ljCounter extends JoinCounter {
-    def apply(lc: Int, rc: Int, count: Int): Int =
-      if (rc > 0) count + lc * rc else count + lc
+    def apply(lc: Int, rc: Int, count: Int): Int = {
+      val asLong =
+        if (rc > 0) count.toLong + lc.toLong * rc.toLong
+        else count.toLong + lc.toLong
+      if (asLong > Int.MaxValue) throw new RuntimeException("overflow in join")
+      else asLong.toInt
+    }
   }
 
   private object ijMarker extends LabelMarker {
