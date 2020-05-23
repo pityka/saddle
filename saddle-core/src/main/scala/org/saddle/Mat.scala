@@ -156,20 +156,21 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
   }
 
   /** Row-by-row equality check of all values. */
-  override def equals(o: Any): Boolean = o match {
-    case rv: Mat[_] =>
-      (this eq rv) || this.numRows == rv.numRows && this.numCols == rv.numCols && {
-        var i = 0
-        var eq = true
-        while (eq && i < length) {
-          eq &&= (raw(i) == rv.raw(i) || this.scalarTag
-            .isMissing(raw(i)) && rv.scalarTag.isMissing(rv.raw(i)))
-          i += 1
+  override def equals(o: Any): Boolean =
+    o match {
+      case rv: Mat[_] =>
+        (this eq rv) || this.numRows == rv.numRows && this.numCols == rv.numCols && {
+          var i = 0
+          var eq = true
+          while (eq && i < length) {
+            eq &&= (raw(i) == rv.raw(i) || this.scalarTag
+              .isMissing(raw(i)) && rv.scalarTag.isMissing(rv.raw(i)))
+            i += 1
+          }
+          eq
         }
-        eq
-      }
-    case _ => super.equals(o)
-  }
+      case _ => super.equals(o)
+    }
 
   /**
     * Returns total number of entries in the matrix
@@ -583,6 +584,38 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
       }
       i += 1
     }
+  }
+
+  /**
+    * Reduces each row with a function
+    * f must return a scalar
+    */
+  def reduceRows[@spec(Boolean, Int, Long, Double) B: ST](
+      f: (Vec[T], Int) => B
+  ): Vec[B] = {
+    val cpy = Array.ofDim[B](numRows)
+    var i = 0
+    while (i < numRows) {
+      cpy(i) = f(row(i), i)
+      i += 1
+    }
+    Vec(cpy)
+  }
+
+  /**
+    * Reduces each col with a function
+    * f must return a scalar
+    */
+  def reduceCols[@spec(Boolean, Int, Long, Double) B: ST](
+      f: (Vec[T], Int) => B
+  ): Vec[B] = {
+    val cpy = Array.ofDim[B](numCols)
+    var i = 0
+    while (i < numCols) {
+      cpy(i) = f(col(i), i)
+      i += 1
+    }
+    Vec(cpy)
   }
 
 }

@@ -701,6 +701,20 @@ class MatCheck extends Specification with ScalaCheck {
         res must_== exp
       }
     }
+    "reduce rows works" in {
+      forAll { (m: Mat[Double]) =>
+        val res = m.reduceRows((v, _) => v.sum)
+        val exp = m.rows.map(_.sum).toVec
+        res must_== exp
+      }
+    }
+    "reduce cols works" in {
+      forAll { (m: Mat[Double]) =>
+        val res = m.reduceCols((v, _) => v.sum)
+        val exp = m.cols.map(_.sum).toVec
+        res must_== exp
+      }
+    }
     "mutate rows works" in {
       forAll { (m: Mat[Double]) =>
         val res = m.copy
@@ -989,14 +1003,18 @@ class MatCheck extends Specification with ScalaCheck {
     }
     "cols works" in {
       forAll { (ma: Mat[Double], i: Int) =>
-        ma.length == 0 || i < 0 || ma.numCols <= i || ma.cols(Vector(i)) == Vector(
+        ma.length == 0 || i < 0 || ma.numCols <= i || ma.cols(
+          Vector(i)
+        ) == Vector(
           ma.cols()(i)
         )
       }
     }
     "rows works" in {
       forAll { (ma: Mat[Double], i: Int) =>
-        ma.length == 0 || i < 0 || ma.numRows <= i || ma.rows(Vector(i)) == Vector(
+        ma.length == 0 || i < 0 || ma.numRows <= i || ma.rows(
+          Vector(i)
+        ) == Vector(
           ma.rows()(i)
         )
       }
