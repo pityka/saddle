@@ -337,7 +337,12 @@ object CsvParser {
         callback(
           if (curBegin >= (data.position - offset)) empty
           else
-            data.buffer.subSequence(curBegin, data.position - offset).toString,
+            ((data.buffer: CharSequence)
+              .subSequence(
+                curBegin,
+                data.position - offset
+              ))
+              .toString,
           locIdx
         )
         locIdx += 1

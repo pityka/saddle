@@ -1,5 +1,5 @@
 lazy val scalaTestVersion = "3.2.0"
-lazy val scalaVersionInBuild = "2.12.11"
+lazy val scalaVersionInBuild = "2.12.12"
 
 lazy val commonSettings = Seq(
   scalaVersion := scalaVersionInBuild,
@@ -79,11 +79,14 @@ lazy val commonSettings = Seq(
   cancelable in Global := true
 )
 
-lazy val core = project
+lazy val core = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("saddle-core"))
   .settings(commonSettings: _*)
   .settings(
-    name := "saddle-core",
+    name := "saddle-core"
+  )
+  .jvmSettings(
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-kernel" % "2.1.1",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
@@ -91,7 +94,20 @@ lazy val core = project
       "org.specs2" %% "specs2-scalacheck" % "4.10.1" % "test"
     )
   )
+  .jsSettings(
+    fork := false,
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "cats-core" % "2.1.1",
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.specs2" %%% "specs2-core" % "4.9.4" % "test",
+      "org.specs2" %%% "specs2-scalacheck" % "4.9.4" % "test"
+    )
+  )
   .dependsOn(spire)
+
+lazy val coreJVM = core.jvm
+
+lazy val coreJS = core.js
 
 lazy val coreJVMTests = project
   .in(file("saddle-core-jvm-test"))
@@ -109,7 +125,7 @@ lazy val coreJVMTests = project
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
-  .dependsOn(core, binary)
+  .dependsOn(coreJVM, binary)
 
 lazy val inlinedOps = project
   .in(file("saddle-ops-inlined"))
@@ -121,14 +137,14 @@ lazy val inlinedOps = project
       "org.specs2" %% "specs2-scalacheck" % "4.10.1" % "test"
     )
   )
-  .dependsOn(core % "compile->compile;test->test")
+  .dependsOn(coreJVM % "compile->compile;test->test")
 
 lazy val bench =
   project
     .in(file("saddle-jmh"))
     .settings(commonSettings: _*)
     .settings(skip in publish := true)
-    .dependsOn(core, inlinedOps, linalg)
+    .dependsOn(coreJVM, inlinedOps, linalg)
     .enablePlugins(JmhPlugin)
 
 lazy val time = project
@@ -144,7 +160,7 @@ lazy val time = project
       "org.specs2" %% "specs2-scalacheck" % "4.10.1" % "test"
     )
   )
-  .dependsOn(core)
+  .dependsOn(coreJVM)
 
 lazy val stats = project
   .in(file("saddle-stats"))
@@ -157,7 +173,7 @@ lazy val stats = project
       "org.specs2" %% "specs2-scalacheck" % "4.10.1" % "test"
     )
   )
-  .dependsOn(core)
+  .dependsOn(coreJVM)
 
 lazy val linalg = project
   .in(file("saddle-linalg"))
@@ -170,104 +186,70 @@ lazy val linalg = project
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
-  .dependsOn(core, inlinedOps)
+  .dependsOn(coreJVM, inlinedOps)
 
 lazy val binary = project
   .in(file("saddle-binary"))
   .settings(commonSettings: _*)
   .settings(
-    name := "saddle-binary",
+    name := "saddle-binary"
+  )
+  .settings(
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "ujson" % "1.2.0",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
-  .dependsOn(core)
+  .dependsOn(coreJVM)
 
-lazy val circe = project
+lazy val circe = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("saddle-circe"))
   .settings(commonSettings: _*)
   .settings(
-    name := "saddle-circe",
+    name := "saddle-circe"
+  )
+  .jvmSettings(
     libraryDependencies ++= Seq(
       "io.circe" %% "circe-core" % "0.13.0",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
+  .jsSettings(
+    fork := false,
+    libraryDependencies ++= Seq(
+      "io.circe" %%% "circe-core" % "0.13.0",
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+    )
+  )
   .dependsOn(core)
 
-lazy val spire = project
+lazy val circeJS = circe.js
+
+lazy val circeJVM = circe.jvm
+
+lazy val spire = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
   .in(file("spire-prng"))
   .settings(commonSettings: _*)
   .settings(
     name := "saddle-spire-prng",
     scalaVersion := scalaVersionInBuild
   )
-
-lazy val spireJS = project
-  .in(file("spire-prng"))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "saddle-spire-prng-js",
-    scalaVersion := scalaVersionInBuild
-  )
-  .settings(
-    target := file("spire-prng/targetJS"),
+  .jsSettings(
     fork := false
   )
-  .enablePlugins(ScalaJSPlugin)
 
-lazy val coreJS = project
-  .in(file("saddle-core"))
-  .settings(commonSettings)
-  .settings(
-    name := "saddle-core",
-    target := file("saddle-core/targetJS"),
-    fork := false,
-    libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core" % "2.1.1",
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "org.specs2" %%% "specs2-core" % "4.8.3" % "test",
-      "org.specs2" %%% "specs2-scalacheck" % "4.8.3" % "test"
-    )
-  )
-  .dependsOn(spireJS)
-  .enablePlugins(ScalaJSPlugin)
+lazy val spireJVM = spire.jvm
 
-lazy val binaryJS = project
-  .in(file("saddle-binary"))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "saddle-binary",
-    libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "ujson" % "1.2.0",
-      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
-    )
-  )
-  .settings(target := file("saddle-binary/targetJS"), fork := false)
-  .dependsOn(coreJS)
-  .enablePlugins(ScalaJSPlugin)
-
-lazy val circeJS = project
-  .in(file("saddle-circe"))
-  .settings(commonSettings: _*)
-  .settings(
-    name := "saddle-circe",
-    libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core" % "0.13.0",
-      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
-    )
-  )
-  .settings(target := file("saddle-circe/targetJS"), fork := false)
-  .dependsOn(coreJS)
-  .enablePlugins(ScalaJSPlugin)
+lazy val spireJS = spire.js
 
 lazy val docs = project
   .in(file("saddle-docs"))
-  .dependsOn(core, linalg, circe, binary)
+  .dependsOn(coreJVM, linalg, circeJVM, binary)
   .settings(
     unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-      (inAnyProject -- inProjects(coreJS, circeJS, binaryJS, spireJS)),
+      (inAnyProject -- inProjects(coreJS, circeJS, spireJS)),
     publishArtifact := false,
     moduleName := "saddle-docs",
     mdocVariables := Map(
@@ -287,19 +269,18 @@ lazy val root = (project in file("."))
     git.remoteRepo := ""
   )
   .aggregate(
-    core,
+    coreJVM,
+    coreJS,
     coreJVMTests,
     time,
     stats,
     linalg,
     binary,
-    circe,
+    circeJS,
+    circeJVM,
     docs,
     inlinedOps,
-    coreJS,
-    binaryJS,
-    circeJS,
-    spire,
+    spireJVM,
     spireJS
   )
 
