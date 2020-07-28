@@ -96,6 +96,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(
     fork := false,
+    coverageEnabled := false,
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-core" % "2.1.1",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
@@ -217,6 +218,7 @@ lazy val circe = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(
     fork := false,
+    coverageEnabled := false,
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core" % "0.13.0",
       "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
@@ -237,6 +239,7 @@ lazy val spire = crossProject(JSPlatform, JVMPlatform)
     scalaVersion := scalaVersionInBuild
   )
   .jsSettings(
+    coverageEnabled := false,
     fork := false
   )
 
