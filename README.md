@@ -85,6 +85,8 @@ see its header.
 Code in saddle-core/src/main/scala/org/saddle/Buffer.scala has different copyright terms,
 see its header. 
 
+Code in spire-prng has different copyright terms, see the spire-prng/COPYING.
+
 About the Copyright Holders
 ===========================
 

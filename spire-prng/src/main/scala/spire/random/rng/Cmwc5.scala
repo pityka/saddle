@@ -1,4 +1,4 @@
-package spireshaded
+package org.saddle.spire
 package random
 package rng
 

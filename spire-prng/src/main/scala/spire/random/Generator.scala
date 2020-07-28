@@ -1,6 +1,6 @@
-package spireshaded
+package org.saddle.spire
 package random
-import spireshaded.math.{ULong, UInt}
+import org.saddle.spire.math.{ULong, UInt}
 
 abstract class Generator {
   protected var extra: Boolean = false
@@ -32,7 +32,7 @@ abstract class Generator {
   /**
     * Generate a random value using a Dist[A] type class instance.
     *
-   * Implicit Dist[A] instances are provided for the AnyVal types as well as
+    * Implicit Dist[A] instances are provided for the AnyVal types as well as
     * UByte through ULong. More complex Dist instances can be created from
     * these.
     */
@@ -517,7 +517,7 @@ object Generator {
 }
 
 object GlobalRng extends LongBasedGenerator {
-  private val rng = spireshaded.random.rng.Cmwc5.fromTime()
+  private val rng = org.saddle.spire.random.rng.Cmwc5.fromTime()
 
   def copyInit: Generator = rng.copyInit
 

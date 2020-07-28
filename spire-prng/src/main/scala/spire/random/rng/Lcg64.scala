@@ -1,8 +1,8 @@
-package spireshaded
+package org.saddle.spire
 package random
 package rng
 
-import spireshaded.util.Pack
+import org.saddle.spire.util.Pack
 
 final class Lcg64(_seed: Long) extends LongBasedGenerator {
   private var seed: Long = _seed

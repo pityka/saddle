@@ -1,4 +1,4 @@
-package spireshaded
+package org.saddle.spire
 package math
 import scala.language.implicitConversions
 object ULong {

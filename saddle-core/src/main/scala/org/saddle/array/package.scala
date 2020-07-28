@@ -12,18 +12,18 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import scala.{specialized => spec}
-import spireshaded.random.rng.Cmwc5
+import org.saddle.spire.random.rng.Cmwc5
 
 /**
   * This package contains utilities for working with arrays that
   * are specialized for numeric types.
   */
 package object array {
-  import spireshaded.random.Generator
+  import org.saddle.spire.random.Generator
 
   /**
     * Create a new array consisting of a range of numbers from a lower bound up to, but
