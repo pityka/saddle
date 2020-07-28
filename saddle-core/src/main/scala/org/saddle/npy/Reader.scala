@@ -35,7 +35,7 @@ object Reader {
       .trim
       .drop(1)
       .dropRight(1)
-    val shape = "'shape': \\((\\d+)(, \\d+)*\\)".r
+    val shape = "'shape': \\((\\d+,)( \\d+,)*( \\d+)*\\)".r
       .findFirstMatchIn(s)
       .get
       .matched

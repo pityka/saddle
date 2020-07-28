@@ -30,6 +30,30 @@ class NpyTest extends Specification {
 
     read must_== ((Vec(1d, 0d, 0d, 0d, 1d, 0d, 0d, 0d, 1d), List(3, 3)))
   }
+  "read vec 2" in {
+    val read =
+      Reader
+        .readVecFromChannel[Double](
+          java.nio.channels.Channels
+            .newChannel(getClass.getResourceAsStream("/ones.npy"))
+        )
+        .right
+        .get
+
+    read._2 must_== List(3)
+  }
+  "read vec 3" in {
+    val read =
+      Reader
+        .readVecFromChannel[Double](
+          java.nio.channels.Channels
+            .newChannel(getClass.getResourceAsStream("/ones2.npy"))
+        )
+        .right
+        .get
+
+    read._2 must_== List(3, 3, 3)
+  }
   "read mat" in {
     val read =
       Reader
