@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.vec
 
 import scala.{specialized => spec}
@@ -118,7 +118,6 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
 
   /**
     * Additive inverse of Vec with numeric elements
-    *
     */
   def unary_-()(implicit num: NUM[T]): Vec[T] = map(num.negate)
 
@@ -266,8 +265,8 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     *
     * @param offsets1 indexes into the original array
     */
-  def view(offsets1: Array[Int]) = {
-    val offsets = offsets1.filter(v => v >= 0 && v < self.length)
+  def view(offsets: Array[Int]) = {
+    import org.saddle._
     if (offsets.length == 0) Vec.empty
     else
       new VecDefault(values, scalarTag) {
@@ -508,7 +507,6 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
 
   /**
     * Converts Vec to an indexed sequence (default implementation is immutable.Vector)
-    *
     */
   def toSeq: IndexedSeq[T] = toArray.toIndexedSeq
 
@@ -585,8 +583,8 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     *
     * percentile function: see: http://en.wikipedia.org/wiki/Percentile
     */
-  def percentile(tile: Double, method: PctMethod = PctMethod.NIST)(
-      implicit na: NUM[T]
+  def percentile(tile: Double, method: PctMethod = PctMethod.NIST)(implicit
+      na: NUM[T]
   ): Double = {
     val vf = Vec(dropNA.toDoubleArray)
     if (vf.length == 0 || tile < 0 || tile > 100)
@@ -615,8 +613,8 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     * @param tie Method with which to break ties; a [[org.saddle.RankTie]]
     * @param ascending Boolean, default true, whether to give lower values larger rank
     */
-  def rank(tie: RankTie = RankTie.Avg, ascending: Boolean = true)(
-      implicit na: NUM[T]
+  def rank(tie: RankTie = RankTie.Avg, ascending: Boolean = true)(implicit
+      na: NUM[T]
   ): Vec[Double] = {
     _rank(copy.toDoubleArray, tie, ascending)
   }
@@ -780,22 +778,22 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
 
   /**
     * Default equality does an iterative, element-wise equality check of all values.
-    *
     */
-  override def equals(o: Any): Boolean = o match {
-    case rv: Vec[_] =>
-      (this eq rv) || (this.length == rv.length) && {
-        var i = 0
-        var eq = true
-        while (eq && i < this.length) {
-          eq &&= (raw(i) == rv.raw(i) || this.scalarTag
-            .isMissing(raw(i)) && rv.scalarTag.isMissing(rv.raw(i)))
-          i += 1
+  override def equals(o: Any): Boolean =
+    o match {
+      case rv: Vec[_] =>
+        (this eq rv) || (this.length == rv.length) && {
+          var i = 0
+          var eq = true
+          while (eq && i < this.length) {
+            eq &&= (raw(i) == rv.raw(i) || this.scalarTag
+              .isMissing(raw(i)) && rv.scalarTag.isMissing(rv.raw(i)))
+            i += 1
+          }
+          eq
         }
-        eq
-      }
-    case _ => false
-  }
+      case _ => false
+    }
 
   /**
     * Creates a string representation of Vec
