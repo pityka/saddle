@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import org.specs2.mutable.Specification
@@ -219,6 +219,13 @@ class VecCheck extends Specification with ScalaCheck {
 
     "zipmap works" in {
       forAll { (v: Vec[Double]) => v.zipMap(v)(_ + _) must_== v * 2.0 }
+    }
+    "zipmap idx works" in {
+      forAll { (v: Vec[Double]) =>
+        v.zipMapIdx((a, b) => (a + b)) must_== v.toSeq.zipWithIndex.map {
+          case (a, b) => a + b
+        }.toVec
+      }
     }
 
     "dropNA works" in {

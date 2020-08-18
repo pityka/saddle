@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import scala.{specialized => spec}
@@ -32,8 +32,8 @@ object Vec {
     * @param arr Array
     * @tparam T Type of elements in array
     */
-  def apply[@spec(Boolean, Int, Long, Double) T](arr: Array[T])(
-      implicit st: ST[T]
+  def apply[@spec(Boolean, Int, Long, Double) T](arr: Array[T])(implicit
+      st: ST[T]
   ): Vec[T] = new VecDefault(arr, st)
 
   /**
@@ -108,7 +108,6 @@ object Vec {
   *   Vec[Int](1,2,3,na).at(0) == Scalar(1)
   *   Vec[Int](1,2,3,na).at(3) == NA
   * }}}
-  *
   *
   * The method `raw` accesses the underlying value directly.
   *
@@ -291,7 +290,6 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
 
   /**
     * Additive inverse of Vec with numeric elements
-    *
     */
   def unary_-()(implicit num: NUM[T]): Vec[T]
 
@@ -360,6 +358,10 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
       @spec(Int, Long, Double) B: ST,
       @spec(Boolean, Int, Long, Double) C: ST
   ](other: Vec[B])(f: (T, B) => C): Vec[C]
+
+  def zipMapIdx[
+      @spec(Boolean, Int, Long, Double) C: ST
+  ](f: (T, Int) => C): Vec[C]
 
   /**
     * Drop the elements of the Vec which are NA
@@ -496,7 +498,6 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
 
   /**
     * Converts Vec to an indexed sequence (default implementation is immutable.Vector)
-    *
     */
   def toSeq: IndexedSeq[T]
 
@@ -545,8 +546,8 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
     * @param tile The percentile in [0, 100] at which to compute the threshold
     * @param method The percentile method; one of [[org.saddle.PctMethod]]
     */
-  def percentile(tile: Double, method: PctMethod = PctMethod.NIST)(
-      implicit na: NUM[T]
+  def percentile(tile: Double, method: PctMethod = PctMethod.NIST)(implicit
+      na: NUM[T]
   ): Double
 
   /**
@@ -554,8 +555,8 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
     * @param tie Method with which to break ties; a [[org.saddle.RankTie]]
     * @param ascending Boolean, default true, whether to give lower values larger rank
     */
-  def rank(tie: RankTie = RankTie.Avg, ascending: Boolean = true)(
-      implicit na: NUM[T]
+  def rank(tie: RankTie = RankTie.Avg, ascending: Boolean = true)(implicit
+      na: NUM[T]
   ): Vec[Double]
 
   /**

@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.vec
 
 import scala.{specialized => spec}
@@ -171,6 +171,26 @@ private[saddle] object VecImpl {
         buf(i) = scc.missing
       } else {
         buf(i) = f(a, b)
+      }
+      i += 1
+    }
+    Vec(buf)
+  }
+
+  def zipMapIdx[
+      @spec(Int, Long, Double) A: ST,
+      @spec(Boolean, Int, Long, Double) C: ST
+  ](v1: Vec[A])(f: (A, Int) => C): Vec[C] = {
+    val sca = implicitly[ST[A]]
+    val scc = implicitly[ST[C]]
+    val buf = Array.ofDim[C](v1.length)
+    var i = 0
+    while (i < v1.length) {
+      val a = v1.raw(i)
+      if (sca.isMissing(a)) {
+        buf(i) = scc.missing
+      } else {
+        buf(i) = f(a, i)
       }
       i += 1
     }

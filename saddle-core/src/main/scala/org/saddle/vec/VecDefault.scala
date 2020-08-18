@@ -218,6 +218,19 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     VecImpl.zipMap(this, other)(f)
 
   /**
+    * Zips Vec with another Vec and applies a function to the paired elements. If either of the pair is NA, the
+    * result is forced to NA.
+    * @param other Vec[B]
+    * @param f Function (A, B) => C
+    * @tparam B Parameter of other Vec
+    * @tparam C Result of function
+    */
+  def zipMapIdx[
+      @spec(Boolean, Int, Long, Double) C: ST
+  ](f: (T, Int) => C): Vec[C] =
+    VecImpl.zipMapIdx(this)(f)
+
+  /**
     * Creates a view into original vector from an offset up to, but excluding,
     * another offset. Data is not copied.
     *
