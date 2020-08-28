@@ -47,7 +47,7 @@ final class Buffer[@specialized V](var array: Array[V], var length: Int)(
 
   /** Grow if necessary the underlying array to accomodate at least n elements. */
   def ensureLength(n: Long): Buffer.Dummy[V] = {
-    def max(l1:Long, l2: Long) = if (l1 > l2) l1 else l2
+    def max(l1: Long, l2: Long) = if (l1 > l2) l1 else l2
     val arrayLength: Long = array.length
     if (n > arrayLength) {
       var newLength: Long = max(arrayLength.toLong * 2, 1)
@@ -75,6 +75,12 @@ object Buffer {
 
   val INIT_CAPACITY = startSize
 
-  def empty[T: ClassTag] = new Buffer(new Array[T](startSize), 0)
+  def empty[@specialized(Int, Double, Boolean, Float) T: ClassTag]: Buffer[T] =
+    new Buffer(new Array[T](startSize), 0)
+
+  def empty[@specialized(Int, Double, Boolean, Float) T: ClassTag](
+      initSize: Int
+  ): Buffer[T] =
+    new Buffer(new Array[T](initSize), 0)
 
 }

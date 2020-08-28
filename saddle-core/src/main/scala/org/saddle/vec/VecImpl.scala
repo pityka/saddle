@@ -369,13 +369,40 @@ private[saddle] object VecImpl {
       vec: Vec[A]
   )(pred: Array[Boolean]): Vec[A] = {
     var i = 0
-    val buf = Buffer.empty[A]
+    val buf = Buffer.empty[A](vec.length / 2 + 1)
     while (i < vec.length) {
       val v: A = vec.raw(i)
       if (pred(i)) buf.+=(v)
       i += 1
     }
     Vec(buf.toArray)
+  }
+
+  def whereNot[@spec(Boolean, Int, Long, Double) A: ST](
+      vec: Vec[A]
+  )(pred: Array[Boolean]): Vec[A] = {
+    var i = 0
+    val buf = Buffer.empty[A](vec.length / 2 + 1)
+    while (i < vec.length) {
+      val v: A = vec.raw(i)
+      if (!pred(i)) buf.+=(v)
+      i += 1
+    }
+    Vec(buf.toArray)
+  }
+  def partition[@spec(Boolean, Int, Long, Double) A: ST](
+      vec: Vec[A]
+  )(pred: Array[Boolean]): (Vec[A], Vec[A]) = {
+    var i = 0
+    val bufT = Buffer.empty[A](vec.length / 2 + 1)
+    val bufF = Buffer.empty[A](vec.length / 2 + 1)
+    while (i < vec.length) {
+      val v: A = vec.raw(i)
+      if (pred(i)) bufT.+=(v)
+      else bufF.+=(v)
+      i += 1
+    }
+    (Vec(bufT.toArray), Vec(bufF.toArray))
   }
 
   def vecfillNA[@spec(Boolean, Int, Long, Double) A: ST](

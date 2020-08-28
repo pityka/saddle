@@ -424,6 +424,18 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   def where(pred: Vec[Boolean]): Vec[T]
 
   /**
+    * Return Vec whose elements are selected via negating a Vec of booleans (where that Vec holds the value true)
+    * @param pred Predicate vector: Vec[Boolean]
+    */
+  def whereNot(pred: Vec[Boolean]): Vec[T]
+
+  /**
+    * Return Vec whose elements are selected via negating a Vec of booleans (where that Vec holds the value true)
+    * @param pred Predicate vector: Vec[Boolean]
+    */
+  def partition(pred: Vec[Boolean]): (Vec[T], Vec[T])
+
+  /**
     * Produce a Vec whose entries are the result of executing a function on a sliding window of the
     * data.
     * @param winSz Window size

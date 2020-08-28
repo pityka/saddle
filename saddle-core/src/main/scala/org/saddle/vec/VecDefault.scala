@@ -481,6 +481,12 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def where(pred: Vec[Boolean]): Vec[T] =
     VecImpl.where(this)(pred.toArray)(scalarTag)
 
+  def whereNot(pred: Vec[Boolean]): Vec[T] =
+    VecImpl.whereNot(this)(pred.toArray)(scalarTag)
+
+  def partition(pred: Vec[Boolean]): (Vec[T], Vec[T]) =
+    VecImpl.partition(this)(pred.toArray)(scalarTag)
+
   /**
     * Yield a Vec whose elements have been sorted (in ascending order)
     * @param ev evidence of Ordering[A]

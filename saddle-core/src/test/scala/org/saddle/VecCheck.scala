@@ -288,6 +288,19 @@ class VecCheck extends Specification with ScalaCheck {
         v.where(whereVec) must_== v.filter(_ < 0)
       }
     }
+    "whereNot works" in {
+      forAll { (v: Vec[Double]) =>
+        val whereVec = (v < 0)
+        v.whereNot(whereVec) must_== v.where(whereVec.map(v => !v))
+      }
+    }
+    "partition works" in {
+      forAll { (v: Vec[Double]) =>
+        val whereVec = (v < 0)
+        v.partition(whereVec)._1 must_== v.where(whereVec)
+        v.partition(whereVec)._2 must_== v.whereNot(whereVec)
+      }
+    }
 
     "sorted works" in {
       forAll { (v: Vec[Double]) =>
