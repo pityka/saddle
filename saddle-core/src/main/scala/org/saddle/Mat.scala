@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import scalar.{Scalar, ScalarTag}
@@ -100,13 +100,11 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
   /**
     * Returns (a copy of) the contents of matrix as a single array in
     * row-major order
-    *
     */
   def contents: Array[T] = values.clone()
 
   /**
     * Makes a copy of this Mat
-    *
     */
   def copy: Mat[T] = new Mat(numRows, numCols, values.clone, scalarTag)
 
@@ -174,19 +172,16 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
 
   /**
     * Returns total number of entries in the matrix
-    *
     */
   def length: Int = numRows * numCols
 
   /**
     * Returns true if rows == cols
-    *
     */
   def isSquare: Boolean = numCols == numRows
 
   /**
     * Returns true if the matrix is empty
-    *
     */
   def isEmpty: Boolean = length == 0
 
@@ -313,8 +308,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     */
   def col(c: Int): Vec[T] = {
     assert(c >= 0 && c < numCols, "Array index %d out of bounds" format c)
-    val offsets = array.range(c, values.length, numCols)
-    toVec.view(offsets)
+    toVec.slice(c, values.length, numCols)
   }
 
   /**

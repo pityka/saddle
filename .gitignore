@@ -13,3 +13,4 @@ website/public/
 website/static/api
 _gen/
 project/metals.sbt
+.vscode/settings.json
