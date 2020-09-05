@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import org.specs2.mutable.Specification
@@ -223,17 +223,17 @@ class FrameCheck extends Specification with ScalaCheck {
     }
     "distinct works" in {
       forAll { (f: Frame[Int, Int, Double]) =>
-        f.distinct must_== {
-          val d = f.toColSeq.map(_._1).distinct
-          f.col(d: _*)
+        f.mapColIndex(_ => 0).distinct must_== {
+          val d = f.toColSeq.map(_ => 0).distinct
+          d.map(d => d -> f.firstCol(d)).toFrame
         }
       }
     }
     "rdistinct works" in {
       forAll { (f: Frame[Int, Int, Double]) =>
-        f.rdistinct must_== {
-          val d = f.toRowSeq.map(_._1).distinct
-          f.row(d: _*)
+        f.mapRowIndex(_ => 0).rdistinct must_== {
+          val d = f.toRowSeq.map(_ => 0).distinct
+          d.map(d => d -> f.first(d)).toFrame.T
         }
       }
     }

@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import scala.{specialized => spec}
@@ -564,8 +564,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   /**
     * Overloaded method to create hierarchical index from two cols.
     */
-  def withRowIndex(col1: Int, col2: Int)(
-      implicit ordT: ORD[T]
+  def withRowIndex(col1: Int, col2: Int)(implicit
+      ordT: ORD[T]
   ): Frame[(T, T), CX, T] = {
     val newIx: Index[(T, T)] =
       Index.make((this.colAt(col1).toVec, this.colAt(col2).toVec))
@@ -630,8 +630,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   /**
     * Overloaded method to create hierarchical index from two rows.
     */
-  def withColIndex(row1: Int, row2: Int)(
-      implicit ordT: ORD[T]
+  def withColIndex(row1: Int, row2: Int)(implicit
+      ordT: ORD[T]
   ): Frame[RX, (T, T), T] = {
     val newIx: Index[(T, T)] =
       Index.make((this.rowAt(row1).toVec, this.rowAt(row2).toVec))
@@ -734,13 +734,11 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
 
   /**
     * Return empty series of type equivalent to a row of frame
-    *
     */
   def emptyRow: Series[CX, T] = Series.empty[CX, T]
 
   /**
     * Return empty series of type equivalent to a column of frame
-    *
     */
   def emptyCol: Series[RX, T] = Series.empty[RX, T]
 
@@ -871,7 +869,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def flatMap[SX: ST: ORD, DX: ST: ORD, U: ST](
       f: ((RX, CX, T)) => Traversable[(SX, DX, U)]
   ): Frame[SX, DX, U] = {
-    Series(toSeq.flatMap(f).map { case (sx, dx, u) => ((sx, dx) -> u) }: _*).pivot
+    Series(
+      toSeq.flatMap(f).map { case (sx, dx, u) => ((sx, dx) -> u) }: _*
+    ).pivot
   }
 
   /**
@@ -1221,7 +1221,6 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     *    2 => 4
     * }}}
     *
-    *
     * @param melter Implicit evidence for a Melter for the two indexes
     * @tparam W Output type (tuple of arity N + M)
     */
@@ -1259,8 +1258,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @tparam O2 The 1-arity type of split-out index C
     * @tparam V The type of the stacked row index
     */
-  def stack[O1, O2, V](
-      implicit splt: Splitter[CX, O1, O2],
+  def stack[O1, O2, V](implicit
+      splt: Splitter[CX, O1, O2],
       stkr: Stacker[RX, O2, V],
       ord1: ORD[O1],
       ord2: ORD[O2],
@@ -1305,8 +1304,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @tparam O2 The 1-arity type of split-out index R
     * @tparam V The type of the stacked col index
     */
-  def unstack[O1, O2, V](
-      implicit splt: Splitter[RX, O1, O2],
+  def unstack[O1, O2, V](implicit
+      splt: Splitter[RX, O1, O2],
       stkr: Stacker[CX, O2, V],
       ord1: ORD[O1],
       ord2: ORD[O2],
@@ -1316,13 +1315,19 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     implicit def ordV = stkr.ord
     implicit def clmV = stkr.tag
 
-    val (lft, rgt) = splt(rowIx) // lft = row index w/o pivot level; rgt = pivot level
+    val (lft, rgt) =
+      splt(rowIx) // lft = row index w/o pivot level; rgt = pivot level
 
     val rix = lft.uniques // Final row index
     val uix = rgt.uniques
-    val cix = stkr(colIx, uix) // Final col index (colIx stacked w/unique pivot labels)
+    val cix =
+      stkr(colIx, uix) // Final col index (colIx stacked w/unique pivot labels)
 
-    val grps = IndexGrouper(rgt, sorted = false).groups // Group by pivot label. Each unique label will get its
+    val grps =
+      IndexGrouper(
+        rgt,
+        sorted = false
+      ).groups // Group by pivot label. Each unique label will get its
     //   own column in the final frame.
     if (values.length > 0) {
       val len = uix.length
@@ -1336,8 +1341,14 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
         val ixer = rix.join(gIdx) //   to compute map to final (rix) locations;
 
         for (currVec <- values) { // For each column vec of original frame
-          val vals = currVec.take(taker) //   take values corresponding to current pivot label
-          val v = ixer.rTake.map(vals.take(_)).getOrElse(vals) //   map values to be in correspondence to rix
+          val vals =
+            currVec.take(
+              taker
+            ) //   take values corresponding to current pivot label
+          val v =
+            ixer.rTake
+              .map(vals.take(_))
+              .getOrElse(vals) //   map values to be in correspondence to rix
           result(loc) = v //   and save vec in array.
 
           loc += len // Increment offset into result array
@@ -1377,10 +1388,14 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       array.fill(arr, st.missing)
       Vec(arr)
     }
-    Frame(values.zipWithIndex.map {
-      case (v, idx) =>
-        if (b.raw(idx)) missing else v
-    }, rowIx, colIx)
+    Frame(
+      values.zipWithIndex.map {
+        case (v, idx) =>
+          if (b.raw(idx)) missing else v
+      },
+      rowIx,
+      colIx
+    )
   }
 
   /**
@@ -1396,7 +1411,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * See reduce; operates row-wise
     */
   def rreduce[U: ST](f: Series[CX, T] => U): Series[RX, U] = {
-    val vec = 0 until numRows map { i => f(Series(values.rowAt(i), colIx)) } toVec
+    val vec = 0 until numRows map { i =>
+      f(Series(values.rowAt(i), colIx))
+    } toVec
 
     Series(vec, rowIx)
   }
@@ -1464,7 +1481,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     */
   def distinct = {
     val newColIx = colIx.distinct
-    col(newColIx.toArray)
+    colAt(colIx.firsts(newColIx.toArray))
   }
 
   /** Return the series with the first occurence of each row key.
@@ -1472,7 +1489,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     */
   def rdistinct = {
     val newRowIx = rowIx.distinct
-    row(newRowIx.toArray)
+    rowAt(rowIx.firsts(newRowIx.toArray))
   }
 
   /**
@@ -1626,33 +1643,40 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       val clens = MatCols.colLens(values, numCols, ncols)
 
       val csca = colIx.scalarTag
-      def clen(c: Int) = clens(c) max {
-        val lst = csca.strList(colIx.raw(c)).map(_.length)
-        if (lst.length > 0) lst.max else 0
-      }
+      def clen(c: Int) =
+        clens(c) max {
+          val lst = csca.strList(colIx.raw(c)).map(_.length)
+          if (lst.length > 0) lst.max else 0
+        }
 
-      var prevColMask = clens.map(x => (x._1, false)) // recalls whether we printed a column's label at level L-1
+      var prevColMask =
+        clens.map(x =>
+          (x._1, false)
+        ) // recalls whether we printed a column's label at level L-1
       var prevColLabel = "" // recalls previous column's label at level L
 
       // build columns header
-      def createColHeader(l: Int) = (c: Int) => {
-        val labs = csca.strList(colIx.raw(c))
-        val currLab = labs(l)
+      def createColHeader(l: Int) =
+        (c: Int) => {
+          val labs = csca.strList(colIx.raw(c))
+          val currLab = labs(l)
 
-        val fmt = "%" + clen(c) + "s "
-        val res =
-          if (l == labs.length - 1 || currLab != prevColLabel || prevColMask
+          val fmt = "%" + clen(c) + "s "
+          val res =
+            if (
+              l == labs.length - 1 || currLab != prevColLabel || prevColMask
                 .get(c)
-                .getOrElse(false)) {
-            prevColMask = prevColMask.updated(c, true)
-            currLab.formatted(fmt)
-          } else {
-            prevColMask = prevColMask.updated(c, false)
-            "".formatted(fmt)
-          }
-        prevColLabel = currLab
-        res
-      }
+                .getOrElse(false)
+            ) {
+              prevColMask = prevColMask.updated(c, true)
+              currLab.formatted(fmt)
+            } else {
+              prevColMask = prevColMask.updated(c, false)
+              "".formatted(fmt)
+            }
+          prevColLabel = currLab
+          res
+        }
 
       def colBreakStr = {
         prevColLabel = ""
@@ -1742,11 +1766,12 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   override def hashCode(): Int =
     values.hashCode() * 31 * 31 + rowIx.hashCode() * 31 + colIx.hashCode()
 
-  override def equals(other: Any): Boolean = other match {
-    case f: Frame[_, _, _] =>
-      (this eq f) || rowIx == f.rowIx && colIx == f.colIx && values == f.values
-    case _ => false
-  }
+  override def equals(other: Any): Boolean =
+    other match {
+      case f: Frame[_, _, _] =>
+        (this eq f) || rowIx == f.rowIx && colIx == f.colIx && values == f.values
+      case _ => false
+    }
 
   /**
     * Sum of the elements of each column, ignoring NA values
