@@ -12,7 +12,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import mat.MatMath
@@ -942,6 +942,15 @@ class MatCheck extends Specification with ScalaCheck {
       }
     }
 
+    "concat works" in {
+      forAll { (m: Mat[Double]) =>
+        (m.numCols > 0) ==> {
+          val c = m concat m
+          (c.numRows must_== (m.numRows * 2)) && (c.toVec must_== (m.toVec concat m.toVec))
+        }
+      }
+    }
+
     "col works" in {
       forAll { (m: Mat[Double]) =>
         (m.numCols > 0) ==> {
@@ -1138,8 +1147,8 @@ class MatCheck extends Specification with ScalaCheck {
           val m2 = m.copy
           val col = m2.col(0)
           col *= 0
-          m2 == Mat(m.cols.zipWithIndex.map {
-            case (col, idx) => if (idx == 0) col * 0d else col
+          m2 == Mat(m.cols.zipWithIndex.map { case (col, idx) =>
+            if (idx == 0) col * 0d else col
           }: _*)
         }
       }

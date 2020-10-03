@@ -589,10 +589,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     */
   def mapRows[Y: ST](fn: (RX, Vec[T]) => Vec[Y]): Frame[RX, CX, Y] =
     toRowSeq
-      .map {
-        case (rix, row) =>
-          val mappedVec = fn(rix, row.toVec)
-          (rix, Series(row.index, mappedVec))
+      .map { case (rix, row) =>
+        val mappedVec = fn(rix, row.toVec)
+        (rix, Series(row.index, mappedVec))
       }
       .toFrame
       .T
@@ -604,10 +603,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @tparam Y Result type of mapped value
     */
   def mapCols[Y: ST](fn: (CX, Vec[T]) => Vec[Y]): Frame[RX, CX, Y] =
-    toColSeq.map {
-      case (cix, col) =>
-        val mappedVec = fn(cix, col.toVec)
-        (cix, Series(col.index, mappedVec))
+    toColSeq.map { case (cix, col) =>
+      val mappedVec = fn(cix, col.toVec)
+      (cix, Series(col.index, mappedVec))
     }.toFrame
 
   /**
@@ -1389,9 +1387,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       Vec(arr)
     }
     Frame(
-      values.zipWithIndex.map {
-        case (v, idx) =>
-          if (b.raw(idx)) missing else v
+      values.zipWithIndex.map { case (v, idx) =>
+        if (b.raw(idx)) missing else v
       },
       rowIx,
       colIx
@@ -1597,12 +1594,10 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * in row-major order.
     */
   def toSeq: IndexedSeq[(RX, CX, T)] =
-    (Range(0, numRows) zip rowIx.toSeq).flatMap {
-      case (i, rx) =>
-        rowAt(i).toSeq.map {
-          case (cx, t) =>
-            (rx, cx, t)
-        }
+    (Range(0, numRows) zip rowIx.toSeq).flatMap { case (i, rx) =>
+      rowAt(i).toSeq.map { case (cx, t) =>
+        (rx, cx, t)
+      }
     }
 
   // ------------------------------------------------------

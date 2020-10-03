@@ -103,6 +103,13 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     */
   def contents: Array[T] = values.clone()
 
+  /** Concatenate this Mat to an other Mat vertically, i.e. concatenate as lists of rows
+    */
+  def concat(other: Mat[T]): Mat[T] = {
+    require(numCols == other.numCols)
+    Mat(numRows + other.numRows, numCols, this.toVec concat other.toVec)
+  }
+
   /**
     * Makes a copy of this Mat
     */
