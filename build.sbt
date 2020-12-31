@@ -79,9 +79,9 @@ lazy val commonSettings = Seq(
   },
   fork := true,
   cancelable in Global := true,
-  mimaPreviousArtifacts := previousStableVersion.value
-    .map(organization.value %% name.value % _)
-    .toSet,
+  mimaPreviousArtifacts := Set(
+    organization.value %% moduleName.value % "2.0.0"
+  ),
   mimaBinaryIssueFilters ++= Seq(
     ProblemFilters.exclude[ReversedMissingMethodProblem](
       "org.saddle.Vec.zipMapIdx"

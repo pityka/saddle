@@ -12,7 +12,7 @@ jobs:
     - uses: olafurpg/setup-scala@v10
     - uses: actions/setup-node@v1
     - name: Compile
-      run: sbt -J-Xmx3000m clean coverage test coverageAggregate docs/mdoc
+      run: sbt -J-Xmx3000m clean coverage test coverageAggregate docs/mdoc coreJVM/mimaReportBinaryIssues linalg/mimaReportBinaryIssues 
     - name: Codecov
       uses: codecov/codecov-action@v1.0.2
       if: github.actor == 'pityka'
