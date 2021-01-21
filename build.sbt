@@ -1,7 +1,7 @@
 import com.typesafe.tools.mima.core._
 
 lazy val scalaTestVersion = "3.2.3"
-lazy val scalaVersionInBuild = "2.12.12"
+lazy val scalaVersionInBuild = "2.12.13"
 
 lazy val commonSettings = Seq(
   scalaVersion := scalaVersionInBuild,
@@ -273,13 +273,27 @@ lazy val docs = project
   )
   .enablePlugins(MdocPlugin, ScalaUnidocPlugin)
 
+lazy val testJVM = taskKey[Unit]("test jvm projects")
+
 lazy val root = (project in file("."))
   .settings(commonSettings: _*)
   .settings(
     publishArtifact := false
   )
   .settings(
-    git.remoteRepo := ""
+    testJVM := {
+      List(
+        (test in Test in coreJVM).value,
+        (test in Test in coreJVMTests).value,
+        (test in Test in time).value,
+        (test in Test in stats).value,
+        (test in Test in linalg).value,
+        (test in Test in binary).value,
+        (test in Test in circeJVM).value,
+        (test in Test in inlinedOps).value,
+        (test in Test in spireJVM).value
+      )
+    }
   )
   .aggregate(
     coreJVM,
