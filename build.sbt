@@ -114,7 +114,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.specs2" %%% "specs2-scalacheck" % "4.9.4" % "test"
     )
   )
-  .dependsOn(spire)
+  .dependsOn(spire, io)
 
 lazy val coreJVM = core.jvm
 
@@ -257,6 +257,19 @@ lazy val spireJVM = spire.jvm
 
 lazy val spireJS = spire.js
 
+lazy val io = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("saddle-io"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "saddle-io",
+    scalaVersion := scalaVersionInBuild
+  )
+  .jsSettings(
+    coverageEnabled := false,
+    fork := false
+  )
+
 lazy val docs = project
   .in(file("saddle-docs"))
   .dependsOn(coreJVM, linalg, circeJVM, binary)
@@ -291,7 +304,8 @@ lazy val root = (project in file("."))
         (test in Test in binary).value,
         (test in Test in circeJVM).value,
         (test in Test in inlinedOps).value,
-        (test in Test in spireJVM).value
+        (test in Test in spireJVM).value,
+        (test in Test in io.jvm).value
       )
     }
   )
@@ -308,7 +322,9 @@ lazy val root = (project in file("."))
     docs,
     inlinedOps,
     spireJVM,
-    spireJS
+    spireJS,
+    io.jvm,
+    io.js
   )
 
 parallelExecution in ThisBuild := false

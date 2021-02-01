@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 Saddle Development Team
+/** Copyright (c) 2019 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -25,32 +24,9 @@ case class Descriptor(fortran: Boolean, shape: List[Int], dtype: String)
 object Reader {
 
   def parseHeader(s: String): Descriptor = {
-    val fortran = s.contains("'fortran_order': True")
-    val dtype = "'descr': '([^']*)'".r
-      .findFirstMatchIn(s)
-      .get
-      .matched
-      .split(":")
-      .last
-      .trim
-      .drop(1)
-      .dropRight(1)
-    val shape = "'shape': \\((\\d+,)( \\d+,)*( \\d+)*\\)".r
-      .findFirstMatchIn(s)
-      .get
-      .matched
-      .split(":")
-      .last
-      .trim
-      .drop(1)
-      .dropRight(1)
-      .split(",")
-      .map(_.trim.toInt)
-      .toList
-
-    Descriptor(fortran, shape, dtype)
+    val d = org.saddle.io.npy.parseHeader(s)
+    Descriptor(d.fortran, d.shape.map(_.toInt), d.dtype)
   }
-
   private[npy] def width[T: ST] =
     implicitly[ST[T]] match {
       case ScalarTagDouble => Right(8)
@@ -67,6 +43,15 @@ object Reader {
       case ScalarTagFloat  => Right("<f4")
       case ScalarTagLong   => Right("<i8")
       case ScalarTagByte   => Right("<i1")
+      case other           => Left(s"Type $other not supported.")
+    }
+  private[npy] def dtype2[T: ST] =
+    implicitly[ST[T]] match {
+      case ScalarTagDouble => Right(org.saddle.io.npy.DoubleType)
+      case ScalarTagInt    => Right(org.saddle.io.npy.IntType)
+      case ScalarTagFloat  => Right(org.saddle.io.npy.FloatType)
+      case ScalarTagLong   => Right(org.saddle.io.npy.LongType)
+      case ScalarTagByte   => Right(org.saddle.io.npy.ByteType)
       case other           => Left(s"Type $other not supported.")
     }
   def parse[T: ST](size: Int, from: ByteBuffer): Either[String, Array[T]] =
@@ -119,40 +104,71 @@ object Reader {
       Right(s.map(_.right.get))
     else s.find(_.isLeft).get.asInstanceOf[Left[A, Seq[B]]]
 
-  def readFully(bb: ByteBuffer, channel: ReadableByteChannel) = {
-    bb.clear
-    var i = 0
-    while (bb.hasRemaining && i >= 0) {
-      i = channel.read(bb)
-    }
-    bb.flip
-  }
+  def readFully(bb: ByteBuffer, channel: ReadableByteChannel) =
+    org.saddle.io.npy.readFully(bb, channel)
 
   def readHeaderFromChannel[T: ST](channel: ReadableByteChannel) =
     dtype[T].right.flatMap { expectedDataType =>
-      val magicAndVersion = Array.ofDim[Byte](8)
-      readFully(ByteBuffer.wrap(magicAndVersion), channel)
-      val magic = String.valueOf(magicAndVersion.map(_.toChar), 0, 6)
-      val major = magicAndVersion(6)
-      val minor = magicAndVersion(7)
-      if (magic.drop(1) != "NUMPY")
-        Left(
-          s"Magic string is incorrect. Found in file: $magic / $major / $minor"
-        )
-      else {
-        val headerLengthBB =
-          ByteBuffer.allocate(2).order(ByteOrder.LITTLE_ENDIAN)
-        readFully(headerLengthBB, channel)
-        val headerLength = headerLengthBB.getShort.toInt
-        val headerArray = Array.ofDim[Byte](headerLength)
-        readFully(ByteBuffer.wrap(headerArray), channel)
-        val header = new String(headerArray, "UTF-8")
-        val descriptor = parseHeader(header)
-        if (descriptor.fortran || descriptor.dtype != expectedDataType)
-          Left("Data layout not supported")
-        else Right(descriptor)
+      org.saddle.io.npy.readHeaderFromChannel(channel).right.flatMap { descr =>
+        if (descr.dtype != expectedDataType) Left("Unexpected dtype")
+        else
+          Right(
+            Descriptor(descr.fortran, descr.shape.map(_.toInt), descr.dtype)
+          )
       }
     }
+
+  def readMatFromChannel[T: ST](
+      channel: ReadableByteChannel
+  ): Either[String, Mat[T]] = {
+    dtype2[T].right.flatMap { dtype =>
+      org.saddle.io.npy.readFromChannel(dtype, channel).flatMap {
+        case (descr, arrays) =>
+          if (descr.shape.size != 2) Left("Not matrix shape")
+          else
+            sequence(arrays.toList).right.map { arrays =>
+              val vec = arrays
+                .map(_.toVec.asInstanceOf[Vec[T]])
+                .foldLeft(Vec.empty[T])(_ concat _)
+              Mat(descr.shape(0).toInt, descr.shape(1).toInt, vec)
+            }
+      }
+    }
+  }
+  def readVecFromChannel[T: ST](
+      channel: ReadableByteChannel
+  ): Either[String, (Vec[T], List[Int])] = {
+    dtype2[T].right.flatMap { dtype =>
+      org.saddle.io.npy.readFromChannel(dtype, channel).flatMap {
+        case (descr, arrays) =>
+          sequence(arrays.toList).right.map { arrays =>
+            val vec = arrays
+              .map(_.toVec.asInstanceOf[Vec[T]])
+              .foldLeft(Vec.empty[T])(_ concat _)
+            (vec, descr.shape.map(_.toInt))
+          }
+      }
+
+    }
+  }
+
+  class ByteChannel(src: ByteBuffer) extends ReadableByteChannel {
+    def read(dst: ByteBuffer) = {
+      var i = 0
+      while (dst.hasRemaining() && src.hasRemaining()) {
+        dst.put(src.get)
+        i += 1
+      }
+      i
+    }
+    def isOpen(): Boolean = true
+    def close(): Unit = ()
+  }
+
+  def readMatFromArray[T: ST](
+      array: Array[Byte]
+  ): Either[String, Mat[T]] =
+    readMatFromChannel(new ByteChannel(ByteBuffer.wrap(array)))
 
   def readMatDataFromChannel[T: ST](
       channel: ReadableByteChannel,
@@ -189,50 +205,4 @@ object Reader {
       }
     }
   }
-
-  def readMatFromChannel[T: ST](
-      channel: ReadableByteChannel
-  ): Either[String, Mat[T]] = {
-    readHeaderFromChannel[T](channel).right.flatMap { descriptor =>
-      width[T].right.flatMap { width =>
-        if (descriptor.shape.size != 2) Left("Not a matrix shape")
-        else {
-          val numRows =
-            descriptor.shape(0)
-          val numCols = descriptor.shape(1)
-          readMatDataFromChannel(channel, numRows, numCols, width)
-        }
-      }
-    }
-  }
-  def readVecFromChannel[T: ST](
-      channel: ReadableByteChannel
-  ): Either[String, (Vec[T], List[Int])] = {
-    readHeaderFromChannel[T](channel).right.flatMap { descriptor =>
-      width[T].right.flatMap { width =>
-        val len = descriptor.shape.reduce(_ * _)
-        readVecDataFromChannel(channel, len, width).right.map(s =>
-          (s, descriptor.shape)
-        )
-      }
-    }
-  }
-
-  class ByteChannel(src: ByteBuffer) extends ReadableByteChannel {
-    def read(dst: ByteBuffer) = {
-      var i = 0
-      while (dst.hasRemaining() && src.hasRemaining()) {
-        dst.put(src.get)
-        i += 1
-      }
-      i
-    }
-    def isOpen(): Boolean = true
-    def close(): Unit = ()
-  }
-
-  def readMatFromArray[T: ST](
-      array: Array[Byte]
-  ): Either[String, Mat[T]] =
-    readMatFromChannel(new ByteChannel(ByteBuffer.wrap(array)))
 }

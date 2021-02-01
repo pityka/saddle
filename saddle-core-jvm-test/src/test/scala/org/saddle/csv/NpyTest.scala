@@ -1,7 +1,6 @@
 package org.saddle.npy
 
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -14,7 +13,7 @@ package org.saddle.npy
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 import org.specs2.mutable.Specification
 import org.saddle._
 class NpyTest extends Specification {
@@ -31,6 +30,7 @@ class NpyTest extends Specification {
     read must_== ((Vec(1d, 0d, 0d, 0d, 1d, 0d, 0d, 0d, 1d), List(3, 3)))
   }
   "read vec 2" in {
+
     val read =
       Reader
         .readVecFromChannel[Double](
