@@ -204,9 +204,7 @@ object CsvParser {
     }
   }
 
-  // this is here to maintain binary compatibility
-  @scala.annotation.nowarn
-  private class DataBuffer(
+  private[csv] class DataBuffer(
       data: Iterator[CharBuffer],
       var buffer: CharBuffer,
       var position: Int,
