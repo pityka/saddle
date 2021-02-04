@@ -3,6 +3,10 @@ package org.saddle.io
 import java.nio.CharBuffer
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
+import java.nio.channels.ReadableByteChannel
+import java.nio.charset.CharsetDecoder
+import java.nio.charset.Charset
+import java.nio.charset.CodingErrorAction
 
 package object csv {
 
@@ -357,4 +361,37 @@ package object csv {
     errorMessage
 
   }
+
+  def readChannel(
+      channel: ReadableByteChannel,
+      bufferSize: Int,
+      charset: CharsetDecoder
+  ): Iterator[CharBuffer] = {
+    val buffer = java.nio.ByteBuffer.allocate(bufferSize)
+    var eof = false
+    def fillBuffer() = {
+      buffer.clear()
+      var count = channel.read(buffer)
+      while (count >= 0 && buffer.remaining > 0) {
+        count = channel.read(buffer)
+      }
+      if (count < 0) {
+        eof = true
+      }
+      buffer.flip
+    }
+    new Iterator[CharBuffer] {
+      def hasNext = !eof
+      def next = {
+        fillBuffer()
+        charset.decode(buffer)
+      }
+    }
+  }
+
+  val asciiSilentCharsetDecoder = Charset
+    .forName("US-ASCII")
+    .newDecoder()
+    .onMalformedInput(CodingErrorAction.REPLACE)
+    .onUnmappableCharacter(CodingErrorAction.REPLACE)
 }

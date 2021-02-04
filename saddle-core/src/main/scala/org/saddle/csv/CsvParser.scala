@@ -22,47 +22,22 @@ import org.saddle.Buffer
 import scala.{specialized => spec}
 import java.nio.CharBuffer
 import java.io.File
-import java.nio.charset.Charset
 import java.nio.charset.CharsetDecoder
-import java.nio.charset.CodingErrorAction
 
 /** Csv parsing utilities
   */
 object CsvParser {
 
-  val asciiSilentCharsetDecoder = Charset
-    .forName("US-ASCII")
-    .newDecoder()
-    .onMalformedInput(CodingErrorAction.REPLACE)
-    .onUnmappableCharacter(CodingErrorAction.REPLACE)
+  val asciiSilentCharsetDecoder = org.saddle.io.csv.asciiSilentCharsetDecoder
 
   def readFile(
       file: File,
       bufferSize: Int,
       charset: CharsetDecoder
   ): Iterator[CharBuffer] = {
-    val buffer = java.nio.ByteBuffer.allocate(bufferSize)
     val is = new java.io.FileInputStream(file)
     val channel = is.getChannel
-    var eof = false
-    def fillBuffer() = {
-      buffer.clear()
-      var count = channel.read(buffer)
-      while (count >= 0 && buffer.remaining > 0) {
-        count = channel.read(buffer)
-      }
-      if (count < 0) {
-        eof = true
-      }
-      buffer.flip
-    }
-    new Iterator[CharBuffer] {
-      def hasNext = !eof
-      def next = {
-        fillBuffer()
-        charset.decode(buffer)
-      }
-    }
+    org.saddle.io.csv.readChannel(channel, bufferSize, charset)
   }
 
   def parseFile[@spec(Int, Double, Long, Float) T](
@@ -74,15 +49,22 @@ object CsvParser {
       bufferSize: Int = 8192,
       maxLines: Long = Long.MaxValue,
       charsetDecoder: CharsetDecoder = asciiSilentCharsetDecoder
-  )(implicit st: ST[T]): Either[String, Frame[Int, Int, T]] =
-    parseFromIterator(
-      readFile(file, bufferSize, charsetDecoder),
-      cols,
-      fieldSeparator,
-      quoteChar,
-      recordSeparator,
-      maxLines
-    ).map(_._1)
+  )(implicit st: ST[T]): Either[String, Frame[Int, Int, T]] = {
+    val is = new java.io.FileInputStream(file)
+    val channel = is.getChannel
+    try {
+      parseFromIterator(
+        org.saddle.io.csv.readChannel(channel, bufferSize, charsetDecoder),
+        cols,
+        fieldSeparator,
+        quoteChar,
+        recordSeparator,
+        maxLines
+      ).map(_._1)
+    } finally {
+      channel.close()
+    }
+  }
 
   def parseFileWithHeader[@spec(Int, Double, Long, Float) T](
       file: File,
@@ -93,16 +75,23 @@ object CsvParser {
       bufferSize: Int = 8192,
       maxLines: Long = Long.MaxValue,
       charsetDecoder: CharsetDecoder = asciiSilentCharsetDecoder
-  )(implicit st: ST[T]): Either[String, Frame[Int, String, T]] =
-    parseFromIterator(
-      readFile(file, bufferSize, charsetDecoder),
-      cols,
-      fieldSeparator,
-      quoteChar,
-      recordSeparator,
-      maxLines,
-      header = true
-    ).map { case (frame, colIndex) => frame.setColIndex(colIndex.get) }
+  )(implicit st: ST[T]): Either[String, Frame[Int, String, T]] = {
+    val is = new java.io.FileInputStream(file)
+    val channel = is.getChannel
+    try {
+      parseFromIterator(
+        org.saddle.io.csv.readChannel(channel, bufferSize, charsetDecoder),
+        cols,
+        fieldSeparator,
+        quoteChar,
+        recordSeparator,
+        maxLines,
+        header = true
+      ).map { case (frame, colIndex) => frame.setColIndex(colIndex.get) }
+    } finally {
+      channel.close()
+    }
+  }
 
   def parseSource[@spec(Int, Double, Long, Float) T](
       source: Source,
