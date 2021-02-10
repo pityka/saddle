@@ -98,7 +98,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-kernel" % "2.3.1",
+      "org.typelevel" %% "cats-kernel" % "2.4.0",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %% "specs2-core" % "4.10.6" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
@@ -108,7 +108,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     fork := false,
     coverageEnabled := false,
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core" % "2.3.1",
+      "org.typelevel" %%% "cats-core" % "2.4.0",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %%% "specs2-core" % "4.9.4" % "test",
       "org.specs2" %%% "specs2-scalacheck" % "4.9.4" % "test"
@@ -130,7 +130,7 @@ lazy val coreJVMTests = project
   )
   .settings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-core" % "2.3.1",
+      "org.typelevel" %% "cats-core" % "2.4.0",
       "org.specs2" %% "specs2-core" % "4.10.6" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
