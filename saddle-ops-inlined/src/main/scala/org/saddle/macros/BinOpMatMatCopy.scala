@@ -17,12 +17,17 @@ trait BinOpMatMatCopy {
   implicit val matMat_Copy_II_Add = MatMat[Int, Int, Int, Add]
 
   implicit val matMat_Copy_DD_Power = MatMat[Double, Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val matMat_Copy_LD_Power = MatMat[Long, Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val matMat_Copy_DL_Power = MatMat[Double, Long, Double, Power]
   implicit val matMat_Copy_DI_Power = MatMat[Double, Int, Double, Power]
   implicit val matMat_Copy_ID_Power = MatMat[Int, Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val matMat_Copy_LL_Power = MatMat[Long, Long, Long, Power]
+  @scala.annotation.nowarn
   implicit val matMat_Copy_LI_Power = MatMat[Long, Int, Long, Power]
+  @scala.annotation.nowarn
   implicit val matMat_Copy_IL_Power = MatMat[Int, Long, Long, Power]
   implicit val matMat_Copy_II_Power = MatMat[Int, Int, Int, Power]
 

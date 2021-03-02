@@ -71,7 +71,7 @@ object Reader {
 
   def sequence[A, B](s: Seq[Either[A, B]]): Either[A, Seq[B]] =
     if (s.forall(_.isRight))
-      Right(s.map(_.right.get))
+      Right(s.map(_.toOption.get))
     else s.find(_.isLeft).get.asInstanceOf[Left[A, Seq[B]]]
 
   def readFully(bb: ByteBuffer, channel: ReadableByteChannel) = {
@@ -84,7 +84,7 @@ object Reader {
   }
 
   def readHeaderFromChannel[T: ST](channel: ReadableByteChannel) =
-    dtype[T].right.flatMap { expectedDataType =>
+    dtype[T].flatMap { expectedDataType =>
       val magicAndVersion = Array.ofDim[Byte](8)
       readFully(ByteBuffer.wrap(magicAndVersion), channel)
       val magic = String.valueOf(magicAndVersion.map(_.toChar), 0, 6)
@@ -121,7 +121,7 @@ object Reader {
       .allocate(width * numRows * numCols)
       .order(ByteOrder.LITTLE_ENDIAN)
     readFully(bb, channel)
-    parse[T](numRows * numCols, bb).right.flatMap { data =>
+    parse[T](numRows * numCols, bb).flatMap { data =>
       if (data.size != numRows * numCols) {
         Left("Premature end of input")
       } else {
@@ -133,8 +133,8 @@ object Reader {
   def readMatFromChannel[T: ST](
       channel: ReadableByteChannel
   ): Either[String, Mat[T]] = {
-    readHeaderFromChannel[T](channel).right.flatMap { descriptor =>
-      width[T].right.flatMap { width =>
+    readHeaderFromChannel[T](channel).flatMap { descriptor =>
+      width[T].flatMap { width =>
         val numRows =
           descriptor
             .get(KEY_numrows)
@@ -152,7 +152,7 @@ object Reader {
             IndexIntRange(numRows).map(_.toString),
             IndexIntRange(numCols).map(_.toString),
             width
-          ).right.map(_.toMat)
+          ).map(_.toMat)
         else readMatDataFromChannel(channel, numRows, numCols, width)
       }
     }
@@ -184,10 +184,10 @@ object Reader {
   def readFrameFromChannel[T: ST](
       channel: ReadableByteChannel
   ): Either[String, Frame[String, String, T]] = {
-    readHeaderFromChannel[T](channel).right.flatMap { descriptor =>
-      width[T].right.flatMap { width =>
-        val colIx = Index(descriptor(KEY_colix).arr.map(_.str): _*)
-        val rowIx = Index(descriptor(KEY_rowix).arr.map(_.str): _*)
+    readHeaderFromChannel[T](channel).flatMap { descriptor =>
+      width[T].flatMap { width =>
+        val colIx = Index(descriptor(KEY_colix).arr.map(_.str).toSeq: _*)
+        val rowIx = Index(descriptor(KEY_rowix).arr.map(_.str).toSeq: _*)
         val rowmajor = descriptor(KEY_rowmajor).bool
         if (rowmajor)
           Left("Row-major data should be read into a Mat")

@@ -101,15 +101,15 @@ object Reader {
 
   def sequence[A, B](s: Seq[Either[A, B]]): Either[A, Seq[B]] =
     if (s.forall(_.isRight))
-      Right(s.map(_.right.get))
+      Right(s.map(_.toOption.get))
     else s.find(_.isLeft).get.asInstanceOf[Left[A, Seq[B]]]
 
   def readFully(bb: ByteBuffer, channel: ReadableByteChannel) =
     org.saddle.io.npy.readFully(bb, channel)
 
   def readHeaderFromChannel[T: ST](channel: ReadableByteChannel) =
-    dtype[T].right.flatMap { expectedDataType =>
-      org.saddle.io.npy.readHeaderFromChannel(channel).right.flatMap { descr =>
+    dtype[T].flatMap { expectedDataType =>
+      org.saddle.io.npy.readHeaderFromChannel(channel).flatMap { descr =>
         if (descr.dtype != expectedDataType) Left("Unexpected dtype")
         else
           Right(
@@ -121,12 +121,12 @@ object Reader {
   def readMatFromChannel[T: ST](
       channel: ReadableByteChannel
   ): Either[String, Mat[T]] = {
-    dtype2[T].right.flatMap { dtype =>
+    dtype2[T].flatMap { dtype =>
       org.saddle.io.npy.readFromChannel(dtype, channel).flatMap {
         case (descr, arrays) =>
           if (descr.shape.size != 2) Left("Not matrix shape")
           else
-            sequence(arrays.toList).right.map { arrays =>
+            sequence(arrays.toList).map { arrays =>
               val vec = arrays
                 .map(_.toVec.asInstanceOf[Vec[T]])
                 .foldLeft(Vec.empty[T])(_ concat _)
@@ -138,10 +138,10 @@ object Reader {
   def readVecFromChannel[T: ST](
       channel: ReadableByteChannel
   ): Either[String, (Vec[T], List[Int])] = {
-    dtype2[T].right.flatMap { dtype =>
+    dtype2[T].flatMap { dtype =>
       org.saddle.io.npy.readFromChannel(dtype, channel).flatMap {
         case (descr, arrays) =>
-          sequence(arrays.toList).right.map { arrays =>
+          sequence(arrays.toList).map { arrays =>
             val vec = arrays
               .map(_.toVec.asInstanceOf[Vec[T]])
               .foldLeft(Vec.empty[T])(_ concat _)
@@ -180,7 +180,7 @@ object Reader {
       .allocate(width * numRows * numCols)
       .order(ByteOrder.LITTLE_ENDIAN)
     readFully(bb, channel)
-    parse[T](numRows * numCols, bb).right.flatMap { data =>
+    parse[T](numRows * numCols, bb).flatMap { data =>
       if (data.size != numRows * numCols) {
         Left("Premature end of input")
       } else {
@@ -197,7 +197,7 @@ object Reader {
       .allocate(width * len)
       .order(ByteOrder.LITTLE_ENDIAN)
     readFully(bb, channel)
-    parse[T](len, bb).right.flatMap { data =>
+    parse[T](len, bb).flatMap { data =>
       if (data.size != len) {
         Left("Premature end of input")
       } else {

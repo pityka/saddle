@@ -1,7 +1,6 @@
 package org.saddle.stats
 
-/**
-  * Mediator is an auxiliary class for O(N log k) rolling median. It is inspired by
+/** Mediator is an auxiliary class for O(N log k) rolling median. It is inspired by
   * AShelly's C99 implementation, which is (c) 2011 ashelly.myopenid.com and licensed
   * under the MIT license: http://www.opensource.org/licenses/mit-license
   *
@@ -13,9 +12,13 @@ class Mediator(winSz: Int) {
 
   // auxiliary data
   private val data = Array.ofDim[Double](winSz) // circular buffer of values
-  private val loc = Array.ofDim[Int](winSz) // ith value's location within heap array
-  private val heap = Array.ofDim[Int](winSz) // orders data array into [max heap] :: median :: [min heap]
-  private val sawNa = Array.ofDim[Boolean](winSz) // circular buffer of na markers
+  private val loc =
+    Array.ofDim[Int](winSz) // ith value's location within heap array
+  private val heap = Array.ofDim[Int](
+    winSz
+  ) // orders data array into [max heap] :: median :: [min heap]
+  private val sawNa =
+    Array.ofDim[Boolean](winSz) // circular buffer of na markers
   private var idx = 0 // position in circular buffer
   private var naIdx = 0 // position in circular buffer
   private var minCt = 0 // # items in minheap
@@ -33,7 +36,8 @@ class Mediator(winSz: Int) {
   //   (a) size(minheap) <= size(maxheap)
   //   (b) size(minheap) >= size(maxheap) - 1
 
-  private val hMid = winSz / 2 // heap(hMid) = x s.t. data(x) holds mid (between max/min heaps)
+  private val hMid =
+    winSz / 2 // heap(hMid) = x s.t. data(x) holds mid (between max/min heaps)
 
   // loc array is a reverse lookup for data into the heap, eg:
   //   loc(n) = -2  ==>  data(n) is maxheap child1
@@ -54,7 +58,7 @@ class Mediator(winSz: Int) {
       v
   }
 
-  def push(v: Double) {
+  def push(v: Double) = {
     val oldNa = sawNa(naIdx)
 
     if (v != v) {
@@ -78,7 +82,7 @@ class Mediator(winSz: Int) {
     naIdx = (naIdx + 1) % winSz
   }
 
-  def pop() {
+  def pop() = {
     // get location of least recently inserted value
     val l = (idx - totCt + winSz) % winSz
     val p = loc(l)
@@ -129,7 +133,7 @@ class Mediator(winSz: Int) {
     data(heap(i + hMid)) < data(heap(j + hMid))
 
   // swaps items i & j in heap, maintains indexes
-  private def swap(i: Int, j: Int) {
+  private def swap(i: Int, j: Int) = {
     val iOff = i + hMid
     val jOff = j + hMid
     val t = heap(iOff)
@@ -148,7 +152,7 @@ class Mediator(winSz: Int) {
   }
 
   // maintains minheap property for all items below i in heap
-  private def minSortDown(iIn: Int) {
+  private def minSortDown(iIn: Int) = {
     var i = iIn * 2
     while (i <= minCt) {
       if (i < minCt && isless(i + 1, i)) {
@@ -162,7 +166,7 @@ class Mediator(winSz: Int) {
   }
 
   // maintains maxheap property for all items below i in heap
-  private def maxSortDown(iIn: Int) {
+  private def maxSortDown(iIn: Int) = {
     var i = iIn * 2
     while (i >= -maxCt) {
       if (i > -maxCt && isless(i, i - 1)) {
@@ -192,7 +196,7 @@ class Mediator(winSz: Int) {
   }
 
   // rebalance toward maxheap
-  private def minToMax() {
+  private def minToMax() = {
     maxCt += 1 // make room on maxheap
     swap(minCt, -maxCt) // swap element from minheap
     minCt -= 1
@@ -202,7 +206,7 @@ class Mediator(winSz: Int) {
   }
 
   // rebalance toward minheap
-  private def maxToMin() {
+  private def maxToMin() = {
     minCt += 1 // make room on minheap
     swap(-maxCt, minCt) // swap element from maxheap
     maxCt -= 1
@@ -211,7 +215,7 @@ class Mediator(winSz: Int) {
     }
   }
 
-  private def insert(v: Double) {
+  private def insert(v: Double) = {
     // save old value
     val old = data(idx)
 
@@ -282,7 +286,7 @@ class Mediator(winSz: Int) {
     idx = (idx + 1) % winSz
   }
 
-  private def printMaxHeap() {
+  private def printMaxHeap() = {
     if (maxCt > 0)
       print("%6.2f" format data(heap(-1 + hMid)))
     var i = 2
@@ -296,7 +300,7 @@ class Mediator(winSz: Int) {
     println("")
   }
 
-  private def printMinHeap() {
+  private def printMinHeap() = {
     if (minCt > 0)
       print("%6.2f" format data(heap(1 + hMid)))
     var i = 2
@@ -310,7 +314,7 @@ class Mediator(winSz: Int) {
     println("")
   }
 
-  def debug() {
+  def debug() = {
     println("Med: %6.2f" format median)
     println("Obs: %6d" format totCt)
     println("NAs: %6d" format nanCt)
@@ -327,7 +331,9 @@ class Mediator(winSz: Int) {
       val star1 = if (i == idx) "*" else " "
       val star2 = if (i == naIdx) " *" else "  "
       println(
-        "%s%3d|%12.6f|%12d|%12d |%5s%s|" format (star1, i, data(i), heap(i), loc(
+        "%s%3d|%12.6f|%12d|%12d |%5s%s|" format (star1, i, data(i), heap(
+          i
+        ), loc(
           i
         ), sawNa(i), star2)
       )

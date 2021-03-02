@@ -5,7 +5,6 @@
   * Modifications:
   *  - add index sorters (arg sort, permutation index)
   *  - add ORD shorthand
-  *
   */
 package org.saddle.array
 
@@ -13,24 +12,21 @@ import org.saddle.ORD
 import scala.{specialized => sp}
 import scala.reflect.ClassTag
 
-/**
-  * An implementation of insertion sort.
+/** An implementation of insertion sort.
   *
- * Works well for small arrays but due to quadratic complexity is not generally optimal.
+  * Works well for small arrays but due to quadratic complexity is not generally optimal.
   */
 object InsertionSort {
 
-  /**
-    * Sorts `data` in place using insertion sort.
+  /** Sorts `data` in place using insertion sort.
     *
     * @param data the array to be sorted
     * @tparam A a member of the type class `Order`
     */
-  final def sort[@sp A: ORD: ClassTag](data: Array[A]): Unit =
+  final def sort[@sp A: ORD](data: Array[A]): Unit =
     sort(data, 0, data.length)
 
-  /**
-    * Uses insertion sort on `data` to sort the entries from the index `start`
+  /** Uses insertion sort on `data` to sort the entries from the index `start`
     * up to, but not including, the index `end`. Operates in place.
     *
     * @param data the array to be sorted
@@ -56,8 +52,7 @@ object InsertionSort {
   }
 }
 
-/**
-  * In-place merge sort implementation. This sort is stable but does mutate
+/** In-place merge sort implementation. This sort is stable but does mutate
   * the given array. It is an in-place sort but it does allocate a temporary
   * array of the same size as the input. It uses InsertionSort for sorting very
   * small arrays.
@@ -66,8 +61,7 @@ object MergeSort {
   @inline final def startWidth: Int = 8
   @inline final def startStep: Int = 16
 
-  /**
-    * Uses merge sort to sort the array `data` in place.
+  /** Uses merge sort to sort the array `data` in place.
     *
     * If the size of the input array does not exceed the threshold `startStep`,
     * uses insertion sort instead.
@@ -115,8 +109,7 @@ object MergeSort {
     if (!buf1.eq(data)) System.arraycopy(buf1, 0, data, 0, len)
   }
 
-  /**
-    * Helper method for mergeSort, used to do a single "merge" between two
+  /** Helper method for mergeSort, used to do a single "merge" between two
     * sections of the input array, and write the result to the output array.
     *
     * The first input section starts at `start` (inclusive) and ends at `mid` (exclusive).
@@ -155,15 +148,13 @@ object MergeSort {
   }
 }
 
-/**
-  * An implementation of insertion sort.
+/** An implementation of insertion sort.
   *
   * Works well for small arrays but due to quadratic complexity is not generally optimal.
   */
 object PermuteInsertionSort {
 
-  /**
-    * Uses insertion sort on `data` to sort the entries from the index `start`
+  /** Uses insertion sort on `data` to sort the entries from the index `start`
     * up to, but not including, the index `end`.
     * Permutation indices are returned in `perm`: data[perm[k]] is the k-th smallest elem in data
     * `data` is not modified.
@@ -201,8 +192,7 @@ object PermuteInsertionSort {
   }
 }
 
-/**
-  * In-place merge sort implementation. This sort is stable but does mutate
+/** In-place merge sort implementation. This sort is stable but does mutate
   * the given array. It is an in-place sort but it does allocate a temporary
   * array of the same size as the input. It uses InsertionSort for sorting very
   * small arrays.

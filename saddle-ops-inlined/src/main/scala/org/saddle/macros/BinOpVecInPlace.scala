@@ -16,9 +16,12 @@ trait BinOpVecInPlace {
   implicit val vecSclr_II_Add = VecSclrIP[Int, Int, Add]
 
   implicit val vecSclr_DD_Power = VecSclrIP[Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val vecSclr_DL_Power = VecSclrIP[Double, Long, Power]
   implicit val vecSclr_DI_Power = VecSclrIP[Double, Int, Power]
+  @scala.annotation.nowarn
   implicit val vecSclr_LL_Power = VecSclrIP[Long, Long, Power]
+  @scala.annotation.nowarn
   implicit val vecSclr_LI_Power = VecSclrIP[Long, Int, Power]
   implicit val vecSclr_II_Power = VecSclrIP[Int, Int, Power]
 

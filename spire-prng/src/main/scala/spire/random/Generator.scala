@@ -19,35 +19,29 @@ abstract class Generator {
 
   def setSeedBytes(bytes: Array[Byte]): Unit
 
-  /**
-    * Generate an equally-distributed random Int.
+  /** Generate an equally-distributed random Int.
     */
   def nextInt(): Int
 
-  /**
-    * Generates a random long. All 64-bit long values are equally likely.
+  /** Generates a random long. All 64-bit long values are equally likely.
     */
   def nextLong(): Long
 
-  /**
-    * Generate a random value using a Dist[A] type class instance.
+  /** Generate a random value using a Dist[A] type class instance.
     *
     * Implicit Dist[A] instances are provided for the AnyVal types as well as
     * UByte through ULong. More complex Dist instances can be created from
     * these.
     */
 
-  /**
-    * Generate an infinite iterator of random values using Dist[A].
+  /** Generate an infinite iterator of random values using Dist[A].
     */
 
-  /**
-    * Generates a random integer using n bits of state (0 <= n <= 32).
+  /** Generates a random integer using n bits of state (0 <= n <= 32).
     */
   def nextBits(n: Int): Int = nextInt() >>> (32 - n)
 
-  /**
-    * Generates a random int between 0 (inclusive) and n (exclusive).
+  /** Generates a random int between 0 (inclusive) and n (exclusive).
     */
   def nextInt(n: Int): Int = {
     @tailrec def loop(b: Int): Int = {
@@ -73,8 +67,7 @@ abstract class Generator {
     n * width
   }
 
-  /**
-    * Return an Int in [from, to].
+  /** Return an Int in [from, to].
     */
   def nextInt(from: Int, to: Int): Int = {
     val width = UInt(to - from + 1)
@@ -95,8 +88,7 @@ abstract class Generator {
     }
   }
 
-  /**
-    * Generates a random int between 0 (inclusive) and n (exclusive).
+  /** Generates a random int between 0 (inclusive) and n (exclusive).
     */
   def nextLong(n: Long): Long = {
     @tailrec def loop(b: Long): Long = {
@@ -122,8 +114,7 @@ abstract class Generator {
     n * width
   }
 
-  /**
-    * Return an Long in [from, to].
+  /** Return an Long in [from, to].
     */
   def nextLong(from: Long, to: Long): Long = {
     val width = ULong(to - from + 1)
@@ -144,46 +135,38 @@ abstract class Generator {
     }
   }
 
-  /**
-    * Generates a random Boolean.
+  /** Generates a random Boolean.
     */
   def nextBoolean(): Boolean = (nextInt() & 1) != 0
 
-  /**
-    * Generates a random float in [0.0, 1.0).
+  /** Generates a random float in [0.0, 1.0).
     */
   def nextFloat(): Float = (nextInt() >>> 8) * 5.9604645e-8f
 
-  /**
-    * Generates a random float in [0.0, n).
+  /** Generates a random float in [0.0, n).
     */
   def nextFloat(n: Float): Float = nextFloat() * n
 
-  /**
-    * Generates a random float in [from, until).
+  /** Generates a random float in [from, until).
     */
   def nextFloat(from: Float, until: Float): Float =
     from + (until - from) * nextFloat()
 
-  /**
-    * Generates a random double in [0.0, 1.0).
+  /** Generates a random double in [0.0, 1.0).
     */
   def nextDouble(): Double =
     (nextLong() >>> 11) * 1.1102230246251565e-16
 
-  /**
-    * Generates a random double in [0.0, n).
+  /** Generates a random double in [0.0, n).
     */
   def nextDouble(n: Double): Double = nextDouble() * n
 
-  /**
-    * Generates a random double in [from, until).
+  /** Generates a random double in [from, until).
     */
   def nextDouble(from: Double, until: Double): Double =
     from + (until - from) * nextDouble()
 
-  /**
-    * Generate an array of n random Longs.
+  /** Generate an array of n random Longs.
     */
   def generateLongs(n: Int): Array[Long] = {
     val arr = new Array[Long](n)
@@ -191,8 +174,7 @@ abstract class Generator {
     arr
   }
 
-  /**
-    * Fill an array with random Longs.
+  /** Fill an array with random Longs.
     */
   def fillLongs(arr: Array[Long]): Unit = {
     var i = 0
@@ -203,8 +185,7 @@ abstract class Generator {
     }
   }
 
-  /**
-    * Generate an array of n random Ints.
+  /** Generate an array of n random Ints.
     */
   def generateInts(n: Int): Array[Int] = {
     val arr = new Array[Int](n)
@@ -212,8 +193,7 @@ abstract class Generator {
     arr
   }
 
-  /**
-    * Fill an array with random Ints.
+  /** Fill an array with random Ints.
     */
   def fillInts(arr: Array[Int]): Unit = {
     var i = 0
@@ -224,8 +204,7 @@ abstract class Generator {
     }
   }
 
-  /**
-    * Generate an array of n random Shorts.
+  /** Generate an array of n random Shorts.
     */
   def generateShorts(n: Int): Array[Short] = {
     val arr = new Array[Short](n)
@@ -233,8 +212,7 @@ abstract class Generator {
     arr
   }
 
-  /**
-    * Fill an array with random Shorts.
+  /** Fill an array with random Shorts.
     */
   def fillShorts(arr: Array[Short]): Unit = {
     var i = 0
@@ -250,8 +228,7 @@ abstract class Generator {
     if (len != llen) arr(i) = (nextInt() & 0xffff).toShort
   }
 
-  /**
-    * Generate an array of n random Bytes.
+  /** Generate an array of n random Bytes.
     */
   def generateBytes(n: Int): Array[Byte] = {
     val arr = new Array[Byte](n)
@@ -259,8 +236,7 @@ abstract class Generator {
     arr
   }
 
-  /**
-    * Fill an array with random Bytes.
+  /** Fill an array with random Bytes.
     */
   def fillBytes(arr: Array[Byte]): Unit = {
     var i = 0
@@ -285,12 +261,10 @@ abstract class Generator {
     }
   }
 
-  /**
-    * Generate an Array[A] using the given Dist[A] instance.
+  /** Generate an Array[A] using the given Dist[A] instance.
     */
 
-  /**
-    * Fill an Array[A] using the given Dist[A] instance.
+  /** Fill an Array[A] using the given Dist[A] instance.
     */
 
   def oneOf[A](as: A*): A = chooseFromSeq(as)(this)
@@ -521,7 +495,7 @@ object GlobalRng extends LongBasedGenerator {
 
   def copyInit: Generator = rng.copyInit
 
-  def getSeedBytes: Array[Byte] = rng.getSeedBytes
+  def getSeedBytes(): Array[Byte] = rng.getSeedBytes()
 
   def setSeedBytes(bytes: Array[Byte]): Unit = rng.setSeedBytes(bytes)
 

@@ -14,7 +14,7 @@
   */
 package org.saddle.csv
 
-import org.saddle.{Frame, Vec, ST, Index}
+import org.saddle.{Frame, Vec, ST}
 import org.saddle.order._
 import org.saddle.Index
 import scala.io.Source
@@ -163,7 +163,7 @@ object CsvParser {
 
       // set up buffers to store parsed data
       bufdata =
-        for { _ <- locs } yield new Buffer[T](
+        for { _ <- locs.toIndexedSeq } yield new Buffer[T](
           Array.ofDim[T](1024),
           0
         )
@@ -184,7 +184,7 @@ object CsvParser {
       header
     )(prepare, addToBuffer)
 
-    done.right.flatMap { colIndex =>
+    done.flatMap { colIndex =>
       val columns = bufdata map { b => Vec(b.toArray) }
       if (columns.map(_.length).distinct.size != 1)
         Left(s"Uneven length ${columns.map(_.length).toVector} columns")
@@ -211,10 +211,10 @@ object CsvParser {
       if (!data.hasNext) false
       else {
         if (!save) {
-          buffer = data.next
+          buffer = data.next()
           position = 0
         } else {
-          buffer = concat(buffer, data.next)
+          buffer = concat(buffer, data.next())
         }
         if (buffer.length > position) true
         else fillBuffer

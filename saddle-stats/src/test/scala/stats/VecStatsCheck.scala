@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.stats
 
 import org.specs2.mutable.Specification
@@ -24,13 +23,11 @@ import org.scalacheck.{Gen, Arbitrary}
 // check stats implementation against apache math
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics
 
-/**
-  * Tests on arbitrarily-generated vectors
+/** Tests on arbitrarily-generated vectors
   */
 class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
-  /**
-    * Double Vectors
+  /** Double Vectors
     */
   "Double Vec Tests" in {
 
@@ -373,8 +370,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
     }
   }
 
-  /**
-    * Long vectors
+  /** Long vectors
     */
   "Long Vec Tests" in {
 
@@ -594,7 +590,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
         val stats = new DescriptiveStatistics()
         v.contents.foreach { v =>
-          stats.addValue(v)
+          stats.addValue(v.toDouble)
         }
 
         areClose(vrnc, stats.getVariance)
@@ -609,7 +605,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
         val stats = new DescriptiveStatistics()
         v.contents.filter(_ != Long.MinValue).foreach { v =>
-          stats.addValue(v)
+          stats.addValue(v.toDouble)
         }
 
         areClose(vrnc, stats.getVariance)
@@ -624,7 +620,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
         val stats = new DescriptiveStatistics()
         v.contents.foreach { v =>
-          stats.addValue(v)
+          stats.addValue(v.toDouble)
         }
 
         areClose(skew, stats.getSkewness)
@@ -639,7 +635,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
         val stats = new DescriptiveStatistics()
         v.contents.filter(_ != Long.MinValue).foreach { v =>
-          stats.addValue(v)
+          stats.addValue(v.toDouble)
         }
 
         areClose(skew, stats.getSkewness)
@@ -654,7 +650,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
         val stats = new DescriptiveStatistics()
         v.contents.foreach { v =>
-          stats.addValue(v)
+          stats.addValue(v.toDouble)
         }
 
         areClose(kurt, stats.getKurtosis)
@@ -669,7 +665,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
         val stats = new DescriptiveStatistics()
         v.contents.filter(_ != Long.MinValue).foreach { v =>
-          stats.addValue(v)
+          stats.addValue(v.toDouble)
         }
 
         areClose(kurt, stats.getKurtosis)
@@ -677,8 +673,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
     }
   }
 
-  /**
-    * Int vectors
+  /** Int vectors
     */
   "Int Vec Tests" in {
 

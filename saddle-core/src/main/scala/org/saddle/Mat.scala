@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -22,8 +21,7 @@ import java.io.OutputStream
 import org.saddle.index.{Slice, IndexIntRange}
 import org.saddle.mat.{MatImpl, MatMath}
 
-/**
-  * `Mat` is an immutable container for 2D homogeneous data (a "matrix"). It is
+/** `Mat` is an immutable container for 2D homogeneous data (a "matrix"). It is
   * backed by a single array. Data is stored in row-major order.
   *
   * Several element access methods are provided.
@@ -75,30 +73,26 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     */
   def toArray = values
 
-  /**
-    * Return unboxed value of matrix at an offset from zero in row-major order
+  /** Return unboxed value of matrix at an offset from zero in row-major order
     *
     * @param i index
     */
   @inline def raw(i: Int): T = values(i)
 
-  /**
-    * Return unboxed value of matrix at row/column
+  /** Return unboxed value of matrix at row/column
     *
     * @param r row index
     * @param c col index
     */
   @inline def raw(r: Int, c: Int): T = values(r * numCols + c)
 
-  /**
-    * Concatenate all rows into a single row-wise Vec instance
+  /** Concatenate all rows into a single row-wise Vec instance
     *
     * Underlying array is shared between the two instances
     */
   def toVec = scalarTag.makeVec(toArray)
 
-  /**
-    * Returns (a copy of) the contents of matrix as a single array in
+  /** Returns (a copy of) the contents of matrix as a single array in
     * row-major order
     */
   def contents: Array[T] = values.clone()
@@ -110,8 +104,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     Mat(numRows + other.numRows, numCols, this.toVec concat other.toVec)
   }
 
-  /**
-    * Makes a copy of this Mat
+  /** Makes a copy of this Mat
     */
   def copy: Mat[T] = new Mat(numRows, numCols, values.clone, scalarTag)
 
@@ -135,15 +128,13 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
 
   def takeRows(locs: Vec[Int]): Mat[T] = MatImpl.takeRows(this, locs.toArray)
 
-  /**
-    * Create Mat comprised of same values without the specified rows
+  /** Create Mat comprised of same values without the specified rows
     *
     * @param locs Row locations to exclude
     */
   def withoutRows(locs: Array[Int]): Mat[T] = MatImpl.withoutRows(this, locs)
 
-  /**
-    * Changes the shape of matrix without changing the underlying data
+  /** Changes the shape of matrix without changing the underlying data
     *
     * Backing array will be shared between the two instances!
     */
@@ -177,31 +168,26 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
       case _ => super.equals(o)
     }
 
-  /**
-    * Returns total number of entries in the matrix
+  /** Returns total number of entries in the matrix
     */
   def length: Int = numRows * numCols
 
-  /**
-    * Returns true if rows == cols
+  /** Returns true if rows == cols
     */
   def isSquare: Boolean = numCols == numRows
 
-  /**
-    * Returns true if the matrix is empty
+  /** Returns true if the matrix is empty
     */
   def isEmpty: Boolean = length == 0
 
-  /**
-    * Return scalar value of matrix at offset from zero in row-major order
+  /** Return scalar value of matrix at offset from zero in row-major order
     *
     * @param i index
     */
   def at(i: Int): Scalar[T] =
     Scalar(raw(i))(scalarTag)
 
-  /**
-    * Return scalar value of Mat at at row/column
+  /** Return scalar value of Mat at at row/column
     * @param r row index
     * @param c col index
     */
@@ -209,8 +195,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     Scalar(raw(r, c))(scalarTag)
   }
 
-  /**
-    * Access a slice of the Mat by integer offsets
+  /** Access a slice of the Mat by integer offsets
     * @param r Array of row offsets
     * @param c Array of col offsets
     */
@@ -218,8 +203,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     row(r).col(c)
   }
 
-  /**
-    * Access a slice of the Mat by integer offsets
+  /** Access a slice of the Mat by integer offsets
     * @param r Array of row offsets
     * @param c Integer col offset
     */
@@ -227,8 +211,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     row(r).col(c)
   }
 
-  /**
-    * Access a slice of the Mat by integer offsets
+  /** Access a slice of the Mat by integer offsets
     * @param r Integer row offset
     * @param c Array of col offsets
     */
@@ -236,52 +219,44 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     col(c).row(r)
   }
 
-  /**
-    * Access a slice of the Mat by Slice parameters
+  /** Access a slice of the Mat by Slice parameters
     * @param r Slice to apply to rows
     * @param c Slice to apply to cols
     */
   def at(r: Slice[Int], c: Slice[Int]): Mat[T] =
     row(r).col(c)
 
-  /**
-    * Create Mat comprised of same values in specified rows
+  /** Create Mat comprised of same values in specified rows
     */
   def takeRows(locs: Int*): Mat[T] = takeRows(locs.toArray)
 
-  /**
-    * Create Mat comprised of same values in specified columns
+  /** Create Mat comprised of same values in specified columns
     */
   def takeCols(locs: Array[Int]): Mat[T] = T.takeRows(locs).T
 
-  /**
-    * Create Mat comprised of same values in specified columns
+  /** Create Mat comprised of same values in specified columns
     */
   def takeCols(locs: Int*): Mat[T] = takeCols(locs.toArray)
 
-  /**
-    * Create Mat comprised of same values without the specified rows
+  /** Create Mat comprised of same values without the specified rows
     *
     * @param locs Row locations to exclude
     */
   def withoutRows(locs: Int*): Mat[T] = withoutRows(locs.toArray)
 
-  /**
-    * Create Mat comprised of same values without the specified columns
+  /** Create Mat comprised of same values without the specified columns
     *
     * @param locs Col locations to exclude
     */
   def withoutCols(locs: Array[Int]): Mat[T] = T.withoutRows(locs).T
 
-  /**
-    * Create Mat comprised of same values without the specified columns
+  /** Create Mat comprised of same values without the specified columns
     *
     * @param locs Col locations to exclude
     */
   def withoutCols(locs: Int*): Mat[T] = withoutCols(locs.toArray)
 
-  /**
-    * Yields row indices where row has some NA value
+  /** Yields row indices where row has some NA value
     */
   def rowsWithNA: Set[Int] = {
     val builder = Set.newBuilder[Int]
@@ -293,23 +268,19 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     builder.result()
   }
 
-  /**
-    * Yields column indices where column has some NA value
+  /** Yields column indices where column has some NA value
     */
   def colsWithNA: Set[Int] = T.rowsWithNA
 
-  /**
-    * Yields a matrix without those rows that have NA
+  /** Yields a matrix without those rows that have NA
     */
   def dropRowsWithNA: Mat[T] = withoutRows(rowsWithNA.toArray)
 
-  /**
-    * Yields a matrix without those cols that have NA
+  /** Yields a matrix without those cols that have NA
     */
   def dropColsWithNA: Mat[T] = withoutCols(colsWithNA.toArray)
 
-  /**
-    * Returns a specific column of the Mat as a Vec
+  /** Returns a specific column of the Mat as a Vec
     *
     * @param c Column index
     */
@@ -318,20 +289,17 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     toVec.slice(c, values.length, numCols)
   }
 
-  /**
-    * Access Mat columns at a particular integer offsets
+  /** Access Mat columns at a particular integer offsets
     * @param locs a sequence of integer offsets
     */
   def col(locs: Int*): Mat[T] = takeCols(locs.toArray)
 
-  /**
-    * Access Mat columns at a particular integer offsets
+  /** Access Mat columns at a particular integer offsets
     * @param locs an array of integer offsets
     */
   def col(locs: Array[Int]): Mat[T] = takeCols(locs)
 
-  /**
-    * Access mat columns specified by a slice
+  /** Access mat columns specified by a slice
     * @param slice a slice specifier
     */
   def col(slice: Slice[Int]): Mat[T] = {
@@ -339,18 +307,15 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     takeCols(a until b toArray)
   }
 
-  /**
-    * Returns columns of Mat as an indexed sequence of Vec instances
+  /** Returns columns of Mat as an indexed sequence of Vec instances
     */
-  def cols(): IndexedSeq[Vec[T]] = Range(0, numCols).map(col)
+  def cols: IndexedSeq[Vec[T]] = Range(0, numCols).map(col)
 
-  /**
-    * Returns columns of Mat as an indexed sequence of Vec instances
+  /** Returns columns of Mat as an indexed sequence of Vec instances
     */
   def cols(seq: IndexedSeq[Int]): IndexedSeq[Vec[T]] = seq.map(col)
 
-  /**
-    * Returns a specific row of the Mat as a Vec
+  /** Returns a specific row of the Mat as a Vec
     *
     * @param r Row index
     */
@@ -359,20 +324,17 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     toVec.slice(r * numCols, (r + 1) * numCols)
   }
 
-  /**
-    * Access Mat rows at a particular integer offsets
+  /** Access Mat rows at a particular integer offsets
     * @param locs a sequence of integer offsets
     */
   def row(locs: Int*): Mat[T] = takeRows(locs.toArray)
 
-  /**
-    * Access Mat rows at a particular integer offsets
+  /** Access Mat rows at a particular integer offsets
     * @param locs an array of integer offsets
     */
   def row(locs: Array[Int]): Mat[T] = takeRows(locs)
 
-  /**
-    * Access Mat rows specified by a slice
+  /** Access Mat rows specified by a slice
     * @param slice a slice specifier
     */
   def row(slice: Slice[Int]): Mat[T] = {
@@ -380,18 +342,15 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     takeRows(a until b toArray)
   }
 
-  /**
-    * Returns rows of matrix as an indexed sequence of Vec instances
+  /** Returns rows of matrix as an indexed sequence of Vec instances
     */
-  def rows(): IndexedSeq[Vec[T]] = Range(0, numRows).map(row)
+  def rows: IndexedSeq[Vec[T]] = Range(0, numRows).map(row)
 
-  /**
-    * Returns rows of matrix as an indexed sequence of Vec instances
+  /** Returns rows of matrix as an indexed sequence of Vec instances
     */
   def rows(seq: IndexedSeq[Int]): IndexedSeq[Vec[T]] = seq.map(row)
 
-  /**
-    * Rounds elements in the matrix (which must be numeric) to
+  /** Rounds elements in the matrix (which must be numeric) to
     * a significance level
     *
     * @param sig Significance level to round to (e.g., 2 decimal places)
@@ -402,8 +361,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     map(rounder)
   }
 
-  /**
-    * Creates a string representation of Mat
+  /** Creates a string representation of Mat
     * @param nrows Max number of rows to include
     * @param ncols Max number of cols to include
     */
@@ -419,7 +377,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
       (c.head(halfr) concat c.tail(halfr))
         .map(scalarTag.show(_))
         .foldLeft(0)(maxStrLen)
-    val colIdx = util.grab(Range(0, numCols), halfc)
+    val colIdx = util.grab(array.range(0, numCols), halfc)
     val lenSeq = colIdx.map { c => c -> maxColLen(col(c)) }
     val lenMap = lenSeq.toMap.withDefault(_ => 1)
 
@@ -442,8 +400,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
 
   override def toString = stringify()
 
-  /**
-    * Pretty-printer for Mat, which simply outputs the result of stringify.
+  /** Pretty-printer for Mat, which simply outputs the result of stringify.
     * @param nrows Number of elements to display
     */
   def print(
@@ -457,8 +414,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
   /** Default hashcode is simple rolling prime multiplication of sums of hashcodes for all values. */
   override def hashCode(): Int = toVec.foldLeft(1)(_ * 31 + _.hashCode())
 
-  /**
-    * Converst to Frame
+  /** Converst to Frame
     */
   def toFrame = Frame(this)
 
@@ -517,8 +473,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     }
   }
 
-  /**
-    * Maps a function over each row in the matrix
+  /** Maps a function over each row in the matrix
     * f must return a Vec with numCols elements
     */
   def mapRows[@spec(Boolean, Int, Long, Double) B: ST](
@@ -535,7 +490,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
   }
 
   /** In place mutate rows of the matrix */
-  def mutateRows[@spec(Boolean, Int, Long, Double) B: ST](
+  def mutateRows(
       f: (Vec[T], Int) => Vec[T]
   ): Unit = {
     val ar = toArray
@@ -548,8 +503,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
 
   }
 
-  /**
-    * Maps a function over each col in the matrix
+  /** Maps a function over each col in the matrix
     * f must return a Vec with numRows elements
     */
   def mapCols[@spec(Boolean, Int, Long, Double) B: ST](
@@ -571,7 +525,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
   }
 
   /** In place mutate cols of the matrix */
-  def mutateCols[@spec(Boolean, Int, Long, Double) B: ST](
+  def mutateCols(
       f: (Vec[T], Int) => Vec[T]
   ): Unit = {
     var i = 0
@@ -587,8 +541,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     }
   }
 
-  /**
-    * Reduces each row with a function
+  /** Reduces each row with a function
     * f must return a scalar
     */
   def reduceRows[@spec(Boolean, Int, Long, Double) B: ST](
@@ -603,8 +556,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     Vec(cpy)
   }
 
-  /**
-    * Reduces each col with a function
+  /** Reduces each col with a function
     * f must return a scalar
     */
   def reduceCols[@spec(Boolean, Int, Long, Double) B: ST](
@@ -623,8 +575,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
 
 object Mat {
 
-  /**
-    * Factory method to create a new Mat from raw materials
+  /** Factory method to create a new Mat from raw materials
     * @param rows Number of rows in Mat
     * @param cols Number of cols in Mat
     * @param arr A 1D array of backing data in row-major order
@@ -646,15 +597,13 @@ object Mat {
     if (rows == 0 || cols == 0) new Mat(0, 0, Array.empty[T], st)
     else new Mat(rows, cols, vec.toArray, st)
 
-  /**
-    * Factory method to create an empty Mat
+  /** Factory method to create an empty Mat
     * @tparam T Type of Mat
     */
   def empty[@spec(Boolean, Int, Long, Double) T: ST]: Mat[T] =
     apply(0, 0, Array.empty[T])
 
-  /**
-    * Factory method to create an zero Mat (all zeros)
+  /** Factory method to create an zero Mat (all zeros)
     * @param numRows Number of rows in Mat
     * @param numCols Number of cols in Mat
     * @tparam T Type of elements in Mat
@@ -664,8 +613,7 @@ object Mat {
   ): Mat[T] =
     apply(numRows, numCols, Array.ofDim[T](numRows * numCols))(st)
 
-  /**
-    * Factory method to create a Mat from an array of arrays. Each inner array
+  /** Factory method to create a Mat from an array of arrays. Each inner array
     * will become a column of the new Mat instance.
     * @param values Array of arrays, each of which is to be a column
     * @tparam T Type of elements in inner array
@@ -673,8 +621,7 @@ object Mat {
   def apply[T: ST](values: Array[Array[T]]): Mat[T] =
     implicitly[ST[T]].makeMat(values.map(Vec(_)))
 
-  /**
-    * Factory method to create a Mat from an array of Vec. Each inner Vec
+  /** Factory method to create a Mat from an array of Vec. Each inner Vec
     * will become a column of the new Mat instance.
     * @param values Array of Vec, each of which is to be a column
     * @tparam T Type of elements in Vec
@@ -682,8 +629,7 @@ object Mat {
   def apply[T: ST](values: Array[Vec[T]]): Mat[T] =
     implicitly[ST[T]].makeMat(values)
 
-  /**
-    * Factory method to create a Mat from a sequence of Vec. Each inner Vec
+  /** Factory method to create a Mat from a sequence of Vec. Each inner Vec
     * will become a column of the new Mat instance.
     * @param values Sequence of Vec, each of which is to be a column
     * @tparam T Type of elements in array
@@ -691,8 +637,7 @@ object Mat {
   def apply[T: ST](values: Vec[T]*): Mat[T] =
     implicitly[ST[T]].makeMat(values.toArray)
 
-  /**
-    * Factory method to create an identity matrix; ie with ones along the
+  /** Factory method to create an identity matrix; ie with ones along the
     * diagonal and zeros off-diagonal.
     * @param n The width of the square matrix
     */

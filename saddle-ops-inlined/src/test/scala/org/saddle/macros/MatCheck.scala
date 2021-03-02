@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import org.specs2.mutable.Specification
@@ -23,8 +22,7 @@ import org.saddle.framework._
 import org.saddle.scalar.{ScalarTagLong => stL, ScalarTagInt => stI}
 import org.saddle.macros.BinOps._
 
-/**
-  * Test Mat
+/** Test Mat
   */
 class MatCheck extends Specification with ScalaCheck {
 
@@ -372,7 +370,7 @@ class MatCheck extends Specification with ScalaCheck {
     }
     "op ** works" in {
       forAll { (m: Mat[Long], b: Double) =>
-        (m ** b) must_== m.map(v => math.pow(v, b))
+        (m ** b) must_== m.map(v => math.pow(v.toDouble, b))
       }
     }
   }
@@ -437,7 +435,7 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Double], b: Long) =>
         (m ** b) must_== m.map(v =>
-          if (stL.isMissing(b)) Double.NaN else math.pow(v, b)
+          if (stL.isMissing(b)) Double.NaN else math.pow(v, b.toDouble)
         )
       }
     }
@@ -513,7 +511,8 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Long], b: Long) =>
         (m ** b) must_== m.map(v =>
-          if (stL.isMissing(b)) stL.missing else math.pow(v, b).toLong
+          if (stL.isMissing(b)) stL.missing
+          else math.pow(v.toDouble, b.toDouble).toLong
         )
       }
     }
@@ -570,7 +569,7 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Long], b: Int) =>
         (m ** b) must_== m.map(v =>
-          if (stI.isMissing(b)) stL.missing else math.pow(v, b).toLong
+          if (stI.isMissing(b)) stL.missing else math.pow(v.toDouble, b).toLong
         )
       }
     }
@@ -627,7 +626,7 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Int], b: Long) =>
         (m ** b) must_== m.map(v =>
-          if (stL.isMissing(b)) stL.missing else math.pow(v, b).toLong
+          if (stL.isMissing(b)) stL.missing else math.pow(v, b.toDouble).toLong
         )
       }
     }

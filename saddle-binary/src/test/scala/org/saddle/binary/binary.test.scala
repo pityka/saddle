@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 Saddle Development Team
+/** Copyright (c) 2019 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -25,14 +24,14 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     )
-    val binaryFrame = Writer.writeFrameIntoArray(frame).right.get
-    val binaryMat = Writer.writeMatIntoArray(frame.toMat).right.get
+    val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
+    val binaryMat = Writer.writeMatIntoArray(frame.toMat).toOption.get
     val deserFrame = Reader.readFrameFromArray[Double](binaryFrame)
     val deserMat = Reader.readMatFromArray[Double](binaryFrame)
     val deserMat2 = Reader.readMatFromArray[Double](binaryMat)
-    assert(deserFrame.right.get == frame)
-    assert(deserMat.right.get == frame.toMat)
-    assert(deserMat2.right.get == frame.toMat)
+    assert(deserFrame.toOption.get == frame)
+    assert(deserMat.toOption.get == frame.toMat)
+    assert(deserMat2.toOption.get == frame.toMat)
   }
   test("double") {
     val frame = Frame(
@@ -40,9 +39,9 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     )
-    val binaryFrame = Writer.writeFrameIntoArray(frame).right.get
+    val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
     val deserFrame = Reader.readFrameFromArray[Double](binaryFrame)
-    assert(deserFrame.right.get == frame)
+    assert(deserFrame.toOption.get == frame)
   }
   test("int") {
     val frame = Frame(
@@ -50,9 +49,9 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     )
-    val binaryFrame = Writer.writeFrameIntoArray(frame).right.get
+    val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
     val deserFrame = Reader.readFrameFromArray[Int](binaryFrame)
-    assert(deserFrame.right.get == frame)
+    assert(deserFrame.toOption.get == frame)
   }
   test("float") {
     val frame = Frame(
@@ -60,9 +59,9 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     )
-    val binaryFrame = Writer.writeFrameIntoArray(frame).right.get
+    val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
     val deserFrame = Reader.readFrameFromArray[Float](binaryFrame)
-    assert(deserFrame.right.get == frame)
+    assert(deserFrame.toOption.get == frame)
   }
   test("long") {
     val frame = Frame(
@@ -70,9 +69,9 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     )
-    val binaryFrame = Writer.writeFrameIntoArray(frame).right.get
+    val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
     val deserFrame = Reader.readFrameFromArray[Long](binaryFrame)
-    assert(deserFrame.right.get == frame)
+    assert(deserFrame.toOption.get == frame)
   }
   test("1x3") {
     val frame = Frame(
@@ -80,9 +79,9 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     ).rowAt(Array(0))
-    val binary = Writer.writeFrameIntoArray(frame).right.get
+    val binary = Writer.writeFrameIntoArray(frame).toOption.get
     val deser = Reader.readFrameFromArray[Double](binary)
-    assert(deser.right.get == frame)
+    assert(deser.toOption.get == frame)
   }
   test("3x1") {
     val frame = Frame(
@@ -90,15 +89,15 @@ class BinarySuite extends AnyFunSuite {
       Index("r1", "r2"),
       Index("c1", "c2", "c3")
     ).colAt(Array(0))
-    val binary = Writer.writeFrameIntoArray(frame).right.get
+    val binary = Writer.writeFrameIntoArray(frame).toOption.get
     val deser = Reader.readFrameFromArray[Double](binary)
-    assert(deser.right.get == frame)
+    assert(deser.toOption.get == frame)
   }
   test("empty") {
     val frame = Frame.empty[String, String, Double]
-    val binary = Writer.writeFrameIntoArray(frame).right.get
+    val binary = Writer.writeFrameIntoArray(frame).toOption.get
     val deser = Reader.readFrameFromArray[Double](binary)
-    assert(deser.right.get == frame)
+    assert(deser.toOption.get == frame)
   }
 
 }

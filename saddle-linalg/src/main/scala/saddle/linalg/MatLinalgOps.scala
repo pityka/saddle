@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 Saddle Development Team
+/** Copyright (c) 2019 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -215,8 +214,7 @@ class MatPimp(val self: Mat[Double]) {
     Vec(target)
   }
 
-  /**
-    * Simple DGEMM
+  /** Simple DGEMM
     */
   /* A x B */
   def mm(other: B): B = {
@@ -340,10 +338,9 @@ class MatPimp(val self: Mat[Double]) {
     Mat(a.numCols, b.numRows, result)
   }
 
-  /**
-    * Full DGEMM
+  /** Full DGEMM
     * alpha A x B + beta * C
-    **/
+    */
   def mmc(
       other: B,
       c: B,

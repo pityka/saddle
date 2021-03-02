@@ -148,7 +148,7 @@ package object npy {
       dtype: DType,
       channel: ReadableByteChannel
   ): Either[String, (Descriptor, Iterator[Either[String, Array[_]]])] = {
-    readHeaderFromChannel(channel).right.map { descriptor =>
+    readHeaderFromChannel(channel).map { descriptor =>
       (
         descriptor,
         readDataFromChannel(

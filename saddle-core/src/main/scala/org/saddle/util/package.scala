@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,11 +11,10 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
-/**
-  * Additional utilities that need a home
+/** Additional utilities that need a home
   */
 package object util {
 
@@ -25,8 +23,7 @@ package object util {
     if (a == b * d) d else d + 1
   }
 
-  /**
-    * Creates a string out of ''count'' number of elements extracted from ''total'' elements
+  /** Creates a string out of ''count'' number of elements extracted from ''total'' elements
     * between offsets [0 ... count / 2) and (total - count / 2 ... total), using a callback
     * that generates a string at each offset, and inserting a break string if count > total.
     * @param count Number of elements to print
@@ -62,10 +59,10 @@ package object util {
     buf.toString()
   }
 
-  /**
-    * Takes n elements from the front and from the back of array
+  /** Takes n elements from the front and from the back of array
     * @param arr Array
     * @param n Number of elements to take
     */
-  def grab[T](arr: Seq[T], n: Int): Seq[T] = arr.take(n) ++ arr.takeRight(n)
+  def grab[T](arr: Array[T], n: Int): Seq[T] =
+    arr.take(n).toIndexedSeq ++ arr.takeRight(n).toIndexedSeq
 }

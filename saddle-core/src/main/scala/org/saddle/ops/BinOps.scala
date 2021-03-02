@@ -7,8 +7,7 @@ import org.saddle.scalar.{
   ScalarTagBool => stB
 }
 
-/**
-  * Contains implementations of primitive binary ops that are NA-aware
+/** Contains implementations of primitive binary ops that are NA-aware
   *
   * Double primitive has NA bit pattern baked into its representation, but
   * for others we must check for the appropriate sentinel value.
@@ -58,7 +57,7 @@ object BinOps
   implicit val powDL = new BinOp[Power, Double, Long, Double] {
     def apply(a: Double, b: Long): Double =
       if (stD.isMissing(a) || stL.isMissing(b)) stD.missing
-      else math.pow(a, b)
+      else math.pow(a, b.toDouble)
   }
   implicit val modDL = new BinOp[Mod, Double, Long, Double] {
     def apply(a: Double, b: Long): Double =
@@ -91,7 +90,7 @@ object BinOps
   implicit val powLD = new BinOp[Power, Long, Double, Double] {
     def apply(a: Long, b: Double): Double =
       if (stL.isMissing(a) || stD.isMissing(b)) stD.missing
-      else math.pow(a, b)
+      else math.pow(a.toDouble, b)
   }
   implicit val modLD = new BinOp[Mod, Long, Double, Double] {
     def apply(a: Long, b: Double): Double =
@@ -190,7 +189,7 @@ object BinOps
   implicit val powLL = new BinOp[Power, Long, Long, Long] {
     def apply(a: Long, b: Long): Long =
       if (stL.isMissing(a) || stL.isMissing(b)) stL.missing
-      else math.pow(a, b).toLong
+      else math.pow(a.toDouble, b.toDouble).toLong
   }
   implicit val modLL = new BinOp[Mod, Long, Long, Long] {
     def apply(a: Long, b: Long): Long =
@@ -238,7 +237,7 @@ object BinOps
   implicit val powIL = new BinOp[Power, Int, Long, Long] {
     def apply(a: Int, b: Long): Long =
       if (stI.isMissing(a) || stL.isMissing(b)) stL.missing
-      else math.pow(a, b).toLong
+      else math.pow(a, b.toDouble).toLong
   }
   implicit val modIL = new BinOp[Mod, Int, Long, Long] {
     def apply(a: Int, b: Long): Long =
@@ -286,7 +285,7 @@ object BinOps
   implicit val powLI = new BinOp[Power, Long, Int, Long] {
     def apply(a: Long, b: Int): Long =
       if (stL.isMissing(a) || stI.isMissing(b)) stL.missing
-      else math.pow(a, b).toLong
+      else math.pow(a.toDouble, b).toLong
   }
   implicit val modLI = new BinOp[Mod, Long, Int, Long] {
     def apply(a: Long, b: Int): Long =

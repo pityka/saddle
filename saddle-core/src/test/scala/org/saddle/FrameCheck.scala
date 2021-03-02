@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -213,7 +212,7 @@ class FrameCheck extends Specification with ScalaCheck {
     }
 
     "Stringify works for one col, zero rows" in {
-      val f = Frame(Array(Vec.empty[Double]): _*)
+      val f = Frame(Array(Vec.empty[Double]).toIndexedSeq: _*)
       f.toString must throwAn[RuntimeException].not
     }
 

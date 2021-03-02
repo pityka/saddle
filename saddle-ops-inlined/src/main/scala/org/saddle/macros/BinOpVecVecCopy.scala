@@ -17,12 +17,17 @@ trait BinOpVecVecCopy {
   implicit val vecVec_Copy_II_Add = make[Int, Int, Int, Add]
 
   implicit val vecVec_Copy_DD_Power = make[Double, Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val vecVec_Copy_LD_Power = make[Long, Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val vecVec_Copy_DL_Power = make[Double, Long, Double, Power]
   implicit val vecVec_Copy_DI_Power = make[Double, Int, Double, Power]
   implicit val vecVec_Copy_ID_Power = make[Int, Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val vecVec_Copy_LL_Power = make[Long, Long, Long, Power]
+  @scala.annotation.nowarn
   implicit val vecVec_Copy_LI_Power = make[Long, Int, Long, Power]
+  @scala.annotation.nowarn
   implicit val vecVec_Copy_IL_Power = make[Int, Long, Long, Power]
   implicit val vecVec_Copy_II_Power = make[Int, Int, Int, Power]
 

@@ -14,9 +14,12 @@ trait BinOpMatMatInPlace {
   implicit val matMatIP_II_Add = make[Int, Int, Add]
 
   implicit val matMatIP_DD_Power = make[Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val matMatIP_DL_Power = make[Double, Long, Power]
   implicit val matMatIP_DI_Power = make[Double, Int, Power]
+  @scala.annotation.nowarn
   implicit val matMatIP_LL_Power = make[Long, Long, Power]
+  @scala.annotation.nowarn
   implicit val matMatIP_LI_Power = make[Long, Int, Power]
   implicit val matMatIP_II_Power = make[Int, Int, Power]
 

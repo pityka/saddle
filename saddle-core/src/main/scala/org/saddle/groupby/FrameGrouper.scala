@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,15 +11,14 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.groupby
 
 import org.saddle.{ST, ORD, Frame, Index, array, Vec}
 
-/**
-  * Helper class to do combine or transform after a groupBy
+/** Helper class to do combine or transform after a groupBy
   */
-class FrameGrouper[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T: ST](
+class FrameGrouper[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T](
     ix: Index[Z],
     frame: Frame[X, Y, T],
     sorted: Boolean = true
@@ -48,7 +46,7 @@ class FrameGrouper[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T: ST](
       .setColIndex(frame.colIx)
 
   // less powerful combine, ignores group key
-  def combine[U: ST: ORD](fn: Vec[T] => U): Frame[Z, Y, U] =
+  def combine[U: ST](fn: Vec[T] => U): Frame[Z, Y, U] =
     combine((_, v) => fn(v))
 
   def transform[U: ST](fn: (Z, Vec[T]) => Vec[U]): Frame[X, Y, U] =
@@ -64,10 +62,10 @@ class FrameGrouper[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T: ST](
 }
 
 object FrameGrouper {
-  def apply[Z: ST: ORD, Y: ST: ORD, T: ST](frame: Frame[Z, Y, T]) =
+  def apply[Z: ST: ORD, Y: ST: ORD, T](frame: Frame[Z, Y, T]) =
     new FrameGrouper(frame.rowIx, frame)
 
-  def apply[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T: ST](
+  def apply[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T](
       ix: Index[Z],
       frame: Frame[X, Y, T]
   ) = new FrameGrouper(ix, frame)

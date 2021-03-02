@@ -7,16 +7,15 @@ import cats.kernel.Order
 import org.saddle.order._
 import org.saddle.index.OuterJoin
 
-/**
-  * User: Adam Klein
+/** User: Adam Klein
   * Date: 2/19/13
   * Time: 7:17 PM
   */
 class IndexSpec extends Specification {
   "Index methods" should {
     "over flow in join" in {
-      val ix1 = Index(array.randInt(1000000, 0, 3): _*)
-      val ix2 = Index(array.randInt(10000, 0, 3): _*)
+      val ix1 = Index(array.randInt(1000000, 0, 3))
+      val ix2 = Index(array.randInt(10000, 0, 3))
 
       ix1.join(ix2, OuterJoin) must throwA[RuntimeException]
     }

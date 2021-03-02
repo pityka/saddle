@@ -28,10 +28,10 @@ package object csv {
       if (!data.hasNext) false
       else {
         if (!save) {
-          buffer = data.next
+          buffer = data.next()
           position = 0
         } else {
-          buffer = concat(buffer, data.next)
+          buffer = concat(buffer, data.next())
         }
         if (buffer.length > position) true
         else fillBuffer
@@ -79,7 +79,7 @@ package object csv {
       Left("Separator character and quote character cannot be the same")
     else if (recordSeparator.size != 1 && recordSeparator.size != 2)
       Left(
-        s"Record separator must have 1 or 2 characters. ${recordSeparator.toCharArray.map(_.toByte).deep}"
+        s"Record separator must have 1 or 2 characters. ${recordSeparator.toCharArray.map(_.toByte).toVector}"
       )
     else if (source.isEmpty || maxLines == 0)
       Right(None)
@@ -93,8 +93,9 @@ package object csv {
       // parse first line
       val (firstLine, errorMessage) = {
         val buffer = new ArrayBuffer[String](1024)
-        val callback = (s: String, _: Int) => {
+        val callback: (String, Int) => Unit = (s: String, _: Int) => {
           buffer.append(s)
+          ()
         }
         val errorMessage = extractFields(
           data,
@@ -382,7 +383,7 @@ package object csv {
     }
     new Iterator[CharBuffer] {
       def hasNext = !eof
-      def next = {
+      def next() = {
         fillBuffer()
         charset.decode(buffer)
       }

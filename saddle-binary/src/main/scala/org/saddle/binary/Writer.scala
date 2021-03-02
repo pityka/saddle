@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 Saddle Development Team
+/** Copyright (c) 2019 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -39,7 +38,7 @@ object Writer {
 
   def createMatDescriptor[T: ST](
       mat: Mat[T]
-  ) = dtype[T].right.map { dtype =>
+  ) = dtype[T].map { dtype =>
     ujson
       .write(
         ujson.Obj(
@@ -53,7 +52,7 @@ object Writer {
   }
   def createFrameDescriptor[RX, CX, T: ST](
       frame: Frame[RX, CX, T]
-  ) = dtype[T].right.map { dtype =>
+  ) = dtype[T].map { dtype =>
     ujson
       .write(
         ujson.Obj(
@@ -69,7 +68,7 @@ object Writer {
   def createHeader(
       descriptor: Either[String, String]
   ): Either[String, Array[Byte]] = {
-    descriptor.right.map { descriptorJson =>
+    descriptor.map { descriptorJson =>
       val descriptor = {
         val json = descriptorJson
           .getBytes("UTF-8")
@@ -161,11 +160,11 @@ object Writer {
       channel: WritableByteChannel
   ): Either[String, Unit] = {
     val header = createHeader(createMatDescriptor(mat))
-    header.right.flatMap { header =>
-      width[T].right.map { width =>
+    header.flatMap { header =>
+      width[T].map { width =>
         writeFully(ByteBuffer.wrap(header), channel)
 
-        mat.rows().foreach { row =>
+        mat.rows.foreach { row =>
           val bb = ByteBuffer
             .allocate(row.length * width)
             .order(ByteOrder.LITTLE_ENDIAN)
@@ -189,8 +188,8 @@ object Writer {
   ): Either[String, Unit] = {
 
     val header = createHeader(createFrameDescriptor(frame))
-    header.right.flatMap { header =>
-      width[T].right.map { width =>
+    header.flatMap { header =>
+      width[T].map { width =>
         writeFully(ByteBuffer.wrap(header), channel)
 
         frame.values.foreach { col =>
@@ -208,8 +207,8 @@ object Writer {
       mat: Mat[T]
   ): Either[String, Array[Byte]] = {
     val header = createHeader(createMatDescriptor(mat))
-    header.right.flatMap { header =>
-      width[T].right.map { width =>
+    header.flatMap { header =>
+      width[T].map { width =>
         val result =
           Array.ofDim[Byte](header.length + width * mat.numRows * mat.numCols)
         System.arraycopy(header, 0, result, 0, header.length)
@@ -226,8 +225,8 @@ object Writer {
       frame: Frame[RX, CX, T]
   ): Either[String, Array[Byte]] = {
     val header = createHeader(createFrameDescriptor(frame))
-    header.right.flatMap { header =>
-      width[T].right.map { width =>
+    header.flatMap { header =>
+      width[T].map { width =>
         val result =
           Array.ofDim[Byte](
             header.length + width * frame.numRows * frame.numCols

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -69,8 +68,7 @@ private[saddle] object VecImpl {
     acc
   }
 
-  /**
-    * Same as foldLeft, but with a condition that operates on the accumulator and element
+  /** Same as foldLeft, but with a condition that operates on the accumulator and element
     * that if false, breaks out of the fold
     */
   def foldLeftWhile[
@@ -113,7 +111,7 @@ private[saddle] object VecImpl {
   }
 
   def flatMap[
-      @spec(Boolean, Int, Long, Double) A: ST,
+      @spec(Boolean, Int, Long, Double) A,
       @spec(Boolean, Int, Long, Double) B: ST
   ](vec: Vec[A])(f: A => Vec[B]): Vec[B] = {
     var i = 0
@@ -126,8 +124,7 @@ private[saddle] object VecImpl {
     Vec(b.toArray)
   }
 
-  /**
-    * Same as foldLeft, but store and return intermediate accumulated results. Note this differs
+  /** Same as foldLeft, but store and return intermediate accumulated results. Note this differs
     * from the Scala collections library by not including the initial value at the head of the
     * scan.
     */
@@ -198,7 +195,7 @@ private[saddle] object VecImpl {
   }
 
   def filterFoldLeft[
-      @spec(Boolean, Int, Long, Double) A: ST,
+      @spec(Boolean, Int, Long, Double) A,
       @spec(Boolean, Int, Long, Double) B
   ](
       vec: Vec[A]

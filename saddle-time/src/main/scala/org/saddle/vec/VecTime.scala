@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.vec
 
 import org.saddle._
@@ -23,8 +22,7 @@ import scala.{specialized => spec}
 import org.saddle.time._
 import org.saddle.order._
 
-/**
-  * A compact native int representation of posix times at millisecond resolution which
+/** A compact native int representation of posix times at millisecond resolution which
   * conforms to and extends the interface of Vec[DateTime]
   *
   * @param times A Vec[Long], where each element is a millisecond timestamp
@@ -59,7 +57,7 @@ class VecTime(
   def concat(x: VecTime) =
     vl2vt(Vec(util.Concat.append(times.toArray, x.times.toArray)))
 
-  override def unary_-()(implicit num: NUM[DateTime]) =
+  override def unary_-(implicit num: NUM[DateTime]) =
     sys.error("Cannot negate VecTime")
 
   override def map[@spec(Boolean, Int, Long, Double) B: ST](
@@ -135,8 +133,7 @@ object VecTime {
   @transient lazy private val sm = ScalarTagTime
   @transient lazy private val sl = ScalarTagLong
 
-  /**
-    * Create a new VecTime from an array of times
+  /** Create a new VecTime from an array of times
     */
   def apply(times: Array[DateTime]): VecTime = {
     val millis = array.empty[Long](times.length)
@@ -149,8 +146,7 @@ object VecTime {
     new VecTime(Vec(millis))
   }
 
-  /**
-    * Create a new VecTime from a sequence of times
+  /** Create a new VecTime from a sequence of times
     */
   def apply(timeSeq: DateTime*): VecTime = {
     val times = timeSeq.toArray
@@ -164,8 +160,7 @@ object VecTime {
     new VecTime(Vec(millis))
   }
 
-  /**
-    * Concatenate several Vec[DateTime] instances into one
+  /** Concatenate several Vec[DateTime] instances into one
     */
   def concat(arr: IndexedSeq[Vec[DateTime]]): VecTime = {
     val vecs = arr.map {
@@ -181,11 +176,10 @@ object VecTime {
     val databuf = Array.ofDim[Long](sz)
 
     var c = 0 // byte counter
-    vecs.zipWithIndex.foreach {
-      case (v, _) =>
-        val vlen = v.length
-        var i = 0
-        while (i < vlen) { databuf(c) = v.times.raw(i); i += 1; c += 1 }
+    vecs.zipWithIndex.foreach { case (v, _) =>
+      val vlen = v.length
+      var i = 0
+      while (i < vlen) { databuf(c) = v.times.raw(i); i += 1; c += 1 }
     }
 
     new VecTime(Vec(databuf))

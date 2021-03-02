@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.index
 
 import scala.{specialized => spec}
@@ -20,8 +19,7 @@ import org.saddle.{array, Index, ST, ORD, util, Vec}
 import org.saddle.scalar.ScalarTagInt
 import org.saddle.locator.Locator
 
-/**
-  * An implementation of an Index[Int] which implicitly represents a bound of integers,
+/** An implementation of an Index[Int] which implicitly represents a bound of integers,
   * which lazily generates its elements as an array when needed. This compact representation
   * is the default when creating a Saddle object such as [[org.saddle.Series]] which
   * requires and index and one is not supplied.
@@ -37,8 +35,7 @@ class IndexIntRange(val length: Int, val from: Int = 0, val ord: ORD[Int])
   @transient private lazy val asArr = array.range(from, from + length)
   @transient private lazy val genIdx = Index(asArr)
 
-  /**
-    * Custom implementation of a Locator to serve as the backing map in a
+  /** Custom implementation of a Locator to serve as the backing map in a
     * more space-efficient manner than the full blown LocatorInt implementation.
     */
   protected def locator = new Locator[Int] {
@@ -60,8 +57,8 @@ class IndexIntRange(val length: Int, val from: Int = 0, val ord: ORD[Int])
 
     def put(key: Int, value: Int) = { sys.error("Not supported") }
     def inc(key: Int) = sys.error("Not supported")
-    def keys() = asArr
-    def counts() = cts
+    def keys = asArr
+    def counts = cts
   }
 
   private def guardLoc(loc: Int): Int =

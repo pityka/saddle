@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.stats
 
 import scala.{specialized => spec}
@@ -20,49 +19,41 @@ import org.saddle._
 import org.saddle.order._
 import org.saddle.scalar._
 
-/**
-  * Statistical methods made available on numeric Vec objects via enrichment.
+/** Statistical methods made available on numeric Vec objects via enrichment.
   */
 trait VecStats[@spec(Int, Long, Double) A] {
 
-  /**
-    * Return the sum of the natural log of each element, ignoring NA values
+  /** Return the sum of the natural log of each element, ignoring NA values
     */
   def logsum: Double
 
-  /**
-    * Return the geometric median of the values in the Vec, ignoring NA
+  /** Return the geometric median of the values in the Vec, ignoring NA
     */
   def geomean: Double
 
-  /**
-    * Return the sample variance of the values in the Vec, ignoring NA
+  /** Return the sample variance of the values in the Vec, ignoring NA
     */
   def variance: Double
 
-  /**
-    * Return the sample standard deviation of values in the Vec, ignoring NA
+  /** Return the sample standard deviation of values in the Vec, ignoring NA
     */
   def stdev: Double = math.sqrt(variance)
 
-  /**
-    * Return the sample skewness of the values in the Vec, ignoring NA
+  /** Return the sample skewness of the values in the Vec, ignoring NA
     */
   def skew: Double
 
-  /**
-    * Return the sample kurtosis of the values in the Vec, ignoring NA
+  /** Return the sample kurtosis of the values in the Vec, ignoring NA
     */
   def kurt: Double
 
-  /**
-    * Return a copy of a numeric Vec with its values demeaned according to the
+  /** Return a copy of a numeric Vec with its values demeaned according to the
     * mean function
     */
   def demeaned: Vec[Double]
 
-  protected def _variance(r: Vec[A], subOp: (A, Double) => Double)(
-      implicit num: NUM[A]
+  protected def _variance(r: Vec[A], subOp: (A, Double) => Double)(implicit
+      num: NUM[A]
   ): Double = {
     val sa = r.scalarTag
     val sd = ScalarTagDouble
@@ -81,8 +72,8 @@ trait VecStats[@spec(Int, Long, Double) A] {
     }
   }
 
-  protected def _skew(r: Vec[A], subOp: (A, Double) => Double)(
-      implicit num: NUM[A]
+  protected def _skew(r: Vec[A], subOp: (A, Double) => Double)(implicit
+      num: NUM[A]
   ): Double = {
     val sa = r.scalarTag
     val sd = ScalarTagDouble
@@ -99,8 +90,8 @@ trait VecStats[@spec(Int, Long, Double) A] {
     } else sd.missing
   }
 
-  protected def _kurt(r: Vec[A], subOp: (A, Double) => Double)(
-      implicit num: NUM[A]
+  protected def _kurt(r: Vec[A], subOp: (A, Double) => Double)(implicit
+      num: NUM[A]
   ): Double = {
     val sa = r.scalarTag
     val sd = ScalarTagDouble
@@ -122,8 +113,8 @@ trait VecStats[@spec(Int, Long, Double) A] {
   protected def _demeaned(
       r: Vec[A],
       subOp: (A, Double) => Double
-  )(
-      implicit num: NUM[A]
+  )(implicit
+      num: NUM[A]
   ): Vec[Double] = {
     val sa = r.scalarTag
     val sd = ScalarTagDouble
@@ -435,7 +426,7 @@ class LongStats(r: Vec[Long]) extends VecStats[Long] {
   def countif(test: Long => Boolean): Int =
     r.filterFoldLeft(t => sl.notMissing(t) && test(t))(0)((a, _) => a + 1)
   def logsum: Double =
-    r.filterFoldLeft(sl.notMissing)(0d)((x, y) => x + math.log(y))
+    r.filterFoldLeft(sl.notMissing)(0d)((x, y) => x + math.log(y.toDouble))
   def mean: Double = sum.asInstanceOf[Double] / count
   def median: Double = _median(r)
   def geomean: Double = math.exp(logsum / count)

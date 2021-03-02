@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -37,8 +36,7 @@ import org.saddle.order._
 import _root_.cats.kernel.Order
 import org.saddle.array.Sorter.intSorter
 
-/**
-  * `Frame` is an immutable container for 2D data which is indexed along both axes
+/** `Frame` is an immutable container for 2D data which is indexed along both axes
   * (rows, columns) by associated keys (i.e., indexes).
   *
   * The primary use case is homogeneous data, but a secondary concern is to support
@@ -144,38 +142,32 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   require(values.numRows == rowIx.length, "Row index length is incorrect")
   require(values.numCols == colIx.length, "Col index length is incorrect")
 
-  /**
-    * Number of rows in the Frame
+  /** Number of rows in the Frame
     */
   def numRows: Int = values.numRows
 
-  /**
-    * Number of cols in the Frame
+  /** Number of cols in the Frame
     */
   def numCols: Int = values.numCols
 
-  /**
-    * Returns true if there are no values in the Frame
+  /** Returns true if there are no values in the Frame
     */
   def isEmpty: Boolean = (values.numRows == 0)
 
-  /**
-    * The transpose of the frame (swapping the axes)
+  /** The transpose of the frame (swapping the axes)
     */
   def T: Frame[CX, RX, T] =
-    Frame(MatCols(toMat.rows(): _*), colIx, rowIx)
+    Frame(MatCols(toMat.rows: _*), colIx, rowIx)
 
   // ---------------------------------------------------------------
   // extract columns by associated key(s); ignore non-existent keys
 
-  /**
-    * Given one or more column keys, slice out the corresponding column(s)
+  /** Given one or more column keys, slice out the corresponding column(s)
     * @param keys Column key(s) (sequence)
     */
   def col(keys: CX*): Frame[RX, CX, T] = col(keys.toArray)
 
-  /**
-    * Given a Slice of type of column key, slice out corresponding column(s)
+  /** Given a Slice of type of column key, slice out corresponding column(s)
     * @param slice Slice containing appropriate key bounds
     */
   def col(slice: Slice[CX]): Frame[RX, CX, T] = {
@@ -183,8 +175,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.slice(a, b), rowIx, colIx.sliceBy(slice))
   }
 
-  /**
-    * Given an array of column keys, slice out the corresponding column(s)
+  /** Given an array of column keys, slice out the corresponding column(s)
     * @param keys Array of keys
     */
   def col(keys: Array[CX]): Frame[RX, CX, T] = {
@@ -196,8 +187,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     }
   }
 
-  /**
-    * Slice out a set of columns from the frame
+  /** Slice out a set of columns from the frame
     * @param from Key from which to begin slicing
     * @param to Key at which to end slicing
     * @param inclusive Whether to include 'to' key; true by default
@@ -209,26 +199,23 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   ): Frame[RX, CX, T] = {
     val tmp = Series(values: _*).setIndex(colIx)
     val res = tmp.sliceBy(from, to, inclusive)
-    Frame(res.values.toArray, rowIx, res.index)
+    Frame(res.values, rowIx, res.index)
   }
 
   // -----------------------------------------
   // access columns by particular location(s)
 
-  /**
-    * Access frame column at a particular integer offset
+  /** Access frame column at a particular integer offset
     * @param loc integer offset
     */
   def colAt(loc: Int): Series[RX, T] = Series(values(loc), rowIx)
 
-  /**
-    * Access frame columns at a particular integer offsets
+  /** Access frame columns at a particular integer offsets
     * @param locs a sequence of integer offsets
     */
   def colAt(locs: Int*): Frame[RX, CX, T] = colAt(locs.toArray)
 
-  /**
-    * Access frame columns at a particular integer offsets
+  /** Access frame columns at a particular integer offsets
     * @param locs an array of integer offsets
     */
   def colAt(locs: Array[Int]): Frame[RX, CX, T] =
@@ -237,8 +224,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     else
       Frame(values.take(locs), rowIx, colIx.take(locs))
 
-  /**
-    * Access frame columns specified by a slice
+  /** Access frame columns specified by a slice
     * @param slice a slice specifier
     */
   def colAt(slice: Slice[Int]): Frame[RX, CX, T] = {
@@ -247,8 +233,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.slice(pair._1, pair._2), rowIx, colIx.slice(pair._1, pair._2))
   }
 
-  /**
-    * Access frame columns between two integer offsets, [from, until)
+  /** Access frame columns between two integer offsets, [from, until)
     * @param from Beginning offset
     * @param until One past ending offset
     * @param stride Optional increment between offsets
@@ -260,15 +245,13 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.take(taker), rowIx, colIx.take(taker))
   }
 
-  /**
-    * Split Frame into two frames at column position c
+  /** Split Frame into two frames at column position c
     * @param c Position at which to split Frame
     */
   def colSplitAt(c: Int): (Frame[RX, CX, T], Frame[RX, CX, T]) =
     (colSlice(0, c), colSlice(c, numCols))
 
-  /**
-    * Split Frame into two frames at column key k
+  /** Split Frame into two frames at column key k
     * @param k Key at which to split Frame
     * `k` is included in the right Frame
     * [1,2,3,4] split at 2 yields [1] and [2,3,4]
@@ -279,14 +262,12 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // ---------------------------------------------------------------
   // extract rows by associated key(s); ignore non-existent keys
 
-  /**
-    * Given one or more row keys, slice out the corresponding row(s)
+  /** Given one or more row keys, slice out the corresponding row(s)
     * @param keys Row key(s) (sequence)
     */
   def row(keys: RX*): Frame[RX, CX, T] = row(keys.toArray)
 
-  /**
-    * Given a Slice of type of row key, slice out corresponding row(s)
+  /** Given a Slice of type of row key, slice out corresponding row(s)
     * @param slice Slice containing appropriate key bounds
     */
   def row(slice: Slice[RX]): Frame[RX, CX, T] = {
@@ -294,8 +275,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.map(v => v.slice(a, b)), rowIx.sliceBy(slice), colIx)
   }
 
-  /**
-    * Given an array of row keys, slice out the corresponding row(s)
+  /** Given an array of row keys, slice out the corresponding row(s)
     * @param keys Array of keys
     */
   def row(keys: Array[RX]): Frame[RX, CX, T] = {
@@ -307,8 +287,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     }
   }
 
-  /**
-    * Slice out a set of rows from the frame
+  /** Slice out a set of rows from the frame
     * @param from Key from which to begin slicing
     * @param to Key at which to end slicing
     * @param inclusive Whether to include 'to' key; true by default
@@ -326,27 +305,23 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // -----------------------------------------
   // access rows by particular location(s)
 
-  /**
-    * Access frame row at a particular integer offset
+  /** Access frame row at a particular integer offset
     * @param loc integer offset
     */
   def rowAt(loc: Int): Series[CX, T] = Series(values.rowAt(loc), colIx)
 
-  /**
-    * Access frame rows at a particular integer offsets
+  /** Access frame rows at a particular integer offsets
     * @param locs a sequence of integer offsets
     */
   def rowAt(locs: Int*): Frame[RX, CX, T] = rowAt(locs.toArray)
 
-  /**
-    * Access frame rows at a particular integer offsets
+  /** Access frame rows at a particular integer offsets
     * @param locs an array of integer offsets
     */
   def rowAt(locs: Array[Int]): Frame[RX, CX, T] =
     Frame(values.map(v => v.take(locs)), rowIx.take(locs), colIx)
 
-  /**
-    * Access frame rows specified by a slice
+  /** Access frame rows specified by a slice
     * @param slice a slice specifier
     */
   def rowAt(slice: Slice[Int]): Frame[RX, CX, T] = {
@@ -359,8 +334,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     )
   }
 
-  /**
-    * Access frame rows between two integer offsets, [from, until)
+  /** Access frame rows between two integer offsets, [from, until)
     * @param from Beginning offset
     * @param until One past ending offset
     * @param stride Optional increment between offsets
@@ -373,15 +347,13 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     )
   }
 
-  /**
-    * Split Frame into two frames at row position r
+  /** Split Frame into two frames at row position r
     * @param r Position at which to split Frame
     */
   def rowSplitAt(r: Int): (Frame[RX, CX, T], Frame[RX, CX, T]) =
     (rowSlice(0, r), rowSlice(r, numRows))
 
-  /**
-    * Split Frame into two frames at row key k
+  /** Split Frame into two frames at row key k
     * @param k Key at which to split Frame
     */
   def rowSplitBy(k: RX): (Frame[RX, CX, T], Frame[RX, CX, T]) =
@@ -390,32 +362,28 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // --------------------------------------------
   // access a two dimensional sub-block by key(s)
 
-  /**
-    * Slice frame by row and column slice specifiers
+  /** Slice frame by row and column slice specifiers
     * @param rix A row slice
     * @param cix A col slice
     */
   def apply(rix: Slice[RX], cix: Slice[CX]): Frame[RX, CX, T] =
     col(cix).row(rix)
 
-  /**
-    * Slice frame by row slice and array of column keys
+  /** Slice frame by row slice and array of column keys
     * @param rix A row slice
     * @param cix An array of column keys
     */
   def apply(rix: Slice[RX], cix: Array[CX]): Frame[RX, CX, T] =
     col(cix).row(rix)
 
-  /**
-    * Slice frame by array of row keys and a col slice
+  /** Slice frame by array of row keys and a col slice
     * @param rix An array of row keys
     * @param cix A col slice
     */
   def apply(rix: Array[RX], cix: Slice[CX]): Frame[RX, CX, T] =
     col(cix).row(rix)
 
-  /**
-    * Slice from by an array of row keys and an array of col keys
+  /** Slice from by an array of row keys and an array of col keys
     * @param rix An array of row keys
     * @param cix An array of col keys
     */
@@ -425,43 +393,37 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // -----------------------------------------
   // access grid by particular location(s)
 
-  /**
-    * Access a (Scalar-boxed) value from within the Frame
+  /** Access a (Scalar-boxed) value from within the Frame
     * @param r Integer row offset
     * @param c Integer col offset
     */
   def at(r: Int, c: Int): Scalar[T] = values.at(r, c)
 
-  /**
-    * Access a slice of the Frame by integer offsets
+  /** Access a slice of the Frame by integer offsets
     * @param r Array of row offsets
     * @param c Array of col offsets
     */
   def at(r: Array[Int], c: Array[Int]): Frame[RX, CX, T] = rowAt(r).colAt(c)
 
-  /**
-    * Access a slice of the Frame by integer offsets
+  /** Access a slice of the Frame by integer offsets
     * @param r Array of row offsets
     * @param c Integer col offset
     */
   def at(r: Array[Int], c: Int): Series[RX, T] = rowAt(r).colAt(c)
 
-  /**
-    * Access a slice of the Frame by integer offsets
+  /** Access a slice of the Frame by integer offsets
     * @param r Integer row offset
     * @param c Array of col offsets
     */
   def at(r: Int, c: Array[Int]): Series[CX, T] = colAt(c).rowAt(r)
 
-  /**
-    * Access a slice of the Frame by Slice parameters
+  /** Access a slice of the Frame by Slice parameters
     * @param r Slice to apply to rows
     * @param c Slice to apply to cols
     */
   def at(r: Slice[Int], c: Slice[Int]): Frame[RX, CX, T] = rowAt(r).colAt(c)
 
-  /**
-    * Access the raw (unboxed) value at an offset within the Frame
+  /** Access the raw (unboxed) value at an offset within the Frame
     * @param r Integer row offset
     * @param c Integer col offset
     */
@@ -470,8 +432,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // -----------------------------------------
   // re-index frame; non-existent keys map to NA
 
-  /**
-    * Create a new Frame whose indexes are formed from the provided arguments, and whose values
+  /** Create a new Frame whose indexes are formed from the provided arguments, and whose values
     * are derived from the original Frame. Keys in the provided indices which do not map to
     * existing values will map to NA in the new Frame.
     * @param rix Sequence of keys to be the row index of the result Frame
@@ -480,8 +441,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def reindex(rix: Index[RX], cix: Index[CX]): Frame[RX, CX, T] =
     reindexRow(rix).reindexCol(cix)
 
-  /**
-    * Create a new Frame whose row index is formed of the provided argument, and whose values
+  /** Create a new Frame whose row index is formed of the provided argument, and whose values
     * are derived from the original Frame.
     * @param rix Sequence of keys to be the row index of the result Frame
     */
@@ -496,8 +456,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     } getOrElse this
   }
 
-  /**
-    * Create a new Frame whose col index is formed of the provided argument, and whose values
+  /** Create a new Frame whose col index is formed of the provided argument, and whose values
     * are derived from the original Frame.
     * @param cix Sequence of keys to be the col index of the result Frame
     */
@@ -511,8 +470,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // -----------------------------------------
   // access columns by type
 
-  /**
-    * Extract columns from a heterogeneous Frame which match the provided type.
+  /** Extract columns from a heterogeneous Frame which match the provided type.
     * The result is a homogeneous frame consisting of the selected data.
     * @tparam U The type of columns to extract
     */
@@ -521,8 +479,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(columns, rowIx, colIx.take(locs))
   }
 
-  /**
-    * Extract columns from a heterogeneous Frame which match either of the provided
+  /** Extract columns from a heterogeneous Frame which match either of the provided
     * types. The result is a heterogeneous frame consisting of the selected data.
     * @tparam U1 First type of columns to extract
     * @tparam U2 Second type of columns to extract
@@ -544,8 +501,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // ----------------------------------------
   // generate or use a new index
 
-  /**
-    * Create a new Frame using the current values but with the new row index. Positions
+  /** Create a new Frame using the current values but with the new row index. Positions
     * of the values do not change. Length of new index must be equal to number of rows.
     * @param newIx A new Index
     * @tparam Y Type of elements of new Index
@@ -553,16 +509,14 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def setRowIndex[Y: ST: ORD](newIx: Index[Y]): Frame[Y, CX, T] =
     new Frame(values, newIx, colIx, cachedMat)
 
-  /**
-    * Create a new Frame using the current values but with the new row index specified
+  /** Create a new Frame using the current values but with the new row index specified
     * by the column at a particular offset, and with that column removed from the frame
     * data body.
     */
   def withRowIndex(col: Int)(implicit ordT: ORD[T]): Frame[T, CX, T] =
     this.setRowIndex(Index(this.colAt(col).toVec)).filterAt(_ != col)
 
-  /**
-    * Overloaded method to create hierarchical index from two cols.
+  /** Overloaded method to create hierarchical index from two cols.
     */
   def withRowIndex(col1: Int, col2: Int)(implicit
       ordT: ORD[T]
@@ -572,8 +526,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     this.setRowIndex(newIx).filterAt { case c => !Set(col1, col2).contains(c) }
   }
 
-  /**
-    * Map a function over the row index, resulting in a new Frame
+  /** Map a function over the row index, resulting in a new Frame
     *
     * @param fn The function RX => Y with which to map
     * @tparam Y Result type of index, ie Index[Y]
@@ -581,8 +534,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def mapRowIndex[Y: ST: ORD](fn: RX => Y): Frame[Y, CX, T] =
     new Frame(values, rowIx.map(fn), colIx, cachedMat)
 
-  /**
-    * Map a function over the rows, resulting in a new Frame
+  /** Map a function over the rows, resulting in a new Frame
     *
     * @param fn The function (RX,Vec[T]) => Vec[Y] with which to map
     * @tparam Y Result type of mapped value
@@ -596,8 +548,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       .toFrame
       .T
 
-  /**
-    * Map a function over the columns, resulting in a new Frame
+  /** Map a function over the columns, resulting in a new Frame
     *
     * @param fn The function (CX,Vec[T]) => Vec[Y] with which to map
     * @tparam Y Result type of mapped value
@@ -608,8 +559,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       (cix, Series(col.index, mappedVec))
     }.toFrame
 
-  /**
-    * Create a new Frame using the current values but with the new col index. Positions
+  /** Create a new Frame using the current values but with the new col index. Positions
     * of the values do not change. Length of new index must be equal to number of cols.
     * @param newIx A new Index
     * @tparam Y Type of elements of new Index
@@ -617,16 +567,14 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def setColIndex[Y: ST: ORD](newIx: Index[Y]): Frame[RX, Y, T] =
     new Frame(values, rowIx, newIx, cachedMat)
 
-  /**
-    * Create a new Frame using the current values but with the new col index specified
+  /** Create a new Frame using the current values but with the new col index specified
     * by the row at a particular offset, and with that row removed from the frame
     * data body.
     */
   def withColIndex(row: Int)(implicit ordT: ORD[T]): Frame[RX, T, T] =
     this.setColIndex(Index(this.rowAt(row).toVec)).rfilterAt(_ != row)
 
-  /**
-    * Overloaded method to create hierarchical index from two rows.
+  /** Overloaded method to create hierarchical index from two rows.
     */
   def withColIndex(row1: Int, row2: Int)(implicit
       ordT: ORD[T]
@@ -636,8 +584,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     this.setColIndex(newIx).rfilterAt { case r => !Set(row1, row2).contains(r) }
   }
 
-  /**
-    * Map a function over the col index, resulting in a new Frame
+  /** Map a function over the col index, resulting in a new Frame
     *
     * @param fn The function CX => Y with which to map
     * @tparam Y Result type of index, ie Index[Y]
@@ -645,15 +592,13 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def mapColIndex[Y: ST: ORD](fn: CX => Y): Frame[RX, Y, T] =
     new Frame(values, rowIx, colIx.map(fn), cachedMat)
 
-  /**
-    * Create a new Frame whose values are the same, but whose row index has been changed
+  /** Create a new Frame whose values are the same, but whose row index has been changed
     * to the bound [0, numRows - 1), as in an array.
     */
   def resetRowIndex: Frame[Int, CX, T] =
     new Frame(values, IndexIntRange(numRows), colIx, cachedMat)
 
-  /**
-    * Create a new Frame whose values are the same, but whose col index has been changed
+  /** Create a new Frame whose values are the same, but whose col index has been changed
     * to the bound [0, numCols - 1), as in an array.
     */
   def resetColIndex: Frame[RX, Int, T] =
@@ -662,36 +607,31 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // ----------------------------------------
   // some helpful ops
 
-  /**
-    * Extract first n rows
+  /** Extract first n rows
     *
     * @param n number of rows to extract
     */
   def head(n: Int): Frame[RX, CX, T] = transform(_.head(n))
 
-  /**
-    * Extract last n rows
+  /** Extract last n rows
     *
     * @param n number of rows to extract
     */
   def tail(n: Int): Frame[RX, CX, T] = transform(_.tail(n))
 
-  /**
-    * Extract first n columns
+  /** Extract first n columns
     *
     * @param n number of columns to extract
     */
   def headCol(n: Int) = Frame(values.take(n), rowIx, colIx.head(n))
 
-  /**
-    * Extract last n columns
+  /** Extract last n columns
     *
     * @param n number of columns to extract
     */
   def tailCol(n: Int) = Frame(values.takeRight(n), rowIx, colIx.tail(n))
 
-  /**
-    * Extract first row matching a particular key
+  /** Extract first row matching a particular key
     *
     * @param k Key to match
     */
@@ -700,8 +640,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     if (loc == -1) emptyRow else rowAt(loc)
   }
 
-  /**
-    * Extract last row matching a particular key
+  /** Extract last row matching a particular key
     *
     * @param k Key to match
     */
@@ -710,8 +649,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     if (loc == -1) Series.empty[CX, T] else rowAt(loc)
   }
 
-  /**
-    * Extract first col matching a particular key
+  /** Extract first col matching a particular key
     *
     * @param k Key to match
     */
@@ -720,8 +658,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     if (loc == -1) emptyCol else colAt(loc)
   }
 
-  /**
-    * Extract first col matching a particular key
+  /** Extract first col matching a particular key
     *
     * @param k Key to match
     */
@@ -730,18 +667,15 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     if (loc == -1) emptyCol else colAt(loc)
   }
 
-  /**
-    * Return empty series of type equivalent to a row of frame
+  /** Return empty series of type equivalent to a row of frame
     */
   def emptyRow: Series[CX, T] = Series.empty[CX, T]
 
-  /**
-    * Return empty series of type equivalent to a column of frame
+  /** Return empty series of type equivalent to a column of frame
     */
   def emptyCol: Series[RX, T] = Series.empty[RX, T]
 
-  /**
-    * Create a new Frame whose rows are sorted according to the row
+  /** Create a new Frame whose rows are sorted according to the row
     * index keys
     */
   def sortedRIx: Frame[RX, CX, T] =
@@ -751,8 +685,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       Frame(values.map(_.take(taker)), rowIx.take(taker), colIx)
     }
 
-  /**
-    * Create a new Frame whose rows are sorted according to the reverse of row
+  /** Create a new Frame whose rows are sorted according to the reverse of row
     * index keys
     */
   def sortedRIxReverse: Frame[RX, CX, T] = {
@@ -760,8 +693,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.map(_.take(taker)), rowIx.take(taker), colIx)
   }
 
-  /**
-    * Create a new Frame whose cols are sorted according to the col
+  /** Create a new Frame whose cols are sorted according to the col
     * index keys
     */
   def sortedCIx: Frame[RX, CX, T] =
@@ -771,8 +703,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       Frame(values.take(taker), rowIx, colIx.take(taker))
     }
 
-  /**
-    * Create a new Frame whose cols are sorted according to the reveverse of col
+  /** Create a new Frame whose cols are sorted according to the reveverse of col
     * index keys
     */
   def sortedCIxReverse: Frame[RX, CX, T] = {
@@ -780,8 +711,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.take(taker), rowIx, colIx.take(taker))
   }
 
-  /**
-    * Create a new Frame whose rows are sorted primarily on the values
+  /** Create a new Frame whose rows are sorted primarily on the values
     * in the first column specified in the argument list, and then on
     * the values in the next column, etc.
     * @param locs Location of columns containing values to sort on
@@ -800,8 +730,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.map(_.take(order)), rowIx.take(order), colIx)
   }
 
-  /**
-    * Create a new Frame whose cols are sorted primarily on the values
+  /** Create a new Frame whose cols are sorted primarily on the values
     * in the first row specified in the argument list, and then on
     * the values in the next row, etc.
     * @param locs Location of rows containing values to sort on
@@ -820,8 +749,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(values.take(order), rowIx, colIx.take(order))
   }
 
-  /**
-    * Create a new Frame whose rows are sorted by the result of a function
+  /** Create a new Frame whose rows are sorted by the result of a function
     * acting on each row.
     * @param f Function from a single row (represented as series) to a value having an
     *          ordering
@@ -835,8 +763,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     rowAt(perm)
   }
 
-  /**
-    * Create a new Frame whose cols are sorted by the result of a function
+  /** Create a new Frame whose cols are sorted by the result of a function
     * acting on each col.
     * @param f Function from a single col (represented as series) to a value having an
     *          ordering
@@ -850,8 +777,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     colAt(perm)
   }
 
-  /**
-    * Map over each triple (r, c, v) in the Frame, returning a new frame from the resulting
+  /** Map over each triple (r, c, v) in the Frame, returning a new frame from the resulting
     * triples.
     */
   def map[SX: ST: ORD, DX: ST: ORD, U: ST](
@@ -860,20 +786,18 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Series(toSeq.map(f).map { case (sx, dx, u) => ((sx, dx) -> u) }: _*).pivot
   }
 
-  /**
-    * Map over each triple (r, c, v) in the Frame, flattening results, and returning a new frame from
+  /** Map over each triple (r, c, v) in the Frame, flattening results, and returning a new frame from
     * the resulting triples.
     */
   def flatMap[SX: ST: ORD, DX: ST: ORD, U: ST](
-      f: ((RX, CX, T)) => Traversable[(SX, DX, U)]
+      f: ((RX, CX, T)) => Iterable[(SX, DX, U)]
   ): Frame[SX, DX, U] = {
     Series(
       toSeq.flatMap(f).map { case (sx, dx, u) => ((sx, dx) -> u) }: _*
     ).pivot
   }
 
-  /**
-    * Map over the values of the Frame. Applies a function to each (non-na) value in the frame,
+  /** Map over the values of the Frame. Applies a function to each (non-na) value in the frame,
     * returning a new frame whose indices remain the same.
     *
     * @param f Function from T to U
@@ -882,24 +806,21 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def mapValues[U: ST](f: T => U): Frame[RX, CX, U] =
     Frame(values.map(v => v.map(f)), rowIx, colIx)
 
-  /**
-    * Create a new Frame that, whenever the mask predicate function evaluates to
+  /** Create a new Frame that, whenever the mask predicate function evaluates to
     * true on a value, is masked with NA
     * @param f Function from T to Boolean
     */
   def mask(f: T => Boolean): Frame[RX, CX, T] =
     Frame(values.map(v => v.mask(f)), rowIx, colIx)
 
-  /**
-    * Create a new Frame whose columns follow the rule that, wherever the mask Vec is true,
+  /** Create a new Frame whose columns follow the rule that, wherever the mask Vec is true,
     * the column value is masked with NA
     * @param m Mask Vec[Boolean]
     */
   def mask(m: Vec[Boolean]): Frame[RX, CX, T] =
     Frame(values.map(v => v.mask(m)), rowIx, colIx)
 
-  /**
-    * Joins two frames along both their indexes and applies a function to each pair
+  /** Joins two frames along both their indexes and applies a function to each pair
     * of values; when either value is NA, the result of the function is forced to be NA.
     * @param other Other Frame
     * @param rhow The type of join to effect on the rows
@@ -919,8 +840,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(result, l.rowIx, l.colIx)
   }
 
-  /**
-    * Map a function over each column vector and collect the results into a Frame respecting
+  /** Map a function over each column vector and collect the results into a Frame respecting
     * the original indexes.
     * @param f Function acting on Vec[T] and producing another Vec
     * @tparam U Type of result Vec of the function
@@ -928,8 +848,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def mapVec[U: ST](f: Vec[T] => Vec[U]): Frame[RX, CX, U] =
     Frame(values.map(f), rowIx, colIx)
 
-  /**
-    * Apply a function to each column series which results in a single value, and return the
+  /** Apply a function to each column series which results in a single value, and return the
     * series of results indexed by original column index.
     * @param f Function taking a column (series) to a value
     * @tparam U The output type of the function
@@ -937,8 +856,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def reduce[U: ST](f: Series[RX, T] => U): Series[CX, U] =
     Series(Vec(values.map(v => f(Series(v, rowIx))): _*), colIx)
 
-  /**
-    * Apply a function to each column series which results in another series (having possibly
+  /** Apply a function to each column series which results in another series (having possibly
     * a different index); return new frame whose row index is the the full outer join of all
     * the intermediately produced series (fast when all series have the same index), and having
     * the original column index.
@@ -953,15 +871,13 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
 
   // groupBy functionality (on rows)
 
-  /**
-    * Construct a [[org.saddle.groupby.FrameGrouper]] with which further computations, such
+  /** Construct a [[org.saddle.groupby.FrameGrouper]] with which further computations, such
     * as combine or transform, may be performed. The groups are constructed from the keys of
     * the row index, with each unique key corresponding to a group.
     */
   def groupBy = FrameGrouper(this)
 
-  /**
-    * Construct a [[org.saddle.groupby.FrameGrouper]] with which further computations, such
+  /** Construct a [[org.saddle.groupby.FrameGrouper]] with which further computations, such
     * as combine or transform, may be performed. The groups are constructed from the result
     * of the function applied to the keys of the row index; each unique result of calling the
     * function on elements of the row index corresponds to a group.
@@ -970,8 +886,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     */
   def groupBy[Y: ST: ORD](fn: RX => Y) = FrameGrouper(this.rowIx.map(fn), this)
 
-  /**
-    * Construct a [[org.saddle.groupby.FrameGrouper]] with which further computations, such
+  /** Construct a [[org.saddle.groupby.FrameGrouper]] with which further computations, such
     * as combine or transform, may be performed. The groups are constructed from the keys of
     * the provided index, with each unique key corresponding to a group.
     * @param ix Index with which to perform grouping
@@ -981,8 +896,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
 
   // concatenate two frames together (vertically), must have same number of columns
 
-  /**
-    * Concatenate the Frame instances together (vertically, i.e. concatenate as lists of rows)
+  /** Concatenate the Frame instances together (vertically, i.e. concatenate as lists of rows)
     * whose indexes share the same type
     * of elements, and where there exists some way to join the values of the Frames. For
     * instance, Frame[X, Y, Double] `concat` Frame[X, Y, Int] will promote Int to Double as
@@ -1017,8 +931,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(data, rowIdx, reindexer.index)
   }
 
-  /**
-    * Create Frame whose rows satisfy the rule that their keys and values are chosen
+  /** Create Frame whose rows satisfy the rule that their keys and values are chosen
     * via a Vec[Boolean] or a Series[_, Boolean] predicate when the latter contains a
     * true value.
     * @param pred Series[_, Boolean] (or Vec[Boolean] which will implicitly convert)
@@ -1026,8 +939,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def where(pred: Series[_, Boolean]): Frame[RX, CX, T] =
     where(pred.values)
 
-  /**
-    * Create Frame whose rows satisfy the rule that their keys and values are chosen
+  /** Create Frame whose rows satisfy the rule that their keys and values are chosen
     * via a Vec[Boolean] or a Series[_, Boolean] predicate when the latter contains a
     * true value.
     * @param pred Series[_, Boolean] (or Vec[Boolean] which will implicitly convert)
@@ -1040,8 +952,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(newVals, rowIx, Index(newIdx))
   }
 
-  /**
-    * Shift the sequence of values relative to the row index by some offset,
+  /** Shift the sequence of values relative to the row index by some offset,
     * dropping those values which no longer associate with a key, and having
     * those keys which no longer associate to a value instead map to NA.
     * @param n Number to shift
@@ -1049,34 +960,29 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def shift(n: Int = 1): Frame[RX, CX, T] =
     Frame(values.map(_.shift(n)), rowIx, colIx)
 
-  /**
-    * Return Frame whose columns satisfy a predicate function operating on that
+  /** Return Frame whose columns satisfy a predicate function operating on that
     * column
     * @param pred Predicate function from Series[RX, T] => Boolean
     */
   def filter(pred: Series[RX, T] => Boolean) = where(reduce(v => pred(v)))
 
-  /**
-    * Return Frame whose columns satisfy a predicate function operating on the
+  /** Return Frame whose columns satisfy a predicate function operating on the
     * column index
     * @param pred Predicate function from CX => Boolean
     */
   def filterIx(pred: CX => Boolean) = where(colIx.toVec.map(pred))
 
-  /**
-    * Return Frame whose columns satisfy a predicate function operating on the
+  /** Return Frame whose columns satisfy a predicate function operating on the
     * column index offset
     * @param pred Predicate function from CX => Boolean
     */
   def filterAt(pred: Int => Boolean) = where(vec.range(0, numCols).map(pred))
 
-  /**
-    * Return Frame excluding any of those columns which have an NA value
+  /** Return Frame excluding any of those columns which have an NA value
     */
   def dropNA: Frame[RX, CX, T] = filter(s => !s.hasNA)
 
-  /**
-    * Produce a Frame each of whose columns are the result of executing a function
+  /** Produce a Frame each of whose columns are the result of executing a function
     * on a sliding window of each column series.
     * @param winSz Window size
     * @param f Function Series[X, T] => B to operate on sliding window
@@ -1090,8 +996,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(tmp, rowIx.slice(windowSize - 1, values.numRows), colIx)
   }
 
-  /**
-    * Create a Series by rolling over winSz number of rows of the Frame at a
+  /** Create a Series by rolling over winSz number of rows of the Frame at a
     * time, and applying a function that takes those rows to a single value.
     *
     * @param winSz Window size to roll with
@@ -1114,8 +1019,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // ----------------------------------------
   // joining
 
-  /**
-    * Same as `addCol`, but preserve the column index, adding the specified index value,
+  /** Same as `addCol`, but preserve the column index, adding the specified index value,
     * `newColIx` as an index for the `other` Series.
     */
   def addCol(
@@ -1128,8 +1032,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     resultingFrame.setColIndex(newColIndex)
   }
 
-  /**
-    * Add a new column. Resets column index
+  /** Add a new column. Resets column index
     *
     * The result is a Frame whose row index is the result of the join, and whose column
     * index has been reset to [0, numcols], and whose values are sourced from the original
@@ -1152,8 +1055,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(lft :+ rgt, indexer.index, IndexIntRange(colIx.length + 1))
   }
 
-  /**
-    * Aligns this frame with another frame, returning the left and right frames aligned
+  /** Aligns this frame with another frame, returning the left and right frames aligned
     * to each others indexes according to the the provided parameters
     *
     * @param other Other frame to align with
@@ -1192,13 +1094,11 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // ------------------------------------------------
   // reshaping
 
-  /**
-    * Drop all columns from the Frame which have nothing but NA values.
+  /** Drop all columns from the Frame which have nothing but NA values.
     */
   def squeeze: Frame[RX, CX, T] = filter(s => !VecImpl.isAllNA(s.toVec))
 
-  /**
-    * Melt stacks the row index of arity N with the column index of arity M to form a result index
+  /** Melt stacks the row index of arity N with the column index of arity M to form a result index
     * of arity N + M, producing a 1D Series whose values are from the original Frame as indexed by
     * the corresponding keys.
     *
@@ -1243,8 +1143,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Series[W, T](toMat.toVec, Index(ix))
   }
 
-  /**
-    * Stack pivots the innermost column labels to the innermost row labels. That is, it splits
+  /** Stack pivots the innermost column labels to the innermost row labels. That is, it splits
     * a col index of tuple keys of arity N into a new col index having arity N-1 and a remaining
     * index C, and forms a new row index by stacking the existing row index with C. The
     * resulting Frame has values as in the original Frame indexed by the corresponding keys. It
@@ -1267,8 +1166,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     T.unstack.T
   }
 
-  /**
-    * Unstack pivots the innermost row labels to the innermost col labels. That is, it splits
+  /** Unstack pivots the innermost row labels to the innermost col labels. That is, it splits
     * a row index of tuple keys of arity N into a new row index having arity N-1 and a remaining
     * index R, and forms a new col index by stacking the existing col index with R. The
     * resulting Frame has values as in the original Frame indexed by the corresponding keys.
@@ -1356,12 +1254,11 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
         }
       }
 
-      Frame[O1, V, T](result, rix, cix)
+      Frame[O1, V, T](result.toVec, rix, cix)
     } else Frame.empty[O1, V, T]
   }
 
-  /**
-    * Extract the Mat embodied in the values of the Frame (dropping any indexing
+  /** Extract the Mat embodied in the values of the Frame (dropping any indexing
     * information)
     */
   def toMat: Mat[T] = {
@@ -1377,8 +1274,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   // ---------------------------------------------------------------
   // Row-wise versions of all the ops that operate on cols by default
 
-  /**
-    * See mask; operates row-wise
+  /** See mask; operates row-wise
     */
   def rmask(b: Vec[Boolean]): Frame[RX, CX, T] = {
     val missing = {
@@ -1395,8 +1291,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     )
   }
 
-  /**
-    * See mapVec; operates row-wise
+  /** See mapVec; operates row-wise
     */
   def rmapVec[U: ST](f: Vec[T] => Vec[U]): Frame[RX, CX, U] = {
     val vecs = 0 until numRows map { i => f(values.rowAt(i)) }
@@ -1404,8 +1299,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(vecs, colIx, rowIx).T
   }
 
-  /**
-    * See reduce; operates row-wise
+  /** See reduce; operates row-wise
     */
   def rreduce[U: ST](f: Series[CX, T] => U): Series[RX, U] = {
     val vec = 0 until numRows map { i =>
@@ -1415,8 +1309,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Series(vec, rowIx)
   }
 
-  /**
-    * See transform; operates row-wise
+  /** See transform; operates row-wise
     */
   def rtransform[U: ST, SX: ST: ORD](
       f: Series[CX, T] => Series[SX, U]
@@ -1428,8 +1321,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(transformed, rowIx).T
   }
 
-  /**
-    * See concat; operates row-wise.
+  /** See concat; operates row-wise.
     * Concetanates two Frames by concatenating their lists of columns
     * A1 A2 rconcat B1 B2  =  A1 A2 B1 B2
     * A3 A4         B3 B4     A3 A4 B3 B4
@@ -1450,8 +1342,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(data, reindexer.index, colIdx)
   }
 
-  /**
-    * Same as rconcat. Concatenates two Frames by concatenating their lists of columns
+  /** Same as rconcat. Concatenates two Frames by concatenating their lists of columns
     * A1 A2 rconcat B1 B2  =  A1 A2 B1 B2
     * A3 A4         B3 B4     A3 A4 B3 B4
     */
@@ -1460,8 +1351,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       how: JoinType = OuterJoin
   ): Frame[RX, CX, T] = rconcat(other, how)
 
-  /**
-    * Same as concat. Concatenates two Frames by concatenating their lists of rows
+  /** Same as concat. Concatenates two Frames by concatenating their lists of rows
     * A1 A2  concat B1 B2  =  A1 A2
     * A3 A4         B3 B4     A3 A4
     *                         B1 B2
@@ -1489,14 +1379,12 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     rowAt(rowIx.firsts(newRowIx.toArray))
   }
 
-  /**
-    * See where; operates row-wise
+  /** See where; operates row-wise
     */
   def rwhere(pred: Series[_, Boolean]): Frame[RX, CX, T] =
     rwhere(pred.values)
 
-  /**
-    * See where; operates row-wise
+  /** See where; operates row-wise
     */
   def rwhere(pred: Vec[Boolean]): Frame[RX, CX, T] = {
     val predv = pred
@@ -1508,28 +1396,23 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     )
   }
 
-  /**
-    * See shift; operates col-wise
+  /** See shift; operates col-wise
     */
   def cshift(n: Int = 1): Frame[RX, CX, T] = T.shift(n).T
 
-  /**
-    * See filter; operates row-wise
+  /** See filter; operates row-wise
     */
   def rfilter(pred: Series[CX, T] => Boolean) = rwhere(rreduce(v => pred(v)))
 
-  /**
-    * See filterIx; operates row-wise
+  /** See filterIx; operates row-wise
     */
   def rfilterIx(pred: RX => Boolean) = rwhere(rowIx.toVec.map(pred))
 
-  /**
-    * See filterAt; operates row-wise
+  /** See filterAt; operates row-wise
     */
   def rfilterAt(pred: Int => Boolean) = rwhere(vec.range(0, numRows).map(pred))
 
-  /**
-    * See addCol, operates row-wise.
+  /** See addCol, operates row-wise.
     */
   def addRow(
       other: Series[CX, T],
@@ -1541,8 +1424,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     resultingFrame.setRowIndex(newRowIndex)
   }
 
-  /**
-    * See addRow; operates row-wise.
+  /** See addRow; operates row-wise.
     */
   def addRow(
       other: Series[CX, T],
@@ -1559,38 +1441,33 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     Frame(lft.appendRow(rgt), IndexIntRange(rowIx.length + 1), indexer.index)
   }
 
-  /**
-    * See dropNA; operates row-wise
+  /** See dropNA; operates row-wise
     */
   def rdropNA: Frame[RX, CX, T] = rfilter(v => !v.hasNA)
 
-  /**
-    * See squeeze; operates row-wise
+  /** See squeeze; operates row-wise
     */
   def rsqueeze: Frame[RX, CX, T] = rfilter(s => !VecImpl.isAllNA(s.toVec))
 
   // --------------------------------------
   // for iterating over rows/cols/elements
 
-  /**
-    * Produce an indexed sequence of pairs of row index value and
+  /** Produce an indexed sequence of pairs of row index value and
     * row Series
     */
   def toRowSeq: IndexedSeq[(RX, Series[CX, T])] =
-    for (i <- array.range(0, numRows)) yield (rowIx.raw(i), rowAt(i))
+    for (i <- 0 until numRows) yield (rowIx.raw(i), rowAt(i))
 
   def rowIterator: Iterator[(RX, Series[CX, T])] =
     for (i <- (0 until numRows).iterator) yield (rowIx.raw(i), rowAt(i))
 
-  /**
-    * Produce an indexed sequence of pairs of column index value and
+  /** Produce an indexed sequence of pairs of column index value and
     * column Series.
     */
   def toColSeq: IndexedSeq[(CX, Series[RX, T])] =
-    for (i <- array.range(0, numCols)) yield (colIx.raw(i), colAt(i))
+    for (i <- 0 until numCols) yield (colIx.raw(i), colAt(i))
 
-  /**
-    * Produce an indexed sequence of triples of values in the Frame
+  /** Produce an indexed sequence of triples of values in the Frame
     * in row-major order.
     */
   def toSeq: IndexedSeq[(RX, CX, T)] =
@@ -1608,8 +1485,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
 
   override def toString: String = stringify()
 
-  /**
-    * Creates a string representation of Frame
+  /** Creates a string representation of Frame
     * @param nrows Max number of rows to include
     * @param ncols Max number of rows to include
     */
@@ -1745,8 +1621,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     buf.toString()
   }
 
-  /**
-    * Pretty-printer for Frame, which simply outputs the result of stringify.
+  /** Pretty-printer for Frame, which simply outputs the result of stringify.
     * @param nrows Number of rows to display
     * @param ncols Number of cols to display
     */
@@ -1768,42 +1643,35 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       case _ => false
     }
 
-  /**
-    * Sum of the elements of each column, ignoring NA values
+  /** Sum of the elements of each column, ignoring NA values
     */
   def sum(implicit num: NUM[T]): Series[CX, T] = reduce(_.sum)
 
-  /**
-    * Count of the elements of each column, ignoring NA values
+  /** Count of the elements of each column, ignoring NA values
     */
   def count: Series[CX, Int] = reduce(_.count)
 
-  /**
-    * Min of the elements of each column, ignoring NA values
+  /** Min of the elements of each column, ignoring NA values
     */
   def min(implicit num: NUM[T]): Series[CX, T] =
     reduce(_.toVec.min.getOrElse(implicitly[ST[T]].missing))
 
-  /**
-    * Median of each column
+  /** Median of each column
     */
   def median(implicit num: NUM[T]): Series[CX, Double] =
     reduce(_.toVec.median)
 
-  /**
-    * Mean of each column
+  /** Mean of each column
     */
   def mean(implicit num: NUM[T]): Series[CX, Double] =
     reduce(_.toVec.mean)
 
-  /**
-    * Max of the elements of each column, ignoring NA values
+  /** Max of the elements of each column, ignoring NA values
     */
   def max(implicit num: NUM[T]): Series[CX, T] =
     reduce(_.toVec.max.getOrElse(implicitly[ST[T]].missing))
 
-  /**
-    * Product of the elements of each column, ignoring NA values
+  /** Product of the elements of each column, ignoring NA values
     */
   def prod(implicit num: NUM[T]): Series[CX, T] = reduce(_.toVec.prod)
 }
@@ -1814,8 +1682,7 @@ object Frame extends BinOpFrame {
   // --------------------------------
   // instantiations
 
-  /**
-    * Factory method to create an empty Frame
+  /** Factory method to create an empty Frame
     * @tparam RX Type of row keys
     * @tparam CX Type of col keys
     * @tparam T Type of values
@@ -1832,8 +1699,7 @@ object Frame extends BinOpFrame {
   // --------------------------------
   // Construct using sequence of vectors
 
-  /**
-    * Factory method to create a Frame from a sequence of Vec objects
+  /** Factory method to create a Frame from a sequence of Vec objects
     */
   def apply[@spec(Int, Long, Double) T: ST](
       values: Vec[T]*
@@ -1848,8 +1714,7 @@ object Frame extends BinOpFrame {
       )
     }
 
-  /**
-    * Factory method to create a Frame from a sequence of Vec objects,
+  /** Factory method to create a Frame from a sequence of Vec objects,
     * a row index, and a column index.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T: ST](
@@ -1861,8 +1726,16 @@ object Frame extends BinOpFrame {
     else
       new Frame[RX, CX, T](MatCols[T](values: _*), rowIx, colIx, None)
 
-  /**
-    * Factory method to create a Frame from a sequence of Vec objects
+  def apply[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T: ST](
+      values: Vec[Vec[T]],
+      rowIx: Index[RX],
+      colIx: Index[CX]
+  ): Frame[RX, CX, T] =
+    if (values.isEmpty) empty[RX, CX, T]
+    else
+      new Frame[RX, CX, T](MatCols[T](values.toSeq: _*), rowIx, colIx, None)
+
+  /** Factory method to create a Frame from a sequence of Vec objects
     * and a column index.
     */
   def apply[CX: ST: ORD, @spec(Int, Long, Double) T: ST](
@@ -1875,8 +1748,7 @@ object Frame extends BinOpFrame {
       apply(asIdxSeq, IndexIntRange(asIdxSeq(0).length), colIx)
     }
 
-  /**
-    * Factory method to create a Frame from tuples whose first element is
+  /** Factory method to create a Frame from tuples whose first element is
     * the column label and the second is a Vec of values.
     */
   def apply[CX: ST: ORD, @spec(Int, Long, Double) T: ST](
@@ -1897,10 +1769,10 @@ object Frame extends BinOpFrame {
   // overloaded apply method
   private type ID[T] = T => T
 
-  /**
-    * Factory method to create a Frame from a sequence of Series. The row labels
+  /** Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
     */
+  @scala.annotation.nowarn
   def apply[RX: ST: ORD, T: ST: ID](
       values: Series[RX, T]*
   ): Frame[RX, Int, T] = {
@@ -1921,8 +1793,7 @@ object Frame extends BinOpFrame {
     }
   }
 
-  /**
-    * Factory method to create a Frame from a sequence of series, also specifying
+  /** Factory method to create a Frame from a sequence of series, also specifying
     * the column index to use. The row labels of the result are the outer join of
     * the indexes of the series provided.
     */
@@ -1942,8 +1813,7 @@ object Frame extends BinOpFrame {
     }
   }
 
-  /**
-    * Factory method to create a Frame from a sequence of tuples, where the
+  /** Factory method to create a Frame from a sequence of tuples, where the
     * first element of the tuple is a column label, and the second a series
     * of values. The row labels of the result are the outer join of the
     * indexes of the series provided.
@@ -1968,8 +1838,7 @@ object Frame extends BinOpFrame {
   // --------------------------------
   // Construct using matrix
 
-  /**
-    * Build a Frame from a provided Mat
+  /** Build a Frame from a provided Mat
     */
   def apply[T: ST](values: Mat[T]): Frame[Int, Int, T] =
     apply(
@@ -1978,8 +1847,7 @@ object Frame extends BinOpFrame {
       IndexIntRange(values.numCols)
     )
 
-  /**
-    * Build a Frame from a provided Mat, row index, and col index
+  /** Build a Frame from a provided Mat, row index, and col index
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       mat: Mat[T],
@@ -1990,7 +1858,7 @@ object Frame extends BinOpFrame {
       empty[RX, CX, T]
     else {
       new Frame[RX, CX, T](
-        MatCols(mat.cols(): _*),
+        MatCols(mat.cols: _*),
         rowIx,
         colIx,
         Some(mat)
@@ -2016,14 +1884,12 @@ object Frame extends BinOpFrame {
   }
 }
 
-/**
-  * Convenience constructors for a Frame[RX, CX, Any] that accept arbitrarily-typed Vectors
+/** Convenience constructors for a Frame[RX, CX, Any] that accept arbitrarily-typed Vectors
   * and Series as constructor parameters, leaving their internal representations unchanged.
   */
 object Panel {
 
-  /**
-    * Factory method to create an empty Frame whose columns have type Any
+  /** Factory method to create an empty Frame whose columns have type Any
     * @tparam RX Type of row keys
     * @tparam CX Type of col keys
     */
@@ -2038,8 +1904,7 @@ object Panel {
   // --------------------------------
   // Construct using sequence of vectors
 
-  /**
-    * Factory method to create a Frame from a sequence of Vec objects
+  /** Factory method to create a Frame from a sequence of Vec objects
     */
   def apply(values: Vec[_]*): Frame[Int, Int, Any] =
     if (values.isEmpty) empty[Int, Int]
@@ -2052,8 +1917,7 @@ object Panel {
       )
     }
 
-  /**
-    * Factory method to create a Frame from a sequence of Vec objects,
+  /** Factory method to create a Frame from a sequence of Vec objects,
     * a row index, and a column index.
     */
   def apply[RX: ST: ORD, CX: ST: ORD](
@@ -2068,8 +1932,7 @@ object Panel {
       Frame(toSeqVec(anySeq), rowIx, colIx)
   }
 
-  /**
-    * Factory method to create a Frame from a sequence of Vec objects
+  /** Factory method to create a Frame from a sequence of Vec objects
     * and a column index.
     */
   def apply[CX: ST: ORD](
@@ -2085,10 +1948,10 @@ object Panel {
   private def toSeqVec(anySeq: Seq[Vec[_]]): IndexedSeq[Vec[Any]] =
     anySeq.toIndexedSeq.asInstanceOf[IndexedSeq[Vec[Any]]]
 
-  /**
-    * Factory method to create a Frame from tuples whose first element is
+  /** Factory method to create a Frame from tuples whose first element is
     * the column label and the second is a Vec of values.
     */
+  @scala.annotation.nowarn
   def apply[CX: ST: ORD, T: ST](values: (CX, Vec[_])*): Frame[Int, CX, Any] = {
     val asIdxSeq = values.map(_._2).toIndexedSeq
     val idx = Index(values.map(_._1).toArray)
@@ -2105,8 +1968,7 @@ object Panel {
   private def toSeqSeries[RX](anySeq: Seq[Series[RX, _]]) =
     anySeq.toIndexedSeq.asInstanceOf[IndexedSeq[Series[RX, Any]]]
 
-  /**
-    * Factory method to create a Frame from a sequence of Series. The row labels
+  /** Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
     */
   def apply[RX: ST: ORD](values: Series[RX, _]*): Frame[RX, Int, Any] = {
@@ -2124,8 +1986,7 @@ object Panel {
     }
   }
 
-  /**
-    * Factory method to create a Frame from a sequence of series, also specifying
+  /** Factory method to create a Frame from a sequence of series, also specifying
     * the column index to use. The row labels of the result are the outer join of
     * the indexes of the series provided.
     */
@@ -2145,8 +2006,7 @@ object Panel {
     }
   }
 
-  /**
-    * Factory method to create a Frame from a sequence of tuples, where the
+  /** Factory method to create a Frame from a sequence of tuples, where the
     * first element of the tuple is a column label, and the second a series
     * of values. The row labels of the result are the outer join of the
     * indexes of the series provided.

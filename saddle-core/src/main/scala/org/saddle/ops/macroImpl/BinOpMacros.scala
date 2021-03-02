@@ -251,7 +251,7 @@ object BinOpMacros {
     cxt.Expr((tree))
   }
 
-  def inline[A: cxt.WeakTypeTag, B: cxt.WeakTypeTag, C: cxt.WeakTypeTag](
+  def inline[A, B, C](
       cxt: Context
   )(op: cxt.Expr[(A, B) => C]) = {
     import cxt.universe._

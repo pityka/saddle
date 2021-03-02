@@ -16,9 +16,12 @@ trait BinOpMatInPlace {
   implicit val matSclr_II_Add = MatSclrIP[Int, Int, Add]
 
   implicit val matSclr_DD_Power = MatSclrIP[Double, Double, Power]
+  @scala.annotation.nowarn
   implicit val matSclr_DL_Power = MatSclrIP[Double, Long, Power]
   implicit val matSclr_DI_Power = MatSclrIP[Double, Int, Power]
+  @scala.annotation.nowarn
   implicit val matSclr_LL_Power = MatSclrIP[Long, Long, Power]
+  @scala.annotation.nowarn
   implicit val matSclr_LI_Power = MatSclrIP[Long, Int, Power]
   implicit val matSclr_II_Power = MatSclrIP[Int, Int, Power]
 

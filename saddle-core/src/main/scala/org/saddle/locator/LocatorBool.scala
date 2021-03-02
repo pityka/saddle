@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,11 +11,10 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.locator
 
-/**
-  * A bool-to-integer hash map
+/** A bool-to-integer hash map
   */
 class LocatorBool extends Locator[Boolean] {
   val map = Array.fill[Int](2)(-1)
@@ -37,13 +35,13 @@ class LocatorBool extends Locator[Boolean] {
     else if (contains(false)) 1
     else 0
 
-  def keys() =
+  def keys =
     if (contains(false) && contains(true)) Array(false, true)
     else if (contains(true)) Array(true)
     else if (contains(false)) Array(false)
     else Array.empty[Boolean]
 
-  def counts() = cts
+  def counts = cts
 
   def inc(key: Boolean): Int = {
     val idx = if (key) 1 else 0

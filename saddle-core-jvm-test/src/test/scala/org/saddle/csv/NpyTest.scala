@@ -24,7 +24,7 @@ class NpyTest extends Specification {
           java.nio.channels.Channels
             .newChannel(getClass.getResourceAsStream("/file.npy"))
         )
-        .right
+        .toOption
         .get
 
     read must_== ((Vec(1d, 0d, 0d, 0d, 1d, 0d, 0d, 0d, 1d), List(3, 3)))
@@ -37,7 +37,7 @@ class NpyTest extends Specification {
           java.nio.channels.Channels
             .newChannel(getClass.getResourceAsStream("/ones.npy"))
         )
-        .right
+        .toOption
         .get
 
     read._2 must_== List(3)
@@ -49,7 +49,7 @@ class NpyTest extends Specification {
           java.nio.channels.Channels
             .newChannel(getClass.getResourceAsStream("/ones2.npy"))
         )
-        .right
+        .toOption
         .get
 
     read._2 must_== List(3, 3, 3)
@@ -61,7 +61,7 @@ class NpyTest extends Specification {
           java.nio.channels.Channels
             .newChannel(getClass.getResourceAsStream("/file.npy"))
         )
-        .right
+        .toOption
         .get
 
     read must_== (Mat(Vec(1d, 0d, 0d), Vec(0d, 1d, 0d), Vec(0d, 0d, 1d)))

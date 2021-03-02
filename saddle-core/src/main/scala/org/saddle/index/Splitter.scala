@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,14 +11,13 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.index
 
 import org.saddle.{Index, ST, ORD}
 import org.saddle.order._
 
-/**
-  * A Splitter operates on an input index whose elements have arity N, and yields the following
+/** A Splitter operates on an input index whose elements have arity N, and yields the following
   * pair of output indexes: the left has elements whose arity is N-1, where each element has the
   * first N-1 constituents of the original tuple; and the right is an index whose elements were
   * those in the Nth position of the original tuple.
@@ -44,8 +42,7 @@ trait Splitter[I, OL, OR] {
   def apply(i: Index[I]): (Index[OL], Index[OR])
 }
 
-/**
-  * Companion object houses implicit instances of Splitter
+/** Companion object houses implicit instances of Splitter
   */
 object Splitter {
   implicit def split2nd[T1: ST: ORD, T2: ST: ORD] =
@@ -53,23 +50,23 @@ object Splitter {
       def apply(i: Index[(T1, T2)]) = (i.map(_._1), i.map(_._2))
     }
 
-  implicit def split3rd[T1: ST: ORD, T2: ST: ORD, T3: ST: ORD] =
+  implicit def split3rd[T1: ORD, T2: ORD, T3: ST: ORD] =
     new Splitter[(T1, T2, T3), (T1, T2), T3] {
       def apply(i: Index[(T1, T2, T3)]) =
         (i.map(t => (t._1, t._2)), i.map(_._3))
     }
 
-  implicit def split4th[T1: ST: ORD, T2: ST: ORD, T3: ST: ORD, T4: ST: ORD] =
+  implicit def split4th[T1: ORD, T2: ORD, T3: ORD, T4: ST: ORD] =
     new Splitter[(T1, T2, T3, T4), (T1, T2, T3), T4] {
       def apply(i: Index[(T1, T2, T3, T4)]) =
         (i.map(t => (t._1, t._2, t._3)), i.map(_._4))
     }
 
   implicit def split5th[
-      T1: ST: ORD,
-      T2: ST: ORD,
-      T3: ST: ORD,
-      T4: ST: ORD,
+      T1: ORD,
+      T2: ORD,
+      T3: ORD,
+      T4: ORD,
       T5: ST: ORD
   ] =
     new Splitter[(T1, T2, T3, T4, T5), (T1, T2, T3, T4), T5] {
@@ -78,11 +75,11 @@ object Splitter {
     }
 
   implicit def split6th[
-      T1: ST: ORD,
-      T2: ST: ORD,
-      T3: ST: ORD,
-      T4: ST: ORD,
-      T5: ST: ORD,
+      T1: ORD,
+      T2: ORD,
+      T3: ORD,
+      T4: ORD,
+      T5: ORD,
       T6: ST: ORD
   ] =
     new Splitter[(T1, T2, T3, T4, T5, T6), (T1, T2, T3, T4, T5), T6] {
@@ -91,12 +88,12 @@ object Splitter {
     }
 
   implicit def split7th[
-      T1: ST: ORD,
-      T2: ST: ORD,
-      T3: ST: ORD,
-      T4: ST: ORD,
-      T5: ST: ORD,
-      T6: ST: ORD,
+      T1: ORD,
+      T2: ORD,
+      T3: ORD,
+      T4: ORD,
+      T5: ORD,
+      T6: ORD,
       T7: ST: ORD
   ] =
     new Splitter[(T1, T2, T3, T4, T5, T6, T7), (T1, T2, T3, T4, T5, T6), T7] {
@@ -105,13 +102,13 @@ object Splitter {
     }
 
   implicit def split8th[
-      T1: ST: ORD,
-      T2: ST: ORD,
-      T3: ST: ORD,
-      T4: ST: ORD,
-      T5: ST: ORD,
-      T6: ST: ORD,
-      T7: ST: ORD,
+      T1: ORD,
+      T2: ORD,
+      T3: ORD,
+      T4: ORD,
+      T5: ORD,
+      T6: ORD,
+      T7: ORD,
       T8: ST: ORD
   ] =
     new Splitter[
@@ -124,14 +121,14 @@ object Splitter {
     }
 
   implicit def split9th[
-      T1: ST: ORD,
-      T2: ST: ORD,
-      T3: ST: ORD,
-      T4: ST: ORD,
-      T5: ST: ORD,
-      T6: ST: ORD,
-      T7: ST: ORD,
-      T8: ST: ORD,
+      T1: ORD,
+      T2: ORD,
+      T3: ORD,
+      T4: ORD,
+      T5: ORD,
+      T6: ORD,
+      T7: ORD,
+      T8: ORD,
       T9: ST: ORD
   ] =
     new Splitter[

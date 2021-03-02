@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,19 +11,17 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.mat
 
 import scala.{specialized => spec}
-import org.saddle.{Mat, ST}
+import org.saddle.Mat
 
-/**
-  * Matrix mathematical helper routines.
+/** Matrix mathematical helper routines.
   */
 object MatMath {
 
-  /**
-    * Yields covariance matrix from input matrix whose columns are variable observations
+  /** Yields covariance matrix from input matrix whose columns are variable observations
     *
     * @param mat Input matrix of observations, with a variable per column
     * @param corr If true, return correlation rather than covariance
@@ -71,8 +68,7 @@ object MatMath {
     Mat[Double](numCols, numCols, output)
   }
 
-  /**
-    * Return a matrix whose rows are demeaned
+  /** Return a matrix whose rows are demeaned
     * @param mat The matrix to demean
     */
   def demeaned(mat: Mat[Double]): Mat[Double] = {
@@ -195,7 +191,7 @@ object MatMath {
 
   /** Efficient square matrix transpose (destructive)
     */
-  private[saddle] def squareTranspose[@spec(Int, Long, Double) S: ST](
+  private[saddle] def squareTranspose[@spec(Int, Long, Double) S](
       sz: Int,
       out: Array[S]
   ) = {

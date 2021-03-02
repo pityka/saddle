@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -31,20 +30,17 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     with Vec[T] { self =>
   implicit private[this] def st: ST[T] = scalarTag
 
-  /**
-    * Set to true when the vec is shifted over the backing array
+  /** Set to true when the vec is shifted over the backing array
     * false iff the backing array is a contiguous sequence of the elements of this Vec
     * false iff 0 until length map raw toArray structurally equals the backing array
     */
   override def needsCopy: Boolean = false
 
-  /**
-    * The number of elements in the container                                                  F
+  /** The number of elements in the container                                                  F
     */
   def length = values.length
 
-  /**
-    * Access an unboxed element of a Vec[A] at a single location
+  /** Access an unboxed element of a Vec[A] at a single location
     * @param loc offset into Vec
     */
   def raw(loc: Int): T = values(loc)
@@ -73,18 +69,15 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     }
   }
 
-  /**
-    * Returns a Vec whose backing array has been copied
+  /** Returns a Vec whose backing array has been copied
     */
   def copy: Vec[T] = Vec(this.contents)
 
-  /**
-    * Return copy of backing array
+  /** Return copy of backing array
     */
   def contents: Array[T] = if (needsCopy) toArray else toArray.clone()
 
-  /**
-    * Equivalent to slicing operation; e.g.
+  /** Equivalent to slicing operation; e.g.
     *
     * {{{
     *   val v = Vec(1,2,3)
@@ -98,31 +91,26 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
 
   def take(locs: Int*): Vec[T] = take(locs.toArray)
 
-  /**
-    * The complement of the take operation; slice out
+  /** The complement of the take operation; slice out
     * elements NOT specified in list.
     *
     * @param locs Location of elements not to take
     */
   def without(locs: Array[Int]): Vec[T] = Vec(array.remove(toArray, locs))
 
-  /**
-    * Drop the elements of the Vec which are NA
+  /** Drop the elements of the Vec which are NA
     */
   def dropNA: Vec[T] = filter(_ => true)
 
-  /**
-    * Return true if there is an NA value in the Vec
+  /** Return true if there is an NA value in the Vec
     */
   def hasNA: Boolean = VecImpl.findOneNA(this)
 
-  /**
-    * Additive inverse of Vec with numeric elements
+  /** Additive inverse of Vec with numeric elements
     */
-  def unary_-()(implicit num: NUM[T]): Vec[T] = map(num.negate)
+  def unary_-(implicit num: NUM[T]): Vec[T] = map(num.negate)
 
-  /**
-    * Concatenate two Vec instances together, where there exists some way to
+  /** Concatenate two Vec instances together, where there exists some way to
     * join the type of elements. For instance, Vec[Double] concat Vec[Int]
     * will promote Int to Double as a result of the implicit existence of an
     * instance of Promoter[Double, Int, Double]
@@ -136,16 +124,14 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def concat(v: Vec[T]): Vec[T] =
     Vec(util.Concat.append(toArray, v.toArray))
 
-  /**
-    * Left fold over the elements of the Vec, as in scala collections library
+  /** Left fold over the elements of the Vec, as in scala collections library
     */
   def foldLeft[@spec(Boolean, Int, Long, Double) B: ST](
       init: B
   )(f: (B, T) => B): B =
     VecImpl.foldLeft(this)(init)(f)
 
-  /**
-    * Left fold that folds only while the test condition holds true. As soon as the condition function yields
+  /** Left fold that folds only while the test condition holds true. As soon as the condition function yields
     * false, the fold returns.
     *
     * @param cond Function whose signature is the same as the fold function, except that it evaluates to Boolean
@@ -155,24 +141,21 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   )(f: (B, T) => B)(cond: (B, T) => Boolean): B =
     VecImpl.foldLeftWhile(this)(init)(f)(cond)
 
-  /**
-    * Filtered left fold over the elements of the Vec, as in scala collections library
+  /** Filtered left fold over the elements of the Vec, as in scala collections library
     */
   def filterFoldLeft[@spec(Boolean, Int, Long, Double) B: ST](
       pred: T => Boolean
   )(init: B)(f: (B, T) => B): B =
     VecImpl.filterFoldLeft(this)(pred)(init)(f)
 
-  /**
-    * Filtered left scan over elements of the Vec, as in scala collections library
+  /** Filtered left scan over elements of the Vec, as in scala collections library
     */
   def filterScanLeft[@spec(Boolean, Int, Long, Double) B: ST](
       pred: T => Boolean
   )(init: B)(f: (B, T) => B): Vec[B] =
     VecImpl.filterScanLeft(this)(pred)(init)(f)
 
-  /**
-    * Produce a Vec whose entries are the result of executing a function on a sliding window of the
+  /** Produce a Vec whose entries are the result of executing a function on a sliding window of the
     * data.
     * @param winSz Window size
     * @param f Function Vec[A] => B to operate on sliding window
@@ -184,27 +167,23 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   ): Vec[B] =
     VecImpl.rolling(this)(winSz, f)
 
-  /**
-    * Map a function over the elements of the Vec, as in scala collections library
+  /** Map a function over the elements of the Vec, as in scala collections library
     */
   def map[@spec(Boolean, Int, Long, Double) B: ST](f: T => B): Vec[B] =
     VecImpl.map(this)(f)
 
-  /**
-    * Maps a function over elements of the Vec and flattens the result.
+  /** Maps a function over elements of the Vec and flattens the result.
     */
   def flatMap[@spec(Boolean, Int, Long, Double) B: ST](f: T => Vec[B]): Vec[B] =
     VecImpl.flatMap(this)(f)
 
-  /**
-    * Left scan over the elements of the Vec, as in scala collections library
+  /** Left scan over the elements of the Vec, as in scala collections library
     */
   def scanLeft[@spec(Boolean, Int, Long, Double) B: ST](init: B)(
       f: (B, T) => B
   ): Vec[B] = VecImpl.scanLeft(this)(init)(f)
 
-  /**
-    * Zips Vec with another Vec and applies a function to the paired elements. If either of the pair is NA, the
+  /** Zips Vec with another Vec and applies a function to the paired elements. If either of the pair is NA, the
     * result is forced to NA.
     * @param other Vec[B]
     * @param f Function (A, B) => C
@@ -217,8 +196,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   ](other: Vec[B])(f: (T, B) => C): Vec[C] =
     VecImpl.zipMap(this, other)(f)
 
-  /**
-    * Zips Vec with another Vec and applies a function to the paired elements. If either of the pair is NA, the
+  /** Zips Vec with another Vec and applies a function to the paired elements. If either of the pair is NA, the
     * result is forced to NA.
     * @param other Vec[B]
     * @param f Function (A, B) => C
@@ -230,8 +208,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   ](f: (T, Int) => C): Vec[C] =
     VecImpl.zipMapIdx(this)(f)
 
-  /**
-    * Creates a view into original vector from an offset up to, but excluding,
+  /** Creates a view into original vector from an offset up to, but excluding,
     * another offset. Data is not copied.
     *
     * @param from Beginning offset
@@ -273,8 +250,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
       }
   }
 
-  /**
-    * Creates a view into original vector at arbitrary indexes. Data is not copied.
+  /** Creates a view into original vector at arbitrary indexes. Data is not copied.
     *
     * @param offsets1 indexes into the original array
     */
@@ -309,8 +285,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
       }
   }
 
-  /**
-    * Creates a view into original Vec, but shifted so that n
+  /** Creates a view into original Vec, but shifted so that n
     * values at the beginning or end of the Vec are NA's. Data
     * is not copied.
     * ex. shift(1)  : [1 2 3 4] => [NA 1 2 3]
@@ -352,21 +327,18 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     }
   }
 
-  /**
-    * Access a boxed element of a Vec[A] at a single location
+  /** Access a boxed element of a Vec[A] at a single location
     * @param loc offset into Vec
     */
   def at(loc: Int): Scalar[T] = {
     Scalar(raw(loc))(scalarTag)
   }
 
-  /**
-    * Same as raw
+  /** Same as raw
     */
   def apply(loc: Int): T = raw(loc)
 
-  /**
-    * Slice a Vec at a bound of locations, e.g.
+  /** Slice a Vec at a bound of locations, e.g.
     *
     * val v = Vec(1,2,3,4,5)
     * v(1->3) == Vec(2,3,4)
@@ -379,39 +351,33 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     slice(pair._1, pair._2)
   }
 
-  /**
-    * Access the first element of a Vec[A], or NA if length is zero
+  /** Access the first element of a Vec[A], or NA if length is zero
     */
   def first: Scalar[T] = {
     if (length > 0) Scalar(raw(0))(scalarTag) else NA
   }
 
-  /**
-    * Access the last element of a Vec[A], or NA if length is zero
+  /** Access the last element of a Vec[A], or NA if length is zero
     */
   def last: Scalar[T] = {
     if (length > 0) Scalar(raw(length - 1))(scalarTag) else NA
   }
 
-  /**
-    * Return first n elements
+  /** Return first n elements
     * @param n Number of elements to access
     */
   def head(n: Int): Vec[T] = slice(0, n)
 
-  /**
-    * Return last n elements
+  /** Return last n elements
     * @param n Number of elements to access
     */
   def tail(n: Int): Vec[T] = slice(length - n, length)
 
-  /**
-    * True if and only if number of elements is zero
+  /** True if and only if number of elements is zero
     */
   def isEmpty: Boolean = length == 0
 
-  /**
-    * Returns Vec whose locations corresponding to true entries in the
+  /** Returns Vec whose locations corresponding to true entries in the
     * boolean input mask vector are set to NA
     *
     * @param m Mask vector of Vec[Boolean]
@@ -419,8 +385,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def mask(m: Vec[Boolean]): Vec[T] =
     VecImpl.mask(this, m, scalarTag.missing)(scalarTag)
 
-  /**
-    * Returns Vec whose locations are NA where the result of the
+  /** Returns Vec whose locations are NA where the result of the
     * provided function evaluates to true
     *
     * @param f A function taking an element and returning a Boolean
@@ -428,14 +393,12 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def mask(f: T => Boolean): Vec[T] =
     VecImpl.mask(this, f, scalarTag.missing)(scalarTag)
 
-  /**
-    * Execute a (side-effecting) operation on each (non-NA) element in the vec
+  /** Execute a (side-effecting) operation on each (non-NA) element in the vec
     * @param op operation to execute
     */
   def foreach(op: T => Unit): Unit = { VecImpl.foreach(this)(op)(scalarTag) }
 
-  /**
-    * Execute a (side-effecting) operation on each (non-NA) element in vec which satisfies
+  /** Execute a (side-effecting) operation on each (non-NA) element in vec which satisfies
     * some predicate.
     * @param pred Function A => Boolean
     * @param op Side-effecting function
@@ -443,39 +406,33 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def forall(pred: T => Boolean)(op: T => Unit): Unit =
     VecImpl.forall(this)(pred)(op)(scalarTag)
 
-  /**
-    * Return Vec of integer locations (offsets) which satisfy some predicate
+  /** Return Vec of integer locations (offsets) which satisfy some predicate
     * @param pred Predicate function from A => Boolean
     */
   def find(pred: T => Boolean): Vec[Int] = VecImpl.find(this)(pred)(scalarTag)
 
-  /**
-    * Return first integer location which satisfies some predicate, or -1 if there is none
+  /** Return first integer location which satisfies some predicate, or -1 if there is none
     * @param pred Predicate function from A => Boolean
     */
   def findOne(pred: T => Boolean): Int = VecImpl.findOne(this)(pred)(scalarTag)
 
-  /**
-    * Return true if there exists some element of the Vec which satisfies the predicate function
+  /** Return true if there exists some element of the Vec which satisfies the predicate function
     * @param pred Predicate function from A => Boolean
     */
   def exists(pred: T => Boolean): Boolean = findOne(pred) != -1
 
-  /**
-    * Return Vec whose elements satisfy a predicate function
+  /** Return Vec whose elements satisfy a predicate function
     * @param pred Predicate function from A => Boolean
     */
   def filter(pred: T => Boolean): Vec[T] = VecImpl.filter(this)(pred)(scalarTag)
 
-  /**
-    * Return vec whose offets satisfy a predicate function
+  /** Return vec whose offets satisfy a predicate function
     * @param pred Predicate function from Int => Boolean
     */
   def filterAt(pred: Int => Boolean): Vec[T] =
     VecImpl.filterAt(this)(pred)(scalarTag)
 
-  /**
-    * Return Vec whose elements are selected via a Vec of booleans (where that Vec holds the value true)
+  /** Return Vec whose elements are selected via a Vec of booleans (where that Vec holds the value true)
     * @param pred Predicate vector: Vec[Boolean]
     */
   def where(pred: Vec[Boolean]): Vec[T] =
@@ -487,20 +444,17 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def partition(pred: Vec[Boolean]): (Vec[T], Vec[T]) =
     VecImpl.partition(this)(pred.toArray)(scalarTag)
 
-  /**
-    * Yield a Vec whose elements have been sorted (in ascending order)
+  /** Yield a Vec whose elements have been sorted (in ascending order)
     * @param ev evidence of Ordering[A]
     */
   def sorted(implicit ev: ORD[T], st: ST[T]) = take(array.argsort(toArray))
 
-  /**
-    * Yield a Vec whose elements have been reversed from their original order
+  /** Yield a Vec whose elements have been reversed from their original order
     */
   def reversed: Vec[T] =
     Vec(array.reverse(toArray))
 
-  /**
-    * Creates a view into original vector from an offset up to, and including,
+  /** Creates a view into original vector from an offset up to, and including,
     * another offset. Data is not copied.
     *
     * @param from Beginning offset
@@ -510,22 +464,19 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def sliceBy(from: Int, to: Int, stride: Int = 1): Vec[T] =
     slice(from, to + stride, stride)
 
-  /**
-    * Split Vec into two Vecs at position i
+  /** Split Vec into two Vecs at position i
     * @param i Position at which to split Vec
     */
   def splitAt(i: Int): (Vec[T], Vec[T]) = (slice(0, i), slice(i, length))
 
-  /**
-    * Fills NA values in vector with result of a function which acts on the index of
+  /** Fills NA values in vector with result of a function which acts on the index of
     * the particular NA value found
     *
     * @param f A function from Int => A; yields value for NA value at ith position
     */
   def fillNA(f: Int => T): Vec[T] = VecImpl.vecfillNA(this)(f)(scalarTag)
 
-  /**
-    * Converts Vec to an indexed sequence (default implementation is immutable.Vector)
+  /** Converts Vec to an indexed sequence (default implementation is immutable.Vector)
     */
   def toSeq: IndexedSeq[T] = toArray.toIndexedSeq
 
@@ -566,14 +517,12 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
       na.times(a, b)
     )
 
-  /**
-    * Integer offset of the minimum element of the Vec, if one exists, or else -1
+  /** Integer offset of the minimum element of the Vec, if one exists, or else -1
     */
   def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
     array.argmin(toArray)
 
-  /**
-    * Integer offset of the minimum element of the Vec, if one exists, or else -1
+  /** Integer offset of the minimum element of the Vec, if one exists, or else -1
     */
   def argmax(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
     array.argmax(toArray)
@@ -595,8 +544,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   def countif(a: T): Int =
     VecImpl.filterFoldLeft(this)(t => t == a)(0)((a, _) => a + 1)
 
-  /**
-    * Return the percentile of the values at a particular threshold, ignoring NA
+  /** Return the percentile of the values at a particular threshold, ignoring NA
     * @param tile The percentile in [0, 100] at which to compute the threshold
     * @param method The percentile method; one of [[org.saddle.PctMethod]]
     *
@@ -627,8 +575,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     }
   }
 
-  /**
-    * Return a Vec of ranks corresponding to a Vec of numeric values.
+  /** Return a Vec of ranks corresponding to a Vec of numeric values.
     * @param tie Method with which to break ties; a [[org.saddle.RankTie]]
     * @param ascending Boolean, default true, whether to give lower values larger rank
     */
@@ -795,8 +742,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   /** Default hashcode is simple rolling prime multiplication of sums of hashcodes for all values. */
   override def hashCode(): Int = foldLeft(1)(_ * 31 + _.hashCode())
 
-  /**
-    * Default equality does an iterative, element-wise equality check of all values.
+  /** Default equality does an iterative, element-wise equality check of all values.
     */
   override def equals(o: Any): Boolean =
     o match {
@@ -814,8 +760,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
       case _ => false
     }
 
-  /**
-    * Creates a string representation of Vec
+  /** Creates a string representation of Vec
     * @param len Max number of elements to include
     */
   def stringify(len: Int = 10): String = {
@@ -842,8 +787,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     buf.toString()
   }
 
-  /**
-    * Pretty-printer for Vec, which simply outputs the result of stringify.
+  /** Pretty-printer for Vec, which simply outputs the result of stringify.
     * @param len Number of elements to display
     */
   def print(len: Int = 10, stream: OutputStream = System.out) = {
@@ -852,8 +796,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
 
   override def toString = stringify()
 
-  /**
-    * Rounds elements in the vec (which must be numeric) to
+  /** Rounds elements in the vec (which must be numeric) to
     * a significance level
     *
     * @param sig Significance level to round to (e.g., 2 decimal places)
@@ -893,23 +836,19 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     Vec(ar)
   }
 
-  /**
-    * Returns a Vec with the first `i` elements
+  /** Returns a Vec with the first `i` elements
     */
   def takeLeft(i: Int) = take(array.range(0, math.min(i, length)))
 
-  /**
-    * Returns a Vec with the last `i` elements
+  /** Returns a Vec with the last `i` elements
     */
   def takeRight(i: Int) = take(array.range(math.max(0, length - i), length))
 
-  /**
-    * Returns a Vec with the first `i` elements removed
+  /** Returns a Vec with the first `i` elements removed
     */
   def dropLeft(i: Int) = take(array.range(math.min(i, length), length))
 
-  /**
-    * Returns a Vec with the last `i` elements removed
+  /** Returns a Vec with the last `i` elements removed
     */
   def dropRight(i: Int) = take(array.range(0, math.max(0, length - i)))
 

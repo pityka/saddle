@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -25,8 +24,7 @@ import org.saddle.scalar.{ScalarTagLong => stL, ScalarTagInt => stI}
 import org.saddle.ops.BinOps._
 import org.specs2.scalacheck.Parameters
 
-/**
-  * Test Mat
+/** Test Mat
   */
 class MatCheck extends Specification with ScalaCheck {
 
@@ -293,7 +291,7 @@ class MatCheck extends Specification with ScalaCheck {
     }
     "op ** works" in {
       forAll { (m: Mat[Long], b: Double) =>
-        (m ** b) must_== m.map(v => math.pow(v, b))
+        (m ** b) must_== m.map(v => math.pow(v.toDouble, b))
       }
     }
   }
@@ -348,7 +346,7 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Double], b: Long) =>
         (m ** b) must_== m.map(v =>
-          if (stL.isMissing(b)) Double.NaN else math.pow(v, b)
+          if (stL.isMissing(b)) Double.NaN else math.pow(v, b.toDouble)
         )
       }
     }
@@ -424,7 +422,8 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Long], b: Long) =>
         (m ** b) must_== m.map(v =>
-          if (stL.isMissing(b)) stL.missing else math.pow(v, b).toLong
+          if (stL.isMissing(b)) stL.missing
+          else math.pow(v.toDouble, b.toDouble).toLong
         )
       }
     }
@@ -481,7 +480,8 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Long], b: Int) =>
         (m ** b) must_== m.map(v =>
-          if (stI.isMissing(b)) stL.missing else math.pow(v, b).toLong
+          if (stI.isMissing(b)) stL.missing
+          else math.pow(v.toDouble, b.toDouble).toLong
         )
       }
     }
@@ -538,7 +538,7 @@ class MatCheck extends Specification with ScalaCheck {
     "op ** works" in {
       forAll { (m: Mat[Int], b: Long) =>
         (m ** b) must_== m.map(v =>
-          if (stL.isMissing(b)) stL.missing else math.pow(v, b).toLong
+          if (stL.isMissing(b)) stL.missing else math.pow(v, b.toDouble).toLong
         )
       }
     }
@@ -718,7 +718,7 @@ class MatCheck extends Specification with ScalaCheck {
     "mutate rows works" in {
       forAll { (m: Mat[Double]) =>
         val res = m.copy
-        res.mutateRows[Double]((v, i) => v + i)
+        res.mutateRows((v, i) => v + i)
         val exp = m.rows.zipWithIndex.map(v => v._1 + v._2).toMat.T
         res must_== exp
       }
@@ -733,7 +733,7 @@ class MatCheck extends Specification with ScalaCheck {
     "mutate cols works" in {
       forAll { (m: Mat[Double]) =>
         val res = m.copy
-        res.mutateCols[Double]((v, i) => v + i)
+        res.mutateCols((v, i) => v + i)
         val exp = m.cols.zipWithIndex.map(v => v._1 + v._2).toMat
         res must_== exp
       }
@@ -901,7 +901,7 @@ class MatCheck extends Specification with ScalaCheck {
     "rowsWithNA works (with NA)" in {
       implicit val arbMat = Arbitrary(MatArbitraries.matDoubleWithNA)
       forAll { (m: Mat[Double]) =>
-        val exp = (m.rows() zip Range(0, m.numRows)).flatMap {
+        val exp = (m.rows zip Range(0, m.numRows)).flatMap {
           case (a: Vec[_], b: Int) => if (a.hasNA) Some(b) else None
         }
         m.rowsWithNA must_== exp.toSet
@@ -928,7 +928,7 @@ class MatCheck extends Specification with ScalaCheck {
         val exp =
           for (i <- IndexedSeq(Range(0, m.numCols): _*))
             yield Vec(data).slice(i * m.numRows, (i + 1) * m.numRows)
-        m.cols() must_== exp
+        m.cols must_== exp
       }
     }
 
@@ -938,7 +938,7 @@ class MatCheck extends Specification with ScalaCheck {
         val exp =
           for (i <- IndexedSeq(Range(0, m.numRows): _*))
             yield Vec(data).slice(i * m.numCols, (i + 1) * m.numCols)
-        m.rows() must_== exp
+        m.rows must_== exp
       }
     }
 
@@ -1015,7 +1015,7 @@ class MatCheck extends Specification with ScalaCheck {
         ma.length == 0 || i < 0 || ma.numCols <= i || ma.cols(
           Vector(i)
         ) == Vector(
-          ma.cols()(i)
+          ma.cols(i)
         )
       }
     }
@@ -1024,7 +1024,7 @@ class MatCheck extends Specification with ScalaCheck {
         ma.length == 0 || i < 0 || ma.numRows <= i || ma.rows(
           Vector(i)
         ) == Vector(
-          ma.rows()(i)
+          ma.rows(i)
         )
       }
     }

@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.locator
 
 import org.saddle.Buffer
@@ -34,8 +33,8 @@ class LocatorDouble(sz: Int = Locator.INIT_CAPACITY) extends Locator[Double] {
     cts.update(key, u + 1)
     u
   }
-  def keys(): Array[Double] = keyOrder.toArray
-  def counts(): Array[Int] = {
+  def keys: Array[Double] = keyOrder.toArray
+  def counts: Array[Int] = {
     val res = Array.ofDim[Int](size)
     var i = 0
     map.foreachKey { key =>

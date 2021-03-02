@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 Saddle Development Team
+/** Copyright (c) 2019 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -30,19 +29,19 @@ class BinarySuite extends AnyFunSuite {
     assert(
       implicitly[Decoder[Frame[String, String, Double]]]
         .decodeJson(frame.asJson)
-        .right
+        .toOption
         .get == frame
     )
     assert(
       implicitly[Decoder[Series[String, Double]]]
         .decodeJson(frame.rowAt(0).asJson)
-        .right
+        .toOption
         .get == frame.rowAt(0)
     )
     assert(
       implicitly[Decoder[Mat[Double]]]
         .decodeJson(frame.toMat.asJson)
-        .right
+        .toOption
         .get == frame.toMat
     )
   }
@@ -55,19 +54,19 @@ class BinarySuite extends AnyFunSuite {
     assert(
       implicitly[Decoder[Frame[String, String, String]]]
         .decodeJson(frame.asJson)
-        .right
+        .toOption
         .get == frame
     )
     assert(
       implicitly[Decoder[Series[String, String]]]
         .decodeJson(frame.rowAt(0).asJson)
-        .right
+        .toOption
         .get == frame.rowAt(0)
     )
     assert(
       implicitly[Decoder[Mat[String]]]
         .decodeJson(frame.toMat.asJson)
-        .right
+        .toOption
         .get == frame.toMat
     )
   }

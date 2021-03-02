@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,21 +11,21 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.mat
 
 import scala.{specialized => spec}
 import org.saddle.{ST, Vec, array, Mat}
 import org.saddle.scalar.Scalar
+import scala.collection.immutable.ArraySeq
 
-/**
-  * An IndexedSeq of Vecs which must all have the same length; a container for
+/** An IndexedSeq of Vecs which must all have the same length; a container for
   * 2D data for a Frame.
   */
 private[saddle] class MatCols[@spec(Int, Long, Double) A](
     private val cols: IndexedSeq[Vec[A]]
-)(
-    implicit st: ST[A]
+)(implicit
+    st: ST[A]
 ) extends IndexedSeq[Vec[A]] {
   require(
     cols.length < 2 || cols.forall(_.length == cols(0).length),
@@ -45,9 +44,8 @@ private[saddle] class MatCols[@spec(Int, Long, Double) A](
   }
 
   def appendRow(v: Vec[A]) =
-    new MatCols(cols.zipWithIndex.map {
-      case (col, i) =>
-        col.concat(v.take(i))
+    new MatCols(cols.zipWithIndex.map { case (col, i) =>
+      col.concat(v.take(i))
     })
 
   def ++(other: MatCols[A]) = new MatCols(cols ++ other.cols)
@@ -114,12 +112,11 @@ private[saddle] class MatCols[@spec(Int, Long, Double) A](
   // take all vecs that match provided type, along with their locations
   private[saddle] def takeType[B: ST]: (IndexedSeq[Vec[B]], Array[Int]) = {
     val bSt = implicitly[ST[B]]
-    val filt = cols.zipWithIndex.filter {
-      case (col, _) =>
-        col.scalarTag.runtimeClass.isPrimitive && (bSt.isAny || bSt.isAnyVal) ||
-          !bSt.isAnyVal && bSt.runtimeClass.isAssignableFrom(
-            col.scalarTag.runtimeClass
-          )
+    val filt = cols.zipWithIndex.filter { case (col, _) =>
+      col.scalarTag.runtimeClass.isPrimitive && (bSt.isAny || bSt.isAnyVal) ||
+        !bSt.isAnyVal && bSt.runtimeClass.isAssignableFrom(
+          col.scalarTag.runtimeClass
+        )
     }
     val (vecs, locs) = filt.unzip
     (vecs.asInstanceOf[IndexedSeq[Vec[B]]], locs.toArray)
@@ -135,13 +132,13 @@ object MatCols {
     new MatCols[A](cols.toIndexedSeq)
 
   def apply[@spec(Int, Long, Double) A: ST](cols: Array[Vec[A]]): MatCols[A] =
-    new MatCols[A](cols)
+    new MatCols[A](ArraySeq.unsafeWrapArray(cols))
 
   def apply[@spec(Int, Long, Double) A: ST](mat: Mat[A]): MatCols[A] =
-    new MatCols[A](mat.cols())
+    new MatCols[A](mat.cols)
 
   // Logic to get string widths of columns in a sequence of vectors
-  private[saddle] def colLens[@spec(Int, Long, Double) A: ST](
+  private[saddle] def colLens[@spec(Int, Long, Double) A](
       cols: MatCols[A],
       numCols: Int,
       len: Int

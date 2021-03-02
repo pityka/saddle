@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.csv
 
 import org.specs2.ScalaCheck
@@ -39,7 +38,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2)
-        .right
+        .toOption
         .get
     frame.colAt(0) must_== Series("a", "", "")
   }
@@ -51,7 +50,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2, recordSeparator = lf)
-        .right
+        .toOption
         .get
     frame.colAt(0) must_== Series("a", "", "")
   }
@@ -63,7 +62,7 @@ class CsvCheck extends Specification with ScalaCheck {
         scala.io.Source
           .fromString(new String(CsvWriter.writeFrameToArray(expect)))
       )
-      .right
+      .toOption
       .get
       .withColIndex(0)
       .withRowIndex(0)
@@ -85,7 +84,7 @@ class CsvCheck extends Specification with ScalaCheck {
         scala.io.Source
           .fromString(new String(CsvWriter.writeFrameToArray(expect)))
       )
-      .right
+      .toOption
       .get
       .withColIndex(0)
       .withRowIndex(0)
@@ -101,7 +100,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -120,7 +119,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSourceWithHeader[Int](src, bufferSize = 2)
-        .right
+        .toOption
         .get
         .resetRowIndex
     val expect = Frame(
@@ -138,7 +137,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2, maxLines = 2)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -157,7 +156,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2, maxLines = 1)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -176,7 +175,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2, recordSeparator = lf)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -195,7 +194,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -214,7 +213,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2, recordSeparator = lf)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -235,7 +234,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -252,7 +251,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2, recordSeparator = lf)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -269,7 +268,7 @@ class CsvCheck extends Specification with ScalaCheck {
     val frame =
       CsvParser
         .parseSource[String](src, bufferSize = 2)
-        .right
+        .toOption
         .get
         .withColIndex(0)
         .resetRowIndex
@@ -287,7 +286,7 @@ class CsvCheck extends Specification with ScalaCheck {
 
     val frame = CsvParser
       .parseSource[String](src)
-      .right
+      .toOption
       .get
       .withColIndex(0)
       .resetRowIndex

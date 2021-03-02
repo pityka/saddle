@@ -6,10 +6,9 @@ import org.saddle.ops.BinOps._
 package object stats {
   // stats implicits
 
-  /**
-    * Enrich a Frame to provide statistical methods
+  /** Enrich a Frame to provide statistical methods
     */
-  implicit def frameToStats[RX, CX, T: ST: NUM](f: Frame[RX, CX, T]) =
+  implicit def frameToStats[RX, CX, T: ST](f: Frame[RX, CX, T]) =
     new FrameStats[RX, CX, T](f)
 
   // stats implicits
@@ -20,15 +19,13 @@ package object stats {
 
   type Series2Stats[T] = Series[_, T] => VecStats[T]
 
-  /**
-    * Enrich Series with basic stats
+  /** Enrich Series with basic stats
     * @param s Series[_, T]
     */
   implicit def seriesToStats[T: Vec2Stats](s: Series[_, T]): VecStats[T] =
     implicitly[Vec2Stats[T]].apply(s.values)
 
-  /**
-    * Enrich Series with rolling stats
+  /** Enrich Series with rolling stats
     * @param s Series[_, T]
     */
   implicit def seriesToRollingStats[X: ST: ORD, T: Vec2RollingStats: ST](
@@ -36,8 +33,7 @@ package object stats {
   ): SeriesRollingStats[X, T] =
     SeriesRollingStats[X, T](s)
 
-  /**
-    * Enrich Series with expanding stats
+  /** Enrich Series with expanding stats
     * @param s Series[_, T]
     */
   implicit def seriesToExpandingStats[X: ST: ORD, T: Vec2ExpandingStats: ST](

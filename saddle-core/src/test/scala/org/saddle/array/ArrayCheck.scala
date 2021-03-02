@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.array
 
 import org.saddle.order._
@@ -22,8 +21,7 @@ import org.specs2.mutable.Specification
 import org.scalacheck.Gen
 import org.scalacheck.Prop._
 
-/**
-  * Test properties of array package
+/** Test properties of array package
   */
 class ArrayCheck extends Specification with ScalaCheck {
 
@@ -85,8 +83,8 @@ class ArrayCheck extends Specification with ScalaCheck {
     )
     array
       .sort(arr)
-      .deep
-      .toString must_== exp.deep.toString
+      .toVector
+      .toString must_== exp.toVector.toString
   }
   "sort Double NaN" in {
     val arr = Array(
@@ -100,10 +98,10 @@ class ArrayCheck extends Specification with ScalaCheck {
       .sort(
         arr
       )
-      .deep
+      .toVector
       .toString) must_== (arr
       .sorted(implicitly[ORD[Double]].toOrdering)
-      .deep
+      .toVector
       .toString)
   }
   "sort FloatNaN NaN" in {
@@ -125,8 +123,8 @@ class ArrayCheck extends Specification with ScalaCheck {
       .sort(
         arr
       )
-      .deep
-      .toString) must_== (exp.deep.toString)
+      .toVector
+      .toString) must_== (exp.toVector.toString)
   }
 
   "sum works for" in {
@@ -137,10 +135,9 @@ class ArrayCheck extends Specification with ScalaCheck {
           loc <- Gen.listOf(Gen.choose(-1, arr.length - 1))
         } yield (arr.toArray, loc.toArray)
 
-      forAll(arrAndLocs) {
-        case (arr: Array[Double], locs: Array[Int]) =>
-          val v = Vec(array.take(arr, locs, 0d))
-          array.sum(arr, locs, 0d) must_== v.sum
+      forAll(arrAndLocs) { case (arr: Array[Double], locs: Array[Int]) =>
+        val v = Vec(array.take(arr, locs, 0d))
+        array.sum(arr, locs, 0d) must_== v.sum
       }
     }
 
@@ -151,10 +148,9 @@ class ArrayCheck extends Specification with ScalaCheck {
           loc <- Gen.listOf(Gen.choose(-1, arr.length - 1))
         } yield (arr.toArray, loc.toArray)
 
-      forAll(arrAndLocs) {
-        case (arr: Array[Int], locs: Array[Int]) =>
-          val v = Vec(array.take(arr, locs, 0))
-          array.sum(arr, locs, 0) must_== v.sum
+      forAll(arrAndLocs) { case (arr: Array[Int], locs: Array[Int]) =>
+        val v = Vec(array.take(arr, locs, 0))
+        array.sum(arr, locs, 0) must_== v.sum
       }
     }
     "tile" in {
@@ -187,7 +183,9 @@ class ArrayCheck extends Specification with ScalaCheck {
     "shuffle" in {
       val ar1 = 0 until 10 toArray
 
-      ((0 until 10000) map (_ => array.shuffle(ar1).apply(0))).toSet must_== ar1.toSet
+      ((0 until 10000) map (_ =>
+        array.shuffle(ar1).apply(0)
+      )).toSet must_== ar1.toSet
     }
     "randInt" in {
       array.randInt(10000, -10, 10).toSet must_== (-10 to 10).toSet

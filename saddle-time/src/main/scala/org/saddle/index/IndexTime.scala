@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle.index
 
 import scala.{specialized => spec}
@@ -28,8 +27,7 @@ import org.saddle.vec.VecTime
 import org.saddle.time._
 import cats.kernel.Order
 
-/**
-  * A compact native int representation of posix times at millisecond resolution which
+/** A compact native int representation of posix times at millisecond resolution which
   * conforms to and extends the interface of Index[DateTime]
   *
   * @param times An Index[Long], where each element is a millisecond timestamp
@@ -63,13 +61,13 @@ class IndexTime(
 
     override def count(key: DateTime) = times.count(t2l(key))
 
-    override def keys() = _keys.toArray
-    override def counts() = times.counts
+    override def keys = _keys.toArray
+    override def counts = times.counts
 
     override def size = _keys.length
 
     // these should not be accessible
-    override def put(key: DateTime, value: Int) {
+    override def put(key: DateTime, value: Int) = {
       throw new IllegalAccessError()
     }
     override def inc(key: DateTime) = throw new IllegalAccessError()
@@ -77,8 +75,7 @@ class IndexTime(
 
   protected def locator = _locator
 
-  /**
-    * Localize TimeIndex using particular time zone. Note, this does not
+  /** Localize TimeIndex using particular time zone. Note, this does not
     * change the values of the times; merely how they are interpreted.
     *
     * @param tzone The time zone
@@ -176,8 +173,7 @@ object IndexTime {
   @transient lazy private val st = ScalarTagTime
   @transient lazy private val sl = ScalarTagLong
 
-  /**
-    * Factory method to create an Index from a recurrence rule between two
+  /** Factory method to create an Index from a recurrence rule between two
     * dates.
     *
     * For instance:
@@ -197,13 +193,11 @@ object IndexTime {
     Index((rrule.copy(count = None) withUntil end from start).toSeq: _*)
   }
 
-  /**
-    * Create a new IndexTime from a sequence of times
+  /** Create a new IndexTime from a sequence of times
     */
   def apply(times: DateTime*): IndexTime = apply(Vec(times: _*))
 
-  /**
-    * Create a new IndexTime from a Vec of times, with an attached timezone
+  /** Create a new IndexTime from a Vec of times, with an attached timezone
     */
   def apply(
       times: Vec[DateTime],

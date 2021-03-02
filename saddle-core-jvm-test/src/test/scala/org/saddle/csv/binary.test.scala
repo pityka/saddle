@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2019 Saddle Development Team
+/** Copyright (c) 2019 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -29,13 +28,13 @@ class BinarySuite extends AnyFunSuite {
     val file = java.io.File.createTempFile("saddletest", "saddle")
     val os = new java.io.FileOutputStream(file)
     val writableChannel = os.getChannel
-    Writer.writeFrameIntoChannel(frame, writableChannel).right.get
+    Writer.writeFrameIntoChannel(frame, writableChannel).toOption.get
     writableChannel.close
     val is = new java.io.FileInputStream(file)
     val readableChannel = is.getChannel
     val deserFrame = Reader.readFrameFromChannel[Long](readableChannel)
     readableChannel.close
-    assert(deserFrame.right.get == frame)
+    assert(deserFrame.toOption.get == frame)
   }
   test("mat into file") {
     val frame = Frame(
@@ -46,13 +45,13 @@ class BinarySuite extends AnyFunSuite {
     val file = java.io.File.createTempFile("saddletest", "saddle")
     val os = new java.io.FileOutputStream(file)
     val writableChannel = os.getChannel
-    Writer.writeMatIntoChannel(frame.toMat, writableChannel).right.get
+    Writer.writeMatIntoChannel(frame.toMat, writableChannel).toOption.get
     writableChannel.close
     val is = new java.io.FileInputStream(file)
     val readableChannel = is.getChannel
     val deser = Reader.readMatFromChannel[Long](readableChannel)
     readableChannel.close
-    assert(deser.right.get == frame.toMat)
+    assert(deser.toOption.get == frame.toMat)
   }
 
 }

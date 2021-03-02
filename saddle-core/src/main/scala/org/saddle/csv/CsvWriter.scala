@@ -19,12 +19,10 @@ package org.saddle.csv
 import java.io.{OutputStream, BufferedOutputStream, FileOutputStream}
 
 import org.saddle.{UTF8, ST, ORD, Series, Frame}
-import org.saddle.order._
 import org.saddle.scalar.ScalarTag
 import java.io.ByteArrayOutputStream
 
-/**
-  * Settings for writing a CSV file
+/** Settings for writing a CSV file
   *
   * @param separChar Separator; default is comma
   * @param useQuote If true, fields containing separChar will be wrapped in quotes
@@ -39,8 +37,7 @@ case class CsvSettings(
 
 object CsvWriter {
 
-  /**
-    * Provides enrichment on Series object for writing to a Csv file.
+  /** Provides enrichment on Series object for writing to a Csv file.
     */
   def writeSeriesToFile[X: ST: ORD, T: ST](
       series: Series[X, T],
@@ -71,15 +68,14 @@ object CsvWriter {
     os.toByteArray()
   }
 
-  /**
-    * Write a frame in CSV format to a file at the path provided
+  /** Write a frame in CSV format to a file at the path provided
     *
     * @param path File to write
     * @param withColIx If true, print out headers as first row
     * @param withRowIx If true, print out index value as first column
     * @param settings Settings to use in formatting
     */
-  def writeFrameToFile[RX: ST: ORD, CX: ST: ORD, T: ST](
+  def writeFrameToFile[RX, CX, T: ST](
       frame: Frame[RX, CX, T],
       path: String,
       withColIx: Boolean = true,
@@ -98,7 +94,7 @@ object CsvWriter {
     }
   }
 
-  def writeFrameToArray[RX: ST: ORD, CX: ST: ORD, T: ST](
+  def writeFrameToArray[RX, CX, T: ST](
       frame: Frame[RX, CX, T],
       withColIx: Boolean = true,
       withRowIx: Boolean = true,
@@ -110,15 +106,14 @@ object CsvWriter {
     stream.toByteArray
   }
 
-  /**
-    * Write a frame in CSV format to the stream provided
+  /** Write a frame in CSV format to the stream provided
     *
     * @param stream Stream to write on
     * @param withColIx If true, print out headers as first row
     * @param withRowIx If true, print out index value as first column
     * @param settings Settings to use in formatting
     */
-  def writeFrameToStream[RX: ST: ORD, CX: ST: ORD, T: ST](
+  def writeFrameToStream[RX, CX, T: ST](
       frame: Frame[RX, CX, T],
       stream: OutputStream,
       withColIx: Boolean = true,
@@ -173,19 +168,18 @@ object CsvWriter {
 
     def writeRows(rsm: ScalarTag[RX]) = {
       // now write each row of the frame
-      frame.rowIterator.foreach {
-        case (ridx, row) =>
-          stream write {
-            val seq =
-              if (!withRowIx)
-                row.values.toSeq.map(stT.asString)
-              else
-                rsm.strList(ridx) ++: row.values.toSeq.map(stT.asString)
+      frame.rowIterator.foreach { case (ridx, row) =>
+        stream write {
+          val seq =
+            if (!withRowIx)
+              row.values.toSeq.map(stT.asString)
+            else
+              rsm.strList(ridx) ++: row.values.toSeq.map(stT.asString)
 
-            quotify(seq).mkString(separ).getBytes(settings.encoding)
-          }
+          quotify(seq).mkString(separ).getBytes(settings.encoding)
+        }
 
-          stream.write(newLine)
+        stream.write(newLine)
       }
     }
 

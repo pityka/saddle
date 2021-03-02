@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import scala.{specialized => spec, Array}
@@ -29,16 +28,15 @@ import scalar.{Scalar, NA, ScalarTag}
 import locator.Locator
 import vec.VecImpl
 import java.io.OutputStream
+import scala.collection.immutable.ArraySeq
 
-/**
-  * Index provides a constant-time look-up of a value within array-backed storage,
+/** Index provides a constant-time look-up of a value within array-backed storage,
   * as well as operations to support joining and slicing.
   */
 trait Index[@spec(Boolean, Int, Long, Double) T] {
   protected def locator: Locator[T]
 
-  /**
-    * Number of elements in the index
+  /** Number of elements in the index
     */
   def length: Int
 
@@ -46,21 +44,18 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
 
   def nonEmpty = length > 0
 
-  /**
-    * A [[org.saddle.scalar.ScalarTag]] representing the kind of Scalar
+  /** A [[org.saddle.scalar.ScalarTag]] representing the kind of Scalar
     * found in this index.
     */
   def scalarTag: ScalarTag[T]
 
   def ord: ORD[T]
 
-  /**
-    * Convert Index to a [[org.saddle.Vec]]
+  /** Convert Index to a [[org.saddle.Vec]]
     */
   def toVec: Vec[T]
 
-  /**
-    * Access an element directly within the index, without wrapping in a Scalar
+  /** Access an element directly within the index, without wrapping in a Scalar
     * box.
     * @param loc Offset into the index
     */
@@ -68,28 +63,24 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
 
   // at method, gets index key(s) by location
 
-  /**
-    * Retrieve an element of the index at a particular offset
+  /** Retrieve an element of the index at a particular offset
     * @param loc Offset into index
     */
   def at(loc: Int): Scalar[T] = {
     Scalar(raw(loc))(scalarTag)
   }
 
-  /**
-    * Retrieve several elements from the index at provided offets
+  /** Retrieve several elements from the index at provided offets
     * @param locs An array of integer offsets
     */
   def at(locs: Array[Int]): Index[T] = take(locs)
 
-  /**
-    * Retrieve several elements from the index at provided offsets
+  /** Retrieve several elements from the index at provided offsets
     * @param locs A sequence of integer offsets
     */
   def at(locs: Int*): Index[T] = take(locs.toArray)
 
-  /**
-    * Given a sequence of keys, return the sequence of first locations in the index
+  /** Given a sequence of keys, return the sequence of first locations in the index
     * at which those keys correspondingly occur, ignoring keys which do not
     * exist.
     * @param keys Sequence of keys to find
@@ -110,8 +101,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     result.toArray
   }
 
-  /**
-    * Given a sequence of keys, return the sequence of locations in the index
+  /** Given a sequence of keys, return the sequence of locations in the index
     * at which those keys correspondingly occur, ignoring keys which do not
     * exist.
     * @param keys Sequence of keys to find
@@ -132,16 +122,16 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     result.toArray
   }
 
-  /**
-    * Given an array of keys, return the sequence of locations in the index
+  /** Given an array of keys, return the sequence of locations in the index
     * at which those keys correspondingly occur, ignoring keys which do not
     * exist.
     * @param keys Sequence of keys to find
     */
-  def apply(keys: Array[T]): Array[Int] = apply(keys: _*)
+  def apply(keys: Array[T]): Array[Int] = apply(
+    ArraySeq.unsafeWrapArray(keys): _*
+  )
 
-  /**
-    * Take values of the index at certain locations, returning a new Index
+  /** Take values of the index at certain locations, returning a new Index
     * consisting of those values.
     *
     * See also org.saddle.array.take
@@ -155,16 +145,14 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     Index(Vec(locator.keys))
   }
 
-  /**
-    * Complement of the take method; return a new Index whose values are those
+  /** Complement of the take method; return a new Index whose values are those
     * which do not occur at the specified locations.
     *
     * @param locs Locations to omit
     */
   def without(locs: Array[Int]): Index[T]
 
-  /**
-    * Concatenate two Index objects together
+  /** Concatenate two Index objects together
     *
     * @param other Other index to concatenate
     * @param p Implicit evidence of a Promoter which can send both T and B to C
@@ -177,22 +165,19 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
       other: Index[T]
   ): Index[T]
 
-  /**
-    * Find the first location whereby inserting a key would maintain a sorted index. Index
+  /** Find the first location whereby inserting a key would maintain a sorted index. Index
     * must already be sorted.
     * @param t Key that would be inserted
     */
   def lsearch(t: T): Int
 
-  /**
-    * Find the last location whereby inserting a key would maintain a sorted index. Index
+  /** Find the last location whereby inserting a key would maintain a sorted index. Index
     * must already be sorted.
     * @param t Key that would be inserted
     */
   def rsearch(t: T): Int
 
-  /**
-    * Returns a slice of an index between two keys; if inclusive is false, then exclude
+  /** Returns a slice of an index between two keys; if inclusive is false, then exclude
     * the upper bound. Index must be sorted, as this method relies on lsearch and rsearch.
     * @param from Key lower bound
     * @param to Key upper bound
@@ -202,8 +187,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     if (inclusive) slice(lsearch(from), rsearch(to))
     else slice(lsearch(from), lsearch(to))
 
-  /**
-    * Returns a slice of Index between two keys, including both the lower and
+  /** Returns a slice of Index between two keys, including both the lower and
     * upper keys.
     * @param rng An instance of
     */
@@ -212,8 +196,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     slice(a, b)
   }
 
-  /**
-    * Returns a slice of Index between two integers, including the `from` bound,
+  /** Returns a slice of Index between two integers, including the `from` bound,
     * and excluding the `until` bound.
     * @param from Int, lower bound
     * @param until Int, one past upper bound
@@ -221,40 +204,34 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     */
   def slice(from: Int, until: Int, stride: Int = 1): Index[T]
 
-  /**
-    * Returns true if there are no duplicate keys in the Index
+  /** Returns true if there are no duplicate keys in the Index
     */
   def isUnique: Boolean = (locator.size == length)
 
-  /**
-    * Returns an array of unique keys in the Index, in the order in which they
+  /** Returns an array of unique keys in the Index, in the order in which they
     * originally appeared in the backing Vec.
     * @param ord Implicit ORD for instances of type T
     * @param tag Implicit ST for instances of type T
     */
   def uniques(implicit ord: ORD[T], tag: ST[T]): Index[T] =
-    Index(Vec(locator.keys()))
+    Index(Vec(locator.keys))
 
-  /**
-    * Returns an array whose entries represent the number of times the corresponding
+  /** Returns an array whose entries represent the number of times the corresponding
     * entry in `uniques` occurs within the index.
     */
-  def counts: Array[Int] = locator.counts()
+  def counts: Array[Int] = locator.counts
 
-  /**
-    * Return the number of times the key occurs in the index
+  /** Return the number of times the key occurs in the index
     * @param key The key to query
     */
   def count(key: T): Int = locator.count(key)
 
-  /**
-    * Get first integer offset of a key
+  /** Get first integer offset of a key
     * @param key Key to find in index
     */
   def getFirst(key: T): Int = locator.get(key)
 
-  /**
-    * Get last integer offset of a key
+  /** Get last integer offset of a key
     * @param key Key to find in index
     */
   def getLast(key: T): Int = {
@@ -274,8 +251,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     }
   }
 
-  /**
-    * Get location offsets within Index given a particular key
+  /** Get location offsets within Index given a particular key
     * @param key Key with which to search
     */
   def get(key: T): Array[Int] = {
@@ -303,61 +279,51 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     }
   }
 
-  /**
-    * Returns a slice comprised of at most the first n elements of the Index
+  /** Returns a slice comprised of at most the first n elements of the Index
     * @param n Number of elements to slice
     */
   def head(n: Int): Index[T] = slice(0, math.min(n, length))
 
-  /**
-    * Returns a slice comprised of at most the last n elements of the Index
+  /** Returns a slice comprised of at most the last n elements of the Index
     * @param n Number of elements to slice
     */
   def tail(n: Int): Index[T] = slice(math.max(length - n, 0), length)
 
-  /**
-    * Returns the first element of the Index, or NA if there is none
+  /** Returns the first element of the Index, or NA if there is none
     */
   def first: Scalar[T] = if (length > 0) at(0) else NA
 
-  /**
-    * Returns the last element of the Index, or NA if there is none
+  /** Returns the last element of the Index, or NA if there is none
     */
   def last: Scalar[T] = if (length > 0) at(length - 1) else NA
 
-  /**
-    * Returns the index in sorted (ascending) order
+  /** Returns the index in sorted (ascending) order
     */
   def sorted: Index[T] = take(argSort)
 
-  /**
-    * Returns the index in reversed order
+  /** Returns the index in reversed order
     */
   def reversed: Index[T]
 
-  /**
-    * Returns the int location of the first element of the index to satisfy the predicate function,
+  /** Returns the int location of the first element of the index to satisfy the predicate function,
     * or -1 if no element satisfies the function.
     * @param pred Function from T => Boolean
     */
   def findOne(pred: T => Boolean): Int = VecImpl.findOne(toVec)(pred)(scalarTag)
 
-  /**
-    * Returns true if there is an element which satisfies the predicate function,
+  /** Returns true if there is an element which satisfies the predicate function,
     * @param pred Function from T => Boolean
     */
   def exists(pred: T => Boolean): Boolean = findOne(pred) != -1
 
-  /**
-    * For an index which contains Tuples, drop the right-most element of each tuple, resulting
+  /** For an index which contains Tuples, drop the right-most element of each tuple, resulting
     * in a new index.
     * @param ev Implicit evidence of a Splitter instance that takes T (of arity N) to U (of arity N-1)
     * @tparam U Type of elements of result index
     */
   def dropLevel[U, _](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
 
-  /**
-    * Given this index whose elements have arity N and another index of arity 1, form a result
+  /** Given this index whose elements have arity N and another index of arity 1, form a result
     * index whose entries are tuples of arity N+1 reflecting the Cartesian product of the two,
     * in the provided order. See [[org.saddle.index.Stacker]] for more details.
     * @param other Another Index
@@ -368,8 +334,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
   def stack[U, V](other: Index[U])(implicit ev: Stacker[T, U, V]): Index[V] =
     ev(this, other)
 
-  /**
-    * Given this index contains tuples of arity N > 1, split will result in a pair of index
+  /** Given this index contains tuples of arity N > 1, split will result in a pair of index
     * instances; the left will have elements of arity N-1, and the right arity 1.
     * @param ev Implicit evidence of an instance of Splitter
     * @tparam O1 Left index type (of arity N-1)
@@ -378,8 +343,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
   def split[O1, O2](implicit ev: Splitter[T, O1, O2]): (Index[O1], Index[O2]) =
     ev(this)
 
-  /**
-    * Generates offsets into current index given another index for the purposes of
+  /** Generates offsets into current index given another index for the purposes of
     * re-indexing. For more on reindexing, see [[org.saddle.index.ReIndexer]]. If
     * the current and other indexes are equal, a value of None is returned.
     *
@@ -394,14 +358,12 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     ixer.lTake
   }
 
-  /**
-    * Returns true if the index contains at least one entry equal to the provided key
+  /** Returns true if the index contains at least one entry equal to the provided key
     * @param key Key to query
     */
   def contains(key: T): Boolean = locator.contains(key)
 
-  /**
-    * Produces a [[org.saddle.index.ReIndexer]] corresponding to the intersection of
+  /** Produces a [[org.saddle.index.ReIndexer]] corresponding to the intersection of
     * this Index with another. Both indexes must have set semantics - ie, have no
     * duplicates.
     *
@@ -409,8 +371,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     */
   def intersect(other: Index[T]): ReIndexer[T]
 
-  /**
-    * Produces a [[org.saddle.index.ReIndexer]] corresponding to the union of
+  /** Produces a [[org.saddle.index.ReIndexer]] corresponding to the union of
     * this Index with another. Both indexes must have set semantics - ie, have no
     * duplicates.
     *
@@ -419,26 +380,22 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
   def union(other: Index[T]): ReIndexer[T]
 
   // default implementation, could be sped up in specialized instances
-  /**
-    * Returns true if the ordering of the elements of the Index is non-decreasing.
+  /** Returns true if the ordering of the elements of the Index is non-decreasing.
     */
   def isMonotonic: Boolean
 
-  /**
-    * Returns true if the index is either unique, or any two or more duplicate keys
+  /** Returns true if the index is either unique, or any two or more duplicate keys
     * occur in consecutive locations in the index.
     */
   def isContiguous: Boolean
 
-  /**
-    * Returns offsets into index that would result in sorted index
+  /** Returns offsets into index that would result in sorted index
     */
   def argSort: Array[Int]
 
   // sql-style joins
 
-  /**
-    * Allows for the following SQL-style joins between this index and another:
+  /** Allows for the following SQL-style joins between this index and another:
     *
     *   - [[org.saddle.index.LeftJoin]]
     *   - [[org.saddle.index.RightJoin]]
@@ -450,8 +407,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     */
   def join(other: Index[T], how: JoinType = LeftJoin): ReIndexer[T]
 
-  /**
-    * Given a key, return the previous value in the Index (in the natural, ie supplied,
+  /** Given a key, return the previous value in the Index (in the natural, ie supplied,
     * order). The Index must at least be contiguous, if not unique.
     * Returns `current` if it is the first.
     *
@@ -470,8 +426,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     }
   }
 
-  /**
-    * Given a key, return the next value in the Index (in the natural, ie supplied,
+  /** Given a key, return the next value in the Index (in the natural, ie supplied,
     * order). The Index must at least be contiguous, if not unique.
     * Returns `current` if it is the last.
     *
@@ -490,8 +445,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     }
   }
 
-  /**
-    * Map over the elements in the Index, producing a new Index, similar to Map in the
+  /** Map over the elements in the Index, producing a new Index, similar to Map in the
     * Scala collections.
     *
     * @param f Function to map with
@@ -499,9 +453,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     */
   def map[@spec(Boolean, Int, Long, Double) B: ST: ORD](f: T => B): Index[B]
 
-  /**
-    * Convert Index elements to an IndexedSeq.
-    *
+  /** Convert Index elements to an IndexedSeq.
     */
   def toSeq: IndexedSeq[T] = toArray.toIndexedSeq
 
@@ -527,8 +479,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     }
   }
 
-  /**
-    * Creates a string representation of Index
+  /** Creates a string representation of Index
     * @param len Max number of elements to include
     */
   def stringify(len: Int = 10): String = {
@@ -565,8 +516,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     buf.toString()
   }
 
-  /**
-    * Pretty-printer for Index, which simply outputs the result of stringify.
+  /** Pretty-printer for Index, which simply outputs the result of stringify.
     * @param len Number of elements to display
     */
   def print(len: Int = 10, stream: OutputStream = System.out) = {
@@ -578,23 +528,20 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
 
 object Index {
 
-  /**
-    * Factory method to create an index from a Vec of elements
+  /** Factory method to create an index from a Vec of elements
     * @param values Vec
     * @tparam C Type of elements in Vec
     */
   def apply[C: ST: ORD](values: Vec[C]): Index[C] =
     implicitly[ST[C]].makeIndex(values)
 
-  /**
-    * Factory method to create an index from an array of elements
+  /** Factory method to create an index from an array of elements
     * @param arr Array
     * @tparam C Type of elements in array
     */
   def apply[C: ST: ORD](arr: Array[C]): Index[C] = apply(Vec(arr))
 
-  /**
-    * Factory method to create an index from a sequence of elements, eg
+  /** Factory method to create an index from a sequence of elements, eg
     *
     * {{{
     *   Index(1,2,3)
@@ -606,8 +553,7 @@ object Index {
     */
   def apply[C: ST: ORD](values: C*): Index[C] = apply(values.toArray)
 
-  /**
-    * Factory method to create an Index; the basic use case is to construct
+  /** Factory method to create an Index; the basic use case is to construct
     * a multi-level index (i.e., an Index of Tuples) via a Tuple of Vecs.
     *
     * For instance:
@@ -624,14 +570,12 @@ object Index {
   def make[I, O](values: I)(implicit ev: IndexMaker[I, O]): Index[O] =
     ev(values)
 
-  /**
-    * Factor method to create an empty Index
+  /** Factor method to create an empty Index
     * @tparam C type of Index
     */
   def empty[C: ST: ORD]: Index[C] = Index(Array.empty[C])
 
-  /**
-    * Provides an index-specific exception
+  /** Provides an index-specific exception
     * @param err Error message
     */
   case class IndexException(err: String) extends RuntimeException(err)

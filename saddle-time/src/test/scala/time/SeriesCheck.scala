@@ -1,5 +1,4 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
   * Licensed under the Apache License, Version 2.0 (the "License");
   * you may not use this file except in compliance with the License.
@@ -12,7 +11,7 @@
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
- **/
+  */
 package org.saddle
 
 import org.specs2.mutable.Specification
@@ -150,14 +149,13 @@ class SeriesCheck extends Specification with ScalaCheck {
             j <- Gen.choose(i, s.length - 1)
           } yield (i, j)
 
-          forAll(locs) {
-            case (i, j) =>
-              val exp = s.take(Range(i, j + 1).toArray)
-              s(i -> j) must_== exp
-              s.sliceBy(i, j) must_== exp
-              s.sliceBy(i, j, inclusive = false) must_== s.take(
-                Range(i, j).toArray
-              )
+          forAll(locs) { case (i, j) =>
+            val exp = s.take(Range(i, j + 1).toArray)
+            s(i -> j) must_== exp
+            s.sliceBy(i, j) must_== exp
+            s.sliceBy(i, j, inclusive = false) must_== s.take(
+              Range(i, j).toArray
+            )
           }
         }
       }
@@ -177,7 +175,7 @@ class SeriesCheck extends Specification with ScalaCheck {
               val exp = s(keys(0)) concat s(keys(1)) concat s(keys(2))
 
               s(keys) must_== exp
-              s(keys: _*) must_== exp
+              s(keys.toIndexedSeq: _*) must_== exp
 
               val srt = s.sortedIx
 
@@ -356,7 +354,7 @@ class SeriesCheck extends Specification with ScalaCheck {
               val exp = s(keys(0)) concat s(keys(1)) concat s(keys(2))
 
               s(keys) must_== exp
-              s(keys: _*) must_== exp
+              s(keys.toIndexedSeq: _*) must_== exp
 
               val srt = s.sortedIx
 
