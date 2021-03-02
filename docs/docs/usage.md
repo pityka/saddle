@@ -341,8 +341,8 @@ There are a few ways to extract values from a Mat.
 
  m.col(0)
  m.row(0)
- m.rows()
- m.cols()
+ m.rows
+ m.cols
 ``` 
 Some other interesting methods on Mat:
 

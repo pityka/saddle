@@ -37,7 +37,7 @@ val irisURL = "https://gist.githubusercontent.com/pityka/d05bb892541d71c2a06a0ef
 val iris = csv.CsvParser.parseSourceWithHeader[Double](
       source = Source.fromURL(irisURL), 
       cols = List(0,1,2,3), 
-      recordSeparator = "\n").right.get
+      recordSeparator = "\n").toOption.get
 
 import org.saddle.linalg._
 val centered = iris.mapVec(_.demeaned)
