@@ -13,8 +13,6 @@ jobs:
     - uses: actions/setup-node@v1
     - name: Compile 2.12.13
       run: sbt -J-Xmx3000m clean test docs/mdoc coreJVM/mimaReportBinaryIssues linalg/mimaReportBinaryIssues 
-    - name: Test coverage 2.12.12
-      run: sbt -J-Xmx3000m clean coverage "++2.12.12 testJVM" coverageAggregate
     - name: Codecov
       uses: codecov/codecov-action@v1.0.2
       if: github.actor == 'pityka'
