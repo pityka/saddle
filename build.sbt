@@ -91,8 +91,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2",
-      "org.typelevel" %% "cats-kernel" % "2.5.0",
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.3",
+      "org.typelevel" %% "cats-kernel" % "2.4.2",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %% "specs2-core" % "4.10.6" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
@@ -102,8 +102,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     fork := false,
     coverageEnabled := false,
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.2",
-      "org.typelevel" %%% "cats-core" % "2.5.0",
+      "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.3",
+      "org.typelevel" %%% "cats-core" % "2.4.2",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %%% "specs2-core" % "4.9.4" % "test",
       "org.specs2" %%% "specs2-scalacheck" % "4.9.4" % "test"
@@ -159,7 +159,7 @@ lazy val time = project
   .settings(
     name := "saddle-time",
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.2",
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.3",
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "org.scala-saddle" % "google-rfc-2445" % "20110304",
@@ -203,7 +203,7 @@ lazy val binary = project
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "ujson" % "1.3.8",
+      "com.lihaoyi" %% "ujson" % "1.3.9",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
