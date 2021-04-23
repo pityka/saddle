@@ -94,8 +94,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.3",
       "org.typelevel" %% "cats-kernel" % "2.6.0",
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "org.specs2" %% "specs2-core" % "4.10.6" % "test",
-      "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
+      "org.specs2" %% "specs2-core" % "4.11.0" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.11.0" % "test"
     )
   )
   .jsSettings(
@@ -126,8 +126,8 @@ lazy val coreJVMTests = project
   .settings(
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-core" % "2.6.0",
-      "org.specs2" %% "specs2-core" % "4.10.6" % "test",
-      "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test",
+      "org.specs2" %% "specs2-core" % "4.11.0" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.11.0" % "test",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
@@ -139,8 +139,8 @@ lazy val inlinedOps = project
   .settings(
     name := "saddle-ops-inlined",
     libraryDependencies ++= Seq(
-      "org.specs2" %% "specs2-core" % "4.10.6" % "test",
-      "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
+      "org.specs2" %% "specs2-core" % "4.11.0" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.11.0" % "test"
     )
   )
   .dependsOn(coreJVM % "compile->compile;test->test")
@@ -163,8 +163,8 @@ lazy val time = project
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "org.scala-saddle" % "google-rfc-2445" % "20110304",
-      "org.specs2" %% "specs2-core" % "4.10.6" % "test",
-      "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
+      "org.specs2" %% "specs2-core" % "4.11.0" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.11.0" % "test"
     )
   )
   .dependsOn(coreJVM)
@@ -176,8 +176,8 @@ lazy val stats = project
     name := "saddle-stats",
     libraryDependencies ++= Seq(
       "org.apache.commons" % "commons-math" % "2.2" % "test",
-      "org.specs2" %% "specs2-core" % "4.10.6" % "test",
-      "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
+      "org.specs2" %% "specs2-core" % "4.11.0" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.11.0" % "test"
     )
   )
   .dependsOn(coreJVM)
