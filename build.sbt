@@ -4,46 +4,59 @@ lazy val scalaTestVersion = "3.2.9"
 lazy val scalaVersionInBuild = "2.13.5"
 
 lazy val commonSettings = Seq(
-  crossScalaVersions := Seq("2.13.5", "2.12.13"),
+  crossScalaVersions := Seq("2.13.5", "2.12.13", "3.0.0"),
   scalaVersion := scalaVersionInBuild,
   parallelExecution in Test := false,
-  scalacOptions ++= Seq(
-    "-opt:l:method",
-    "-opt:l:inline",
-    "-opt-inline-from:org.saddle.**",
-    "-opt-warnings",
-    "-deprecation", // Emit warning and location for usages of deprecated APIs.
-    "-encoding",
-    "utf-8", // Specify character encoding used by source files.
-    "-feature", // Emit warning and location for usages of features that should be imported explicitly.
-    "-language:postfixOps",
-    "-language:existentials",
-    "-language:higherKinds",
-    "-unchecked", // Enable additional warnings where generated code depends on assumptions.
-    "-Xfatal-warnings", // Fail the compilation if there are any warnings.
-    "-Xlint:adapted-args", // Warn if an argument list is modified to match the receiver.
-    "-Xlint:constant", // Evaluation of a constant arithmetic expression results in an error.
-    "-Xlint:delayedinit-select", // Selecting member of DelayedInit.
-    "-Xlint:doc-detached", // A Scaladoc comment appears to be detached from its element.
-    "-Xlint:inaccessible", // Warn about inaccessible types in method signatures.
-    "-Xlint:infer-any", // Warn when a type argument is inferred to be `Any`.
-    "-Xlint:missing-interpolator", // A string literal appears to be missing an interpolator id.
-    "-Xlint:nullary-unit", // Warn when nullary methods return Unit.
-    "-Xlint:option-implicit", // Option.apply used implicit view.
-    "-Xlint:poly-implicit-overload", // Parameterized overloaded implicit methods are not visible as view bounds.
-    "-Xlint:private-shadow", // A private field (or class parameter) shadows a superclass field.
-    "-Xlint:stars-align", // Pattern sequence wildcard must align with sequence component.
-    "-Xlint:type-parameter-shadow", // A local type parameter shadows a type already in scope.
-    // "-Ywarn-dead-code", // Warn when dead code is identified.
-    "-Ywarn-extra-implicit", // Warn when more than one implicit parameter section is defined.
-    // "-Ywarn-numeric-widen", // Warn when numerics are widened.
-    "-Ywarn-unused:implicits", // Warn if an implicit parameter is unused.
-    "-Ywarn-unused:imports", // Warn if an import selector is not referenced.
-    "-Ywarn-unused:locals", // Warn if a local definition is unused.
-    "-Ywarn-unused:params", // Warn if a value parameter is unused.
-    "-Ywarn-unused:patvars", // Warn if a variable bound in a pattern is unused.
-    "-Ywarn-unused:privates" // Warn if a private member is unused.
-  ),
+  scalacOptions ++= (CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((3, _)) =>
+      Seq(
+        "-deprecation", // Emit warning and location for usages of deprecated APIs.
+        "-encoding",
+        "utf-8", // Specify character encoding used by source files.
+        "-feature", // Emit warning and location for usages of features that should be imported explicitly.
+        "-language:postfixOps",
+        "-language:existentials",
+        "-unchecked", // Enable additional warnings where generated code depends on assumptions.
+        "-Xfatal-warnings" // Fail the compilation if there are any warnings.
+      )
+    case Some((2, _)) =>
+      Seq(
+        "-opt:l:method",
+        "-opt:l:inline",
+        "-opt-inline-from:org.saddle.**",
+        "-opt-warnings",
+        "-deprecation", // Emit warning and location for usages of deprecated APIs.
+        "-encoding",
+        "utf-8", // Specify character encoding used by source files.
+        "-feature", // Emit warning and location for usages of features that should be imported explicitly.
+        "-language:postfixOps",
+        "-language:existentials",
+        "-unchecked", // Enable additional warnings where generated code depends on assumptions.
+        "-Xfatal-warnings", // Fail the compilation if there are any warnings.
+        "-Xlint:adapted-args", // Warn if an argument list is modified to match the receiver.
+        "-Xlint:constant", // Evaluation of a constant arithmetic expression results in an error.
+        "-Xlint:delayedinit-select", // Selecting member of DelayedInit.
+        "-Xlint:doc-detached", // A Scaladoc comment appears to be detached from its element.
+        "-Xlint:inaccessible", // Warn about inaccessible types in method signatures.
+        "-Xlint:infer-any", // Warn when a type argument is inferred to be `Any`.
+        "-Xlint:missing-interpolator", // A string literal appears to be missing an interpolator id.
+        "-Xlint:nullary-unit", // Warn when nullary methods return Unit.
+        "-Xlint:option-implicit", // Option.apply used implicit view.
+        "-Xlint:poly-implicit-overload", // Parameterized overloaded implicit methods are not visible as view bounds.
+        "-Xlint:private-shadow", // A private field (or class parameter) shadows a superclass field.
+        "-Xlint:stars-align", // Pattern sequence wildcard must align with sequence component.
+        "-Xlint:type-parameter-shadow", // A local type parameter shadows a type already in scope.
+        // "-Ywarn-dead-code", // Warn when dead code is identified.
+        // "-Ywarn-numeric-widen", // Warn when numerics are widened.
+        "-Ywarn-unused:implicits", // Warn if an implicit parameter is unused.
+        "-Ywarn-unused:imports", // Warn if an import selector is not referenced.
+        "-Ywarn-unused:locals", // Warn if a local definition is unused.
+        "-Ywarn-unused:params", // Warn if a value parameter is unused.
+        "-Ywarn-unused:patvars", // Warn if a variable bound in a pattern is unused.
+        "-Ywarn-unused:privates" // Warn if a private member is unused.
+      )
+    case _ => ???
+  }),
   scalacOptions in (Compile, console) ~= (_ filterNot (_ == "-Xfatal-warnings"))
 ) ++ Seq(
   organization := "io.github.pityka",
@@ -72,9 +85,13 @@ lazy val commonSettings = Seq(
   },
   fork := true,
   cancelable in Global := true,
-  mimaPreviousArtifacts := Set(
-    organization.value %% moduleName.value % "2.2.5"
-  ),
+  mimaPreviousArtifacts := (CrossVersion.partialVersion(
+    scalaVersion.value
+  ) match {
+    case Some((2, _)) => Set(organization.value %% moduleName.value % "2.2.5")
+    case Some((3, _)) => Set()
+    case _            => ???
+  }),
   mimaBinaryIssueFilters ++= Seq(
     ProblemFilters.exclude[ReversedMissingMethodProblem](
       "org.saddle.Vec.zipMapIdx"
@@ -92,19 +109,16 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .jvmSettings(
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.4.4",
-      "org.typelevel" %% "cats-kernel" % "2.6.0",
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.typelevel" %% "cats-kernel" % "2.6.1",
       "org.specs2" %% "specs2-core" % "4.10.6" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
     )
   )
   .jsSettings(
     fork := false,
-    coverageEnabled := false,
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.4",
-      "org.typelevel" %%% "cats-core" % "2.6.0",
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.typelevel" %%% "cats-core" % "2.6.1",
       "org.specs2" %%% "specs2-core" % "4.9.4" % "test",
       "org.specs2" %%% "specs2-scalacheck" % "4.9.4" % "test"
     )
@@ -133,17 +147,32 @@ lazy val coreJVMTests = project
   )
   .dependsOn(coreJVM, binary)
 
-lazy val inlinedOps = project
-  .in(file("saddle-ops-inlined"))
+lazy val inlinedOpsMacroImpl = project
+  .in(file("saddle-ops-inlined-macroimpl"))
   .settings(commonSettings: _*)
   .settings(
-    name := "saddle-ops-inlined",
+    crossScalaVersions := Seq("2.13.5", "2.12.13"),
+    name := "saddle-ops-inlined-macroimpl",
     libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
       "org.specs2" %% "specs2-core" % "4.10.6" % "test",
       "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
     )
   )
   .dependsOn(coreJVM % "compile->compile;test->test")
+lazy val inlinedOps = project
+  .in(file("saddle-ops-inlined"))
+  .settings(commonSettings: _*)
+  .settings(
+    crossScalaVersions := Seq("2.13.5", "2.12.13"),
+    name := "saddle-ops-inlined",
+    libraryDependencies ++= Seq(
+      "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+      "org.specs2" %% "specs2-core" % "4.10.6" % "test",
+      "org.specs2" %% "specs2-scalacheck" % "4.10.6" % "test"
+    )
+  )
+  .dependsOn(inlinedOpsMacroImpl % "compile->compile;test->test")
 
 lazy val bench =
   project
@@ -203,7 +232,7 @@ lazy val binary = project
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "ujson" % "1.3.13",
+      "com.lihaoyi" %% "ujson" % "1.3.14",
       "org.scalatest" %% "scalatest" % scalaTestVersion % "test"
     )
   )
@@ -224,7 +253,6 @@ lazy val circe = crossProject(JSPlatform, JVMPlatform)
   )
   .jsSettings(
     fork := false,
-    coverageEnabled := false,
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core" % "0.13.0",
       "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
@@ -245,7 +273,6 @@ lazy val spire = crossProject(JSPlatform, JVMPlatform)
     scalaVersion := scalaVersionInBuild
   )
   .jsSettings(
-    coverageEnabled := false,
     fork := false
   )
 
@@ -262,7 +289,6 @@ lazy val io = crossProject(JSPlatform, JVMPlatform)
     scalaVersion := scalaVersionInBuild
   )
   .jsSettings(
-    coverageEnabled := false,
     fork := false
   )
 
