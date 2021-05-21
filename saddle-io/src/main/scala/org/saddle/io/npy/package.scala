@@ -64,7 +64,7 @@ package object npy {
           to.asInstanceOf[ByteBuffer].put(from)
           to.array
         }
-      case other => Left(s"Type $other not supported.")
+      case null => Left(s"null type not supported (likely programmer error).")
     }
 
   def parseHeader(s: String): Descriptor = {
