@@ -322,7 +322,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     * @param ev Implicit evidence of a Splitter instance that takes T (of arity N) to U (of arity N-1)
     * @tparam U Type of elements of result index
     */
-  def dropLevel[U, _](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
+  def dropLevel[U](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
 
   /** Given this index whose elements have arity N and another index of arity 1, form a result
     * index whose entries are tuples of arity N+1 reflecting the Cartesian product of the two,
