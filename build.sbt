@@ -232,6 +232,29 @@ lazy val circe = crossProject(JSPlatform, JVMPlatform)
     )
   )
   .dependsOn(core)
+lazy val jsoniter = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("saddle-jsoniter"))
+  .settings(commonSettings: _*)
+  .settings(
+    name := "saddle-jsoniter"
+  )
+  .jvmSettings(
+    libraryDependencies ++= Seq(
+      "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-core" % "2.8.2",
+      "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.8.2" % "compile-internal",
+      "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.8.2" % "test"
+    ) ++ scalaTest
+  )
+  .jsSettings(
+    fork := false,
+    libraryDependencies ++= Seq(
+      "com.github.plokhotnyuk.jsoniter-scala" %%% "jsoniter-scala-core" % "2.8.2",
+      "com.github.plokhotnyuk.jsoniter-scala" %%% "jsoniter-scala-macros" % "2.8.2" % "compile-internal",
+      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+    )
+  )
+  .dependsOn(core)
 
 lazy val circeJS = circe.js
 
@@ -274,7 +297,13 @@ lazy val docs = project
       "-language:postfixOps"
     ),
     unidocProjectFilter in (ScalaUnidoc, unidoc) :=
-      (inAnyProject -- inProjects(coreJS, circeJS, spireJS, io.js)),
+      (inAnyProject -- inProjects(
+        coreJS,
+        circeJS,
+        spireJS,
+        io.js,
+        jsoniter.js
+      )),
     publishArtifact := false,
     moduleName := "saddle-docs",
     mdocVariables := Map(
@@ -302,6 +331,7 @@ lazy val root = (project in file("."))
         (test in Test in linalg).value,
         (test in Test in binary).value,
         (test in Test in circeJVM).value,
+        (test in Test in jsoniter.jvm).value,
         (test in Test in inlinedOps).value,
         (test in Test in spireJVM).value,
         (test in Test in io.jvm).value
@@ -318,6 +348,8 @@ lazy val root = (project in file("."))
     binary,
     circeJS,
     circeJVM,
+    jsoniter.js,
+    jsoniter.jvm,
     docs,
     inlinedOps,
     spireJVM,
