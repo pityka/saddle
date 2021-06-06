@@ -42,7 +42,7 @@ package object jsoniter {
 
   implicit def matCodec[T: JsonValueCodec: ST]: JsonValueCodec[Mat[T]] =
     new JsonValueCodec[Mat[T]] {
-      locally {
+      locally { // suppressing unused warning
         val _ = implicitly[JsonValueCodec[T]]
       }
       val codec0: JsonValueCodec[(Int, Int, Vec[T])] = JsonCodecMaker.make
@@ -63,9 +63,8 @@ package object jsoniter {
   implicit def seriesCodec[T: JsonValueCodec: ST, I: JsonValueCodec: ST: ORD]
       : JsonValueCodec[Series[I, T]] =
     new JsonValueCodec[Series[I, T]] {
-      locally {
-        val _ = implicitly[JsonValueCodec[T]]
-        val _ = implicitly[JsonValueCodec[I]]
+      locally { // suppressing unused warning
+        val _ = (implicitly[JsonValueCodec[T]], implicitly[JsonValueCodec[I]])
       }
       val codec0: JsonValueCodec[(Index[I], Vec[T])] = JsonCodecMaker.make
       override def decodeValue(
@@ -90,10 +89,13 @@ package object jsoniter {
       I2: JsonValueCodec: ST: ORD
   ]: JsonValueCodec[Frame[I, I2, T]] =
     new JsonValueCodec[Frame[I, I2, T]] {
-      locally {
-        val _ = implicitly[JsonValueCodec[T]]
-        val _ = implicitly[JsonValueCodec[I]]
-        val _ = implicitly[JsonValueCodec[I2]]
+      locally { // suppressing unused warning
+        val _ = (
+          implicitly[JsonValueCodec[T]],
+          implicitly[JsonValueCodec[I]],
+          implicitly[JsonValueCodec[I2]]
+        )
+
       }
       val codec0: JsonValueCodec[(Vec[I], Vec[I2], Vec[T])] =
         JsonCodecMaker.make
