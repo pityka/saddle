@@ -84,8 +84,8 @@ lazy val commonSettings = Seq(
 )
 
 lazy val specs = List(
-  ("org.specs2" %% "specs2-core" % "4.12.0" % "test"),
-  ("org.specs2" %% "specs2-scalacheck" % "4.12.0" % "test")
+  ("org.specs2" %% "specs2-core" % "4.12.1" % "test"),
+  ("org.specs2" %% "specs2-scalacheck" % "4.12.1" % "test")
 )
 
 lazy val scalaTest = List(
