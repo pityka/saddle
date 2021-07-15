@@ -221,13 +221,13 @@ lazy val circe = crossProject(JSPlatform, JVMPlatform)
   )
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "io.circe" %% "circe-core" % "0.13.0"
+      "io.circe" %% "circe-core" % "0.14.1"
     ) ++ scalaTest
   )
   .jsSettings(
     fork := false,
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core" % "0.13.0",
+      "io.circe" %%% "circe-core" % "0.14.1",
       "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
     )
   )
