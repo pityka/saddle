@@ -1,30 +1,31 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle
 
 import scala.{specialized => spec}
 import org.saddle.spire.random.rng.Cmwc5
 
-/** This package contains utilities for working with arrays that
-  * are specialized for numeric types.
+/** This package contains utilities for working with arrays that are specialized
+  * for numeric types.
   */
 package object array {
   import org.saddle.spire.random.Generator
 
-  /** Create a new array consisting of a range of numbers from a lower bound up to, but
-    * not including, an upper bound, at a particular increment (default 1)
+  /** Create a new array consisting of a range of numbers from a lower bound up
+    * to, but not including, an upper bound, at a particular increment (default
+    * 1)
     */
   def range(from: Int, until: Int, step: Int = 1): Array[Int] = {
     if (from >= until) Array.ofDim[Int](0)
@@ -260,8 +261,8 @@ package object array {
   def randDoublePos(sz: Int): Array[Double] =
     randDoublePos(sz, defaultRandom)
 
-  /** Generate an array of random doubles which is normally distributed
-    * with a mean of zero and stdev of one.
+  /** Generate an array of random doubles which is normally distributed with a
+    * mean of zero and stdev of one.
     */
   def randNormal(sz: Int, rng: Generator): Array[Double] = {
     val arr = Array.ofDim[Double](sz)
@@ -269,14 +270,14 @@ package object array {
     arr
   }
 
-  /** Generate an array of random doubles which is normally distributed
-    * with a mean of zero and stdev of one.
+  /** Generate an array of random doubles which is normally distributed with a
+    * mean of zero and stdev of one.
     */
   def randNormal(sz: Int): Array[Double] =
     randNormal(sz, defaultRandom)
 
-  /** Generate an array of random doubles which is normally distributed
-    * with a mean of mu and stdev of sigma.
+  /** Generate an array of random doubles which is normally distributed with a
+    * mean of mu and stdev of sigma.
     */
   def randNormal2(
       sz: Int,
@@ -293,21 +294,21 @@ package object array {
     arr
   }
 
-  /** Generate an array of random doubles which is normally distributed
-    * with a mean of mu and stdev of sigma.
+  /** Generate an array of random doubles which is normally distributed with a
+    * mean of mu and stdev of sigma.
     */
   def randNormal2(sz: Int, mu: Double, sigma: Double): Array[Double] =
     randNormal2(sz, mu, sigma, defaultRandom)
 
-  /** Takes values from array arr at particular offsets so as to produce a new array.
-    * Offset -1 is mapped to by-name parameter `missing`.
+  /** Takes values from array arr at particular offsets so as to produce a new
+    * array. Offset -1 is mapped to by-name parameter `missing`.
     *
-    * Note that each integer I at offset O in `offsets` works to "take" input[I] to
-    * output[O]. Eg, Array(2,0,1) permutes locations as follows:
+    * Note that each integer I at offset O in `offsets` works to "take" input[I]
+    * to output[O]. Eg, Array(2,0,1) permutes locations as follows:
     *
-    *  - 2 to 0
-    *  - 0 to 1
-    *  - 1 to 2
+    *   - 2 to 0
+    *   - 0 to 1
+    *   - 1 to 2
     *
     * For example,
     *
@@ -333,15 +334,15 @@ package object array {
     res
   }
 
-  /** Takes values from array arr at particular offsets so as to produce a new array.
-    * Offset -1 is mapped to by-name parameter `missing`.
+  /** Takes values from array arr at particular offsets so as to produce a new
+    * array. Offset -1 is mapped to by-name parameter `missing`.
     *
-    * Note that each integer I at offset O in `offsets` works to "take" input[I] to
-    * output[O]. Eg, Array(2,0,1) permutes locations as follows:
+    * Note that each integer I at offset O in `offsets` works to "take" input[I]
+    * to output[O]. Eg, Array(2,0,1) permutes locations as follows:
     *
-    *  - 2 to 0
-    *  - 0 to 1
-    *  - 1 to 2
+    *   - 2 to 0
+    *   - 0 to 1
+    *   - 1 to 2
     *
     * For example,
     *
@@ -355,8 +356,8 @@ package object array {
       missing: => T
   ): Array[T] = take(arr, offsets.toArray, missing)
 
-  /** Compute the sum of the array at particular offets. If any of the offets is -1,
-    * the pass-by-name value 'missing' is used instead.
+  /** Compute the sum of the array at particular offets. If any of the offets is
+    * -1, the pass-by-name value 'missing' is used instead.
     *
     * For example,
     *
@@ -381,10 +382,10 @@ package object array {
     res
   }
 
-  /** Sends values from an array to particular offsets so as to produce a new array.
-    * This does the inverse of 'take'; ie, each integer I at offset O in `offsets`
-    * works to "send" input[O] to output[I]. Eg, Array(2,0,1) permutes locations as
-    * follows:
+  /** Sends values from an array to particular offsets so as to produce a new
+    * array. This does the inverse of 'take'; ie, each integer I at offset O in
+    * `offsets` works to "send" input[O] to output[I]. Eg, Array(2,0,1) permutes
+    * locations as follows:
     *
     *   - 0 to 2
     *   - 1 to 0
@@ -409,8 +410,8 @@ package object array {
     res
   }
 
-  /** Remove values from array arr at particular offsets so as to
-    * produce a new array.
+  /** Remove values from array arr at particular offsets so as to produce a new
+    * array.
     */
   def remove[@spec(Boolean, Int, Long, Double) T: ST](
       arr: Array[T],
@@ -440,7 +441,8 @@ package object array {
     res
   }
 
-  /** Put a single value into array arr at particular offsets, so as to produce a new array.
+  /** Put a single value into array arr at particular offsets, so as to produce
+    * a new array.
     */
   def put[@spec(Boolean, Int, Long, Double) T](
       arr: Array[T],
@@ -457,8 +459,8 @@ package object array {
     res
   }
 
-  /** Put a value into array arr at particular offsets provided by a boolean array where its locations
-    * are true, so as to produce a new array.
+  /** Put a value into array arr at particular offsets provided by a boolean
+    * array where its locations are true, so as to produce a new array.
     */
   def put[@spec(Boolean, Int, Long, Double) T](
       arr: Array[T],
@@ -474,8 +476,8 @@ package object array {
     res
   }
 
-  /** Put n values into array arr at particular offsets, where the values come from another array,
-    * so as to produce a new array.
+  /** Put n values into array arr at particular offsets, where the values come
+    * from another array, so as to produce a new array.
     */
   def putn[@spec(Boolean, Int, Long, Double) T](
       arr: Array[T],
@@ -506,8 +508,8 @@ package object array {
     *
     * Return evenly spaced numbers over a specified interval.
     *
-    * Returns num evenly spaced samples, calculated over the
-    * interval [start, stop].
+    * Returns num evenly spaced samples, calculated over the interval [start,
+    * stop].
     *
     * If start < stop, then the order of elements are decreasing.
     *
@@ -537,10 +539,11 @@ package object array {
     }
   }
 
-  /** Stable indirect sort resulting in permutation of numbers [0, n), whose application
-    * on an array results in a sorted array.
+  /** Stable indirect sort resulting in permutation of numbers [0, n), whose
+    * application on an array results in a sorted array.
     *
-    * @param arr Array to sort
+    * @param arr
+    *   Array to sort
     */
   def argsort[@spec(Double, Long, Int, Float) T: ORD](
       arr: Array[T]
@@ -554,7 +557,8 @@ package object array {
   /** Stable sort of array argument (not destructive), using radix sort
     * implementation wherever possible.
     *
-    * @param arr Array to sort
+    * @param arr
+    *   Array to sort
     */
   def sort[T: ST: ORD](arr: Array[T]): Array[T] =
     implicitly[ST[T]].makeSorter.sorted(arr)
@@ -575,7 +579,8 @@ package object array {
     newArr
   }
 
-  /** Filter an array based on a predicate function, wherever that predicate is true
+  /** Filter an array based on a predicate function, wherever that predicate is
+    * true
     */
   def filter[@spec(Boolean, Int, Long, Double) T: ST](
       f: T => Boolean

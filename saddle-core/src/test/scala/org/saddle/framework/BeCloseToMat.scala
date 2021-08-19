@@ -3,8 +3,7 @@ package org.saddle.framework
 import org.saddle._
 import org.specs2.matcher._
 
-/** A matcher for two numeric Mats that must be equal to within
-  * a tolerance
+/** A matcher for two numeric Mats that must be equal to within a tolerance
   */
 class BeCloseToMat[T: Numeric](m: Mat[T], delta: T) extends Matcher[Mat[T]] {
   def apply[S <: Mat[T]](x: Expectable[S]) = {

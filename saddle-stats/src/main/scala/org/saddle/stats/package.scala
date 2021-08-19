@@ -20,13 +20,15 @@ package object stats {
   type Series2Stats[T] = Series[_, T] => VecStats[T]
 
   /** Enrich Series with basic stats
-    * @param s Series[_, T]
+    * @param s
+    *   Series[_, T]
     */
   implicit def seriesToStats[T: Vec2Stats](s: Series[_, T]): VecStats[T] =
     implicitly[Vec2Stats[T]].apply(s.values)
 
   /** Enrich Series with rolling stats
-    * @param s Series[_, T]
+    * @param s
+    *   Series[_, T]
     */
   implicit def seriesToRollingStats[X: ST: ORD, T: Vec2RollingStats: ST](
       s: Series[X, T]
@@ -34,7 +36,8 @@ package object stats {
     SeriesRollingStats[X, T](s)
 
   /** Enrich Series with expanding stats
-    * @param s Series[_, T]
+    * @param s
+    *   Series[_, T]
     */
   implicit def seriesToExpandingStats[X: ST: ORD, T: Vec2ExpandingStats: ST](
       s: Series[X, T]

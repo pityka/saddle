@@ -24,9 +24,12 @@ import java.io.ByteArrayOutputStream
 
 /** Settings for writing a CSV file
   *
-  * @param separChar Separator; default is comma
-  * @param useQuote If true, fields containing separChar will be wrapped in quotes
-  * @param quoteChar Quote character; default double-quote
+  * @param separChar
+  *   Separator; default is comma
+  * @param useQuote
+  *   If true, fields containing separChar will be wrapped in quotes
+  * @param quoteChar
+  *   Quote character; default double-quote
   */
 case class CsvSettings(
     separChar: Char = ',',
@@ -70,10 +73,14 @@ object CsvWriter {
 
   /** Write a frame in CSV format to a file at the path provided
     *
-    * @param path File to write
-    * @param withColIx If true, print out headers as first row
-    * @param withRowIx If true, print out index value as first column
-    * @param settings Settings to use in formatting
+    * @param path
+    *   File to write
+    * @param withColIx
+    *   If true, print out headers as first row
+    * @param withRowIx
+    *   If true, print out index value as first column
+    * @param settings
+    *   Settings to use in formatting
     */
   def writeFrameToFile[RX, CX, T: ST](
       frame: Frame[RX, CX, T],
@@ -108,10 +115,14 @@ object CsvWriter {
 
   /** Write a frame in CSV format to the stream provided
     *
-    * @param stream Stream to write on
-    * @param withColIx If true, print out headers as first row
-    * @param withRowIx If true, print out index value as first column
-    * @param settings Settings to use in formatting
+    * @param stream
+    *   Stream to write on
+    * @param withColIx
+    *   If true, print out headers as first row
+    * @param withRowIx
+    *   If true, print out index value as first column
+    * @param settings
+    *   Settings to use in formatting
     */
   def writeFrameToStream[RX, CX, T: ST](
       frame: Frame[RX, CX, T],

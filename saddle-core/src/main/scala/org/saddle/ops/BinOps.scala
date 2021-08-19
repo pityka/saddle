@@ -9,8 +9,8 @@ import org.saddle.scalar.{
 
 /** Contains implementations of primitive binary ops that are NA-aware
   *
-  * Double primitive has NA bit pattern baked into its representation, but
-  * for others we must check for the appropriate sentinel value.
+  * Double primitive has NA bit pattern baked into its representation, but for
+  * others we must check for the appropriate sentinel value.
   *
   * Note scala.Function2 is not specialized on Boolean inputs, only output
   */

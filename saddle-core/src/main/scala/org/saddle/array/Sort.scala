@@ -1,10 +1,10 @@
-/** The code in this file is adapted from spire (https://github.com/typelevel/spire)
-  * Spire is Copyright (c) 2011-2012 Erik Osheim, Tom Switzer
-  * and is released under MIT license.
+/** The code in this file is adapted from spire
+  * (https://github.com/typelevel/spire) Spire is Copyright (c) 2011-2012 Erik
+  * Osheim, Tom Switzer and is released under MIT license.
   *
   * Modifications:
-  *  - add index sorters (arg sort, permutation index)
-  *  - add ORD shorthand
+  *   - add index sorters (arg sort, permutation index)
+  *   - add ORD shorthand
   */
 package org.saddle.array
 
@@ -14,14 +14,17 @@ import scala.reflect.ClassTag
 
 /** An implementation of insertion sort.
   *
-  * Works well for small arrays but due to quadratic complexity is not generally optimal.
+  * Works well for small arrays but due to quadratic complexity is not generally
+  * optimal.
   */
 object InsertionSort {
 
   /** Sorts `data` in place using insertion sort.
     *
-    * @param data the array to be sorted
-    * @tparam A a member of the type class `Order`
+    * @param data
+    *   the array to be sorted
+    * @tparam A
+    *   a member of the type class `Order`
     */
   final def sort[@sp A: ORD](data: Array[A]): Unit =
     sort(data, 0, data.length)
@@ -29,10 +32,14 @@ object InsertionSort {
   /** Uses insertion sort on `data` to sort the entries from the index `start`
     * up to, but not including, the index `end`. Operates in place.
     *
-    * @param data the array to be sorted
-    * @param start the index of the first element, inclusive, to be sorted
-    * @param end the index of the last element, exclusive, to be sorted
-    * @tparam A a member of the type class `Order`
+    * @param data
+    *   the array to be sorted
+    * @param start
+    *   the index of the first element, inclusive, to be sorted
+    * @param end
+    *   the index of the last element, exclusive, to be sorted
+    * @tparam A
+    *   a member of the type class `Order`
     */
   final def sort[@sp A](data: Array[A], start: Int, end: Int)(implicit
       o: ORD[A]
@@ -52,10 +59,10 @@ object InsertionSort {
   }
 }
 
-/** In-place merge sort implementation. This sort is stable but does mutate
-  * the given array. It is an in-place sort but it does allocate a temporary
-  * array of the same size as the input. It uses InsertionSort for sorting very
-  * small arrays.
+/** In-place merge sort implementation. This sort is stable but does mutate the
+  * given array. It is an in-place sort but it does allocate a temporary array
+  * of the same size as the input. It uses InsertionSort for sorting very small
+  * arrays.
   */
 object MergeSort {
   @inline final def startWidth: Int = 8
@@ -66,8 +73,10 @@ object MergeSort {
     * If the size of the input array does not exceed the threshold `startStep`,
     * uses insertion sort instead.
     *
-    * @param data the array to be sorted
-    * @tparam A a member of the type class `Order`
+    * @param data
+    *   the array to be sorted
+    * @tparam A
+    *   a member of the type class `Order`
     */
   final def sort[@sp A: ORD: ClassTag](data: Array[A]): Unit = {
     val len = data.length
@@ -112,17 +121,26 @@ object MergeSort {
   /** Helper method for mergeSort, used to do a single "merge" between two
     * sections of the input array, and write the result to the output array.
     *
-    * The first input section starts at `start` (inclusive) and ends at `mid` (exclusive).
-    * The second input section starts at `mid` (inclusive) and ends at `end` (exclusive).
+    * The first input section starts at `start` (inclusive) and ends at `mid`
+    * (exclusive). The second input section starts at `mid` (inclusive) and ends
+    * at `end` (exclusive).
     *
     * Writing to the output begins at `start` (inclusive).
     *
-    * @param in the input array
-    * @param out the output array
-    * @param start the start of the first input section (inclusive) as well as the start of the merged output
-    * @param mid the end of the first input section (exclusive) and the beginning of the second input section (inclusive)
-    * @param end the end of the second input section (exclusive)
-    * @tparam A a member of the type class `Order`
+    * @param in
+    *   the input array
+    * @param out
+    *   the output array
+    * @param start
+    *   the start of the first input section (inclusive) as well as the start of
+    *   the merged output
+    * @param mid
+    *   the end of the first input section (exclusive) and the beginning of the
+    *   second input section (inclusive)
+    * @param end
+    *   the end of the second input section (exclusive)
+    * @tparam A
+    *   a member of the type class `Order`
     */
   @inline final def merge[@sp A](
       in: Array[A],
@@ -150,21 +168,26 @@ object MergeSort {
 
 /** An implementation of insertion sort.
   *
-  * Works well for small arrays but due to quadratic complexity is not generally optimal.
+  * Works well for small arrays but due to quadratic complexity is not generally
+  * optimal.
   */
 object PermuteInsertionSort {
 
   /** Uses insertion sort on `data` to sort the entries from the index `start`
-    * up to, but not including, the index `end`.
-    * Permutation indices are returned in `perm`: data[perm[k]] is the k-th smallest elem in data
-    * `data` is not modified.
-    * Does not allocate, except on stack.
+    * up to, but not including, the index `end`. Permutation indices are
+    * returned in `perm`: data[perm[k]] is the k-th smallest elem in data `data`
+    * is not modified. Does not allocate, except on stack.
     *
-    * @param data the array to be sorted
-    * @param start the index of the first element, inclusive, to be sorted
-    * @param end the index of the last element, exclusive, to be sorted
-    * @param perm array of permutation indices
-    * @tparam A a member of the type class `Order`
+    * @param data
+    *   the array to be sorted
+    * @param start
+    *   the index of the first element, inclusive, to be sorted
+    * @param end
+    *   the index of the last element, exclusive, to be sorted
+    * @param perm
+    *   array of permutation indices
+    * @tparam A
+    *   a member of the type class `Order`
     */
   final def sort[@sp A](data: Array[A], start: Int, end: Int, perm: Array[Int])(
       implicit o: ORD[A]
@@ -192,10 +215,10 @@ object PermuteInsertionSort {
   }
 }
 
-/** In-place merge sort implementation. This sort is stable but does mutate
-  * the given array. It is an in-place sort but it does allocate a temporary
-  * array of the same size as the input. It uses InsertionSort for sorting very
-  * small arrays.
+/** In-place merge sort implementation. This sort is stable but does mutate the
+  * given array. It is an in-place sort but it does allocate a temporary array
+  * of the same size as the input. It uses InsertionSort for sorting very small
+  * arrays.
   */
 object PermuteMergeSort {
   @inline final def startWidth: Int = 8

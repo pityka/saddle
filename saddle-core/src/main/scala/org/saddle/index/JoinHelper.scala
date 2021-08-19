@@ -1,30 +1,28 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
- **/
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  */
 package org.saddle.index
 
 import org.saddle.array
 
-/**
-  * JoinHelper takes a factorized representation of a left and right index (ie, the
-  * label identifiers are integers).
+/** JoinHelper takes a factorized representation of a left and right index (ie,
+  * the label identifiers are integers).
   *
-  * Applying the class will return a left and right indexer each of whose length is
-  * equal to the length of the joint index, and each of whose ith entry indicates the
-  * location within the original corresponding (left/right) index which contributes to
-  * the ith entry of the joint index.
+  * Applying the class will return a left and right indexer each of whose length
+  * is equal to the length of the joint index, and each of whose ith entry
+  * indicates the location within the original corresponding (left/right) index
+  * which contributes to the ith entry of the joint index.
   *
   * Also see [[org.saddle.array.take]] for more info
   */

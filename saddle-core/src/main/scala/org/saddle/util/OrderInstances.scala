@@ -7,19 +7,17 @@ import cats.kernel.Hash
 object DoubleTotalOrder extends DoubleTotalOrderTrait
 object FloatTotalOrder extends FloatTotalOrderTrait
 
-/**
-  * An Order[Double] instance which produces a total order by ordering NaNs above
-  * all other Doubles
+/** An Order[Double] instance which produces a total order by ordering NaNs
+  * above all other Doubles
   *
-  * Contrary to the specification of cats, the DoubleOrdering in cats.kernel
-  * is not total because NaN is not ordered (all comparisons return false).
-  * This behaviour is consistent with IEEE-754, but not very practical.
+  * Contrary to the specification of cats, the DoubleOrdering in cats.kernel is
+  * not total because NaN is not ordered (all comparisons return false). This
+  * behaviour is consistent with IEEE-754, but not very practical.
   *
   * java.lang.Double.compare orders NaN to be largest of all Doubles.
   *
-  * See https://github.com/scala/scala/pull/8721
-  * See https://github.com/scala/scala/blob/39e82c3f904380f0b40d106723747faf881640d4/src/library/scala/math/Ordering.scala#L465
-  *
+  * See https://github.com/scala/scala/pull/8721 See
+  * https://github.com/scala/scala/blob/39e82c3f904380f0b40d106723747faf881640d4/src/library/scala/math/Ordering.scala#L465
   */
 trait DoubleTotalOrderTrait extends Order[Double] with Hash[Double] {
 

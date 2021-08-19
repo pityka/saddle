@@ -3,8 +3,7 @@ package util
 
 import java.nio.ByteBuffer
 
-/**
-  * These methods are all big-endian.
+/** These methods are all big-endian.
   *
   * That is, bytes[0] is the most-significant byte.
   */

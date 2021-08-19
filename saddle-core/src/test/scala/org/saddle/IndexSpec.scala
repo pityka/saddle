@@ -7,9 +7,7 @@ import cats.kernel.Order
 import org.saddle.order._
 import org.saddle.index.OuterJoin
 
-/** User: Adam Klein
-  * Date: 2/19/13
-  * Time: 7:17 PM
+/** User: Adam Klein Date: 2/19/13 Time: 7:17 PM
   */
 class IndexSpec extends Specification {
   "Index methods" should {

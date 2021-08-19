@@ -1,24 +1,24 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.index
 
 import org.saddle.{ST, ORD}
 import org.saddle.order._
 
-/** A Melter operates on a Tuple,,N,, and a Tuple,,M,, and produces a Tuple,,N+M,, which is
-  * composed of the corresponding tuple elements.
+/** A Melter operates on a Tuple,,N,, and a Tuple,,M,, and produces a
+  * Tuple,,N+M,, which is composed of the corresponding tuple elements.
   */
 trait Melter[A, B, C] {
   def apply(a: A, b: B): C
@@ -27,15 +27,21 @@ trait Melter[A, B, C] {
   def ord: ORD[C]
 }
 
-/** Lowest priority melter implicit instance takes two arbitrary types and produces a Tuple2
+/** Lowest priority melter implicit instance takes two arbitrary types and
+  * produces a Tuple2
   */
 trait MelterLowerPriority {
 
-  /** Creates a new Melter instance from a function that implements the internal mechanics
-    * @param fn A function from (A, B) => C
-    * @tparam A Type of left operand
-    * @tparam B Type of right operand
-    * @tparam C Type of result
+  /** Creates a new Melter instance from a function that implements the internal
+    * mechanics
+    * @param fn
+    *   A function from (A, B) => C
+    * @tparam A
+    *   Type of left operand
+    * @tparam B
+    *   Type of right operand
+    * @tparam C
+    *   Type of result
     */
   protected def makeMelter[A, B, C: ST: ORD](fn: (A, B) => C) =
     new Melter[A, B, C] {
@@ -49,7 +55,8 @@ trait MelterLowerPriority {
   }
 }
 
-/** Next lowest priority melter implicit instances; takes one arbitrary types and a Tuple,,N,, and produces a Tuple,,N+1,,
+/** Next lowest priority melter implicit instances; takes one arbitrary types
+  * and a Tuple,,N,, and produces a Tuple,,N+1,,
   */
 trait MelterLowPriority extends MelterLowerPriority {
   implicit def melt1_2[A: ORD, B: ORD, C: ORD] = makeMelter {
@@ -171,7 +178,8 @@ trait MelterLowPriority extends MelterLowerPriority {
   }
 }
 
-/** Normal priority melter implicit instances takes one a Tuple,,N,, and a Tuple,,M,, and produce a Tuple,,N+M,,
+/** Normal priority melter implicit instances takes one a Tuple,,N,, and a
+  * Tuple,,M,, and produce a Tuple,,N+M,,
   */
 object Melter extends MelterLowPriority {
   implicit def melt2_2[A: ORD, B: ORD, C: ORD, D: ORD] =

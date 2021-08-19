@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.vec
 
@@ -68,8 +68,8 @@ private[saddle] object VecImpl {
     acc
   }
 
-  /** Same as foldLeft, but with a condition that operates on the accumulator and element
-    * that if false, breaks out of the fold
+  /** Same as foldLeft, but with a condition that operates on the accumulator
+    * and element that if false, breaks out of the fold
     */
   def foldLeftWhile[
       @spec(Boolean, Int, Long, Double) A: ST,
@@ -124,9 +124,9 @@ private[saddle] object VecImpl {
     Vec(b.toArray)
   }
 
-  /** Same as foldLeft, but store and return intermediate accumulated results. Note this differs
-    * from the Scala collections library by not including the initial value at the head of the
-    * scan.
+  /** Same as foldLeft, but store and return intermediate accumulated results.
+    * Note this differs from the Scala collections library by not including the
+    * initial value at the head of the scan.
     */
   def scanLeft[
       @spec(Boolean, Int, Long, Double) A: ST,

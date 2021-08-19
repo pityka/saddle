@@ -1,26 +1,27 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.index
 
 import org.saddle.{Index, ST, ORD}
 import org.saddle.order._
 
-/** A Splitter operates on an input index whose elements have arity N, and yields the following
-  * pair of output indexes: the left has elements whose arity is N-1, where each element has the
-  * first N-1 constituents of the original tuple; and the right is an index whose elements were
-  * those in the Nth position of the original tuple.
+/** A Splitter operates on an input index whose elements have arity N, and
+  * yields the following pair of output indexes: the left has elements whose
+  * arity is N-1, where each element has the first N-1 constituents of the
+  * original tuple; and the right is an index whose elements were those in the
+  * Nth position of the original tuple.
   *
   * For example,
   *
@@ -34,9 +35,12 @@ import org.saddle.order._
   *   (Index[Char]('a', 'a', 'b', 'b'), Index[Int](1, 2, 1, 2))
   * }}}
   *
-  * @tparam I Input index whose elements have arity > 1
-  * @tparam OL Left output index whose elements have arity >= 1
-  * @tparam OR Right output index whose elements have arity 1
+  * @tparam I
+  *   Input index whose elements have arity > 1
+  * @tparam OL
+  *   Left output index whose elements have arity >= 1
+  * @tparam OR
+  *   Right output index whose elements have arity 1
   */
 trait Splitter[I, OL, OR] {
   def apply(i: Index[I]): (Index[OL], Index[OR])

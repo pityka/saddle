@@ -1,11 +1,12 @@
 package org.saddle.stats
 
-/** Mediator is an auxiliary class for O(N log k) rolling median. It is inspired by
-  * AShelly's C99 implementation, which is (c) 2011 ashelly.myopenid.com and licensed
-  * under the MIT license: http://www.opensource.org/licenses/mit-license
+/** Mediator is an auxiliary class for O(N log k) rolling median. It is inspired
+  * by AShelly's C99 implementation, which is (c) 2011 ashelly.myopenid.com and
+  * licensed under the MIT license:
+  * http://www.opensource.org/licenses/mit-license
   *
   * Reference:
-  *   http://stackoverflow.com/questions/5527437/rolling-median-in-c-turlach-implementation
+  * http://stackoverflow.com/questions/5527437/rolling-median-in-c-turlach-implementation
   */
 class Mediator(winSz: Int) {
   require(winSz > 0, "Window length must be > 0!")

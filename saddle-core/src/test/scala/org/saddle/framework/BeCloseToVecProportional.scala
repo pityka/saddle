@@ -4,8 +4,8 @@ import org.saddle._
 import org.saddle.Vec
 import org.specs2.matcher._
 
-/** A matcher for two numeric Vecs that must be equal to within
-  * a proportional tolerance
+/** A matcher for two numeric Vecs that must be equal to within a proportional
+  * tolerance
   */
 class BeCloseToVecProportional[T: NUM](v: Vec[T], delta: T)
     extends Matcher[Vec[T]] {

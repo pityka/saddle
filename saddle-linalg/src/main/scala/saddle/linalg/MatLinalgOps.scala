@@ -1,16 +1,16 @@
 /** Copyright (c) 2019 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.linalg
 
@@ -338,8 +338,7 @@ class MatPimp(val self: Mat[Double]) {
     Mat(a.numCols, b.numRows, result)
   }
 
-  /** Full DGEMM
-    * alpha A x B + beta * C
+  /** Full DGEMM alpha A x B + beta * C
     */
   def mmc(
       other: B,
@@ -1426,8 +1425,10 @@ class MatPimp(val self: Mat[Double]) {
 
   /** Solves A x X = B for X when A is PD and self is the Cholesky decomposition
     * The matrix this is called on must be the lower Cholesky factor
-    * @param rhsT matrix B'
-    * @return t(X)
+    * @param rhsT
+    *   matrix B'
+    * @return
+    *   t(X)
     */
   def solvePDTransposed(rhsT: Mat[Double]) = {
     // A X = B

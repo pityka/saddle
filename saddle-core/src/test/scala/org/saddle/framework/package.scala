@@ -31,7 +31,8 @@ package object framework {
   implicit def arbFrame[X: Gen: ORD: ClassTag, S: ClassTag: Gen]
       : Arbitrary[Frame[X, Int, S]] = arbFrameOfN[X, S](10, 100)
 
-  /** A generator for doubles with bounds at .5 the size of the min/max valyes. */
+  /** A generator for doubles with bounds at .5 the size of the min/max valyes.
+    */
   def boundedDouble: Gen[Double] = Gen.choose(-1000000d, 1000000d)
 
   /** A generator for longs between 0 and the current time in milliseconds. */

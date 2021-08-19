@@ -1,18 +1,17 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
- **/
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  */
 package org.saddle
 
 import scala.language.implicitConversions
@@ -25,8 +24,7 @@ import org.saddle.scalar.ScalarTagTime
 import cats.kernel.Order
 import org.saddle.order._
 
-/**
-  * Functionality to assist in TimeSeries related operations
+/** Functionality to assist in TimeSeries related operations
   */
 package object time {
 
@@ -38,8 +36,7 @@ package object time {
   val TZ_LOCAL = ISO_CHRONO.getZone
   val TZ_UTC = ISO_CHRONO_UTC.getZone
 
-  /**
-    * Convenience factory for constructing a DateTime instance
+  /** Convenience factory for constructing a DateTime instance
     */
   def datetime(
       y: Int = 0,
@@ -65,11 +62,12 @@ package object time {
   private val dfmt2 = "(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)".r // eg 2012-02-05
   private val dfmt3 = "(\\d{1,2})/(\\d{1,2})/(\\d\\d\\d\\d)".r // eg 2/5/2012
 
-  /**
-    * Convenience method for constructing a DateTime instance from a date string
+  /** Convenience method for constructing a DateTime instance from a date string
     *
-    * @param s    String representing the date
-    * @param euro Whether to use the european format, eg 2/5/2012 => 2nd of May, 2012
+    * @param s
+    *   String representing the date
+    * @param euro
+    *   Whether to use the european format, eg 2/5/2012 => 2nd of May, 2012
     */
   def parsedate(s: String, euro: Boolean = false): Option[DateTime] = {
     s match {
@@ -85,8 +83,8 @@ package object time {
     }
   }
 
-  /**
-    * Class providing time accessor methods for Vec and Index containing DateTimes
+  /** Class providing time accessor methods for Vec and Index containing
+    * DateTimes
     */
   protected[saddle] class TimeAccessors[T](
       times: Vec[Long],
@@ -175,9 +173,9 @@ package object time {
         }
     }
 
-    /**
-      * Using Joda time's PreciseDateTimeField logic directly allows much faster extraction of the
-      * fractional units of each instant when there isn't a need to delegate chronology math.
+    /** Using Joda time's PreciseDateTimeField logic directly allows much faster
+      * extraction of the fractional units of each instant when there isn't a
+      * need to delegate chronology math.
       *
       * e.g., extract the minute of the current hour.
       */
@@ -189,8 +187,7 @@ package object time {
     }
   }
 
-  /**
-    * Enrichment methods for Vec[DateTime]
+  /** Enrichment methods for Vec[DateTime]
     */
   implicit def vecTimeAccessors(vec: Vec[DateTime]): TimeAccessors[Vec[Int]] = {
     val (times, chrono: Chronology) = vec match {
@@ -202,8 +199,7 @@ package object time {
     new TimeAccessors(times, chrono, identity)
   }
 
-  /**
-    * Enrichment methods for Index[DateTime]
+  /** Enrichment methods for Index[DateTime]
     */
   implicit def indexTimeAccessors(
       ix: Index[DateTime]
@@ -224,8 +220,7 @@ package object time {
   implicit def dt2rd(dt: DateTime): RichDT = new RichDT(dt)
   implicit def rd2dt(rd: RichDT): DateTime = rd.dt
 
-  /**
-    * Provides an implicit ordering for DateTime
+  /** Provides an implicit ordering for DateTime
     */
   implicit val dtOrdering = new Ordering[DateTime] {
     def compare(x: DateTime, y: DateTime) = x.compareTo(y)
@@ -242,8 +237,7 @@ package object time {
   def weeks(i: Int) = Weeks.weeks(i)
   def days(i: Int) = Days.days(i)
 
-  /**
-    * Factory method to create an Index from a recurrence rule between two
+  /** Factory method to create an Index from a recurrence rule between two
     * dates.
     *
     * For instance:
@@ -252,9 +246,12 @@ package object time {
     *   Index.make(RRules.bizEoms, datetime(2005,1,1), datetime(2005,12,31))
     * }}}
     *
-    * @param rrule Recurrence rule to use
-    * @param start The earliest datetime on or after which to being the recurrence
-    * @param end   The latest datetime on or before which to end the recurrence
+    * @param rrule
+    *   Recurrence rule to use
+    * @param start
+    *   The earliest datetime on or after which to being the recurrence
+    * @param end
+    *   The latest datetime on or before which to end the recurrence
     */
   def make(rrule: RRule, start: DateTime, end: DateTime): Index[DateTime] = {
     implicit val ord: ORD[DateTime] =

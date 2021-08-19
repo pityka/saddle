@@ -18,21 +18,21 @@ object BinOpMacros {
     val c = weakTypeOf[C]
     val opT = weakTypeOf[OP]
     val scalarTagA = a match {
-      case t if t =:= weakTypeOf[Double]  => q"org.saddle.scalar.ScalarTagDouble"
-      case t if t =:= weakTypeOf[Int]     => q"org.saddle.scalar.ScalarTagInt"
-      case t if t =:= weakTypeOf[Long]    => q"org.saddle.scalar.ScalarTagLong"
+      case t if t =:= weakTypeOf[Double] => q"org.saddle.scalar.ScalarTagDouble"
+      case t if t =:= weakTypeOf[Int]    => q"org.saddle.scalar.ScalarTagInt"
+      case t if t =:= weakTypeOf[Long]   => q"org.saddle.scalar.ScalarTagLong"
       case t if t =:= weakTypeOf[Boolean] => q"org.saddle.scalar.ScalarTagBool"
     }
     val scalarTagB = b match {
-      case t if t =:= weakTypeOf[Double]  => q"org.saddle.scalar.ScalarTagDouble"
-      case t if t =:= weakTypeOf[Int]     => q"org.saddle.scalar.ScalarTagInt"
-      case t if t =:= weakTypeOf[Long]    => q"org.saddle.scalar.ScalarTagLong"
+      case t if t =:= weakTypeOf[Double] => q"org.saddle.scalar.ScalarTagDouble"
+      case t if t =:= weakTypeOf[Int]    => q"org.saddle.scalar.ScalarTagInt"
+      case t if t =:= weakTypeOf[Long]   => q"org.saddle.scalar.ScalarTagLong"
       case t if t =:= weakTypeOf[Boolean] => q"org.saddle.scalar.ScalarTagBool"
     }
     val scalarTagC = c match {
-      case t if t =:= weakTypeOf[Double]  => q"org.saddle.scalar.ScalarTagDouble"
-      case t if t =:= weakTypeOf[Int]     => q"org.saddle.scalar.ScalarTagInt"
-      case t if t =:= weakTypeOf[Long]    => q"org.saddle.scalar.ScalarTagLong"
+      case t if t =:= weakTypeOf[Double] => q"org.saddle.scalar.ScalarTagDouble"
+      case t if t =:= weakTypeOf[Int]    => q"org.saddle.scalar.ScalarTagInt"
+      case t if t =:= weakTypeOf[Long]   => q"org.saddle.scalar.ScalarTagLong"
       case t if t =:= weakTypeOf[Boolean] => q"org.saddle.scalar.ScalarTagBool"
     }
 
@@ -110,14 +110,14 @@ object BinOpMacros {
       }"""
 
       // all other operations follow
-      case t if t =:= weakTypeOf[Power]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[Power] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else math.pow(a, b)
       }"""
-      case t if t =:= weakTypeOf[Divide]   => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[Divide] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
@@ -131,7 +131,7 @@ object BinOpMacros {
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a * b
       }"""
-      case t if t =:= weakTypeOf[Add]      => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[Add] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
@@ -145,100 +145,100 @@ object BinOpMacros {
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a - b
       }"""
-      case t if t =:= weakTypeOf[Mod]      => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[Mod] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a % b
       }"""
-      case t if t =:= weakTypeOf[BitAnd]   => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[BitAnd] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a & b
       }"""
-      case t if t =:= weakTypeOf[BitOr]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[BitOr] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a | b
       }"""
-      case t if t =:= weakTypeOf[BitXor]   => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[BitXor] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a ^ b
       }"""
-      case t if t =:= weakTypeOf[BitShl]   => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[BitShl] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a << b
       }"""
-      case t if t =:= weakTypeOf[BitShr]   => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[BitShr] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a >> b
       }"""
-      case t if t =:= weakTypeOf[BitUShr]  => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[BitUShr] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a >>> b
       }"""
-      case t if t =:= weakTypeOf[AndOp]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[AndOp] => q"""(a:$a,b:$b) => {
         a && b
       }"""
-      case t if t =:= weakTypeOf[OrOp]     => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[OrOp] => q"""(a:$a,b:$b) => {
         a || b
       }"""
-      case t if t =:= weakTypeOf[XorOp]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[XorOp] => q"""(a:$a,b:$b) => {
         a && b || !a && !b
       }"""
-      case t if t =:= weakTypeOf[GtOp]     => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[GtOp] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a > b
       }"""
-      case t if t =:= weakTypeOf[LtOp]     => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[LtOp] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a < b
       }"""
-      case t if t =:= weakTypeOf[EqOp]     => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[EqOp] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a == b
       }"""
-      case t if t =:= weakTypeOf[NeqOp]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[NeqOp] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a != b
       }"""
-      case t if t =:= weakTypeOf[GteOp]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[GteOp] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC
         if (stA.isMissing(a) || stB.isMissing(b)) stC.missing
         else a >= b
       }"""
-      case t if t =:= weakTypeOf[LteOp]    => q"""(a:$a,b:$b) => {
+      case t if t =:= weakTypeOf[LteOp] => q"""(a:$a,b:$b) => {
         val stA = $scalarTagA
         val stB = $scalarTagB
         val stC = $scalarTagC

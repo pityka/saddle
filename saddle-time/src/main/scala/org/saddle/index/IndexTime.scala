@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.index
 
@@ -27,11 +27,13 @@ import org.saddle.vec.VecTime
 import org.saddle.time._
 import cats.kernel.Order
 
-/** A compact native int representation of posix times at millisecond resolution which
-  * conforms to and extends the interface of Index[DateTime]
+/** A compact native int representation of posix times at millisecond resolution
+  * which conforms to and extends the interface of Index[DateTime]
   *
-  * @param times An Index[Long], where each element is a millisecond timestamp
-  * @param tzone Optional time zone containing localization info
+  * @param times
+  *   An Index[Long], where each element is a millisecond timestamp
+  * @param tzone
+  *   Optional time zone containing localization info
   */
 class IndexTime(
     val times: Index[Long],
@@ -75,10 +77,11 @@ class IndexTime(
 
   protected def locator = _locator
 
-  /** Localize TimeIndex using particular time zone. Note, this does not
-    * change the values of the times; merely how they are interpreted.
+  /** Localize TimeIndex using particular time zone. Note, this does not change
+    * the values of the times; merely how they are interpreted.
     *
-    * @param tzone The time zone
+    * @param tzone
+    *   The time zone
     */
   def withZone(tzone: DateTimeZone) = new IndexTime(times, tzone)
 
@@ -182,9 +185,12 @@ object IndexTime {
     *   Index.make(RRules.bizEoms, datetime(2005,1,1), datetime(2005,12,31))
     * }}}
     *
-    * @param rrule Recurrence rule to use
-    * @param start The earliest datetime on or after which to being the recurrence
-    * @param end   The latest datetime on or before which to end the recurrence
+    * @param rrule
+    *   Recurrence rule to use
+    * @param start
+    *   The earliest datetime on or after which to being the recurrence
+    * @param end
+    *   The latest datetime on or before which to end the recurrence
     */
   def make(rrule: RRule, start: DateTime, end: DateTime): Index[DateTime] = {
     import time._

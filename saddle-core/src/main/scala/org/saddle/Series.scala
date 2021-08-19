@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle
 
@@ -25,13 +25,13 @@ import org.saddle.mat.MatCols
 import org.saddle.locator.Locator
 import org.saddle.order._
 
-/** `Series` is an immutable container for 1D homogeneous data which is indexed by a
-  * an associated sequence of keys.
+/** `Series` is an immutable container for 1D homogeneous data which is indexed
+  * by a an associated sequence of keys.
   *
   * Both the index and value data are backed by arrays.
   *
-  * `Series` is effectively an associative map whose keys have an ordering provided by
-  * the natural (provided) order of the backing array.
+  * `Series` is effectively an associative map whose keys have an ordering
+  * provided by the natural (provided) order of the backing array.
   *
   * Several element access methods are provided.
   *
@@ -43,8 +43,8 @@ import org.saddle.order._
   *   s('b') == Series('b'->2, 'b'->3)
   * }}}
   *
-  * Other ways to slice a series involve implicitly constructing an [[org.saddle.index.Slice]]
-  * object and passing it to the Series apply method:
+  * Other ways to slice a series involve implicitly constructing an
+  * [[org.saddle.index.Slice]] object and passing it to the Series apply method:
   *
   * {{{
   *   s('a'->'b') == Series('a'->1, 'b'->2, 'b'->3)
@@ -53,48 +53,54 @@ import org.saddle.order._
   *   s(*) == s
   * }}}
   *
-  * The `at` method returns an instance of a [[org.saddle.scalar.Scalar]], which behaves
-  * much like an `Option` in that it can be either an instance of [[org.saddle.scalar.NA]]
-  * or a [[org.saddle.scalar.Value]] case class:
+  * The `at` method returns an instance of a [[org.saddle.scalar.Scalar]], which
+  * behaves much like an `Option` in that it can be either an instance of
+  * [[org.saddle.scalar.NA]] or a [[org.saddle.scalar.Value]] case class:
   *
   * {{{
   *   s.at(0) == Scalar(1)
   * }}}
   *
-  * The `slice` method allows slicing the Series for locations in [i, j) irrespective of
-  * the value of the keys at those locations.
+  * The `slice` method allows slicing the Series for locations in [i, j)
+  * irrespective of the value of the keys at those locations.
   *
   * {{{
   *   s.slice(2,4) == Series('b'->3, 'c'->4)
   * }}}
   *
-  * To slice explicitly by labels, use the `sliceBy` method, which is inclusive of the
-  * key boundaries:
+  * To slice explicitly by labels, use the `sliceBy` method, which is inclusive
+  * of the key boundaries:
   *
   * {{{
   *   s.sliceBy('b','c') == Series('b'->3, 'c'->4)
   * }}}
   *
-  * The method `raw` accesses the value directly, which may reveal the underlying representation
-  * of a missing value (so be careful).
+  * The method `raw` accesses the value directly, which may reveal the
+  * underlying representation of a missing value (so be careful).
   *
   * {{{
   *   s.raw(0) == 1
   * }}}
   *
-  * `Series` may be used in arithmetic expressions which operate on two `Series` or on a
-  * `Series` and a scalar value. In the former case, the two Series will automatically
-  * align along their indexes. A few examples:
+  * `Series` may be used in arithmetic expressions which operate on two `Series`
+  * or on a `Series` and a scalar value. In the former case, the two Series will
+  * automatically align along their indexes. A few examples:
   *
   * {{{
   *   s * 2 == Series('a'->2, 'b'->4, ... )
   *   s + s.shift(1) == Series('a'->NA, 'b'->3, 'b'->5, ...)
   * }}}
   *
-  * @param values Vec backing the values in the Series
-  * @param index Index backing the keys in the Series
-  * @tparam X Type of elements in the index, for which there must be an implicit Ordering and ST
-  * @tparam T Type of elements in the values array, for which there must be an implicit ST
+  * @param values
+  *   Vec backing the values in the Series
+  * @param index
+  *   Index backing the keys in the Series
+  * @tparam X
+  *   Type of elements in the index, for which there must be an implicit
+  *   Ordering and ST
+  * @tparam T
+  *   Type of elements in the values array, for which there must be an implicit
+  *   ST
   */
 class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     val values: Vec[T],
@@ -117,22 +123,28 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   // access values by location(s)
 
   /** Access an unboxed element of a Series at a single location
-    * @param loc offset into Series
+    * @param loc
+    *   offset into Series
     */
   def raw(loc: Int): T = values.raw(loc)
 
   /** Access a boxed element of a Series at a single location
-    * @param loc offset into Series
+    * @param loc
+    *   offset into Series
     */
   def at(loc: Int): Scalar[T] = values.at(loc)
 
-  /** Access multiple locations of a Series, returning a new Series comprising those locations
-    * @param locs Array of int offsets into Series
+  /** Access multiple locations of a Series, returning a new Series comprising
+    * those locations
+    * @param locs
+    *   Array of int offsets into Series
     */
   def at(locs: Array[Int]): Series[X, T] = take(locs)
 
-  /** Access multiple locations of a Series, returning a new Series comprising those locations
-    * @param locs Sequence of Int
+  /** Access multiple locations of a Series, returning a new Series comprising
+    * those locations
+    * @param locs
+    *   Sequence of Int
     */
   def at(locs: Int*): Series[X, T] = take(locs.toArray)
 
@@ -141,15 +153,16 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   def first: Scalar[T] = values.first
 
   /** Get the first value of the Series whose key matches that provided
-    * @param key Key on which to match
+    * @param key
+    *   Key on which to match
     */
   def first(key: X): Scalar[T] = {
     val loc = index.getFirst(key)
     if (loc == -1) NA else at(loc)
   }
 
-  /** Alias for `first`. If a key exists, get the value associated with the first
-    * occurence of that key.
+  /** Alias for `first`. If a key exists, get the value associated with the
+    * first occurence of that key.
     * @return
     */
   def get(key: X): Scalar[T] = {
@@ -162,7 +175,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   def last: Scalar[T] = values.last
 
   /** Get the last value of the Series whose key matches that provided
-    * @param key Key on which to match
+    * @param key
+    *   Key on which to match
     */
   def last(key: X): Scalar[T] = {
     val loc = index.getLast(key)
@@ -172,17 +186,20 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   // access index keys by location(s)
 
   /** Access a boxed element of a Series index at a single location
-    * @param loc offset into Series
+    * @param loc
+    *   offset into Series
     */
   def keyAt(loc: Int): Scalar[X] = Scalar(index.raw(loc))
 
   /** Access a multiple locations of a Series index, returning a new Index
-    * @param locs array of int offset into Index
+    * @param locs
+    *   array of int offset into Index
     */
   def keyAt(locs: Array[Int]): Index[X] = index.take(locs)
 
   /** Access a multiple locations of a Series index, returning a new Index
-    * @param locs Sequence of int offsets into Index
+    * @param locs
+    *   Sequence of int offsets into Index
     */
   def keyAt(locs: Int*): Index[X] = index.take(locs.toArray)
 
@@ -196,22 +213,25 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   // extract values by associated key(s); ignore non-existent keys
 
-  /** Extract a Series corresponding to those keys provided. Returns a new Series
-    * whose key-value pairs maintain the original ordering.
-    * @param keys Array of keys
+  /** Extract a Series corresponding to those keys provided. Returns a new
+    * Series whose key-value pairs maintain the original ordering.
+    * @param keys
+    *   Array of keys
     */
   def apply(keys: Array[X]): Series[X, T] = take(index(keys))
   def apply(keys: Vec[X]): Series[X, T] = take(index(keys.toArray))
 
-  /** Extract a Series corresponding to those keys provided. Returns a new Series
-    * whose key-value pairs maintain the original ordering.
-    * @param keys Sequence of keys
+  /** Extract a Series corresponding to those keys provided. Returns a new
+    * Series whose key-value pairs maintain the original ordering.
+    * @param keys
+    *   Sequence of keys
     */
   def apply(keys: X*): Series[X, T] = apply(keys.toArray)
 
-  /** Extract a Series whose keys respect the Slice provided. Returns a new Series
-    * whose key-value pairs maintain the original ordering.
-    * @param slice Slice
+  /** Extract a Series whose keys respect the Slice provided. Returns a new
+    * Series whose key-value pairs maintain the original ordering.
+    * @param slice
+    *   Slice
     */
   def apply(slice: Slice[X]): Series[X, T] = sliceBy(slice)
 
@@ -219,63 +239,77 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Create a new Series whose index is the provided argument, and whose values
     * are derived from the original Series.
-    * @param newIx Index of the result series
+    * @param newIx
+    *   Index of the result series
     */
   def reindex(newIx: Index[X]): Series[X, T] = {
     val ixer = index.getIndexer(newIx)
     ixer.map(a => Series(values.take(a), newIx)) getOrElse this
   }
 
-  /** Create a new Series whose index formed of the provided argument, and whose values
-    * are derived from the original Series.
-    * @param keys Sequence of keys to be the index of the result series
+  /** Create a new Series whose index formed of the provided argument, and whose
+    * values are derived from the original Series.
+    * @param keys
+    *   Sequence of keys to be the index of the result series
     */
   def reindex(keys: X*): Series[X, T] = reindex(Index(keys.toArray))
 
   // make new index
 
-  /** Create a new Series using the current values but with the new index. Positions
-    * of the values do not change.
-    * @param newIx A new Index
-    * @tparam Y Type of elements of new Index
+  /** Create a new Series using the current values but with the new index.
+    * Positions of the values do not change.
+    * @param newIx
+    *   A new Index
+    * @tparam Y
+    *   Type of elements of new Index
     */
   def setIndex[Y: ST: ORD](newIx: Index[Y]): Series[Y, T] =
     Series(values, newIx)
 
-  /** Create a new Series whose values are the same, but whose Index has been changed
-    * to the bound [0, length - 1), as in an array.
+  /** Create a new Series whose values are the same, but whose Index has been
+    * changed to the bound [0, length - 1), as in an array.
     */
   def resetIndex: Series[Int, T] = Series(values, IndexIntRange(values.length))
 
   /** Map a function over the index, resulting in a new Series
     *
-    * @param fn The function X => Y with which to map
-    * @tparam Y Result type of index, ie Index[Y]
+    * @param fn
+    *   The function X => Y with which to map
+    * @tparam Y
+    *   Result type of index, ie Index[Y]
     */
   def mapIndex[Y: ST: ORD](fn: X => Y): Series[Y, T] =
     Series(values, index.map(fn))
 
   /** Map a function over the contents, resulting in a new Series
     *
-    * @param fn The function T => Y with which to map
-    * @tparam Y Result type of index, ie Index[Y]
+    * @param fn
+    *   The function T => Y with which to map
+    * @tparam Y
+    *   Result type of index, ie Index[Y]
     */
   def mapVec[@spec(Boolean, Int, Long, Double) Y: ST](
       fn: Vec[T] => Vec[Y]
   ): Series[X, Y] =
     Series(fn(values), index)
 
-  /** Concatenate two Series instances together whose indexes share the same type of
-    * element, and where there exists some way to join the values of the Series. For
-    * instance, Series[X, Double] `concat` Series[X, Int] will promote Int to Double as
-    * a result of the implicit existence of a Promoter[Double, Int, Double] instance.
-    * The result Index will simply be the concatenation of the two input Indexes.
+  /** Concatenate two Series instances together whose indexes share the same
+    * type of element, and where there exists some way to join the values of the
+    * Series. For instance, Series[X, Double] `concat` Series[X, Int] will
+    * promote Int to Double as a result of the implicit existence of a
+    * Promoter[Double, Int, Double] instance. The result Index will simply be
+    * the concatenation of the two input Indexes.
     *
-    * @param other  Series[X, B] to concat
-    * @param pro Implicit evidence of Promoter[A, B, C]
-    * @param md Implicit evidence of ST[C]
-    * @tparam U type of other Series Values
-    * @tparam V type of resulting Series values
+    * @param other
+    *   Series[X, B] to concat
+    * @param pro
+    *   Implicit evidence of Promoter[A, B, C]
+    * @param md
+    *   Implicit evidence of ST[C]
+    * @tparam U
+    *   type of other Series Values
+    * @tparam V
+    *   type of resulting Series values
     */
   def concat(
       other: Series[X, T]
@@ -288,10 +322,12 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   // slicing
 
-  /** Creates a view into original Series from one key up to (inclusive by default)
-    * another key. Data is not copied. Series index must be sorted.
-    * @param from Beginning offset key
-    * @param to Ending offset key
+  /** Creates a view into original Series from one key up to (inclusive by
+    * default) another key. Data is not copied. Series index must be sorted.
+    * @param from
+    *   Beginning offset key
+    * @param to
+    *   Ending offset key
     */
   def sliceBy(from: X, to: X, inclusive: Boolean = true): Series[X, T] = {
     val start = index.lsearch(from)
@@ -302,7 +338,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   /** Creates a view into original Series from one key through another key as
     * specified in the bound argument. Data is not copied. Series index must be
     * sorted.
-    * @param rng An IRange which computes the bound locations
+    * @param rng
+    *   An IRange which computes the bound locations
     */
   def sliceBy(rng: Slice[X]): Series[X, T] = {
     val (start, end) = rng(index)
@@ -311,8 +348,10 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Creates a view into original Series from one int offset until (exclusive)
     * another offset. Data is not copied.
-    * @param from Beginning offset
-    * @param until Ending offset
+    * @param from
+    *   Beginning offset
+    * @param until
+    *   Ending offset
     */
   def slice(from: Int, until: Int, stride: Int = 1): Series[X, T] = {
     Series(values.slice(from, until, stride), index.slice(from, until, stride))
@@ -320,38 +359,43 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Given int offets to take, form a new series from the keys and values found
     * at those offsets.
-    * @param locs Array of int offsets
+    * @param locs
+    *   Array of int offsets
     */
   def take(locs: Array[Int]): Series[X, T] =
     Series(values.take(locs), index.take(locs))
 
   /** Extract at most the first n elements of the Series
-    * @param n Number of elements to extract
+    * @param n
+    *   Number of elements to extract
     */
   def head(n: Int) = Series(values.head(n), index.head(n))
 
   /** Extract at most the last n elements of the Series
-    * @param n number to extract
+    * @param n
+    *   number to extract
     */
   def tail(n: Int) = Series(values.tail(n), index.tail(n))
 
   /** Shift the sequence of values relative to the index by some offset,
     * dropping those values which no longer associate with a key, and having
     * those keys which no longer associate to a value instead map to NA.
-    * @param n Number to shift
+    * @param n
+    *   Number to shift
     */
   def shift(n: Int = 1): Series[X, T] = Series(values.shift(n), index)
 
-  /** Fills NA values in series with result of a function which acts on the index of
-    * the particular NA value found
+  /** Fills NA values in series with result of a function which acts on the
+    * index of the particular NA value found
     *
-    * @param f A function X => A to be applied at NA location
+    * @param f
+    *   A function X => A to be applied at NA location
     */
   def fillNA(f: X => T): Series[X, T] =
     Series(VecImpl.seriesfillNA(index.toVec, values)(f), index)
 
-  /** Creates a Series having the same values but excluding all key/value pairs in
-    * which the value is NA.
+  /** Creates a Series having the same values but excluding all key/value pairs
+    * in which the value is NA.
     */
   def dropNA: Series[X, T] = filter(values.scalarTag.notMissing)
 
@@ -370,47 +414,55 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   // filtering
 
   /** Create a new Series that, wherever the mask Vec is true, is masked with NA
-    * @param m Mask Vec[Boolean]
+    * @param m
+    *   Mask Vec[Boolean]
     */
   def mask(m: Vec[Boolean]): Series[X, T] = Series(values.mask(m), index)
 
-  /** Create a new Series that, whenever the mask predicate function evaluates to
-    * true on a value, is masked with NA
-    * @param f Function from T to Boolean
+  /** Create a new Series that, whenever the mask predicate function evaluates
+    * to true on a value, is masked with NA
+    * @param f
+    *   Function from T to Boolean
     */
   def mask(f: T => Boolean): Series[X, T] = Series(values.mask(f), index)
 
-  /** Create a new Series that, whenever the mask predicate function evaluates to
-    * true on a key, is masked with NA
-    * @param f Function from X to Boolean
+  /** Create a new Series that, whenever the mask predicate function evaluates
+    * to true on a key, is masked with NA
+    * @param f
+    *   Function from X to Boolean
     */
   def maskIx(f: X => Boolean): Series[X, T] = mask(index.toVec.map(f))
 
   /** Return Series whose values satisfy a predicate function
-    * @param pred Predicate function from T => Boolean
+    * @param pred
+    *   Predicate function from T => Boolean
     */
   def filter(pred: T => Boolean): Series[X, T] = where(values.map(pred))
 
   /** Return Series whose index keys satisfy a predicate function
-    * @param pred Predicate function from X => Boolean
+    * @param pred
+    *   Predicate function from X => Boolean
     */
   def filterIx(pred: X => Boolean): Series[X, T] = where(index.toVec.map(pred))
 
   /** Return Series whose offets satisfy a predicate function
-    * @param pred Predicate function from Int => Boolean
+    * @param pred
+    *   Predicate function from Int => Boolean
     */
   def filterAt(pred: Int => Boolean) =
     Series(values.filterAt(pred), Index(index.toVec.filterAt(pred)))
 
-  /** Return Series whose keys and values are chosen via a
-    * Series[_, Boolean] where the latter contains a true value.
-    * @param pred Series[_, Boolean] (or Vec[Boolean] which will implicitly convert)
+  /** Return Series whose keys and values are chosen via a Series[_, Boolean]
+    * where the latter contains a true value.
+    * @param pred
+    *   Series[_, Boolean] (or Vec[Boolean] which will implicitly convert)
     */
   def where(pred: Series[_, Boolean]): Series[X, T] = where(pred.values)
 
   /** Return Series whose keys and values are chosen via a Vec[Boolean] or a
     * Series[_, Boolean] where the latter contains a true value.
-    * @param pred Series[_, Boolean] (or Vec[Boolean] which will implicitly convert)
+    * @param pred
+    *   Series[_, Boolean] (or Vec[Boolean] which will implicitly convert)
     */
   def where(pred: Vec[Boolean]): Series[X, T] = {
     val newVals = VecImpl.where(this.values)(pred.toArray)
@@ -420,27 +472,31 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   // searching
 
-  /** Search for the int offsets where the values of the Series satisfy a predicate
-    * function.
-    * @param pred Function from T to Boolean
+  /** Search for the int offsets where the values of the Series satisfy a
+    * predicate function.
+    * @param pred
+    *   Function from T to Boolean
     */
   def find(pred: T => Boolean): Vec[Int] = values.find(pred)
 
-  /** Search for the keys of the Series index whose corresponding values satisfy a
-    * predicate function.
-    * @param pred Function from T to Boolean
+  /** Search for the keys of the Series index whose corresponding values satisfy
+    * a predicate function.
+    * @param pred
+    *   Function from T to Boolean
     */
   def findKey(pred: T => Boolean): Index[X] = index.take(find(pred).toArray)
 
-  /** Find the first int offset (or -1 if none) where a value of the Series satisfies
-    * a predicate function.
-    * @param pred Function from T to Boolean
+  /** Find the first int offset (or -1 if none) where a value of the Series
+    * satisfies a predicate function.
+    * @param pred
+    *   Function from T to Boolean
     */
   def findOne(pred: T => Boolean): Int = values.findOne(pred)
 
-  /** Find the first key (or NA if none) where a value of the Series satisfies
-    * a predicate function.
-    * @param pred Function from T to Boolean
+  /** Find the first key (or NA if none) where a value of the Series satisfies a
+    * predicate function.
+    * @param pred
+    *   Function from T to Boolean
     */
   def findOneKey(pred: T => Boolean): Scalar[X] = {
     val loc = findOne(pred)
@@ -464,62 +520,79 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     }
 
   /** Returns true if the index of the Series contains the key
-    * @param key The key to check
+    * @param key
+    *   The key to check
     */
   def contains(key: X): Boolean = index.contains(key)
 
-  /** Return true if there exists some element of the Series which satisfies the predicate function
-    * @param pred Predicate function from T => Boolean
+  /** Return true if there exists some element of the Series which satisfies the
+    * predicate function
+    * @param pred
+    *   Predicate function from T => Boolean
     */
   def exists(pred: T => Boolean): Boolean = findOne(pred) != -1
 
   // manipulating
 
-  /** Map over the key-value pairs of the Series, resulting in a new Series. Applies a
-    * function to each pair of values in the series.
+  /** Map over the key-value pairs of the Series, resulting in a new Series.
+    * Applies a function to each pair of values in the series.
     *
-    * @param f Function from (X,T) to (Y,U)
-    * @tparam Y The type of the resulting index
-    * @tparam U The type of the resulting values
+    * @param f
+    *   Function from (X,T) to (Y,U)
+    * @tparam Y
+    *   The type of the resulting index
+    * @tparam U
+    *   The type of the resulting values
     */
   def map[Y: ST: ORD, U: ST](f: ((X, T)) => (Y, U)): Series[Y, U] =
     Series(toSeq.map(f): _*)
 
-  /** Map and then flatten over the key-value pairs of the Series, resulting in a new Series.
+  /** Map and then flatten over the key-value pairs of the Series, resulting in
+    * a new Series.
     */
   def flatMap[Y: ST: ORD, U: ST](
       f: ((X, T)) => Iterable[(Y, U)]
   ): Series[Y, U] = Series(toSeq.flatMap(f): _*)
 
-  /** Map over the values of the Series, resulting in a new Series. Applies a function
-    * to each (non-na) value in the series, returning a new series whose index remains
-    * the same.
+  /** Map over the values of the Series, resulting in a new Series. Applies a
+    * function to each (non-na) value in the series, returning a new series
+    * whose index remains the same.
     *
-    * @param f Function from T to U
-    * @tparam U The type of the resulting values
+    * @param f
+    *   Function from T to U
+    * @tparam U
+    *   The type of the resulting values
     */
   def mapValues[U: ST](f: T => U): Series[X, U] = Series(values.map(f), index)
 
-  /** Left scan over the values of the Series, as in scala collections library, but
-    * with the resulting series having the same index. Note, differs from standard left
-    * scan because initial value is not retained in result.
+  /** Left scan over the values of the Series, as in scala collections library,
+    * but with the resulting series having the same index. Note, differs from
+    * standard left scan because initial value is not retained in result.
     *
-    * @param init Initial value of scan
-    * @param f Function taking (U, T) to U
-    * @tparam U Result type of function
+    * @param init
+    *   Initial value of scan
+    * @param f
+    *   Function taking (U, T) to U
+    * @tparam U
+    *   Result type of function
     */
   def scanLeft[U: ST](init: U)(f: (U, T) => U) =
     Series(values.scanLeft(init)(f), index)
 
   // safe cast operation
 
-  /** Join two series on their index and apply a function to each paired value; when either
-    * value is NA, the result of the function is forced to be NA.
-    * @param other Other series
-    * @param how The type of join to effect
-    * @param f The function to apply
-    * @tparam U Type of other series values
-    * @tparam V The result type of the function
+  /** Join two series on their index and apply a function to each paired value;
+    * when either value is NA, the result of the function is forced to be NA.
+    * @param other
+    *   Other series
+    * @param how
+    *   The type of join to effect
+    * @param f
+    *   The function to apply
+    * @tparam U
+    *   Type of other series values
+    * @tparam V
+    *   The result type of the function
     */
   def joinMap[U: ST, V: ST](other: Series[X, U], how: JoinType = LeftJoin)(
       f: (T, U) => V
@@ -528,13 +601,16 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     Series(VecImpl.zipMap(l.values, r.values)(f), l.index)
   }
 
-  /** Create a new Series whose key/value entries are sorted according to the values of the Series.
-    * @param ev Implicit evidence of ordering for T
+  /** Create a new Series whose key/value entries are sorted according to the
+    * values of the Series.
+    * @param ev
+    *   Implicit evidence of ordering for T
     */
   def sorted(implicit ev: ORD[T]): Series[X, T] =
     take(array.argsort(values.toArray))
 
-  /** Create a new Series whose key/value entries are sorted according to the keys (index values).
+  /** Create a new Series whose key/value entries are sorted according to the
+    * keys (index values).
     */
   def sortedIx: Series[X, T] =
     if (index.isMonotonic) this else take(index.argSort)
@@ -543,36 +619,46 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     */
   def reversed: Series[X, T] = Series(values.reversed, index.reversed)
 
-  /** Construct a [[org.saddle.groupby.SeriesGrouper]] with which further computations, such
-    * as combine or transform, may be performed. The groups are constructed from the keys of
-    * the index, with each unique key corresponding to a group.
+  /** Construct a [[org.saddle.groupby.SeriesGrouper]] with which further
+    * computations, such as combine or transform, may be performed. The groups
+    * are constructed from the keys of the index, with each unique key
+    * corresponding to a group.
     */
   def groupBy: SeriesGrouper[X, X, T] = SeriesGrouper(this)
 
-  /** Construct a [[org.saddle.groupby.SeriesGrouper]] with which further computations, such
-    * as combine or transform, may be performed. The groups are constructed from the result
-    * of the function applied to the keys of the Index; each unique result of calling the
-    * function on elements of the Index corresponds to a group.
-    * @param fn Function from X => Y
-    * @tparam Y Type of function codomain
+  /** Construct a [[org.saddle.groupby.SeriesGrouper]] with which further
+    * computations, such as combine or transform, may be performed. The groups
+    * are constructed from the result of the function applied to the keys of the
+    * Index; each unique result of calling the function on elements of the Index
+    * corresponds to a group.
+    * @param fn
+    *   Function from X => Y
+    * @tparam Y
+    *   Type of function codomain
     */
   def groupBy[Y: ST: ORD](fn: X => Y): SeriesGrouper[Y, X, T] =
     SeriesGrouper(this.index.map(fn), this)
 
-  /** Construct a [[org.saddle.groupby.SeriesGrouper]] with which further computations, such
-    * as combine or transform, may be performed. The groups are constructed from the keys of
-    * the provided index, with each unique key corresponding to a group.
-    * @param ix Index with which to perform grouping
-    * @tparam Y Type of elements of ix
+  /** Construct a [[org.saddle.groupby.SeriesGrouper]] with which further
+    * computations, such as combine or transform, may be performed. The groups
+    * are constructed from the keys of the provided index, with each unique key
+    * corresponding to a group.
+    * @param ix
+    *   Index with which to perform grouping
+    * @tparam Y
+    *   Type of elements of ix
     */
   def groupBy[Y: ST: ORD](ix: Index[Y]): SeriesGrouper[Y, X, T] =
     SeriesGrouper(ix, this)
 
-  /** Produce a Series whose values are the result of executing a function on a sliding window of
-    * the data.
-    * @param winSz Window size
-    * @param f Function Series[X, T] => B to operate on sliding window
-    * @tparam B Result type of function
+  /** Produce a Series whose values are the result of executing a function on a
+    * sliding window of the data.
+    * @param winSz
+    *   Window size
+    * @param f
+    *   Function Series[X, T] => B to operate on sliding window
+    * @tparam B
+    *   Result type of function
     */
   def rolling[B: ST](winSz: Int, f: Series[X, T] => B): Series[X, B] = {
     if (winSz <= 0)
@@ -591,22 +677,24 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   }
 
   /** Split Series into two series at position i
-    * @param i Position at which to split Series
+    * @param i
+    *   Position at which to split Series
     */
   def splitAt(i: Int): (Series[X, T], Series[X, T]) =
     (slice(0, i), slice(i, length))
 
   /** Split Series into two series at key x
-    * @param k Key at which to split Series
+    * @param k
+    *   Key at which to split Series
     */
   def splitBy(k: X): (Series[X, T], Series[X, T]) = splitAt(index.lsearch(k))
 
   // ----------------------------
   // reshaping
 
-  /** Pivot splits an index of tuple keys of arity N into a row index having arity N-1 and a
-    * column index, producing a 2D Frame whose values are from the original Series as indexed
-    * by the corresponding keys.
+  /** Pivot splits an index of tuple keys of arity N into a row index having
+    * arity N-1 and a column index, producing a 2D Frame whose values are from
+    * the original Series as indexed by the corresponding keys.
     *
     * To recover the original Series, the melt method of Frame may be used.
     *
@@ -616,10 +704,10 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     *   Series(Vec(1,2,3,4), Index(('a',1),('a',2),('b',1),('b',2)))
     *   res0: org.saddle.Series[(Char, Int),Int] =
     *   [4 x 1]
-    *    a 1 => 1
-    *      2 => 2
-    *    b 1 => 3
-    *      2 => 4
+    *     a 1 => 1
+    *       2 => 2
+    *     b 1 => 3
+    *       2 => 4
     * }}}
     *
     * the pivot command does the following:
@@ -628,19 +716,26 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     *   res0.pivot
     *   res1: org.saddle.Frame[Char,Int,Int] =
     *   [2 x 2]
-    *          1  2
+    *           1  2
     *         -- --
-    *    a =>  1  2
-    *    b =>  3  4
+    *     a =>  1  2
+    *     b =>  3  4
     * }}}
     *
-    * @param split Implicit evidence of a Splitter for the index
-    * @param ord1 Implicit evidence of an ordering for O1
-    * @param ord2 Implicit evidence of an ordering for O2
-    * @param m1 Implicit evidence of a ST for O1
-    * @param m2 Implicit evidence of a ST for O2
-    * @tparam O1 Output row index
-    * @tparam O2 Output col index
+    * @param split
+    *   Implicit evidence of a Splitter for the index
+    * @param ord1
+    *   Implicit evidence of an ordering for O1
+    * @param ord2
+    *   Implicit evidence of an ordering for O2
+    * @param m1
+    *   Implicit evidence of a ST for O1
+    * @param m2
+    *   Implicit evidence of a ST for O2
+    * @tparam O1
+    *   Output row index
+    * @tparam O2
+    *   Output col index
     */
   def pivot[O1, O2](implicit
       split: Splitter[X, O1, O2],
@@ -690,11 +785,14 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     *   - Inner [[org.saddle.index.InnerJoin]]
     *   - Outer [[org.saddle.index.OuterJoin]]
     *
-    * The result is a Frame whose index is the result of the join, and whose column
-    * index is {0, 1}, and whose values are sourced from the original Series.
+    * The result is a Frame whose index is the result of the join, and whose
+    * column index is {0, 1}, and whose values are sourced from the original
+    * Series.
     *
-    * @param other Series to join with
-    * @param how How to perform the join
+    * @param other
+    *   Series to join with
+    * @param how
+    *   How to perform the join
     */
   def join(other: Series[X, T], how: JoinType = LeftJoin): Frame[X, Int, T] = {
     val indexer = this.index.join(other.index, how)
@@ -703,13 +801,16 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     Frame(MatCols(lseq, rseq), indexer.index, Index(Array(0, 1)))
   }
 
-  /** Perform a (heterogeneous) join with another Series[X, _] according to its index.
-    * The values of the other Series do not need to have the same type. The result is
-    * a Frame whose index is the result of the join, and whose column index is {0, 1},
-    * and whose values are sourced from the original Series.
+  /** Perform a (heterogeneous) join with another Series[X, _] according to its
+    * index. The values of the other Series do not need to have the same type.
+    * The result is a Frame whose index is the result of the join, and whose
+    * column index is {0, 1}, and whose values are sourced from the original
+    * Series.
     *
-    * @param other Series to join with
-    * @param how How to perform the join
+    * @param other
+    *   Series to join with
+    * @param how
+    *   How to perform the join
     */
   def hjoin(
       other: Series[X, _],
@@ -721,14 +822,17 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     Panel(Seq(lft, rgt), indexer.index, IndexIntRange(2))
   }
 
-  /** Perform a join with a Frame[X, _, T] according to its row index. The values of
-    * the other Frame must have the same type as the Series. The result is a Frame
-    * whose row index is the result of the join, and whose column index is [0, N),
-    * corresponding to the number of columns of the frame plus 1, and whose values
-    * are sourced from the original Series and Frame.
+  /** Perform a join with a Frame[X, _, T] according to its row index. The
+    * values of the other Frame must have the same type as the Series. The
+    * result is a Frame whose row index is the result of the join, and whose
+    * column index is [0, N), corresponding to the number of columns of the
+    * frame plus 1, and whose values are sourced from the original Series and
+    * Frame.
     *
-    * @param other Frame[X, Any, T]
-    * @param how How to perform the join
+    * @param other
+    *   Frame[X, Any, T]
+    * @param how
+    *   How to perform the join
     */
   def joinF(
       other: Frame[X, _, T],
@@ -746,8 +850,10 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   /** Aligns this series with another series, returning the two series aligned
     * to each others indexes according to the the provided parameter
     *
-    * @param other Other series to align with
-    * @param how How to perform the join on the indexes
+    * @param other
+    *   Other series to align with
+    * @param how
+    *   How to perform the join on the indexes
     */
   def align[U: ST](
       other: Series[X, U],
@@ -764,7 +870,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Fill series NA's with values using a secondary series
     *
-    * @param proxy The series containing the values to use
+    * @param proxy
+    *   The series containing the values to use
     */
   def proxyWith(
       proxy: Series[X, T]
@@ -856,7 +963,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   }
 
   /** Pretty-printer for Series, which simply outputs the result of stringify.
-    * @param len Number of elements to display
+    * @param len
+    *   Number of elements to display
     */
   def print(len: Int = 10, stream: OutputStream = System.out) = {
     stream.write(stringify(len).getBytes)
@@ -893,9 +1001,12 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Converts to a single-column Frame
     *
-    * @param s Series to promote
-    * @tparam X Type of Index
-    * @tparam T Type of values Vec
+    * @param s
+    *   Series to promote
+    * @tparam X
+    *   Type of Index
+    * @tparam T
+    *   Type of values Vec
     */
   def toFrame: Frame[X, Int, T] = Frame(this)
 
@@ -927,24 +1038,31 @@ object Series extends BinOpSeries {
 
   /** Enrich Boolean Series with logic methods; see definition of companion
     * object of [[org.saddle.Vec]].
-    * @param v Series[_, Boolean]
+    * @param v
+    *   Series[_, Boolean]
     */
   // implicit def serToBoolLogic(v: Series[_, Boolean]) = Vec.vecToBoolLogic(v.toVec)
 
   // factory methods
 
   /** Factory method to create an empty Series
-    * @tparam X Type of keys
-    * @tparam T Type of values
+    * @tparam X
+    *   Type of keys
+    * @tparam T
+    *   Type of values
     */
   def empty[X: ST: ORD, @spec(Int, Long, Double) T: ST] =
     new Series[X, T](Vec.empty[T], Index.empty[X])
 
   /** Factory method to create a Series from a Vec and an Index
-    * @param values a Vec of values
-    * @param index an index of keys
-    * @tparam X Type of keys
-    * @tparam T Type of values
+    * @param values
+    *   a Vec of values
+    * @param index
+    *   an index of keys
+    * @tparam X
+    *   Type of keys
+    * @tparam T
+    *   Type of values
     */
   def apply[X: ST: ORD, @spec(Int, Long, Double) T: ST](
       values: Vec[T],
@@ -953,10 +1071,14 @@ object Series extends BinOpSeries {
     new Series[X, T](values, index)
 
   /** Factory method to create a Series from a Vec and an Index
-    * @param index an index of keys
-    * @param values a Vec of values
-    * @tparam X Type of keys
-    * @tparam T Type of values
+    * @param index
+    *   an index of keys
+    * @param values
+    *   a Vec of values
+    * @tparam X
+    *   Type of keys
+    * @tparam T
+    *   Type of values
     */
   def apply[X: ST: ORD, @spec(Int, Long, Double) T: ST](
       index: Index[X],
@@ -965,23 +1087,31 @@ object Series extends BinOpSeries {
     new Series[X, T](values, index)
 
   /** Factory method to create a Series from a Vec; keys are integer offsets
-    * @param values a Vec of values
-    * @tparam T Type of values
+    * @param values
+    *   a Vec of values
+    * @tparam T
+    *   Type of values
     */
   def apply[@spec(Int, Long, Double) T: ST](values: Vec[T]): Series[Int, T] =
     new Series[Int, T](values, IndexIntRange(values.length))
 
-  /** Factory method to create a Series from a sequence of values; keys are integer offsets
-    * @param values a sequence of values
-    * @tparam T Type of values
+  /** Factory method to create a Series from a sequence of values; keys are
+    * integer offsets
+    * @param values
+    *   a sequence of values
+    * @tparam T
+    *   Type of values
     */
   def apply[@spec(Int, Long, Double) T: ST](values: T*): Series[Int, T] =
     new Series[Int, T](Vec(values: _*), IndexIntRange(values.length))
 
   /** Factory method to create a Series from a sequence of key/value pairs
-    * @param values a sequence of (key -> value) tuples
-    * @tparam T Type of value
-    * @tparam X Type of key
+    * @param values
+    *   a sequence of (key -> value) tuples
+    * @tparam T
+    *   Type of value
+    * @tparam X
+    *   Type of key
     */
   def apply[X: ST: ORD, @spec(Int, Long, Double) T: ST](
       values: (X, T)*

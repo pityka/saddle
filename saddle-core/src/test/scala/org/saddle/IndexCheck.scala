@@ -1,18 +1,17 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
- **/
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  */
 package org.saddle
 
 import org.specs2.mutable.Specification
@@ -96,8 +95,12 @@ class IndexCheck extends Specification with ScalaCheck {
         val cr = ix.lsearch(elem)
 
         (cl <= cr) and
-          (Index((ix.toSeq.take(cl) :+ elem) ++ ix.toSeq.drop(cl): _*).isMonotonic must_== true) and
-          (Index((ix.toSeq.take(cr) :+ elem) ++ ix.toSeq.drop(cr): _*).isMonotonic must_== true)
+          (Index(
+            (ix.toSeq.take(cl) :+ elem) ++ ix.toSeq.drop(cl): _*
+          ).isMonotonic must_== true) and
+          (Index(
+            (ix.toSeq.take(cr) :+ elem) ++ ix.toSeq.drop(cr): _*
+          ).isMonotonic must_== true)
       }
     }
 
@@ -107,9 +110,8 @@ class IndexCheck extends Specification with ScalaCheck {
         v1 <- Gen.listOfN(n, Gen.choose(0, 1000))
         v2 <- Gen.listOfN(n, Gen.choose(0, 1000))
       } yield (v1, v2)
-      forAll(gen) {
-        case (v1, v2) =>
-          Index.make((v1.toVector, v2.toVector)).toSeq must_== (v1 zip v2)
+      forAll(gen) { case (v1, v2) =>
+        Index.make((v1.toVector, v2.toVector)).toSeq must_== (v1 zip v2)
       }
     }
 
@@ -119,9 +121,8 @@ class IndexCheck extends Specification with ScalaCheck {
         v1 <- Gen.listOfN(n, Gen.choose(0, 1000))
         v2 <- Gen.listOfN(n, Gen.choose(0, 1000))
       } yield (v1, v2)
-      forAll(gen) {
-        case (v1, v2) =>
-          Index.make((v1.toVec, v2.toVec)).toSeq must_== (v1 zip v2)
+      forAll(gen) { case (v1, v2) =>
+        Index.make((v1.toVec, v2.toVec)).toSeq must_== (v1 zip v2)
       }
     }
 
@@ -132,9 +133,8 @@ class IndexCheck extends Specification with ScalaCheck {
       } yield v1.distinct
       forAll(gen) { indices =>
         val hashmap = indices.zipWithIndex.toMap
-        indices.zipWithIndex.forall {
-          case (ix, idx) =>
-            hashmap(ix) == idx
+        indices.zipWithIndex.forall { case (ix, idx) =>
+          hashmap(ix) == idx
         } must_== true
       }
     }

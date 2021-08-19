@@ -54,14 +54,22 @@ package object csv {
 
   /** Parse CSV files according to RFC 4180
     *
-    * @param cols The column offsets to parse (if empty, parse everything)
-    * @param fieldSeparator The separator; default is comma
-    * @param quoteChar Within matching quotes, treat separChar as normal char;
-    *                  default is double-quote
-    * @param recordSeparator Record separator (line ending)
-    * @param source The csv data source to operate on
-    * @param maxLines The maximum number of records that will be read from the file. Includes header.
-    * @param header indicates whether the first line should be set aside
+    * @param cols
+    *   The column offsets to parse (if empty, parse everything)
+    * @param fieldSeparator
+    *   The separator; default is comma
+    * @param quoteChar
+    *   Within matching quotes, treat separChar as normal char; default is
+    *   double-quote
+    * @param recordSeparator
+    *   Record separator (line ending)
+    * @param source
+    *   The csv data source to operate on
+    * @param maxLines
+    *   The maximum number of records that will be read from the file. Includes
+    *   header.
+    * @param header
+    *   indicates whether the first line should be set aside
     */
   def parseFromIteratorCallback(
       source: Iterator[CharBuffer],

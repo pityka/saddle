@@ -1,31 +1,33 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.index
 
 import org.saddle.{Index, ST, ORD, Vec}
 import org.saddle.order._
 
-/** An IndexMaker takes some input of type I and returns an Index whose
-  * elements are of type O.
+/** An IndexMaker takes some input of type I and returns an Index whose elements
+  * are of type O.
   *
-  * The basic use case is to take a Tuple,,N,, of Seq-like instances and
-  * return an Index whose entries are instances of Tuple,,N,, corresponding
-  * to the elements of the original Seqs.
+  * The basic use case is to take a Tuple,,N,, of Seq-like instances and return
+  * an Index whose entries are instances of Tuple,,N,, corresponding to the
+  * elements of the original Seqs.
   *
-  * @tparam I Type of input with which to make index
-  * @tparam O Type of contents of output index
+  * @tparam I
+  *   Type of input with which to make index
+  * @tparam O
+  *   Type of contents of output index
   */
 trait IndexMaker[I, O] {
   def apply(in: I): Index[O]

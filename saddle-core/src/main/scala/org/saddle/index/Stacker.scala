@@ -1,26 +1,26 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.index
 
 import org.saddle.{ST, ORD, Index}
 import org.saddle.order._
 
-/** A Stacker operates on two input Index instances and produces a new output Index
-  * whose entries are drawn from the Cartesian product of the elements of the original
-  * indexes, and whose ordering is likewise specified by the original orderings. For
-  * instance,
+/** A Stacker operates on two input Index instances and produces a new output
+  * Index whose entries are drawn from the Cartesian product of the elements of
+  * the original indexes, and whose ordering is likewise specified by the
+  * original orderings. For instance,
   *
   * {{{
   *   Index[Int](1,2) stack Index[Char]('a','b')
@@ -44,15 +44,20 @@ import org.saddle.order._
   *   Index[(Char, Int, Char)](('x',1,'a'), ('x',1,'b'), ('y',2,'a'), ('y',2,'b'))
   * }}}
   *
-  * @tparam I Type of the elements of the left index
-  * @tparam J Type of the elements of the right index
-  * @tparam O Type of the elements of the output index
+  * @tparam I
+  *   Type of the elements of the left index
+  * @tparam J
+  *   Type of the elements of the right index
+  * @tparam O
+  *   Type of the elements of the output index
   */
 trait Stacker[I, J, O] {
 
   /** Take two indexes and stack them, producing a third index
-    * @param ix1 Left index
-    * @param ix2 Right index
+    * @param ix1
+    *   Left index
+    * @param ix2
+    *   Right index
     */
   def apply(ix1: Index[I], ix2: Index[J]): Index[O]
 
@@ -209,9 +214,9 @@ object Stacker extends StackerLowPriority {
     }
 }
 
-/** Implicit instance of Stacker for two indexes of arbitrary type. The priority is
-  * lower than the Stacker instances in the Stacker companion object because we want
-  * to specialize the case when the left index is composed of Tuples.
+/** Implicit instance of Stacker for two indexes of arbitrary type. The priority
+  * is lower than the Stacker instances in the Stacker companion object because
+  * we want to specialize the case when the left index is composed of Tuples.
   */
 trait StackerLowPriority {
   implicit def stack2nd[T1: ORD, T2: ORD] =

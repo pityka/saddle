@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle
 
@@ -27,8 +27,10 @@ object Vec {
 
   /** Factory method to create a Vec from an array of elements
     *
-    * @param arr Array
-    * @tparam T Type of elements in array
+    * @param arr
+    *   Array
+    * @tparam T
+    *   Type of elements in array
     */
   def apply[@spec(Boolean, Int, Long, Double) T](arr: Array[T])(implicit
       st: ST[T]
@@ -41,15 +43,18 @@ object Vec {
     *   Vec(Seq(1,2,3) : _*)
     * }}}
     *
-    * @param values Sequence
-    * @tparam T Type of elements in Vec
+    * @param values
+    *   Sequence
+    * @tparam T
+    *   Type of elements in Vec
     */
   def apply[@spec(Boolean, Int, Long, Double) T: ST](values: T*): Vec[T] =
     Vec(values.toArray)
 
   /** Creates an empty Vec of type T.
     *
-    * @tparam T Vec type parameter
+    * @tparam T
+    *   Vec type parameter
     */
   def empty[T: ST]: Vec[T] = Vec(Array.empty[T])
 
@@ -90,9 +95,9 @@ object Vec {
   *   v(1, 2) == Vec(2,3)
   * }}}
   *
-  * The `at` method returns an instance of a [[org.saddle.scalar.Scalar]], which behaves
-  * much like an `Option` in that it can be either an instance of [[org.saddle.scalar.NA]]
-  * or a [[org.saddle.scalar.Value]] case class:
+  * The `at` method returns an instance of a [[org.saddle.scalar.Scalar]], which
+  * behaves much like an `Option` in that it can be either an instance of
+  * [[org.saddle.scalar.NA]] or a [[org.saddle.scalar.Value]] case class:
   *
   * {{{
   *   Vec[Int](1,2,3,na).at(0) == Scalar(1)
@@ -105,22 +110,23 @@ object Vec {
   *   Vec(1d,2,3).raw(0) == 1d
   * }}}
   *
-  * `Vec` may be used in arithemetic expressions which operate on two `Vec`s or on a
-  * `Vec` and a scalar value. A few examples:
+  * `Vec` may be used in arithemetic expressions which operate on two `Vec`s or
+  * on a `Vec` and a scalar value. A few examples:
   *
   * {{{
   *   Vec(1,2,3,4) + Vec(2,3,4,5) == Vec(3,5,7,9)
   *   Vec(1,2,3,4) * 2 == Vec(2,4,6,8)
   * }}}
   *
-  * Note, Vec is implicitly convertible to an array for convenience; this could be
-  * abused to mutate the contents of the Vec. Try to avoid this!
+  * Note, Vec is implicitly convertible to an array for convenience; this could
+  * be abused to mutate the contents of the Vec. Try to avoid this!
   *
-  * @tparam T Type of elements within the Vec
+  * @tparam T
+  *   Type of elements within the Vec
   */
 trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
 
-  /** The number of elements in the container                                                  F
+  /** The number of elements in the container F
     */
   def length: Int
 
@@ -128,9 +134,9 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
     */
   def scalarTag: ScalarTag[T]
 
-  /** Set to true when the vec is shifted over the backing array
-    * false iff the backing array is a contiguous sequence of the elements of this Vec
-    * false iff 0 until length map (raw) == the backing array
+  /** Set to true when the vec is shifted over the backing array false iff the
+    * backing array is a contiguous sequence of the elements of this Vec false
+    * iff 0 until length map (raw) == the backing array
     */
   def needsCopy: Boolean
 
@@ -138,21 +144,23 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   // get values
 
   /** Access a boxed element of a Vec[A] at a single location
-    * @param loc offset into Vec
+    * @param loc
+    *   offset into Vec
     */
   def at(loc: Int): Scalar[T]
 
-  /** Access an unboxed element of a Vec[A] at a single location
-    * Same as apply
-    * @param loc offset into Vec
+  /** Access an unboxed element of a Vec[A] at a single location Same as apply
+    * @param loc
+    *   offset into Vec
     */
   def raw(loc: Int): T
 
-  /** Access an unboxed element of a Vec[A] at a single location
-    * Same as raw
-    * @param loc offset into Vec
+  /** Access an unboxed element of a Vec[A] at a single location Same as raw
+    * @param loc
+    *   offset into Vec
     *
-    * @param locs locations at which to slice
+    * @param locs
+    *   locations at which to slice
     */
   def apply(loc: Int): T
 
@@ -171,12 +179,14 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   def contents: Array[T]
 
   /** Return first n elements
-    * @param n Number of elements to access
+    * @param n
+    *   Number of elements to access
     */
   def head(n: Int): Vec[T]
 
   /** Return last n elements
-    * @param n Number of elements to access
+    * @param n
+    *   Number of elements to access
     */
   def tail(n: Int): Vec[T]
 
@@ -191,7 +201,8 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
     *   v.take(0,1) == v(0,1)
     * }}}
     *
-    * @param locs Location of elements to take
+    * @param locs
+    *   Location of elements to take
     */
   def take(locs: Array[Int]): Vec[T]
 
@@ -199,10 +210,10 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
 
   /** Slice a Vec at a bound of locations, e.g.
     *
-    * val v = Vec(1,2,3,4,5)
-    * v(1->3) == Vec(2,3,4)
+    * val v = Vec(1,2,3,4,5) v(1->3) == Vec(2,3,4)
     *
-    * @param rng evaluates to IRange
+    * @param rng
+    *   evaluates to IRange
     */
   def take(rng: Slice[Int]): Vec[T]
 
@@ -222,37 +233,45 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
     */
   def dropRight(i: Int): Vec[T]
 
-  /** The complement of the take operation; slice out
-    * elements NOT specified in list.
+  /** The complement of the take operation; slice out elements NOT specified in
+    * list.
     *
-    * @param locs Location of elements not to take
+    * @param locs
+    *   Location of elements not to take
     */
   def without(locs: Array[Int]): Vec[T]
 
-  /** Returns Vec whose locations corresponding to true entries in the
-    * boolean input mask vector are set to NA
+  /** Returns Vec whose locations corresponding to true entries in the boolean
+    * input mask vector are set to NA
     *
-    * @param m Mask vector of Vec[Boolean]
+    * @param m
+    *   Mask vector of Vec[Boolean]
     */
   def mask(m: Vec[Boolean]): Vec[T]
 
-  /** Returns Vec whose locations are NA where the result of the
-    * provided function evaluates to true
+  /** Returns Vec whose locations are NA where the result of the provided
+    * function evaluates to true
     *
-    * @param f A function taking an element and returning a Boolean
+    * @param f
+    *   A function taking an element and returning a Boolean
     */
   def mask(f: T => Boolean): Vec[T]
 
   /** Concatenate two Vec instances together, where there exists some way to
-    * join the type of elements. For instance, Vec[Double] concat Vec[Int]
-    * will promote Int to Double as a result of the implicit existence of an
-    * instance of Promoter[Double, Int, Double]
+    * join the type of elements. For instance, Vec[Double] concat Vec[Int] will
+    * promote Int to Double as a result of the implicit existence of an instance
+    * of Promoter[Double, Int, Double]
     *
-    * @param v  Vec[B] to concat
-    * @param wd Implicit evidence of Promoter[A, B, C]
-    * @param mc Implicit evidence of ST[C]
-    * @tparam B type of other Vec elements
-    * @tparam C type of resulting Vec elements
+    * @param v
+    *   Vec[B] to concat
+    * @param wd
+    *   Implicit evidence of Promoter[A, B, C]
+    * @param mc
+    *   Implicit evidence of ST[C]
+    * @tparam B
+    *   type of other Vec elements
+    * @tparam C
+    *   type of resulting Vec elements
     */
   def concat(v: Vec[T]): Vec[T]
 
@@ -263,7 +282,8 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   // Must implement specialized methods independently of specialized class, workaround to
   // https://issues.scala-lang.org/browse/SI-5281
 
-  /** Map a function over the elements of the Vec, as in scala collections library
+  /** Map a function over the elements of the Vec, as in scala collections
+    * library
     */
   def map[@spec(Boolean, Int, Long, Double) B: ST](f: T => B): Vec[B]
 
@@ -285,33 +305,41 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
       f: (B, T) => B
   ): Vec[B]
 
-  /** Filtered left fold over the elements of the Vec, as in scala collections library
+  /** Filtered left fold over the elements of the Vec, as in scala collections
+    * library
     */
   def filterFoldLeft[@spec(Boolean, Int, Long, Double) B: ST](
       pred: T => Boolean
   )(init: B)(f: (B, T) => B): B
 
-  /** Filtered left scan over elements of the Vec, as in scala collections library
+  /** Filtered left scan over elements of the Vec, as in scala collections
+    * library
     */
   def filterScanLeft[@spec(Boolean, Int, Long, Double) B: ST](
       pred: T => Boolean
   )(init: B)(f: (B, T) => B): Vec[B]
 
-  /** Left fold that folds only while the test condition holds true. As soon as the condition function yields
-    * false, the fold returns.
+  /** Left fold that folds only while the test condition holds true. As soon as
+    * the condition function yields false, the fold returns.
     *
-    * @param cond Function whose signature is the same as the fold function, except that it evaluates to Boolean
+    * @param cond
+    *   Function whose signature is the same as the fold function, except that
+    *   it evaluates to Boolean
     */
   def foldLeftWhile[@spec(Boolean, Int, Long, Double) B: ST](init: B)(
       f: (B, T) => B
   )(cond: (B, T) => Boolean): B
 
-  /** Zips Vec with another Vec and applies a function to the paired elements. If either of the pair is NA, the
-    * result is forced to NA.
-    * @param other Vec[B]
-    * @param f Function (A, B) => C
-    * @tparam B Parameter of other Vec
-    * @tparam C Result of function
+  /** Zips Vec with another Vec and applies a function to the paired elements.
+    * If either of the pair is NA, the result is forced to NA.
+    * @param other
+    *   Vec[B]
+    * @param f
+    *   Function (A, B) => C
+    * @tparam B
+    *   Parameter of other Vec
+    * @tparam C
+    *   Result of function
     */
   def zipMap[
       @spec(Int, Long, Double) B: ST,
@@ -331,62 +359,81 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   def hasNA: Boolean
 
   /** Execute a (side-effecting) operation on each (non-NA) element in the vec
-    * @param op operation to execute
+    * @param op
+    *   operation to execute
     */
   def foreach(op: T => Unit): Unit
 
-  /** Execute a (side-effecting) operation on each (non-NA) element in vec which satisfies
-    * some predicate.
-    * @param pred Function A => Boolean
-    * @param op Side-effecting function
+  /** Execute a (side-effecting) operation on each (non-NA) element in vec which
+    * satisfies some predicate.
+    * @param pred
+    *   Function A => Boolean
+    * @param op
+    *   Side-effecting function
     */
   def forall(pred: T => Boolean)(op: T => Unit): Unit
 
   /** Return Vec of integer locations (offsets) which satisfy some predicate
-    * @param pred Predicate function from A => Boolean
+    * @param pred
+    *   Predicate function from A => Boolean
     */
   def find(pred: T => Boolean): Vec[Int]
 
-  /** Return first integer location which satisfies some predicate, or -1 if there is none
-    * @param pred Predicate function from A => Boolean
+  /** Return first integer location which satisfies some predicate, or -1 if
+    * there is none
+    * @param pred
+    *   Predicate function from A => Boolean
     */
   def findOne(pred: T => Boolean): Int
 
-  /** Return true if there exists some element of the Vec which satisfies the predicate function
-    * @param pred Predicate function from A => Boolean
+  /** Return true if there exists some element of the Vec which satisfies the
+    * predicate function
+    * @param pred
+    *   Predicate function from A => Boolean
     */
   def exists(pred: T => Boolean): Boolean
 
   /** Return Vec whose elements satisfy a predicate function
-    * @param pred Predicate function from A => Boolean
+    * @param pred
+    *   Predicate function from A => Boolean
     */
   def filter(pred: T => Boolean): Vec[T]
 
   /** Return vec whose offets satisfy a predicate function
-    * @param pred Predicate function from Int => Boolean
+    * @param pred
+    *   Predicate function from Int => Boolean
     */
   def filterAt(pred: Int => Boolean): Vec[T]
 
-  /** Return Vec whose elements are selected via a Vec of booleans (where that Vec holds the value true)
-    * @param pred Predicate vector: Vec[Boolean]
+  /** Return Vec whose elements are selected via a Vec of booleans (where that
+    * Vec holds the value true)
+    * @param pred
+    *   Predicate vector: Vec[Boolean]
     */
   def where(pred: Vec[Boolean]): Vec[T]
 
-  /** Return Vec whose elements are selected via negating a Vec of booleans (where that Vec holds the value true)
-    * @param pred Predicate vector: Vec[Boolean]
+  /** Return Vec whose elements are selected via negating a Vec of booleans
+    * (where that Vec holds the value true)
+    * @param pred
+    *   Predicate vector: Vec[Boolean]
     */
   def whereNot(pred: Vec[Boolean]): Vec[T]
 
-  /** Return Vec whose elements are selected via negating a Vec of booleans (where that Vec holds the value true)
-    * @param pred Predicate vector: Vec[Boolean]
+  /** Return Vec whose elements are selected via negating a Vec of booleans
+    * (where that Vec holds the value true)
+    * @param pred
+    *   Predicate vector: Vec[Boolean]
     */
   def partition(pred: Vec[Boolean]): (Vec[T], Vec[T])
 
-  /** Produce a Vec whose entries are the result of executing a function on a sliding window of the
-    * data.
-    * @param winSz Window size
-    * @param f Function Vec[A] => B to operate on sliding window
-    * @tparam B Result type of function
+  /** Produce a Vec whose entries are the result of executing a function on a
+    * sliding window of the data.
+    * @param winSz
+    *   Window size
+    * @param f
+    *   Function Vec[A] => B to operate on sliding window
+    * @tparam B
+    *   Result type of function
     */
   def rolling[@spec(Boolean, Int, Long, Double) B: ST](
       winSz: Int,
@@ -394,7 +441,8 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   ): Vec[B]
 
   /** Yield a Vec whose elements have been sorted (in ascending order)
-    * @param ev evidence of Ordering[A]
+    * @param ev
+    *   evidence of Ordering[A]
     */
   def sorted(implicit ev: ORD[T], st: ST[T]): Vec[T]
 
@@ -405,48 +453,59 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   /** Creates a view into original vector from an offset up to, but excluding,
     * another offset. Data is not copied.
     *
-    * @param from Beginning offset
-    * @param until One past ending offset
-    * @param stride Increment within slice
+    * @param from
+    *   Beginning offset
+    * @param until
+    *   One past ending offset
+    * @param stride
+    *   Increment within slice
     */
   def slice(from: Int, until: Int, stride: Int = 1): Vec[T]
 
-  /** Creates a view into original vector at arbitrary indexes. Data is not copied.
+  /** Creates a view into original vector at arbitrary indexes. Data is not
+    * copied.
     *
-    * @param offsets1 indexes into the original array
+    * @param offsets1
+    *   indexes into the original array
     */
   def view(offsets1: Array[Int]): Vec[T]
 
   /** Creates a view into original vector from an offset up to, and including,
     * another offset. Data is not copied.
     *
-    * @param from Beginning offset
-    * @param to Ending offset
-    * @param stride Increment within slice
+    * @param from
+    *   Beginning offset
+    * @param to
+    *   Ending offset
+    * @param stride
+    *   Increment within slice
     */
   def sliceBy(from: Int, to: Int, stride: Int = 1): Vec[T]
 
   /** Split Vec into two Vecs at position i
-    * @param i Position at which to split Vec
+    * @param i
+    *   Position at which to split Vec
     */
   def splitAt(i: Int): (Vec[T], Vec[T])
 
-  /** Creates a view into original Vec, but shifted so that n
-    * values at the beginning or end of the Vec are NA's. Data
-    * is not copied.
+  /** Creates a view into original Vec, but shifted so that n values at the
+    * beginning or end of the Vec are NA's. Data is not copied.
     *
-    * @param n Number of offsets to shift
+    * @param n
+    *   Number of offsets to shift
     */
   def shift(n: Int): Vec[T]
 
-  /** Fills NA values in vector with result of a function which acts on the index of
-    * the particular NA value found
+  /** Fills NA values in vector with result of a function which acts on the
+    * index of the particular NA value found
     *
-    * @param f A function from Int => A; yields value for NA value at ith position
+    * @param f
+    *   A function from Int => A; yields value for NA value at ith position
     */
   def fillNA(f: Int => T): Vec[T]
 
-  /** Converts Vec to an indexed sequence (default implementation is immutable.Vector)
+  /** Converts Vec to an indexed sequence (default implementation is
+    * immutable.Vector)
     */
   def toSeq: IndexedSeq[T]
 
@@ -469,11 +528,13 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
     */
   def prod(implicit na: NUM[T], st: ST[T]): T
 
-  /** Integer offset of the minimum element of the Vec, if one exists, or else -1
+  /** Integer offset of the minimum element of the Vec, if one exists, or else
+    * -1
     */
   def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int
 
-  /** Integer offset of the minimum element of the Vec, if one exists, or else -1
+  /** Integer offset of the minimum element of the Vec, if one exists, or else
+    * -1
     */
   def argmax(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int
 
@@ -486,16 +547,20 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   def mean(implicit na: NUM[T]): Double
 
   /** Return the percentile of the values at a particular threshold, ignoring NA
-    * @param tile The percentile in [0, 100] at which to compute the threshold
-    * @param method The percentile method; one of [[org.saddle.PctMethod]]
+    * @param tile
+    *   The percentile in [0, 100] at which to compute the threshold
+    * @param method
+    *   The percentile method; one of [[org.saddle.PctMethod]]
     */
   def percentile(tile: Double, method: PctMethod = PctMethod.NIST)(implicit
       na: NUM[T]
   ): Double
 
   /** Return a Vec of ranks corresponding to a Vec of numeric values.
-    * @param tie Method with which to break ties; a [[org.saddle.RankTie]]
-    * @param ascending Boolean, default true, whether to give lower values larger rank
+    * @param tie
+    *   Method with which to break ties; a [[org.saddle.RankTie]]
+    * @param ascending
+    *   Boolean, default true, whether to give lower values larger rank
     */
   def rank(tie: RankTie = RankTie.Avg, ascending: Boolean = true)(implicit
       na: NUM[T]
@@ -515,19 +580,21 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
   private[saddle] def toDoubleArray(implicit na: NUM[T]): Array[Double]
 
   /** Creates a string representation of Vec
-    * @param len Max number of elements to include
+    * @param len
+    *   Max number of elements to include
     */
   def stringify(len: Int): String
 
   /** Pretty-printer for Vec, which simply outputs the result of stringify.
-    * @param len Number of elements to display
+    * @param len
+    *   Number of elements to display
     */
   def print(len: Int, stream: OutputStream): Unit
 
-  /** Rounds elements in the vec (which must be numeric) to
-    * a significance level
+  /** Rounds elements in the vec (which must be numeric) to a significance level
     *
-    * @param sig Significance level to round to (e.g., 2 decimal places)
+    * @param sig
+    *   Significance level to round to (e.g., 2 decimal places)
     */
   def roundTo(sig: Int = 2)(implicit ev: NUM[T]): Vec[Double]
 
@@ -557,15 +624,13 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
 
   /** Returns a new Vec with the values at `offset` set to `value
     *
-    * Copies before mutating.
-    * Ignores invalid offsets in the array
+    * Copies before mutating. Ignores invalid offsets in the array
     */
   def updated(offsets: Array[Int], value: T): Vec[T]
 
   /** Reshapes the Vec into a Mat
     *
-    * May not copy. The new Mat instance may share data
-    * with this Vec.
+    * May not copy. The new Mat instance may share data with this Vec.
     */
   def reshape(rows: Int, cols: Int): Mat[T]
 

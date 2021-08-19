@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.csv
 
@@ -132,14 +132,22 @@ object CsvParser {
 
   /** Parse CSV files according to RFC 4180
     *
-    * @param cols The column offsets to parse (if empty, parse everything)
-    * @param fieldSeparator The separator; default is comma
-    * @param quoteChar Within matching quotes, treat separChar as normal char;
-    *                  default is double-quote
-    * @param recordSeparator Record separator (line ending)
-    * @param source The csv data source to operate on
-    * @param maxLines The maximum number of records that will be read from the file. Includes header.
-    * @param header indicates whether the first line should be set aside
+    * @param cols
+    *   The column offsets to parse (if empty, parse everything)
+    * @param fieldSeparator
+    *   The separator; default is comma
+    * @param quoteChar
+    *   Within matching quotes, treat separChar as normal char; default is
+    *   double-quote
+    * @param recordSeparator
+    *   Record separator (line ending)
+    * @param source
+    *   The csv data source to operate on
+    * @param maxLines
+    *   The maximum number of records that will be read from the file. Includes
+    *   header.
+    * @param header
+    *   indicates whether the first line should be set aside
     */
   def parseFromIterator[@spec(Int, Double, Long, Float) T](
       source: Iterator[CharBuffer],

@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.time
 
@@ -22,39 +22,39 @@ import com.google.ical.iter.RecurrenceIteratorFactory
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory
 import scala.collection.compat._
 
-/** Wrapper of a RFC 2445 RRULE or EXRULE as implemented in the google
-  * rfc2445 java library.
+/** Wrapper of a RFC 2445 RRULE or EXRULE as implemented in the google rfc2445
+  * java library.
   *
-  * For _lots_ of examples of recurrence rule constructions, see the
-  * following: http://recurrance.sourceforge.net/
+  * For _lots_ of examples of recurrence rule constructions, see the following:
+  * http://recurrance.sourceforge.net/
   *
   * To create, start by invoking RRule(frequency), e.g.
   *
-  *   RRule(DAILY)
+  * RRule(DAILY)
   *
   * Use setters to construct the rule you want. For instance:
   *
-  *   val rule = RRule(DAILY) byWeekDay(TU, TH) withCount(3)
+  * val rule = RRule(DAILY) byWeekDay(TU, TH) withCount(3)
   *
   * Finally, attach a start date as follows, to get a DateTime iterator:
   *
-  *   val iter = rule from datetime(2007,1,1)
+  * val iter = rule from datetime(2007,1,1)
   *
-  * By default, the times created will be in LOCAL time; however, you may
-  * attach a different time zone (eg, UTC).
+  * By default, the times created will be in LOCAL time; however, you may attach
+  * a different time zone (eg, UTC).
   *
   * Also, you may join rules or add exceptions via the join and except
   * functions. Eg,
   *
-  *   val rules = RRule(DAILY) byWeekDay(TU, TH) join { RRule(DAILY) byWeekDay(MO) }
-  *   val dates = rules from datetime(2006,12,31) take(5) toList
+  * val rules = RRule(DAILY) byWeekDay(TU, TH) join { RRule(DAILY) byWeekDay(MO)
+  * } val dates = rules from datetime(2006,12,31) take(5) toList
   *
   * Please note:
   *
   * Some of the javadoc descriptions of RFC2445 fields are courtesy of python
   * dateutil 2.1:
-  *  -- http://labix.org/python-dateutil
-  *  -- https://pypi.python.org/pypi/python-dateutil
+  * -- http://labix.org/python-dateutil
+  * -- https://pypi.python.org/pypi/python-dateutil
   */
 case class RRule private (
     freq: Frequency,
@@ -133,13 +133,15 @@ case class RRule private (
 
   // setters, makes for a nice DSL
 
-  /** The week start day. Must be one of the MO, TU, ... constants specifying the first day of the week.
-    * This will affect recurrences based on weekly periods.
+  /** The week start day. Must be one of the MO, TU, ... constants specifying
+    * the first day of the week. This will affect recurrences based on weekly
+    * periods.
     */
   def withWkSt(w: Weekday) = copy(wkst = Some(w))
 
-  /** The interval between each freq iteration. For example, when using YEARLY, an interval of 2 means once
-    * every two years, but with HOURLY, it means once every two hours. The default interval is 1.
+  /** The interval between each freq iteration. For example, when using YEARLY,
+    * an interval of 2 means once every two years, but with HOURLY, it means
+    * once every two hours. The default interval is 1.
     */
   def withInterval(i: Int) = copy(interval = i)
 
@@ -151,63 +153,75 @@ case class RRule private (
     */
   def withUntil(d: DateTime) = copy(until = Some(d))
 
-  /** The bySetPos specifies a value or list of values which correspond to the nth occurrence(s)
-    * within the set of events specified by the rule. Valid values are +/-1 to +/-366. It MUST be
-    * used in conjunction with another BYxxx rule, and is used to restrict the occurrences valid
-    * within the rule.
+  /** The bySetPos specifies a value or list of values which correspond to the
+    * nth occurrence(s) within the set of events specified by the rule. Valid
+    * values are +/-1 to +/-366. It MUST be used in conjunction with another
+    * BYxxx rule, and is used to restrict the occurrences valid within the rule.
     */
   def bySetPos(i: Int*) = copy(bysetpos = i.toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the months valid in the recurrence.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the months valid in the recurrence.
     */
   def byMonth(m: Int*) = copy(bymonth = m.toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the month days valid in the recurrence.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the month days valid in the recurrence.
     */
   def byMonthDay(d: Int*) = copy(bymonthday = d.toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the year days valid in the recurrence.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the year days valid in the recurrence.
     */
   def byYearDay(d: Int*) = copy(byyearday = d.toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the week numbers valid in the recurrence.
-    * Week numbers have the meaning described in ISO8601, that is, the first week of the year is that containing at least
-    * four days of the new year.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the week numbers valid in the recurrence. Week numbers have the meaning
+    * described in ISO8601, that is, the first week of the year is that
+    * containing at least four days of the new year.
     */
   def byWeekNo(w: Int*) = copy(byweekno = w.toList)
 
-  /** If given, it must be either a Weekday (eg MO), a or a sequence of these constants. When given, these variables
-    * will define the weekdays valid in the recurrence. It's also possible to use an argument n for the weekday instances,
-    * which will signify the nth occurrence of this weekday in the period. For example, with MONTHLY, or with YEARLY and
-    * BYMONTH, using FR(+1) in byweekday will specify the first friday of the month where the recurrence happens. Notice
-    * that in the RFC documentation, this is specified as BYDAY, but was renamed to avoid the ambiguity of that keyword.
+  /** If given, it must be either a Weekday (eg MO), a or a sequence of these
+    * constants. When given, these variables will define the weekdays valid in
+    * the recurrence. It's also possible to use an argument n for the weekday
+    * instances, which will signify the nth occurrence of this weekday in the
+    * period. For example, with MONTHLY, or with YEARLY and BYMONTH, using
+    * FR(+1) in byweekday will specify the first friday of the month where the
+    * recurrence happens. Notice that in the RFC documentation, this is
+    * specified as BYDAY, but was renamed to avoid the ambiguity of that
+    * keyword.
     */
   def byWeekDay[T](d: T*)(implicit conv: T => WeekdayNum) =
     copy(byday = d.map(conv).toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the hours valid in the recurrence.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the hours valid in the recurrence.
     */
   def byHour(h: Int*) = copy(byhour = h.toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the minutes valid in the recurrence.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the minutes valid in the recurrence.
     */
   def byMinute(m: Int*) = copy(byminute = m.toList)
 
-  /** If given, it must be either an integer, or a sequence of integers, meaning the minutes valid in the recurrence.
+  /** If given, it must be either an integer, or a sequence of integers, meaning
+    * the minutes valid in the recurrence.
     */
   def bySecond(s: Int*) = copy(bysecond = s.toList)
 
-  /** If given, it determines which time zone the recurrence date/times will be generated in.
+  /** If given, it determines which time zone the recurrence date/times will be
+    * generated in.
     */
   def inZone(tz: DateTimeZone) = copy(inzone = tz)
 
   /** Syntactic sugar to get the nth occurrence; allows user to write, e.g.
     *
-    *   val x = weeklyOn(FR) counting 3 from datetime(2013, 1, 1)
+    * val x = weeklyOn(FR) counting 3 from datetime(2013, 1, 1)
     *
     * to get the third Friday in January 2013. With a negative number, e.g.
     *
-    *   val x = weeklyOn(FR) counting -3 from datetime(2013, 1, 1)
+    * val x = weeklyOn(FR) counting -3 from datetime(2013, 1, 1)
     *
     * you would get the third occurrence counting back from Jan 1, 2013.
     *
@@ -249,20 +263,22 @@ case class RRule private (
     }
   }
 
-  /** Join with another RRule, and optionally specify a start date. If a start date is not specified,
-    * it will utilize the start date provided when the function 'from' is applied.
+  /** Join with another RRule, and optionally specify a start date. If a start
+    * date is not specified, it will utilize the start date provided when the
+    * function 'from' is applied.
     */
   def join(rrule: RRule, from: Option[DateTime] = None): RRule =
     copy(joins = rrule -> from :: this.joins)
 
-  /** Exclude another RRule, and optionally specify a start date. If a start date is not specified,
-    * it will utilize the start date provided when the function 'from' is applied.
+  /** Exclude another RRule, and optionally specify a start date. If a start
+    * date is not specified, it will utilize the start date provided when the
+    * function 'from' is applied.
     */
   def except(rrule: RRule, from: Option[DateTime] = None): RRule =
     copy(excepts = rrule -> from :: this.excepts)
 
-  /** Generate an iterator of DateTime instances based on the current RRule instance starting on or after the
-    * provided DateTime instance.
+  /** Generate an iterator of DateTime instances based on the current RRule
+    * instance starting on or after the provided DateTime instance.
     */
   def from(dt: DateTime): Iterator[DateTime] = {
     val riter = RecurrenceIteratorFactory.createRecurrenceIterator(

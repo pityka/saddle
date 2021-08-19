@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.mat
 
@@ -21,10 +21,13 @@ import org.saddle.Mat
   */
 object MatMath {
 
-  /** Yields covariance matrix from input matrix whose columns are variable observations
+  /** Yields covariance matrix from input matrix whose columns are variable
+    * observations
     *
-    * @param mat Input matrix of observations, with a variable per column
-    * @param corr If true, return correlation rather than covariance
+    * @param mat
+    *   Input matrix of observations, with a variable per column
+    * @param corr
+    *   If true, return correlation rather than covariance
     */
   def cov(mat: Mat[Double], corr: Boolean = false): Mat[Double] = {
     // we do cov calc on columns; but as rows for efficiency
@@ -69,7 +72,8 @@ object MatMath {
   }
 
   /** Return a matrix whose rows are demeaned
-    * @param mat The matrix to demean
+    * @param mat
+    *   The matrix to demean
     */
   def demeaned(mat: Mat[Double]): Mat[Double] = {
     val data: Array[Double] = mat.contents
@@ -149,8 +153,8 @@ object MatMath {
       ab / (count - 1)
   }
 
-  /** Efficient block-based non-square matrix transpose that is sensitive to cache line
-    * effects (destructive to out matrix)
+  /** Efficient block-based non-square matrix transpose that is sensitive to
+    * cache line effects (destructive to out matrix)
     */
   private[saddle] def blockTranspose[@spec(Int, Long, Double) S](
       inR: Int,

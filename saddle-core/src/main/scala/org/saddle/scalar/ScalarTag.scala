@@ -1,16 +1,16 @@
 /** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
   */
 package org.saddle.scalar
 
@@ -23,9 +23,10 @@ import org.saddle.Buffer
 import scala.collection.compat._
 import immutable.ArraySeq
 
-/** Typeclass definition for scalar tags. A ScalarTag contains important meta-data regarding
-  * a scalar type, including how to instantiate a Buffer/Vec/Mat/Index of that type, as well
-  * as an array. Often implicitly required when dealing with objects in Saddle
+/** Typeclass definition for scalar tags. A ScalarTag contains important
+  * meta-data regarding a scalar type, including how to instantiate a
+  * Buffer/Vec/Mat/Index of that type, as well as an array. Often implicitly
+  * required when dealing with objects in Saddle
   */
 trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
     extends ClassTag[T]
@@ -156,8 +157,8 @@ trait SpecializedFactory[@spec(Boolean, Int, Long, Float, Double) T] {
     }
   }
 
-  /** Can override this default construction methodology to avoid the toArray call if you
-    * don't want to extract elements that way.
+  /** Can override this default construction methodology to avoid the toArray
+    * call if you don't want to extract elements that way.
     */
   protected def altMatConstructor(r: Int, c: Int, arr: Array[Vec[T]])(implicit
       st: ST[T]

@@ -1,22 +1,20 @@
-/**
-  * Copyright (c) 2013 Saddle Development Team
+/** Copyright (c) 2013 Saddle Development Team
   *
-  * Licensed under the Apache License, Version 2.0 (the "License");
-  * you may not use this file except in compliance with the License.
-  * You may obtain a copy of the License at
+  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+  * use this file except in compliance with the License. You may obtain a copy
+  * of the License at
   *
-  *     http://www.apache.org/licenses/LICENSE-2.0
+  * http://www.apache.org/licenses/LICENSE-2.0
   *
   * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
-  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  * See the License for the specific language governing permissions and
-  * limitations under the License.
- **/
+  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+  * License for the specific language governing permissions and limitations
+  * under the License.
+  */
 package org.saddle.time
 
-/**
-  * Enumeration of weekdays for utilizing with an RRule
+/** Enumeration of weekdays for utilizing with an RRule
   */
 sealed trait Weekday { this: Weekday =>
   protected[time] def toICal: com.google.ical.values.Weekday = this match {
@@ -29,8 +27,7 @@ sealed trait Weekday { this: Weekday =>
     case SA => com.google.ical.values.Weekday.SA
   }
 
-  /**
-    * Create a WeekdayNum instance: e.g., MO(1) or TU(-2)
+  /** Create a WeekdayNum instance: e.g., MO(1) or TU(-2)
     */
   def apply(i: Int): WeekdayNum = WeekdayNum(i, this)
 }
@@ -38,8 +35,7 @@ sealed trait Weekday { this: Weekday =>
 object Weekday {
   import scala.language.implicitConversions
 
-  /**
-    * Allow for implicit Weekday => WeekdayNum conversion: e.g., MO => MO(0)
+  /** Allow for implicit Weekday => WeekdayNum conversion: e.g., MO => MO(0)
     */
   implicit def w2wn(w: Weekday) = WeekdayNum(0, w)
 }
@@ -52,8 +48,7 @@ case object TH extends Weekday
 case object FR extends Weekday
 case object SA extends Weekday
 
-/**
-  * Weekday + Offset, for utilizing with an RRule
+/** Weekday + Offset, for utilizing with an RRule
   */
 case class WeekdayNum(n: Int, d: Weekday) {
   assert(n <= 53 && n >= -53, "n must be in [-53, 53]")
