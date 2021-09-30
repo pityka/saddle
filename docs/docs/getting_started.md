@@ -11,7 +11,7 @@ libraryDependencies += "io.github.pityka" % "saddle-core" % "@VERSION@"
 libraryDependencies += "io.github.pityka" % "saddle-ops-inlined" % "@VERSION@"
 // Linear algebra interface to BLAS
 libraryDependencies += "io.github.pityka" % "saddle-linalg" % "@VERSION@"
-// Binary representation of data fames and matrices
+// Binary representation of data frames and matrices
 libraryDependencies += "io.github.pityka" % "saddle-binary" % "@VERSION@"
 // Circe Encoder and Decoder instances
 libraryDependencies += "io.github.pityka" % "saddle-circe" % "@VERSION@"
