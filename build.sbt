@@ -1,10 +1,10 @@
 import com.typesafe.tools.mima.core._
 
 lazy val scalaTestVersion = "3.2.10"
-lazy val scalaVersionInBuild = "2.13.6"
+lazy val scalaVersionInBuild = "2.13.7"
 
 lazy val commonSettings = Seq(
-  crossScalaVersions := Seq("2.13.6", "2.12.15"),
+  crossScalaVersions := Seq("2.13.7", "2.12.15"),
   scalaVersion := scalaVersionInBuild,
   parallelExecution in Test := false,
   scalacOptions ++= Seq(
@@ -137,7 +137,7 @@ lazy val inlinedOpsMacroImpl = project
   .in(file("saddle-ops-inlined-macroimpl"))
   .settings(commonSettings: _*)
   .settings(
-    crossScalaVersions := Seq("2.13.6", "2.12.15"),
+    crossScalaVersions := Seq("2.13.7", "2.12.15"),
     name := "saddle-ops-inlined-macroimpl",
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-reflect" % scalaVersion.value
@@ -148,7 +148,7 @@ lazy val inlinedOps = project
   .in(file("saddle-ops-inlined"))
   .settings(commonSettings: _*)
   .settings(
-    crossScalaVersions := Seq("2.13.6", "2.12.15"),
+    crossScalaVersions := Seq("2.13.7", "2.12.15"),
     name := "saddle-ops-inlined",
     libraryDependencies ++= specs
   )
