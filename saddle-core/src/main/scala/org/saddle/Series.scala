@@ -937,8 +937,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
           val fmt = "%" + l + "s"
           val res = if (i == vls.length - 1 || prevRowLabels(i) != v) {
             resetRowLabels(i + 1)
-            v.formatted(fmt)
-          } else "".formatted(fmt)
+            v.format(fmt)
+          } else "".format(fmt)
           prevRowLabels(i) = v
           res
         }

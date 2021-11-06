@@ -359,7 +359,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     * @tparam U
     *   Type of elements of result index
     */
-  def dropLevel[U, _](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
+  def dropLevel[U](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
 
   /** Given this index whose elements have arity N and another index of arity 1,
     * form a result index whose entries are tuples of arity N+1 reflecting the
@@ -571,7 +571,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
       def createRow(r: Int) = {
         val lst =
           for ((l, v) <- (vlens zip sm.strList(raw(r))))
-            yield v.formatted("%" + l + "s")
+            yield v.format("%" + l + "s")
         lst.mkString(" ") + "\n"
       }
 
