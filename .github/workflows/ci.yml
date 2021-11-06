@@ -8,8 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v1
-    - uses: olafurpg/setup-scala@v10
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v2
+      with:
+      distribution: temurin
+      java-version: 8
     - uses: actions/setup-node@v1
     - name: Compile 2.13
       run: sbt -J-Xmx3000m clean test docs/mdoc coreJVM/mimaReportBinaryIssues linalg/mimaReportBinaryIssues 
