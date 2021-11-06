@@ -18,9 +18,13 @@ package org.saddle
   */
 package object util {
 
-  @inline final def dividePositiveRoundUp(a: Int, b: Int) = {
+  @inline final def dividePositiveRoundUp(a: Int, b: Int) : Int = {
     val d = a / b
     if (a == b * d) d else d + 1
+  }
+  @inline final def dividePositiveRoundUp(a: Long, b: Long) : Long = {
+    val d = a / b
+    if (a == b * d) d else d + 1L
   }
 
   /** Creates a string out of ''count'' number of elements extracted from

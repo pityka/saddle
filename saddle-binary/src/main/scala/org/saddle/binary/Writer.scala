@@ -103,54 +103,60 @@ object Writer {
     case other           => Left(s"Type $other not supported.")
   }
 
-  def put[@specialized(Double, Long, Int, Float, Byte) T: ST](
+  private def put[@specialized(Double, Long, Int, Float, Byte) T: ST](
+      startOffset: Int,
       t: Array[T],
       bb: ByteBuffer
   ) = implicitly[ST[T]] match {
     case ScalarTagDouble =>
       Right {
-        var i = 0
+        var i = startOffset
         val n = t.length
-        while (i < n) {
+        while (i < n && bb.hasRemaining()) {
           bb.putDouble(t(i))
           i += 1
         }
+        i - startOffset
       }
     case ScalarTagInt =>
       Right {
-        var i = 0
+        var i = startOffset
         val n = t.length
-        while (i < n) {
+        while (i < n && bb.hasRemaining()) {
           bb.putInt(t(i).asInstanceOf[Int])
           i += 1
         }
+        i - startOffset
       }
     case ScalarTagFloat =>
       Right {
-        var i = 0
+        var i = startOffset
         val n = t.length
-        while (i < n) {
+        while (i < n && bb.hasRemaining()) {
           bb.putFloat(t(i).asInstanceOf[Float])
           i += 1
         }
+        i - startOffset
       }
     case ScalarTagLong =>
       Right {
-        var i = 0
+        var i = startOffset
         val n = t.length
-        while (i < n) {
+        while (i < n && bb.hasRemaining()) {
           bb.putLong(t(i).asInstanceOf[Long])
           i += 1
         }
+        i - startOffset
       }
     case ScalarTagByte =>
       Right {
-        var i = 0
+        var i = startOffset
         val n = t.length
-        while (i < n) {
+        while (i < n && bb.hasRemaining()) {
           bb.put(t(i).asInstanceOf[Byte])
           i += 1
         }
+        i
       }
     case other => Left(s"Type $other not supported.")
   }
@@ -168,7 +174,7 @@ object Writer {
           val bb = ByteBuffer
             .allocate(row.length * width)
             .order(ByteOrder.LITTLE_ENDIAN)
-          put(row.toArray, bb)
+          put(0, row.toArray, bb)
           writeFully(bb, channel)
         }
       }
@@ -196,7 +202,7 @@ object Writer {
           val bb = ByteBuffer
             .allocate(col.length * width)
             .order(ByteOrder.LITTLE_ENDIAN)
-          put(col.toArray, bb)
+          put(0, col.toArray, bb)
           writeFully(bb, channel)
         }
       }
@@ -216,8 +222,36 @@ object Writer {
         bb.position(header.length)
 
         val ar = mat.toArray
-        put(ar, bb)
+        put(0, ar, bb)
         result
+      }
+    }
+  }
+  def writeMatIntoArrays[T: ST](
+      mat: Mat[T],
+      maxArrayLength: Long = 2147483544
+  ): Either[String, IndexedSeq[Array[Byte]]] = {
+    val header = createHeader(createMatDescriptor(mat))
+    header.flatMap { header =>
+      width[T].map { width =>
+        val ar = mat.toArray
+        val totalLength: Long =
+          width.toLong * ar.length
+        var i = 0
+        val numArrays =
+          org.saddle.util.dividePositiveRoundUp(totalLength, maxArrayLength)
+        header +: (0L until numArrays).map { arrayIdx =>
+          val offset = arrayIdx * maxArrayLength
+          val length = math.min(maxArrayLength, totalLength - offset).toInt
+          val result =
+            Array.ofDim[Byte](length)
+
+          val bb = ByteBuffer.wrap(result).order(ByteOrder.LITTLE_ENDIAN)
+
+          val usedElements = put(i, ar, bb).toOption.get
+          i += usedElements
+          result
+        }
       }
     }
   }
@@ -236,7 +270,7 @@ object Writer {
         bb.position(header.length)
 
         frame.values.foreach { col =>
-          put(col.toArray, bb)
+          put(0, col.toArray, bb).toOption.get
         }
         result
       }

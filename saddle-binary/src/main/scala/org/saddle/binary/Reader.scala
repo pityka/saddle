@@ -196,15 +196,22 @@ object Reader {
     }
   }
 
-  class ByteChannel(src: ByteBuffer) extends ReadableByteChannel {
+  private class ByteChannel(srcs: IndexedSeq[ByteBuffer]) extends ReadableByteChannel {
+
+    var i = 0
+    var src = srcs(i)
     def read(dst: ByteBuffer) = {
       val n1 = dst.remaining
       val n2 = src.remaining
       val m = math.min(n1, n2)
-      val l = src.limit
+      val l = src.limit()
       src.limit(src.position() + m)
       dst.put(src)
       src.limit(l)
+      if (!src.hasRemaining() && i < srcs.size - 1) {
+        i += 1
+        src = srcs(i)
+      }
       m
     }
     def isOpen(): Boolean = true
@@ -214,10 +221,14 @@ object Reader {
   def readFrameFromArray[T: ST](
       array: Array[Byte]
   ): Either[String, Frame[String, String, T]] =
-    readFrameFromChannel(new ByteChannel(ByteBuffer.wrap(array)))
+    readFrameFromChannel(new ByteChannel(Vector(ByteBuffer.wrap(array))))
 
+  def readMatFromArrays[T: ST](
+      arrays: IndexedSeq[Array[Byte]]
+  ): Either[String, Mat[T]] =
+    readMatFromChannel(new ByteChannel(arrays.map(array => ByteBuffer.wrap(array))))
   def readMatFromArray[T: ST](
       array: Array[Byte]
   ): Either[String, Mat[T]] =
-    readMatFromChannel(new ByteChannel(ByteBuffer.wrap(array)))
+    readMatFromArrays(Vector(array))
 }
