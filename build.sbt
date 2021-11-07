@@ -80,8 +80,12 @@ lazy val commonSettings = Seq(
       "org.saddle.Vec.zipMapIdx"
     ),
     ProblemFilters.exclude[MissingClassProblem]("org.saddle.ops.macroImpl.*"),
-    ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.binary.Reader#ByteChannel.this"),
-    ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.put")
+    ProblemFilters.exclude[IncompatibleMethTypeProblem](
+      "org.saddle.binary.Reader#ByteChannel.this"
+    ),
+    ProblemFilters.exclude[DirectMissingMethodProblem](
+      "org.saddle.binary.Writer.put"
+    )
   )
 )
 
@@ -112,8 +116,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %%% "scala-collection-compat" % "2.5.0",
       "org.typelevel" %%% "cats-core" % "2.6.1",
-      "org.specs2" %%% "specs2-core" % "4.13.0" % "test",
-      "org.specs2" %%% "specs2-scalacheck" % "4.13.0" % "test"
+      "org.specs2" %%% "specs2-core" % "4.9.4" % "test", // scala-steward:off
+      "org.specs2" %%% "specs2-scalacheck" % "4.9.4" % "test" // scala-steward:off
     )
   )
   .dependsOn(spire, io)
@@ -230,7 +234,7 @@ lazy val circe = crossProject(JSPlatform, JVMPlatform)
     fork := false,
     libraryDependencies ++= Seq(
       "io.circe" %%% "circe-core" % "0.14.1",
-      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+      "org.scalatest" %%% "scalatest" % "3.2.9" % "test" // scala-steward:off
     )
   )
   .dependsOn(core)
@@ -254,7 +258,7 @@ lazy val jsoniter = crossProject(JSPlatform, JVMPlatform)
       "com.github.plokhotnyuk.jsoniter-scala" %%% "jsoniter-scala-core" % "2.11.1",
       "com.github.plokhotnyuk.jsoniter-scala" %%% "jsoniter-scala-macros" % "2.11.1" % "compile-internal",
       "com.github.plokhotnyuk.jsoniter-scala" %% "jsoniter-scala-macros" % "2.11.1" % "test",
-      "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
+      "org.scalatest" %%% "scalatest" % "3.2.9" % "test" // scala-steward:off
     )
   )
   .dependsOn(core)
