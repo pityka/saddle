@@ -21,7 +21,7 @@ jobs:
       - name: Publish
         run: |
           git ls-remote --get-url origin
-          sbt -J-Xmx3000m test coreJVM/mimaReportBinaryIssues linalg/mimaReportBinaryIssues ci-release
+          sbt -J-Xmx3000m test versionCheck ci-release
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
           PGP_SECRET: ${{ secrets.PGP_SECRET }}
