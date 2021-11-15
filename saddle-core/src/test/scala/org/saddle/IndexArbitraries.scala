@@ -27,6 +27,24 @@ object IndexArbitraries {
       lst <- Gen.listOfN(l, Gen.chooseNum(0, l))
     } yield lst.toIndex
 
+  def indexLongWithDups: Gen[Index[Long]] =
+    for {
+      l <- Gen.choose(0, 20)
+      lst <- Gen.listOfN(l, Gen.chooseNum(0, l))
+    } yield lst.toIndex.map(_.toLong)
+
+  def indexDoubleWithDups: Gen[Index[Double]] =
+    for {
+      l <- Gen.choose(0, 20)
+      lst <- Gen.listOfN(l, Gen.chooseNum(0, l))
+    } yield lst.toIndex.map(_.toDouble)
+
+  def indexBoolWithDups: Gen[Index[Boolean]] =
+    for {
+      l <- Gen.choose(0, 20)
+      lst <- Gen.listOfN(l, Gen.chooseNum(0, l))
+    } yield lst.toIndex.map(_ > 10)
+
   def indexIntNoDups: Gen[Index[Int]] =
     for {
       l <- Gen.choose(0, 20)

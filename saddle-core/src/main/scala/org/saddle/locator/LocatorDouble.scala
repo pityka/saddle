@@ -37,7 +37,7 @@ class LocatorDouble(sz: Int = Locator.INIT_CAPACITY) extends Locator[Double] {
   def counts: Array[Int] = {
     val res = Array.ofDim[Int](size)
     var i = 0
-    map.foreachKey { key =>
+    keys.foreach { key =>
       res(i) = count(key)
       i += 1
     }

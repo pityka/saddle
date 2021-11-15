@@ -41,7 +41,7 @@ class LocatorBool extends Locator[Boolean] {
     else if (contains(false)) Array(false)
     else Array.empty[Boolean]
 
-  def counts = cts
+  def counts = cts.filter(_ > 0)
 
   def inc(key: Boolean): Int = {
     val idx = if (key) 1 else 0

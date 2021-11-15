@@ -24,6 +24,9 @@ import org.saddle.order._
 class IndexCheck extends Specification with ScalaCheck {
   "Int Index Tests" in {
     implicit val arbIndex = Arbitrary(IndexArbitraries.indexIntWithDups)
+    implicit val arbIndexLong = Arbitrary(IndexArbitraries.indexLongWithDups)
+    implicit val arbIndexDouble = Arbitrary(IndexArbitraries.indexDoubleWithDups)
+    implicit val arbIndexBool = Arbitrary(IndexArbitraries.indexBoolWithDups)
 
     "access works" in {
       forAll { (ix: Index[Int]) =>
@@ -90,6 +93,22 @@ class IndexCheck extends Specification with ScalaCheck {
 
     "lsearch and rsearch works" in {
       forAll { (ix1: Index[Int], elem: Int) =>
+        val ix = ix1.sorted
+        val cl = ix.lsearch(elem)
+        val cr = ix.lsearch(elem)
+
+        (cl <= cr) and
+          (Index(
+            (ix.toSeq.take(cl) :+ elem) ++ ix.toSeq.drop(cl): _*
+          ).isMonotonic must_== true) and
+          (Index(
+            (ix.toSeq.take(cr) :+ elem) ++ ix.toSeq.drop(cr): _*
+          ).isMonotonic must_== true)
+      }
+    }
+    
+    "lsearch and rsearch works long" in {
+      forAll { (ix1: Index[Long], elem: Long) =>
         val ix = ix1.sorted
         val cl = ix.lsearch(elem)
         val cr = ix.lsearch(elem)
@@ -209,6 +228,91 @@ class IndexCheck extends Specification with ScalaCheck {
               .map(l => if (ix.raw(l) == v) 1 else 0)
               .sum
           }
+        }
+      }
+    }
+    "key counts work long" in {
+      forAll { (ix: Index[Long]) =>
+        (ix.length > 0) ==> {
+          val idx = Gen.choose(0, ix.length - 1)
+          forAll(idx) { i =>
+            val v = ix.raw(i)
+            ix.count(v) must_== array
+              .range(0, ix.length)
+              .map(l => if (ix.raw(l) == v) 1 else 0)
+              .sum
+          }
+        }
+      }
+    }
+    "key counts work bool" in {
+      forAll { (ix: Index[Boolean]) =>
+        (ix.length > 0) ==> {
+          val idx = Gen.choose(0, ix.length - 1)
+          forAll(idx) { i =>
+            val v = ix.raw(i)
+            ix.count(v) must_== array
+              .range(0, ix.length)
+              .map(l => if (ix.raw(l) == v) 1 else 0)
+              .sum
+          }
+        }
+      }
+    }
+    "key counts work double" in {
+      forAll { (ix: Index[Double]) =>
+        (ix.length > 0) ==> {
+          val idx = Gen.choose(0, ix.length - 1)
+          forAll(idx) { i =>
+            val v = ix.raw(i)
+            ix.count(v) must_== array
+              .range(0, ix.length)
+              .map(l => if (ix.raw(l) == v) 1 else 0)
+              .sum
+          }
+        }
+      }
+    }
+    "key counts / uniques work int" in {
+      forAll { (ix: Index[Int]) =>
+        (ix.length > 0) ==> {
+          val uq = ix.uniques.toVec 
+          val c = ix.counts.toVec
+          assert(uq.length == c.length)
+          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
+         
+        }
+      }
+    }
+    "key counts / uniques work long" in {
+      forAll { (ix: Index[Long]) =>
+        (ix.length > 0) ==> {
+          val uq = ix.uniques.toVec 
+          val c = ix.counts.toVec
+          assert(uq.length == c.length)
+          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
+        }
+      }
+    }
+    "key counts / uniques work double" in {
+      forAll { (ix: Index[Double]) =>
+        (ix.length > 0) ==> {
+          val uq = ix.uniques.toVec 
+          val c = ix.counts.toVec
+          assert(uq.length == c.length)
+          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
+        }
+      }
+    }
+    "key counts / uniques work bool" in {
+      forAll { (ix: Index[Boolean]) =>
+        (ix.length > 0) ==> {
+          val uq = ix.uniques.toVec 
+          val c = ix.counts.toVec
+          println(uq)
+          println(c)
+          assert(uq.length == c.length)
+          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
         }
       }
     }

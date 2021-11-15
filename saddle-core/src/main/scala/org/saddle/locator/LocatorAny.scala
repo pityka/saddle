@@ -36,7 +36,7 @@ class LocatorAny[T: ST](sz: Int = Locator.INIT_CAPACITY) extends Locator[T] {
   }
   def keys: Array[T] = keyOrder.toArray
   def counts: Array[Int] = {
-    val iter = map.keys.iterator
+    val iter = keys.iterator
     val res = Array.ofDim[Int](size)
     var i = 0
     while (iter.hasNext) {
