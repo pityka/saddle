@@ -573,13 +573,47 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     * -1
     */
   def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
-    array.argmin(toArray)
+    {
+          val sca = implicitly[ST[T]]
+    val sz = length
+    if (sz == 0) -1
+    else {
+      var (min, arg) = if (sca.isMissing(raw(0))) (sca.inf, -1) else (raw(0), 0)
+      var i = 1
+      while (i < sz) {
+        val v = raw(i)
+        if (sca.notMissing(v) && sca.compare(min, v) == 1) {
+          min = raw(i)
+          arg = i
+        }
+        i += 1
+      }
+      arg
+    }
+    }
 
   /** Integer offset of the minimum element of the Vec, if one exists, or else
     * -1
     */
-  def argmax(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
-    array.argmax(toArray)
+  def argmax(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int = {
+    val sca = implicitly[ST[T]]
+    val sz = length
+    if (sz == 0) -1
+    else {
+      var (max, arg) =
+        if (sca.isMissing(raw(0))) (sca.negInf, -1) else (raw(0), 0)
+      var i = 1
+      while (i < sz) {
+        val v = raw(i)
+        if (sca.notMissing(v) && sca.compare(v, max) == 1) {
+          max = raw(i)
+          arg = i
+        }
+        i += 1
+      }
+      arg
+    }
+  }
 
   /** Counts the number of non-NA elements
     */
