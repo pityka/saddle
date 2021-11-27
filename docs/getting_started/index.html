@@ -120,20 +120,20 @@
   
 
 <p>Add any of these lines to your build.sbt:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#75715e">// The core library
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-core&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span>
-<span style="color:#75715e">// Inlined binary operation instances for Mat and Vec
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-ops-inlined&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span>
-<span style="color:#75715e">// Linear algebra interface to BLAS
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-linalg&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span>
-<span style="color:#75715e">// Binary representation of data frames and matrices
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-binary&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span>
-<span style="color:#75715e">// Circe Encoder and Decoder instances
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-circe&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span>
-<span style="color:#75715e">// Interface to joda time (not maintained)
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-time&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span>
-<span style="color:#75715e">// Interface to EJML (not maintained)
-</span><span style="color:#75715e"></span>libraryDependencies <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;io.github.pityka&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;saddle-stats&#34;</span> <span style="color:#f92672">%</span> <span style="color:#e6db74">&#34;0.0.0+1-d7fc265b-SNAPSHOT&#34;</span></code></pre></div>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#60a0b0;font-style:italic">// The core library
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-core&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// Inlined binary operation instances for Mat and Vec
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-ops-inlined&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// Linear algebra interface to BLAS
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-linalg&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// Binary representation of data frames and matrices
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-binary&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// Circe Encoder and Decoder instances
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-circe&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// Interface to joda time (not maintained)
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-time&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// Interface to EJML (not maintained)
+</span><span style="color:#60a0b0;font-style:italic"></span>libraryDependencies <span style="color:#666">+=</span> <span style="color:#4070a0">&#34;io.github.pityka&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;saddle-stats&#34;</span> <span style="color:#666">%</span> <span style="color:#4070a0">&#34;0.0.0+1-a3f3f4c1-SNAPSHOT&#34;</span></code></pre></div>
 <h3 id="dependencies">Dependencies</h3>
 
 <p>The actively maintained artifacts have minimal dependencies:</p>
@@ -146,83 +146,83 @@
 </ul>
 
 <h3 id="example-svd-on-the-iris-dataset">Example: SVD on the Iris dataset</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#66d9ef">import</span> scala.io.Source
-<span style="color:#66d9ef">import</span> org.saddle._
-<span style="color:#66d9ef">val</span> irisURL <span style="color:#66d9ef">=</span> <span style="color:#e6db74">&#34;https://gist.githubusercontent.com/pityka/d05bb892541d71c2a06a0efb6933b323/raw/639388c2cbc2120a14dcf466e85730eb8be498bb/iris.csv&#34;</span>
-<span style="color:#75715e">// irisURL: String = &#34;https://gist.githubusercontent.com/pityka/d05bb892541d71c2a06a0efb6933b323/raw/639388c2cbc2120a14dcf466e85730eb8be498bb/iris.csv&#34;
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">val</span> iris <span style="color:#66d9ef">=</span> csv<span style="color:#f92672">.</span><span style="color:#a6e22e">CsvParser</span><span style="color:#f92672">.</span>parseSourceWithHeader<span style="color:#f92672">[</span><span style="color:#66d9ef">Double</span><span style="color:#f92672">](</span>
-      source <span style="color:#66d9ef">=</span> <span style="color:#a6e22e">Source</span><span style="color:#f92672">.</span>fromURL<span style="color:#f92672">(</span>irisURL<span style="color:#f92672">),</span> 
-      cols <span style="color:#66d9ef">=</span> <span style="color:#a6e22e">List</span><span style="color:#f92672">(</span><span style="color:#ae81ff">0</span><span style="color:#f92672">,</span><span style="color:#ae81ff">1</span><span style="color:#f92672">,</span><span style="color:#ae81ff">2</span><span style="color:#f92672">,</span><span style="color:#ae81ff">3</span><span style="color:#f92672">),</span> 
-      recordSeparator <span style="color:#66d9ef">=</span> <span style="color:#e6db74">&#34;\n&#34;</span><span style="color:#f92672">).</span>toOption<span style="color:#f92672">.</span>get
-<span style="color:#75715e">// iris: Frame[Int, String, Double] = [150 x 4]
-</span><span style="color:#75715e">//        sepal_length sepal_width petal_length petal_width 
-</span><span style="color:#75715e">//        ------------ ----------- ------------ ----------- 
-</span><span style="color:#75715e">//   0 -&gt;       5.1000      3.5000       1.4000      0.2000 
-</span><span style="color:#75715e">//   1 -&gt;       4.9000      3.0000       1.4000      0.2000 
-</span><span style="color:#75715e">//   2 -&gt;       4.7000      3.2000       1.3000      0.2000 
-</span><span style="color:#75715e">//   3 -&gt;       4.6000      3.1000       1.5000      0.2000 
-</span><span style="color:#75715e">//   4 -&gt;       5.0000      3.6000       1.4000      0.2000 
-</span><span style="color:#75715e">// ...
-</span><span style="color:#75715e">// 145 -&gt;       6.7000      3.0000       5.2000      2.3000 
-</span><span style="color:#75715e">// 146 -&gt;       6.3000      2.5000       5.0000      1.9000 
-</span><span style="color:#75715e">// 147 -&gt;       6.5000      3.0000       5.2000      2.0000 
-</span><span style="color:#75715e">// 148 -&gt;       6.2000      3.4000       5.4000      2.3000 
-</span><span style="color:#75715e">// 149 -&gt;       5.9000      3.0000       5.1000      1.8000 
-</span><span style="color:#75715e">// 
-</span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">import</span> org.saddle.linalg._
-<span style="color:#66d9ef">val</span> centered <span style="color:#66d9ef">=</span> iris<span style="color:#f92672">.</span>mapVec<span style="color:#f92672">(</span><span style="color:#66d9ef">_</span><span style="color:#f92672">.</span>demeaned<span style="color:#f92672">)</span>
-<span style="color:#75715e">// centered: Frame[Int, String, Double] = [150 x 4]
-</span><span style="color:#75715e">//        sepal_length sepal_width petal_length petal_width 
-</span><span style="color:#75715e">//        ------------ ----------- ------------ ----------- 
-</span><span style="color:#75715e">//   0 -&gt;      -0.7433      0.4460      -2.3587     -0.9987 
-</span><span style="color:#75715e">//   1 -&gt;      -0.9433     -0.0540      -2.3587     -0.9987 
-</span><span style="color:#75715e">//   2 -&gt;      -1.1433      0.1460      -2.4587     -0.9987 
-</span><span style="color:#75715e">//   3 -&gt;      -1.2433      0.0460      -2.2587     -0.9987 
-</span><span style="color:#75715e">//   4 -&gt;      -0.8433      0.5460      -2.3587     -0.9987 
-</span><span style="color:#75715e">// ...
-</span><span style="color:#75715e">// 145 -&gt;       0.8567     -0.0540       1.4413      1.1013 
-</span><span style="color:#75715e">// 146 -&gt;       0.4567     -0.5540       1.2413      0.7013 
-</span><span style="color:#75715e">// 147 -&gt;       0.6567     -0.0540       1.4413      0.8013 
-</span><span style="color:#75715e">// 148 -&gt;       0.3567      0.3460       1.6413      1.1013 
-</span><span style="color:#75715e">// 149 -&gt;       0.0567     -0.0540       1.3413      0.6013 
-</span><span style="color:#75715e">// 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">val</span> <span style="color:#a6e22e">SVDResult</span><span style="color:#f92672">(</span>u<span style="color:#f92672">,</span> s<span style="color:#f92672">,</span> vt<span style="color:#f92672">)</span> <span style="color:#66d9ef">=</span> centered<span style="color:#f92672">.</span>toMat<span style="color:#f92672">.</span>svd<span style="color:#f92672">(</span><span style="color:#ae81ff">2</span><span style="color:#f92672">)</span>
-<span style="color:#75715e">// u: Mat[Double] = [150 x 2]
-</span><span style="color:#75715e">//  0.1070  0.0544 
-</span><span style="color:#75715e">//  0.1082 -0.0282 
-</span><span style="color:#75715e">//  0.1152 -0.0229 
-</span><span style="color:#75715e">//  0.1095 -0.0518 
-</span><span style="color:#75715e">// ...
-</span><span style="color:#75715e">// -0.0608 -0.0624 
-</span><span style="color:#75715e">// -0.0703  0.0131 
-</span><span style="color:#75715e">// -0.0758  0.0193 
-</span><span style="color:#75715e">// -0.0554 -0.0471 
-</span><span style="color:#75715e">// 
-</span><span style="color:#75715e">// s: Vec[Double] = [2 x 1]
-</span><span style="color:#75715e">// 25.0899
-</span><span style="color:#75715e">//  6.0079
-</span><span style="color:#75715e">// 
-</span><span style="color:#75715e">// vt: Mat[Double] = [2 x 4]
-</span><span style="color:#75715e">// -0.3616 0.0823 -0.8566 -0.3588 
-</span><span style="color:#75715e">//  0.6565 0.7297 -0.1758 -0.0747 
-</span><span style="color:#75715e">// 
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">val</span> pca <span style="color:#66d9ef">=</span> u<span style="color:#f92672">.</span>mDiagFromRight<span style="color:#f92672">(</span>s<span style="color:#f92672">).</span>toFrame
-<span style="color:#75715e">// pca: Frame[Int, Int, Double] = [150 x 2]
-</span><span style="color:#75715e">//              0       1 
-</span><span style="color:#75715e">//        ------- ------- 
-</span><span style="color:#75715e">//   0 -&gt;  2.6842  0.3266 
-</span><span style="color:#75715e">//   1 -&gt;  2.7154 -0.1696 
-</span><span style="color:#75715e">//   2 -&gt;  2.8898 -0.1373 
-</span><span style="color:#75715e">//   3 -&gt;  2.7464 -0.3111 
-</span><span style="color:#75715e">//   4 -&gt;  2.7286  0.3339 
-</span><span style="color:#75715e">// ...
-</span><span style="color:#75715e">// 145 -&gt; -1.9440  0.1874 
-</span><span style="color:#75715e">// 146 -&gt; -1.5257 -0.3750 
-</span><span style="color:#75715e">// 147 -&gt; -1.7640  0.0785 
-</span><span style="color:#75715e">// 148 -&gt; -1.9016  0.1159 
-</span><span style="color:#75715e">// 149 -&gt; -1.3897 -0.2829 
-</span><span style="color:#75715e"></span><span style="color:#f92672">//</span></code></pre></div>
+<div class="highlight"><pre style="background-color:#f0f0f0;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">scala.io.Source</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">val</span> irisURL <span style="color:#007020;font-weight:bold">=</span> <span style="color:#4070a0">&#34;https://gist.githubusercontent.com/pityka/d05bb892541d71c2a06a0efb6933b323/raw/639388c2cbc2120a14dcf466e85730eb8be498bb/iris.csv&#34;</span>
+<span style="color:#60a0b0;font-style:italic">// irisURL: String = &#34;https://gist.githubusercontent.com/pityka/d05bb892541d71c2a06a0efb6933b323/raw/639388c2cbc2120a14dcf466e85730eb8be498bb/iris.csv&#34;
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">val</span> iris <span style="color:#007020;font-weight:bold">=</span> csv<span style="color:#666">.</span><span style="color:#0e84b5;font-weight:bold">CsvParser</span><span style="color:#666">.</span>parseSourceWithHeader<span style="color:#666">[</span><span style="color:#902000">Double</span><span style="color:#666">](</span>
+      source <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Source</span><span style="color:#666">.</span>fromURL<span style="color:#666">(</span>irisURL<span style="color:#666">),</span> 
+      cols <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">List</span><span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> 
+      recordSeparator <span style="color:#007020;font-weight:bold">=</span> <span style="color:#4070a0">&#34;\n&#34;</span><span style="color:#666">).</span>toOption<span style="color:#666">.</span>get
+<span style="color:#60a0b0;font-style:italic">// iris: Frame[Int, String, Double] = [150 x 4]
+</span><span style="color:#60a0b0;font-style:italic">//        sepal_length sepal_width petal_length petal_width 
+</span><span style="color:#60a0b0;font-style:italic">//        ------------ ----------- ------------ ----------- 
+</span><span style="color:#60a0b0;font-style:italic">//   0 -&gt;       5.1000      3.5000       1.4000      0.2000 
+</span><span style="color:#60a0b0;font-style:italic">//   1 -&gt;       4.9000      3.0000       1.4000      0.2000 
+</span><span style="color:#60a0b0;font-style:italic">//   2 -&gt;       4.7000      3.2000       1.3000      0.2000 
+</span><span style="color:#60a0b0;font-style:italic">//   3 -&gt;       4.6000      3.1000       1.5000      0.2000 
+</span><span style="color:#60a0b0;font-style:italic">//   4 -&gt;       5.0000      3.6000       1.4000      0.2000 
+</span><span style="color:#60a0b0;font-style:italic">// ...
+</span><span style="color:#60a0b0;font-style:italic">// 145 -&gt;       6.7000      3.0000       5.2000      2.3000 
+</span><span style="color:#60a0b0;font-style:italic">// 146 -&gt;       6.3000      2.5000       5.0000      1.9000 
+</span><span style="color:#60a0b0;font-style:italic">// 147 -&gt;       6.5000      3.0000       5.2000      2.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 148 -&gt;       6.2000      3.4000       5.4000      2.3000 
+</span><span style="color:#60a0b0;font-style:italic">// 149 -&gt;       5.9000      3.0000       5.1000      1.8000 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.linalg._</span>
+<span style="color:#007020;font-weight:bold">val</span> centered <span style="color:#007020;font-weight:bold">=</span> iris<span style="color:#666">.</span>mapVec<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span><span style="color:#666">.</span>demeaned<span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// centered: Frame[Int, String, Double] = [150 x 4]
+</span><span style="color:#60a0b0;font-style:italic">//        sepal_length sepal_width petal_length petal_width 
+</span><span style="color:#60a0b0;font-style:italic">//        ------------ ----------- ------------ ----------- 
+</span><span style="color:#60a0b0;font-style:italic">//   0 -&gt;      -0.7433      0.4460      -2.3587     -0.9987 
+</span><span style="color:#60a0b0;font-style:italic">//   1 -&gt;      -0.9433     -0.0540      -2.3587     -0.9987 
+</span><span style="color:#60a0b0;font-style:italic">//   2 -&gt;      -1.1433      0.1460      -2.4587     -0.9987 
+</span><span style="color:#60a0b0;font-style:italic">//   3 -&gt;      -1.2433      0.0460      -2.2587     -0.9987 
+</span><span style="color:#60a0b0;font-style:italic">//   4 -&gt;      -0.8433      0.5460      -2.3587     -0.9987 
+</span><span style="color:#60a0b0;font-style:italic">// ...
+</span><span style="color:#60a0b0;font-style:italic">// 145 -&gt;       0.8567     -0.0540       1.4413      1.1013 
+</span><span style="color:#60a0b0;font-style:italic">// 146 -&gt;       0.4567     -0.5540       1.2413      0.7013 
+</span><span style="color:#60a0b0;font-style:italic">// 147 -&gt;       0.6567     -0.0540       1.4413      0.8013 
+</span><span style="color:#60a0b0;font-style:italic">// 148 -&gt;       0.3567      0.3460       1.6413      1.1013 
+</span><span style="color:#60a0b0;font-style:italic">// 149 -&gt;       0.0567     -0.0540       1.3413      0.6013 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">val</span> <span style="color:#0e84b5;font-weight:bold">SVDResult</span><span style="color:#666">(</span>u<span style="color:#666">,</span> s<span style="color:#666">,</span> vt<span style="color:#666">)</span> <span style="color:#007020;font-weight:bold">=</span> centered<span style="color:#666">.</span>toMat<span style="color:#666">.</span>svd<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// u: Mat[Double] = [150 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//  0.1070  0.0544 
+</span><span style="color:#60a0b0;font-style:italic">//  0.1082 -0.0282 
+</span><span style="color:#60a0b0;font-style:italic">//  0.1152 -0.0229 
+</span><span style="color:#60a0b0;font-style:italic">//  0.1095 -0.0518 
+</span><span style="color:#60a0b0;font-style:italic">// ...
+</span><span style="color:#60a0b0;font-style:italic">// -0.0608 -0.0624 
+</span><span style="color:#60a0b0;font-style:italic">// -0.0703  0.0131 
+</span><span style="color:#60a0b0;font-style:italic">// -0.0758  0.0193 
+</span><span style="color:#60a0b0;font-style:italic">// -0.0554 -0.0471 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// s: Vec[Double] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 25.0899
+</span><span style="color:#60a0b0;font-style:italic">//  6.0079
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// vt: Mat[Double] = [2 x 4]
+</span><span style="color:#60a0b0;font-style:italic">// -0.3616 0.0823 -0.8566 -0.3588 
+</span><span style="color:#60a0b0;font-style:italic">//  0.6565 0.7297 -0.1758 -0.0747 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">val</span> pca <span style="color:#007020;font-weight:bold">=</span> u<span style="color:#666">.</span>mDiagFromRight<span style="color:#666">(</span>s<span style="color:#666">).</span>toFrame
+<span style="color:#60a0b0;font-style:italic">// pca: Frame[Int, Int, Double] = [150 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//              0       1 
+</span><span style="color:#60a0b0;font-style:italic">//        ------- ------- 
+</span><span style="color:#60a0b0;font-style:italic">//   0 -&gt;  2.6842  0.3266 
+</span><span style="color:#60a0b0;font-style:italic">//   1 -&gt;  2.7154 -0.1696 
+</span><span style="color:#60a0b0;font-style:italic">//   2 -&gt;  2.8898 -0.1373 
+</span><span style="color:#60a0b0;font-style:italic">//   3 -&gt;  2.7464 -0.3111 
+</span><span style="color:#60a0b0;font-style:italic">//   4 -&gt;  2.7286  0.3339 
+</span><span style="color:#60a0b0;font-style:italic">// ...
+</span><span style="color:#60a0b0;font-style:italic">// 145 -&gt; -1.9440  0.1874 
+</span><span style="color:#60a0b0;font-style:italic">// 146 -&gt; -1.5257 -0.3750 
+</span><span style="color:#60a0b0;font-style:italic">// 147 -&gt; -1.7640  0.0785 
+</span><span style="color:#60a0b0;font-style:italic">// 148 -&gt; -1.9016  0.1159 
+</span><span style="color:#60a0b0;font-style:italic">// 149 -&gt; -1.3897 -0.2829 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#666">//</span></code></pre></div>
 </div>
 </div>
 
