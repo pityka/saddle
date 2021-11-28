@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>SADDLE</title>
+    <title>Saddle Documentation on SADDLE</title>
     <link>https://pityka.github.io/saddle/</link>
-    <description>Recent content on SADDLE</description>
+    <description>Recent content in Saddle Documentation on SADDLE</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
@@ -16,7 +16,8 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://pityka.github.io/saddle/docs/getting_started/</guid>
-      <description>Add any of these lines to your build.</description>
+      <description>Add any of these lines to your build.sbt:
+// The core library libraryDependencies += &amp;quot;io.github.pityka&amp;quot; % &amp;quot;saddle-core&amp;quot; % &amp;quot;0.0.0+1-368730bb-SNAPSHOT&amp;quot; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;quot;io.github.pityka&amp;quot; % &amp;quot;saddle-ops-inlined&amp;quot; % &amp;quot;0.0.0+1-368730bb-SNAPSHOT&amp;quot; // Linear algebra interface to BLAS libraryDependencies += &amp;quot;io.github.pityka&amp;quot; % &amp;quot;saddle-linalg&amp;quot; % &amp;quot;0.0.0+1-368730bb-SNAPSHOT&amp;quot; // Binary representation of data frames and matrices libraryDependencies += &amp;quot;io.github.pityka&amp;quot; % &amp;quot;saddle-binary&amp;quot; % &amp;quot;0.0.0+1-368730bb-SNAPSHOT&amp;quot; // Circe Encoder and Decoder instances libraryDependencies += &amp;quot;io.</description>
     </item>
     
     <item>
@@ -25,7 +26,11 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://pityka.github.io/saddle/docs/usage/</guid>
-      <description>Imports You most likely need the following two imports:</description>
+      <description>Imports You most likely need the following two imports:
+import org.saddle._ import org.saddle.order._  Note that org.saddle.order._ imports cats.kernel.Order[_] typeclass instances into the scope. If you import cats instances an other way then you should not import org.saddle.order._.
+The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare.
+1D vector: Vec[T] Factories:
+import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.</description>
     </item>
     
   </channel>
