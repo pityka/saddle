@@ -1,0 +1,1 @@
+navigator.serviceWorker&&navigator.serviceWorker.register("/saddle/sw.js",{scope:"/saddle/"})
