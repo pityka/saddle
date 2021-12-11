@@ -223,7 +223,7 @@ lazy val binary = project
   )
   .settings(
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %% "ujson" % "1.4.2"
+      "com.lihaoyi" %% "ujson" % "1.4.3"
     ) ++ scalaTest
   )
   .dependsOn(coreJVM)
