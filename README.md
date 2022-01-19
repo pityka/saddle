@@ -37,7 +37,19 @@ You need [sbt](https://www.scala-sbt.org/): `sbt test`
 
 How to build the website
 ========================
-You need [sbt](https://www.scala-sbt.org/) and [hugo](https://gohugo.io/): `sbt docs/mdoc docs/unidoc && cd website && hugo`
+The website is built with [hugo](https://gohugo.io/) and the [hugo-book](https://github.com/alex-shpak/hugo-book) theme.
+
+The theme is a git submodule. It must be initialized.
+
+```sh
+git submodule update --init
+```
+
+Create and serve the site with:
+
+```sh
+sbt docs/mdoc docs/unidoc && cd website && hugo
+```
 
 License
 =======
