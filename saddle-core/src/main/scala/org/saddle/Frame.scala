@@ -1687,10 +1687,10 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
                 .getOrElse(false)
             ) {
               prevColMask = prevColMask.updated(c, true)
-              currLab.formatted(fmt)
+              fmt.format(currLab)
             } else {
               prevColMask = prevColMask.updated(c, false)
-              "".formatted(fmt)
+              fmt.format("")
             }
           prevColLabel = currLab
           res
@@ -1734,8 +1734,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
           val fmt = "%" + l + "s"
           val res = if (i == vls.length - 1 || prevRowLabels(i) != v) {
             resetRowLabels(i + 1)
-            v.formatted(fmt)
-          } else "".formatted(fmt)
+            fmt.format(v)
+          } else fmt.format("")
           prevRowLabels(i) = v
           res
         }
