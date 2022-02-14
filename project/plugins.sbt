@@ -10,7 +10,7 @@ addSbtPlugin("org.scalameta" % "sbt-mdoc" % "2.3.0")
 
 addSbtPlugin("pl.project13.scala" % "sbt-jmh" % "0.4.3")
 
-addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.7.1")
+addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.9.0")
 
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.1.0")
 
