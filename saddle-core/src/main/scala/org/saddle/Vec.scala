@@ -506,14 +506,14 @@ trait Vec[@spec(Boolean, Int, Long, Double) T] extends NumericOps[Vec[T]] {
 
   /** Fill NA values by propagating defined values forward.
     *
-    * @param limit 
+    * @param limit
     *   If > 0, propagate over a maximum of `limit` consecutive NA values
     */
   def fillForward(limit: Int = 0): Vec[T]
 
   /** Fill NA values by propagating defined values backward.
     *
-    * @param limit 
+    * @param limit
     *   If > 0, propagate over a maximum of `limit` consecutive NA values
     */
   def fillBackward(limit: Int = 0): Vec[T]

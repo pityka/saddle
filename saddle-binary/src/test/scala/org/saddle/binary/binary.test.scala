@@ -26,7 +26,7 @@ class BinarySuite extends AnyFunSuite {
     )
     val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
     val binaryMat = Writer.writeMatIntoArray(frame.toMat).toOption.get
-    val binaryMats = Writer.writeMatIntoArrays(frame.toMat,16).toOption.get
+    val binaryMats = Writer.writeMatIntoArrays(frame.toMat, 16).toOption.get
     val deserFrame = Reader.readFrameFromArray[Double](binaryFrame)
     val deserMat = Reader.readMatFromArrays[Double](Vector(binaryFrame))
     val deserMat2 = Reader.readMatFromArrays[Double](Vector(binaryMat))

@@ -396,7 +396,7 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Fill NA values by propagating defined values forward.
     *
-    * @param limit 
+    * @param limit
     *   If > 0, propagate over a maximum of `limit` consecutive NA values.
     */
   def fillForward(limit: Int = 0): Series[X, T] =
@@ -404,7 +404,7 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
 
   /** Fill NA values by propagating defined values backward.
     *
-    * @param limit 
+    * @param limit
     *   If > 0, propagate over a maximum of `limit` consecutive NA values.
     */
   def fillBackward(limit: Int = 0): Series[X, T] =

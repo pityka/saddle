@@ -90,7 +90,7 @@ lazy val commonSettings = Seq(
   mimaBinaryIssueFilters ++= Seq(
     ProblemFilters.exclude[ReversedMissingMethodProblem](
       "*"
-    ), 
+    ),
     ProblemFilters.exclude[MissingClassProblem]("org.saddle.ops.macroImpl.*"),
     ProblemFilters.exclude[IncompatibleMethTypeProblem](
       "org.saddle.binary.Reader#ByteChannel.this"
@@ -318,7 +318,7 @@ lazy val docs = project
     scalacOptions ++= Seq(
       "-language:postfixOps"
     ),
-     ScalaUnidoc / unidoc / unidocProjectFilter :=
+    ScalaUnidoc / unidoc / unidocProjectFilter :=
       (inAnyProject -- inProjects(
         coreJS,
         circeJS,
@@ -332,7 +332,7 @@ lazy val docs = project
     mdocVariables := Map(
       "VERSION" -> version.value
     ),
-    ScalaUnidoc / unidoc / target  := (LocalRootProject / baseDirectory).value / "website" / "static" / "api",
+    ScalaUnidoc / unidoc / target := (LocalRootProject / baseDirectory).value / "website" / "static" / "api",
     cleanFiles += (ScalaUnidoc / unidoc / target).value
   )
   .enablePlugins(MdocPlugin, ScalaUnidocPlugin)
