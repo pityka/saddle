@@ -17,6 +17,8 @@ package org.saddle.vec
 import scala.{specialized => spec}
 import org.saddle.{ST, Vec}
 import org.saddle.Buffer
+import org.saddle.vec.VecImpl.Fill.Forward
+import org.saddle.vec.VecImpl.Fill.Backward
 
 // Specialized method implementations for code reuse in implementations of Vec; NA-safe
 private[saddle] object VecImpl {
@@ -430,4 +432,66 @@ private[saddle] object VecImpl {
     }
     Vec(buf)
   }
+
+  sealed trait Fill
+  object Fill {
+    object Forward extends Fill
+    object Backward extends Fill
+  }
+
+  def fillNA[@spec(Boolean, Int, Long, Double) A: ST](
+      vec: Vec[A],
+      method: Fill,
+      limit: Int
+  ): Vec[A] = {
+    val step = method match {
+      case Forward  => 1
+      case Backward => -1
+    }
+    val buf = vec.contents
+    val l = vec.length
+    val end = method match {
+      case Forward  => l
+      case Backward => -1
+    }
+    var i = method match {
+      case Forward  => 0
+      case Backward => l - 1
+    }
+    val s = implicitly[ST[A]]
+
+    while (i != end) {
+      while (i != end && s.isMissing(buf(i))) {
+        i += step
+      }
+      if (i != end) {
+        val lastNotMissing = buf(i)
+        i += step
+        while (i != end && s.notMissing(buf(i))) {
+          i += 1
+        }
+        var remaining = limit
+        while (
+          i != end
+          && (limit == 0 || remaining > 0)
+          && s.isMissing(buf(i))
+        ) {
+          buf(i) = lastNotMissing
+          remaining -= 1
+          i += step
+        }
+      }
+    }
+    Vec(buf)
+  }
+
+  def fillForward[@spec(Boolean, Int, Long, Double) A: ST](
+      vec: Vec[A],
+      limit: Int
+  ): Vec[A] = fillNA(vec, Fill.Forward, limit)
+
+  def fillBackward[@spec(Boolean, Int, Long, Double) A: ST](
+      vec: Vec[A],
+      limit: Int
+  ): Vec[A] = fillNA(vec, Fill.Backward, limit)
 }

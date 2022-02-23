@@ -345,6 +345,40 @@ class VecCheck extends Specification with ScalaCheck {
       }
     }
 
+    "fillForward fills values forward" in {
+      val v = Vec[Int](1, na, na, 2, na, na)
+      v.fillForward() mustEqual Vec[Int](1, 1, 1, 2, 2, 2)
+    }
+
+    "fillForward fills values forward until the limit if greater than 0" in {
+      val v = Vec[Int](1, na, na, 2, na, na, na)
+      v.fillForward(0) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, 2)
+      v.fillForward(1) mustEqual Vec[Int](1, 1, na, 2, 2, na, na)
+      v.fillForward(2) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, na)
+    }
+
+    "fillForward fills values forward only" in {
+      val v = Vec[Int](na, na, 2, na, na)
+      v.fillForward() mustEqual Vec[Int](na, na, 2, 2, 2)
+    }
+
+    "fillBackward fills values backward" in {
+      val v = Vec[Int](na, na, 1, na, na, 2)
+      v.fillBackward() mustEqual Vec[Int](1, 1, 1, 2, 2, 2)
+    }
+
+    "fillBackword fills values backward until the limit if greater than 0" in {
+      val v = Vec[Int](na, na, na, 2, na, na, 1)
+      v.fillBackward(0) mustEqual Vec[Int](2, 2, 2, 2, 1, 1, 1)
+      v.fillBackward(1) mustEqual Vec[Int](na, na, 2, 2, na, 1, 1)
+      v.fillBackward(2) mustEqual Vec[Int](na, 2, 2, 2, 1, 1, 1)
+    }
+
+    "fillBackward fills values backward only" in {
+      val v = Vec[Int](na, na, 2, na, na)
+      v.fillBackward() mustEqual Vec[Int](2, 2, 2, na, na)
+    }
+
     "sliceAt works" in {
       forAll { (v: Vec[Double]) =>
         (v.length > 0) ==> {

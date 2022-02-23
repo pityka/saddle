@@ -22,7 +22,7 @@ import org.saddle.locator.Locator
 /** An implementation of an Index[Int] which implicitly represents a bound of
   * integers, which lazily generates its elements as an array when needed. This
   * compact representation is the default when creating a Saddle object such as
-  * [[org.saddle.Series]] which requires and index and one is not supplied.
+  * [[org.saddle.Series]] which requires an index and one is not supplied.
   */
 class IndexIntRange(val length: Int, val from: Int = 0, val ord: ORD[Int])
     extends Index[Int] {
