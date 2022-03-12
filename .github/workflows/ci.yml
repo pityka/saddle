@@ -19,4 +19,4 @@ jobs:
     - name: Compile 2.13
       run: sbt -J-Xmx3000m clean test docs/mdoc versionPolicyCheck docs/unidoc
     - name: Compile 2.12
-      run: sbt -J-Xmx3000m ++2.12.13! clean test docs/mdoc versionPolicyCheck docs/unidoc
+      run: sbt -J-Xmx3000m ++2.12.15! clean test docs/mdoc versionPolicyCheck docs/unidoc
