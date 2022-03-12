@@ -30,6 +30,31 @@ class FrameSpec extends Specification {
     3 -> Series(1 -> "1,3", 2 -> "2,3", 4 -> null, 5 -> "5,3"),
     5 -> Series(1 -> "1,5", 2 -> "2,5", 4 -> "4,5", 5 -> "5,5")
   )
+
+  "setColIndex and setRowIndex on empty frame should return an empty frame" in {
+    val f1 = Frame.empty[Int, Int, Int]
+    val f2 = f1.setColIndex(Index(0, 1, 2, 3))
+    val f3 = f1.setRowIndex(Index(0, 1, 2, 3))
+    (f1 must_== f2) and
+      (f1 must_== f3)
+  }
+  "setColIndex on frame with empty rows should not throw" in {
+    val f1 = Frame(Vec.empty[Int]).T
+    val f2 = f1.setColIndex(Index(0, 1, 2, 3))
+    (f1 must_== f2)
+  }
+  "setColIndex on frame with empty cols should throw" in {
+    val f1 = Frame(Vec.empty[Int])
+    scala.util.Try {
+      (f1.setColIndex(Index(0, 1, 2, 3)))
+    }.isFailure must_== true
+  }
+  "setRowIndex on empty frame with empty cols should not throw" in {
+    val f1 = Frame(Vec.empty[Int])
+    val f2 = f1.setRowIndex(Index(0, 1, 2, 3))
+    (f1 must_== f2)
+  }
+
   "join" in {
     val f2 = Frame(
       0 -> Series(

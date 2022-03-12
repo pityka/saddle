@@ -575,8 +575,12 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @tparam Y
     *   Type of elements of new Index
     */
-  def setRowIndex[Y: ST: ORD](newIx: Index[Y]): Frame[Y, CX, T] =
-    new Frame(values, newIx, colIx, cachedMat)
+  def setRowIndex[Y: ST: ORD](newIx: Index[Y]): Frame[Y, CX, T] = {
+    val maybeEmptyIx =
+      if (numRows == 0) Index.empty[Y]
+      else newIx
+    new Frame(values, maybeEmptyIx, colIx, cachedMat)
+  }
 
   /** Create a new Frame using the current values but with the new row index
     * specified by the column at a particular offset, and with that column
@@ -642,8 +646,12 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @tparam Y
     *   Type of elements of new Index
     */
-  def setColIndex[Y: ST: ORD](newIx: Index[Y]): Frame[RX, Y, T] =
-    new Frame(values, rowIx, newIx, cachedMat)
+  def setColIndex[Y: ST: ORD](newIx: Index[Y]): Frame[RX, Y, T] = {
+    val maybeEmptyIx =
+      if (numCols == 0) Index.empty[Y]
+      else newIx
+    new Frame(values, rowIx, maybeEmptyIx, cachedMat)
+  }
 
   /** Create a new Frame using the current values but with the new col index
     * specified by the row at a particular offset, and with that row removed
