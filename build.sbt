@@ -10,6 +10,8 @@ ThisBuild / libraryDependencySchemes ++= Seq(
   "io.circe" % "circe-numbers" % "always",
   "org.typelevel" % "cats-core" % "early-semver",
   "org.typelevel" % "cats-kernel" % "early-semver",
+  "com.lihaoyi" % "ujson" % "early-semver",
+  "com.lihaoyi" % "upickle-core" % "early-semver",
   "com.github.plokhotnyuk.jsoniter-scala" % "jsoniter-scala-core" % "early-semver"
 )
 
