@@ -1929,8 +1929,14 @@ object Frame extends BinOpFrame {
   // overloaded apply method
   private type ID[T] = T => T
 
-  /** Factory method to create a Frame from a sequence of Series. The row labels
+  /** Use of this method is needs caution, see Frame.fromColumns instead.
+    *
+    * Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
+    *
+    * This method repeatedly joins the rows indices. If duplicates index values
+    * are present then a full cross product is done. The latter can easily lead
+    * to OOM.
     */
   @scala.annotation.nowarn
   def apply[RX: ST: ORD, T: ST: ID](
@@ -1953,30 +1959,70 @@ object Frame extends BinOpFrame {
     }
   }
 
-  /** Factory method to create a Frame from a sequence of series, also
+  /** Factory method to create a Frame from a sequence of Series. The row labels
+    * of the result are the outer join of the indexes of the series provided.
+    * Throws IllegalArgumentException if the row indices are not unique.
+    */
+  @scala.annotation.nowarn
+  def fromColumns[RX: ST: ORD, T: ST: ID](
+      values: Series[RX, T]*
+  ): Frame[RX, Int, T] = {
+
+    require(
+      values.forall(_.index.isUnique),
+      "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
+    )
+
+    Frame(values: _*)
+  }
+
+  /** Use of this method is needs caution, see Frame.fromColumns instead.
+    *
+    * Factory method to create a Frame from a sequence of series, also
     * specifying the column index to use. The row labels of the result are the
     * outer join of the indexes of the series provided.
+    *
+    * This method repeatedly joins the rows indices. If duplicates index values
+    * are present then a full cross product is done. The latter can easily lead
+    * to OOM.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
       colIx: Index[CX]
   ): Frame[RX, CX, T] = {
-    val asIdxSeq = values.toIndexedSeq
-    asIdxSeq.length match {
-      case 0 => empty[RX, CX, T]
-      case 1 => Frame(asIdxSeq.map(_.values), asIdxSeq(0).index, colIx)
-      case _ => {
-        val init = Frame(Seq(asIdxSeq(0).values), asIdxSeq(0).index, Index(0))
-        val temp = values.tail.foldLeft(init)(_.addCol(_, OuterJoin))
-        Frame(temp.values, temp.rowIx, colIx)
-      }
-    }
+    require(
+      values.size == colIx.length,
+      s"colIx length (${colIx.length}) != number of columns (${values.size})"
+    )
+    Frame(values: _*).setColIndex(colIx)
   }
 
-  /** Factory method to create a Frame from a sequence of tuples, where the
+  /** Factory method to create a Frame from a sequence of series, also
+    * specifying the column index to use. The row labels of the result are the
+    * outer join of the indexes of the series provided. Throws
+    * IllegalArgumentException if the row indices are not unique.
+    */
+  def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
+      values: Seq[Series[RX, T]],
+      colIx: Index[CX]
+  ): Frame[RX, CX, T] = {
+    require(
+      values.forall(_.index.isUnique),
+      "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
+    )
+    Frame(values, colIx)
+  }
+
+  /** Use of this method is needs caution, see Frame.fromColumns instead.
+    *
+    * Factory method to create a Frame from a sequence of tuples, where the
     * first element of the tuple is a column label, and the second a series of
     * values. The row labels of the result are the outer join of the indexes of
     * the series provided.
+    *
+    * This method repeatedly joins the rows indices. If duplicates index values
+    * are present then a full cross product is done. The latter can easily lead
+    * to OOM.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
@@ -1993,6 +2039,22 @@ object Frame extends BinOpFrame {
         Frame(temp.values, temp.rowIx, idx)
       }
     }
+  }
+
+  /** Factory method to create a Frame from a sequence of tuples, where the
+    * first element of the tuple is a column label, and the second a series of
+    * values. The row labels of the result are the outer join of the indexes of
+    * the series provided. Throws IllegalArgumentException if the row indices
+    * are not unique.
+    */
+  def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
+      values: (CX, Series[RX, T])*
+  ): Frame[RX, CX, T] = {
+    require(
+      values.forall(_._2.index.isUnique),
+      "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
+    )
+    Frame(values: _*)
   }
 
   // --------------------------------
