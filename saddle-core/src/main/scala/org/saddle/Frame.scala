@@ -1964,7 +1964,7 @@ object Frame extends BinOpFrame {
     * Throws IllegalArgumentException if the row indices are not unique.
     */
   @scala.annotation.nowarn
-  def fromColumns[RX: ST: ORD, T: ST: ID](
+  def fromColumns[RX: ST: ORD, T: ST](
       values: Series[RX, T]*
   ): Frame[RX, Int, T] = {
 
@@ -1973,7 +1973,7 @@ object Frame extends BinOpFrame {
       "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
     )
 
-    Frame(values: _*)
+    Frame[RX,T](values: _*)
   }
 
   /** Use of this method needs caution, see Frame.fromColumns instead.
