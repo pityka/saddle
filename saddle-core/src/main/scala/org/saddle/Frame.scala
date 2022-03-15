@@ -1929,7 +1929,7 @@ object Frame extends BinOpFrame {
   // overloaded apply method
   private type ID[T] = T => T
 
-  /** Use of this method is needs caution, see Frame.fromColumns instead.
+  /** Use of this method needs caution, see Frame.fromColumns instead.
     *
     * Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
@@ -1976,7 +1976,7 @@ object Frame extends BinOpFrame {
     Frame(values: _*)
   }
 
-  /** Use of this method is needs caution, see Frame.fromColumns instead.
+  /** Use of this method needs caution, see Frame.fromColumns instead.
     *
     * Factory method to create a Frame from a sequence of series, also
     * specifying the column index to use. The row labels of the result are the
@@ -2013,7 +2013,7 @@ object Frame extends BinOpFrame {
     Frame(values, colIx)
   }
 
-  /** Use of this method is needs caution, see Frame.fromColumns instead.
+  /** Use of this method needs caution, see Frame.fromColumns instead.
     *
     * Factory method to create a Frame from a sequence of tuples, where the
     * first element of the tuple is a column label, and the second a series of
