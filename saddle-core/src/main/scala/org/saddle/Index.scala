@@ -242,6 +242,26 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
   def uniques(implicit ord: ORD[T], tag: ST[T]): Index[T] =
     Index(Vec(locator.keys))
 
+  /** Returns a unique index where each element is paired up with a unique
+    * integer in [0,n) n being the multiplicity count of that element in the
+    * index
+    */
+  def toUniqueIndex(implicit ord: ORD[T]): Index[(T, Int)] = if (isUnique)
+    this.map((_, 0))
+  else {
+    val ar = Array.ofDim[(T, Int)](length)
+    var i = 0
+    val n = length
+    while (i < n) {
+      val value = this.raw(i)
+      val offsetsOfThisValue = this.apply(value)
+      val c = offsetsOfThisValue.indexOf(i)
+      ar(i) = (value, c)
+      i += 1
+    }
+    Index(ar)
+  }
+
   /** Returns an array whose entries represent the number of times the
     * corresponding entry in `uniques` occurs within the index.
     */

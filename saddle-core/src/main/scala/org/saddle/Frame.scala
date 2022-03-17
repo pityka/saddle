@@ -1934,9 +1934,9 @@ object Frame extends BinOpFrame {
     * Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
     *
-    * This method repeatedly joins the rows indices. If duplicates index values
-    * are present then a full cross product is done. The latter can easily lead
-    * to OOM.
+    * This method repeatedly joins the rows indices. 
+    * Mind the combinatorial semantics of joins, 
+    * if the indices contain duplicates, the resulting Frame can grow quickly.
     */
   @scala.annotation.nowarn
   def apply[RX: ST: ORD, T: ST: ID](
@@ -1961,19 +1961,23 @@ object Frame extends BinOpFrame {
 
   /** Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
-    * Throws IllegalArgumentException if the row indices are not unique.
+    *
+    * Row indices are disambiguated before the join via the Index.makeUnique
+    * method which turns each row index into a unique index resolving ties.
+    *
+    * This methods avoids a combinatorial increase in the resulting row count in
+    * case of duplicate elements in the row indices, however the join of rows
+    * with the same index is arbitrary.
     */
   @scala.annotation.nowarn
   def fromColumns[RX: ST: ORD, T: ST](
       values: Series[RX, T]*
   ): Frame[RX, Int, T] = {
-
-    require(
-      values.forall(_.index.isUnique),
-      "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
-    )
-
-    Frame[RX,T](values: _*)
+    if (values.forall(_.index.isUnique)) Frame(values: _*)
+    else
+      Frame(
+        values.map(series => series.setIndex(series.index.toUniqueIndex)): _*
+      ).mapRowIndex(_._1)
   }
 
   /** Use of this method needs caution, see Frame.fromColumns instead.
@@ -1982,9 +1986,9 @@ object Frame extends BinOpFrame {
     * specifying the column index to use. The row labels of the result are the
     * outer join of the indexes of the series provided.
     *
-    * This method repeatedly joins the rows indices. If duplicates index values
-    * are present then a full cross product is done. The latter can easily lead
-    * to OOM.
+    * This method repeatedly joins the rows indices. 
+    * Mind the combinatorial semantics of joins, 
+    * if the indices contain duplicates, the resulting Frame can grow quickly.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
@@ -1999,18 +2003,27 @@ object Frame extends BinOpFrame {
 
   /** Factory method to create a Frame from a sequence of series, also
     * specifying the column index to use. The row labels of the result are the
-    * outer join of the indexes of the series provided. Throws
-    * IllegalArgumentException if the row indices are not unique.
+    * outer join of the indexes of the series provided.
+    *
+    * Row indices are disambiguated before the join via the Index.makeUnique
+    * method which turns each row index into a unique index resolving ties.
+    *
+    * This methods avoids a combinatorial increase in the resulting row count in
+    * case of duplicate elements in the row indices, however the join of rows
+    * with the same index is arbitrary.
     */
   def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
       colIx: Index[CX]
   ): Frame[RX, CX, T] = {
-    require(
-      values.forall(_.index.isUnique),
-      "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
-    )
-    Frame(values, colIx)
+    val allUnique = values.forall(_.index.isUnique)
+    if (allUnique) Frame(values, colIx)
+    else
+      Frame(
+        values.map(series => series.setIndex(series.index.toUniqueIndex)),
+        colIx
+      ).mapRowIndex(_._1)
+
   }
 
   /** Use of this method needs caution, see Frame.fromColumns instead.
@@ -2020,9 +2033,9 @@ object Frame extends BinOpFrame {
     * values. The row labels of the result are the outer join of the indexes of
     * the series provided.
     *
-    * This method repeatedly joins the rows indices. If duplicates index values
-    * are present then a full cross product is done. The latter can easily lead
-    * to OOM.
+    * This method repeatedly joins the rows indices. 
+    * Mind the combinatorial semantics of joins, 
+    * if the indices contain duplicates, the resulting Frame can grow quickly.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
@@ -2044,17 +2057,23 @@ object Frame extends BinOpFrame {
   /** Factory method to create a Frame from a sequence of tuples, where the
     * first element of the tuple is a column label, and the second a series of
     * values. The row labels of the result are the outer join of the indexes of
-    * the series provided. Throws IllegalArgumentException if the row indices
-    * are not unique.
+    * the series provided.
+    *
+    * Row indices are disambiguated before the join via the Index.makeUnique
+    * method which turns each row index into a unique index resolving ties.
+    *
+    * This methods avoids a combinatorial increase in the resulting row count in
+    * case of duplicate elements in the row indices, however the join of rows
+    * with the same index is arbitrary.
     */
   def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
   ): Frame[RX, CX, T] = {
-    require(
-      values.forall(_._2.index.isUnique),
-      "Frame.fromColumns need unique indices. See Frame.apply for an alternative"
-    )
-    Frame(values: _*)
+    if (values.forall(_._2.index.isUnique)) Frame(values: _*)
+    else
+      Frame(values.map { case (cx, series) =>
+        (cx, series.setIndex(series.index.toUniqueIndex))
+      }: _*).mapRowIndex(_._1)
   }
 
   // --------------------------------

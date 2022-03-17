@@ -41,43 +41,41 @@ class FrameSpec extends Specification {
     fr.row(0).numRows must_== 8
   }
 
-  "Frame.fromColumns throws if row indices are not unique" in {
-    scala.util
-      .Try(
-        Frame.fromColumns(
+  "Frame.fromColumns performs no cross product in case of duplicates" in {
+
+    Frame
+      .fromColumns(
+        Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
+        Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
+        Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
+      )
+      .row(0)
+      .numRows must_== 2
+
+  }
+  "Frame.fromColumns performs no cross product in case of duplicates - 2" in {
+    Frame
+      .fromColumns(
+        List(
           Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
           Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
           Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
-        )
+        ),
+        Index(0, 1, 2)
       )
-      .isFailure must_== true
+      .row(0)
+      .numRows must_== 2
 
   }
-  "Frame.fromColumns throws if row indices are not unique - 2" in {
-    scala.util
-      .Try(
-        Frame.fromColumns(
-          List(
-            Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
-            Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
-            Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
-          ),
-          Index(0, 1, 2)
-        )
+  "Frame.fromColumns performs no cross product in case of duplicates - 3" in {
+    Frame
+      .fromColumns(
+        0 -> Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
+        1 -> Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
+        2 -> Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
       )
-      .isFailure must_== true
-
-  }
-  "Frame.fromColumns throws if row indices are not unique - 3" in {
-    scala.util
-      .Try(
-        Frame.fromColumns(
-          0 -> Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
-          1 -> Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
-          2 -> Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
-        )
-      )
-      .isFailure must_== true
+      .row(0)
+      .numRows must_== 2
 
   }
   "Frame.fromColumns performs no cross product if indices are unique" in {
