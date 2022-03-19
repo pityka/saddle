@@ -35,6 +35,9 @@ import org.saddle.mat.MatCols
 import org.saddle.order._
 import _root_.cats.kernel.Order
 import org.saddle.array.Sorter.intSorter
+import org.saddle.ORD
+import org.saddle.ST
+import org.saddle.FillMethod
 
 /** `Frame` is an immutable container for 2D data which is indexed along both
   * axes (rows, columns) by associated keys (i.e., indexes).
