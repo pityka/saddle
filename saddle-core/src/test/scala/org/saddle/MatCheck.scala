@@ -28,7 +28,7 @@ import org.specs2.scalacheck.Parameters
   */
 class MatCheck extends Specification with ScalaCheck {
 
-  implicit val params = Parameters(minTestsOk = 20)
+  implicit val params: Parameters = Parameters(minTestsOk = 20)
 
   "Elementwise matrix operations with scalar (D,D) => B" in {
     "op < works" in {
@@ -658,7 +658,7 @@ class MatCheck extends Specification with ScalaCheck {
   }
 
   "Double Mat Tests" in {
-    implicit val arbMat = Arbitrary(MatArbitraries.matDouble)
+    implicit val arbMat: Arbitrary[Mat[Double]] = Arbitrary(MatArbitraries.matDouble)
     "scalar operation in place works" in {
       forAll { (m: Mat[Double], b: Int) =>
         val m2 = m * b
@@ -690,8 +690,8 @@ class MatCheck extends Specification with ScalaCheck {
     "map works" in {
       forAll { (m: Mat[Double]) =>
         val res = m.map(_ + 1)
-        val exp = m.contents.map(_ + 1)
-        res.contents must_== exp
+        val exp = m.contents.toList.map(_ + 1)
+        res.contents.toList must_== exp
       }
     }
     "map rows works" in {
@@ -754,17 +754,17 @@ class MatCheck extends Specification with ScalaCheck {
 
     "map works" in {
       forAll { (m: Mat[Double]) =>
-        val data = m.contents
-        m.map(_ + 1.0) must_== Mat(m.numRows, m.numCols, data.map(_ + 1.0))
+        val data = m.contents.toList
+        m.map(_ + 1.0) must_== Mat(m.numRows, m.numCols, data.map(_ + 1.0).toArray)
         m.map(_ => 5.0) must_== Mat(
           m.numRows,
           m.numCols,
-          (data.map(d => if (d.isNaN) na.to[Double] else 5.0))
+          (data.map(d => if (d.isNaN) na.to[Double] else 5.0).toArray)
         )
         m.map(_ => 5) must_== Mat[Int](
           m.numRows,
           m.numCols,
-          data.map(d => if (d.isNaN) na.to[Int] else 5)
+          data.map(d => if (d.isNaN) na.to[Int] else 5).toArray
         )
       }
     }
@@ -986,9 +986,9 @@ class MatCheck extends Specification with ScalaCheck {
 
     "roundTo works" in {
       forAll { (ma: Mat[Double]) =>
-        ma.contents.map((v: Double) => math.round(v * 100) / 100d) must_== ma
+        ma.contents.toList.map((v: Double) => math.round(v * 100) / 100d) must_== ma
           .roundTo(2)
-          .contents
+          .contents.toList
       }
     }
     "isEmpty works" in {

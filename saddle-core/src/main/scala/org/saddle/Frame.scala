@@ -1390,8 +1390,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       m1: ST[O1],
       m2: ST[O2]
   ): Frame[O1, V, T] = {
-    implicit def ordV = stkr.ord
-    implicit def clmV = stkr.tag
+    implicit def ordV: ORD[V]  = stkr.ord
+    implicit def clmV: ST[V] = stkr.tag
 
     val (lft, rgt) =
       splt(rowIx) // lft = row index w/o pivot level; rgt = pivot level

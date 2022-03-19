@@ -165,14 +165,14 @@ class ArrayCheck extends Specification with ScalaCheck {
       forAll { (arr1: Seq[Int]) =>
         val p = Array.ofDim[Int](arr1.size)
         array.PermuteInsertionSort.sort(arr1.toArray, 0, arr1.size, p)
-        p must_== arr1.toArray.zipWithIndex.sortBy(_._1).map(_._2)
+        p must_== arr1.toArray.zipWithIndex.sortBy(_._1).toSeq.map(_._2).toArray
       }
     }
     "merge sort" in {
       forAll { (arr1: Seq[Int]) =>
-        array.argsort(arr1.toArray) must_== arr1.toArray.zipWithIndex
+        array.argsort(arr1.toArray).toSeq must_== arr1.toArray.zipWithIndex
           .sortBy(_._1)
-          .map(_._2)
+          .map(_._2).toSeq
       }
     }
     "shuffle" in {

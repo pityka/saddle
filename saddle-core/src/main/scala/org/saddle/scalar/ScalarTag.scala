@@ -77,32 +77,37 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
 }
 
 object ScalarTag extends ScalarTagImplicits {
-  implicit val stChar = ScalarTagChar
-  implicit val stByte = ScalarTagByte
-  implicit val stBool = ScalarTagBool
-  implicit val stShort = ScalarTagShort
-  implicit val stInt = ScalarTagInt
-  implicit val stFloat = ScalarTagFloat
-  implicit val stLong = ScalarTagLong
-  implicit val stDouble = ScalarTagDouble
+  implicit val stChar: ST[Char] = ScalarTagChar
+  implicit val stByte: ST[Byte] = ScalarTagByte
+  implicit val stBool: ST[Boolean] = ScalarTagBool
+  implicit val stShort: ST[Short] = ScalarTagShort
+  implicit val stInt: ST[Int] = ScalarTagInt
+  implicit val stFloat: ST[Float] = ScalarTagFloat
+  implicit val stLong: ST[Long] = ScalarTagLong
+  implicit val stDouble: ST[Double] = ScalarTagDouble
 }
 
 trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
-  implicit def stPrd[T <: Product: CLM] = new ScalarTagProduct[T]
+  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTagAny[T] =
+    new ScalarTagProduct[T]()(ev)
 }
 
 trait ScalarTagImplicitsL1 extends ScalarTagImplicitsL2 {
-  implicit def stAnyVal[T <: AnyVal: CLM] = new ScalarTagAny[T] {
-    override def isAnyVal = true
-  }
+  implicit def stAnyVal[T <: AnyVal](implicit ev: CLM[T]): ScalarTagAny[T] =
+    new ScalarTagAny[T]()(ev) {
+      override def isAnyVal = true
+    }
 }
 
 trait ScalarTagImplicitsL2 extends ScalarTagImplicitsL3 {
-  implicit def stAnyRef[T <: AnyRef: CLM] = new ScalarTagAny[T]
+  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTagAny[T] = new ScalarTagAny[T]()(ev)
 }
 
 trait ScalarTagImplicitsL3 {
-  implicit def stAny[T: CLM] = new ScalarTagAny[T] { override def isAny = true }
+  implicit def stAny[T](implicit ev: CLM[T]): ScalarTagAny[T]=
+    new ScalarTagAny[T]()(ev) {
+      override def isAny = true
+    }
 }
 
 trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {

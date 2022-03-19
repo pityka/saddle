@@ -22,6 +22,7 @@ import org.saddle.scalar.ScalarTag
 import scala.reflect.ClassTag
 import cats.kernel.Order
 import org.saddle.order._
+import scala.annotation.unused
 
 /** ==Saddle==
   *
@@ -69,10 +70,12 @@ package object saddle {
   type ST[C] = ScalarTag[C]
 
   // *********************
-  implicit val doubleOrd = doubleIsNumeric
-  implicit val floatOrd = floatIsNumeric
-  implicit val intOrd = intIsNumeric
-  implicit val longOrd = longIsNumeric
+  implicit val doubleOrd: Numeric[Double] with util.DoubleTotalOrderTrait =
+    doubleIsNumeric
+  implicit val floatOrd: Numeric[Float] with util.FloatTotalOrderTrait =
+    floatIsNumeric
+  implicit val intOrd: Numeric[Int] = intIsNumeric
+  implicit val longOrd: Numeric[Long] = longIsNumeric
 
   // **********************
 
@@ -96,8 +99,8 @@ package object saddle {
     *   val u = v(0 -> 2)
     * }}}
     */
-  implicit def pair2Slice[T](p: (T, T)) = Slice(p._1, p._2)
-  implicit def any2Slice[T](p: T) = Slice(p, p)
+  implicit def pair2Slice[T](p: (T, T)): Slice[T] = Slice(p._1, p._2)
+  implicit def any2Slice[T](p: T): Slice[T] = Slice(p, p)
 
   /** Syntactic sugar, allow '* -> ' to generate an (inclusive) index slice,
     * open on left
@@ -107,7 +110,7 @@ package object saddle {
     *   val u = v(* -> 2)
     * }}}
     */
-  implicit def pair2SliceTo[T](p: (SliceAll, T)) = SliceTo(p._2)
+  implicit def pair2SliceTo[T](p: (SliceAll, T)): SliceTo[T] = SliceTo(p._2)
 
   /** Syntactic sugar, allow ' -> *' to generate an (inclusive) index slice,
     * open on right
@@ -117,7 +120,9 @@ package object saddle {
     *   val u = v(1 -> *)
     * }}}
     */
-  implicit def pair2SliceFrom[T](p: (T, SliceAll)) = SliceFrom(p._1)
+  implicit def pair2SliceFrom[T](p: (T, SliceAll)): SliceFrom[T] = SliceFrom(
+    p._1
+  )
 
   /** Syntactic sugar, placeholder for 'slice-all'
     *
@@ -159,20 +164,36 @@ package object saddle {
       */
     def to[T](implicit fn: na.type => T): T = fn(this)
 
-    implicit val naToByte: na.type => Byte = (_: na.type) =>
+    @deprecated
+    val naToByte: na.type => Byte = (_: na.type) => scalar.ScalarTagByte.missing
+    implicit def naToByteConv(@unused it: na.type): Byte =
       scalar.ScalarTagByte.missing
-    implicit val naToChar: na.type => Char = (_: na.type) =>
+    @deprecated
+    val naToChar: na.type => Char = (_: na.type) => scalar.ScalarTagChar.missing
+    implicit def naToCharConv(@unused it: na.type): Char =
       scalar.ScalarTagChar.missing
-    implicit val naToShort: na.type => Short = (_: na.type) =>
+    @deprecated
+    val naToShort: na.type => Short = (_: na.type) =>
       scalar.ScalarTagShort.missing
-
-    implicit val naToInt: na.type => Int = (_: na.type) =>
+    implicit def naToShortConv(@unused it: na.type): Short =
+      scalar.ScalarTagShort.missing
+    @deprecated
+    val naToInt: na.type => Int = (_: na.type) => scalar.ScalarTagInt.missing
+    implicit def naToIntConv(@unused it: na.type): Int =
       scalar.ScalarTagInt.missing
-    implicit val naToLong: na.type => Long = (_: na.type) =>
+    @deprecated
+    val naToLong: na.type => Long = (_: na.type) => scalar.ScalarTagLong.missing
+    implicit def naToLongConv(@unused it: na.type): Long =
       scalar.ScalarTagLong.missing
-    implicit val naToFloat: na.type => Float = (_: na.type) =>
+    @deprecated
+    val naToFloat: na.type => Float = (_: na.type) =>
       scalar.ScalarTagFloat.missing
-    implicit val naToDouble: na.type => Double = (_: na.type) =>
+    implicit def naToFloatConv(@unused it: na.type): Float =
+      scalar.ScalarTagFloat.missing
+    @deprecated
+    val naToDouble: na.type => Double = (_: na.type) =>
+      scalar.ScalarTagDouble.missing
+    implicit def naToDoubleConv(@unused it: na.type): Double =
       scalar.ScalarTagDouble.missing
 
     override def toString = "na"

@@ -18,6 +18,7 @@ import org.saddle.scalar._
 import java.nio._
 import scala.util.{Left, Right, Either}
 import java.nio.channels.ReadableByteChannel
+import org.saddle.io.npy.DType
 
 case class Descriptor(fortran: Boolean, shape: List[Int], dtype: String)
 
@@ -41,7 +42,7 @@ object Reader {
       case ScalarTagByte   => Right("<i1")
       case other           => Left(s"Type $other not supported.")
     }
-  private[npy] def dtype2[T: ST] =
+  private[npy] def dtype2[T: ST] : Either[String,DType[T]] =
     implicitly[ST[T]] match {
       case ScalarTagDouble => Right(org.saddle.io.npy.DoubleType)
       case ScalarTagInt    => Right(org.saddle.io.npy.IntType)
@@ -108,7 +109,7 @@ object Reader {
       channel: ReadableByteChannel
   ): Either[String, Mat[T]] = {
     dtype2[T].flatMap { dtype =>
-      org.saddle.io.npy.readFromChannel(dtype, channel).flatMap {
+      org.saddle.io.npy.readFromChannel[T](dtype, channel).flatMap {
         case (descr, arrays) =>
           if (descr.shape.size != 2) Left("Not matrix shape")
           else

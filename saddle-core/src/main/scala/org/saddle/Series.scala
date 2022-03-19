@@ -15,16 +15,19 @@
 package org.saddle
 
 import scala.{specialized => spec}
-import ops.{NumericOps, BinOpSeries}
+import ops.{BinOpSeries, NumericOps}
 import vec.VecImpl
-import org.saddle.index.{JoinType, LeftJoin, IndexIntRange, Slice, Splitter}
-import groupby.{SeriesGrouper, IndexGrouper}
-import scalar.{Scalar, NA}
+import org.saddle.index.{IndexIntRange, JoinType, LeftJoin, Slice, Splitter}
+import groupby.{IndexGrouper, SeriesGrouper}
+import scalar.{NA, Scalar}
+
 import java.io.OutputStream
 import org.saddle.mat.MatCols
 import org.saddle.locator.Locator
 import org.saddle.order._
 import org.saddle.index.OuterJoin
+
+import scala.annotation.unused
 
 /** `Series` is an immutable container for 1D homogeneous data which is indexed
   * by a an associated sequence of keys.
@@ -933,12 +936,12 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     */
   def proxyWith(
       proxy: Series[X, T]
-  )(implicit fn: org.saddle.scalar.NA.type => T): Series[X, T] = {
+  )(@unused implicit fn: org.saddle.scalar.NA.type => T): Series[X, T] = {
     require(proxy.index.isUnique, "Proxy index must be unique")
 
     this.fillNA { key =>
       val loc = proxy.index.getFirst(key)
-      val res: T = if (loc == -1) NA else proxy.raw(loc)
+      val res: T = if (loc == -1) implicitly[ST[T]].missing else proxy.raw(loc)
       res
     }
   }

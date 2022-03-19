@@ -243,12 +243,12 @@ class VecCheck extends Specification with ScalaCheck {
     "map works" in {
       forAll { (v: Vec[Double]) =>
         val data = v.contents
-        v.map(_ + 1.0) must_== Vec(data.map(_ + 1.0))
+        v.map(_ + 1.0) must_== Vec(data.toSeq.map(_ + 1.0).toArray)
         v.map(_ => 5.0) must_== Vec(
-          data.map(d => if (d.isNaN) na.to[Double] else 5.0)
+          data.toSeq.map(d => if (d.isNaN) na.to[Double] else 5.0).toArray
         )
         v.map(_ => 5) must_== Vec[Int](
-          data.map(d => if (d.isNaN) na.to[Int] else 5)
+          data.toSeq.map(d => if (d.isNaN) na.to[Int] else 5).toArray
         )
       }
     }
@@ -363,7 +363,7 @@ class VecCheck extends Specification with ScalaCheck {
     "fillNA works" in {
       forAll { (v: Vec[Double]) =>
         val res = v.fillNA(_ => 5.0)
-        val exp = Vec(v.contents.map(x => if (x.isNaN) 5.0 else x))
+        val exp = Vec(v.contents.toSeq.map(x => if (x.isNaN) 5.0 else x).toArray)
         res.hasNA must beFalse
         res must_== exp
       }
@@ -485,7 +485,7 @@ class VecCheck extends Specification with ScalaCheck {
     "negation works" in {
       forAll { (v: Vec[Double]) =>
         val res = -v
-        val exp = Vec(v.toArray.map(_ * -1))
+        val exp = Vec(v.toArray.toSeq.map(_ * -1).toArray)
         res must_== exp
       }
     }
@@ -496,7 +496,7 @@ class VecCheck extends Specification with ScalaCheck {
           val idx = Gen.listOfN(3, Gen.choose(0, v.length - 1))
           forAll(idx) { i =>
             val res = v.take(i.toArray)
-            val exp = Vec(i.toArray.map(v.raw(_)))
+            val exp = Vec(i.toArray.toSeq.map(v.raw(_)).toArray)
             res must_== exp
             res must_== v.take(i: _*)
           }

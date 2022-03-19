@@ -15,8 +15,8 @@
 package org.saddle.ops
 
 import scala.{specialized => spec}
-
 import org.saddle.{ST, Vec, NUM, Mat}
+import org.saddle.{doubleOrd,longOrd,intOrd}
 
 /** Provides concrete implementations of binary operations for
   * [[org.saddle.Vec]]; these instances provide implicit support for
@@ -48,69 +48,69 @@ trait BinOpVec {
   // math ops
   implicit def VecSclrElmOpDDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) = new VecSclrElemOp[Op, Double, Double, Double](op)
+  ) :VecSclrElemOp[Op, Double, Double, Double]= new VecSclrElemOp[Op, Double, Double, Double](op)
   implicit def VecSclrElmOpDLD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) = new VecSclrElemOp[Op, Double, Long, Double](op)
+  ) :VecSclrElemOp[Op, Double, Long, Double]= new VecSclrElemOp[Op, Double, Long, Double](op)
   implicit def VecSclrElmOpDID[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ) = new VecSclrElemOp[Op, Double, Int, Double](op)
+  ):VecSclrElemOp[Op, Double, Int, Double] = new VecSclrElemOp[Op, Double, Int, Double](op)
 
   implicit def VecSclrElmOpLDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Double]
-  ) = new VecSclrElemOp[Op, Long, Double, Double](op)
+  ):VecSclrElemOp[Op, Long, Double, Double] = new VecSclrElemOp[Op, Long, Double, Double](op)
   implicit def VecSclrElmOpLLL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ) = new VecSclrElemOp[Op, Long, Long, Long](op)
+  ):VecSclrElemOp[Op, Long, Long, Long] = new VecSclrElemOp[Op, Long, Long, Long](op)
   implicit def VecSclrElmOpLIL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ) = new VecSclrElemOp[Op, Long, Int, Long](op)
+  ) :VecSclrElemOp[Op, Long, Int, Long]= new VecSclrElemOp[Op, Long, Int, Long](op)
 
   implicit def VecSclrElmOpIDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Double]
-  ) = new VecSclrElemOp[Op, Int, Double, Double](op)
+  ) :VecSclrElemOp[Op, Int, Double, Double]= new VecSclrElemOp[Op, Int, Double, Double](op)
   implicit def VecSclrElmOpILL[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Long, Long]
-  ) = new VecSclrElemOp[Op, Int, Long, Long](op)
+  ) : VecSclrElemOp[Op, Int, Long, Long]= new VecSclrElemOp[Op, Int, Long, Long](op)
   implicit def VecSclrElmOpIII[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ) = new VecSclrElemOp[Op, Int, Int, Int](op)
+  ) :VecSclrElemOp[Op, Int, Int, Int]= new VecSclrElemOp[Op, Int, Int, Int](op)
 
   // comparisons
   implicit def VecSclrElmOpDDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Boolean]
-  ) = new VecSclrElemOp[Op, Double, Double, Boolean](op)
+  ) :VecSclrElemOp[Op, Double, Double, Boolean]= new VecSclrElemOp[Op, Double, Double, Boolean](op)
   implicit def VecSclrElmOpDLB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Boolean]
-  ) = new VecSclrElemOp[Op, Double, Long, Boolean](op)
+  ) :VecSclrElemOp[Op, Double, Long, Boolean]= new VecSclrElemOp[Op, Double, Long, Boolean](op)
   implicit def VecSclrElmOpDIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Boolean]
-  ) = new VecSclrElemOp[Op, Double, Int, Boolean](op)
+  ):VecSclrElemOp[Op, Double, Int, Boolean] = new VecSclrElemOp[Op, Double, Int, Boolean](op)
 
   implicit def VecSclrElmOpLDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Boolean]
-  ) = new VecSclrElemOp[Op, Long, Double, Boolean](op)
+  ):VecSclrElemOp[Op, Long, Double, Boolean] = new VecSclrElemOp[Op, Long, Double, Boolean](op)
   implicit def VecSclrElmOpLLB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Boolean]
-  ) = new VecSclrElemOp[Op, Long, Long, Boolean](op)
+  ) :VecSclrElemOp[Op, Long, Long, Boolean]= new VecSclrElemOp[Op, Long, Long, Boolean](op)
   implicit def VecSclrElmOpLIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Boolean]
-  ) = new VecSclrElemOp[Op, Long, Int, Boolean](op)
+  ) :VecSclrElemOp[Op, Long, Int, Boolean]= new VecSclrElemOp[Op, Long, Int, Boolean](op)
 
   implicit def VecSclrElmOpIDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Boolean]
-  ) = new VecSclrElemOp[Op, Int, Double, Boolean](op)
+  ):VecSclrElemOp[Op, Int, Double, Boolean] = new VecSclrElemOp[Op, Int, Double, Boolean](op)
   implicit def VecSclrElmOpILB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Long, Boolean]
-  ) = new VecSclrElemOp[Op, Int, Long, Boolean](op)
+  ) :VecSclrElemOp[Op, Int, Long, Boolean]= new VecSclrElemOp[Op, Int, Long, Boolean](op)
   implicit def VecSclrElmOpIIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Boolean]
-  ) = new VecSclrElemOp[Op, Int, Int, Boolean](op)
+  ):VecSclrElemOp[Op, Int, Int, Boolean] = new VecSclrElemOp[Op, Int, Int, Boolean](op)
 
   // and, or ops
   implicit def VecSclrElmOpBBB[Op <: ScalarOp](implicit
       op: BinOp[Op, Boolean, Boolean, Boolean]
-  ) = new VecSclrElemOp[Op, Boolean, Boolean, Boolean](op)
+  ) :VecSclrElemOp[Op, Boolean, Boolean, Boolean]= new VecSclrElemOp[Op, Boolean, Boolean, Boolean](op)
 
   // ***************
 
@@ -139,69 +139,69 @@ trait BinOpVec {
   // math ops
   implicit def VecVelElemOpDDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) = new VecVecElemOp[Op, Double, Double, Double](op)
+  ):VecVecElemOp[Op, Double, Double, Double] = new VecVecElemOp[Op, Double, Double, Double](op)
   implicit def VecVelElemOpDLD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) = new VecVecElemOp[Op, Double, Long, Double](op)
+  ) :VecVecElemOp[Op, Double, Long, Double]= new VecVecElemOp[Op, Double, Long, Double](op)
   implicit def VecVelElemOpDID[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ) = new VecVecElemOp[Op, Double, Int, Double](op)
+  ):VecVecElemOp[Op, Double, Int, Double] = new VecVecElemOp[Op, Double, Int, Double](op)
 
   implicit def VecVelElemOpLDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Double]
-  ) = new VecVecElemOp[Op, Long, Double, Double](op)
+  ) :VecVecElemOp[Op, Long, Double, Double]= new VecVecElemOp[Op, Long, Double, Double](op)
   implicit def VecVelElemOpLLL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ) = new VecVecElemOp[Op, Long, Long, Long](op)
+  ):VecVecElemOp[Op, Long, Long, Long] = new VecVecElemOp[Op, Long, Long, Long](op)
   implicit def VecVelElemOpLIL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ) = new VecVecElemOp[Op, Long, Int, Long](op)
+  ):VecVecElemOp[Op, Long, Int, Long] = new VecVecElemOp[Op, Long, Int, Long](op)
 
   implicit def VecVelElemOpIDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Double]
-  ) = new VecVecElemOp[Op, Int, Double, Double](op)
+  ):VecVecElemOp[Op, Int, Double, Double] = new VecVecElemOp[Op, Int, Double, Double](op)
   implicit def VecVelElemOpILL[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Long, Long]
-  ) = new VecVecElemOp[Op, Int, Long, Long](op)
+  ):VecVecElemOp[Op, Int, Long, Long] = new VecVecElemOp[Op, Int, Long, Long](op)
   implicit def VecVelElemOpIII[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ) = new VecVecElemOp[Op, Int, Int, Int](op)
+  ):VecVecElemOp[Op, Int, Int, Int] = new VecVecElemOp[Op, Int, Int, Int](op)
 
   // comparisons
   implicit def VecVecElemOpDDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Boolean]
-  ) = new VecVecElemOp[Op, Double, Double, Boolean](op)
+  ):VecVecElemOp[Op, Double, Double, Boolean] = new VecVecElemOp[Op, Double, Double, Boolean](op)
   implicit def VecVecElemOpDLB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Boolean]
-  ) = new VecVecElemOp[Op, Double, Long, Boolean](op)
+  ):VecVecElemOp[Op, Double, Long, Boolean] = new VecVecElemOp[Op, Double, Long, Boolean](op)
   implicit def VecVecElemOpDIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Boolean]
-  ) = new VecVecElemOp[Op, Double, Int, Boolean](op)
+  ): VecVecElemOp[Op, Double, Int, Boolean] = new VecVecElemOp[Op, Double, Int, Boolean](op)
 
   implicit def VecVecElemOpLDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Boolean]
-  ) = new VecVecElemOp[Op, Long, Double, Boolean](op)
+  ): VecVecElemOp[Op, Long, Double, Boolean]= new VecVecElemOp[Op, Long, Double, Boolean](op)
   implicit def VecVecElemOpLLB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Boolean]
-  ) = new VecVecElemOp[Op, Long, Long, Boolean](op)
+  ): VecVecElemOp[Op, Long, Long, Boolean]= new VecVecElemOp[Op, Long, Long, Boolean](op)
   implicit def VecVecElemOpLIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Boolean]
-  ) = new VecVecElemOp[Op, Long, Int, Boolean](op)
+  ): VecVecElemOp[Op, Long, Int, Boolean]= new VecVecElemOp[Op, Long, Int, Boolean](op)
 
   implicit def VecVecElemOpIDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Boolean]
-  ) = new VecVecElemOp[Op, Int, Double, Boolean](op)
+  ): VecVecElemOp[Op, Int, Double, Boolean]= new VecVecElemOp[Op, Int, Double, Boolean](op)
   implicit def VecVecElemOpILB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Long, Boolean]
-  ) = new VecVecElemOp[Op, Int, Long, Boolean](op)
+  ):VecVecElemOp[Op, Int, Long, Boolean] = new VecVecElemOp[Op, Int, Long, Boolean](op)
   implicit def VecVecElemOpIIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Boolean]
-  ) = new VecVecElemOp[Op, Int, Int, Boolean](op)
+  ): VecVecElemOp[Op, Int, Int, Boolean] = new VecVecElemOp[Op, Int, Int, Boolean](op)
 
   // and, or ops
   implicit def VecVecElemOpBBB[Op <: ScalarOp](implicit
       op: BinOp[Op, Boolean, Boolean, Boolean]
-  ) = new VecVecElemOp[Op, Boolean, Boolean, Boolean](op)
+  ):VecVecElemOp[Op, Boolean, Boolean, Boolean] = new VecVecElemOp[Op, Boolean, Boolean, Boolean](op)
 
   // ***************
 
@@ -230,41 +230,41 @@ trait BinOpVec {
   implicit def VecVecDotOpDDD(implicit
       opA: BinOp[Add, Double, Double, Double],
       opM: BinOp[Multiply, Double, Double, Double]
-  ) = new VecVecDot[Double, Double, Double](opA, opM)
+  ): VecVecDot[Double, Double, Double]= new VecVecDot[Double, Double, Double](opA, opM)
   implicit def VecVecDotOpDLD(implicit
       opA: BinOp[Add, Double, Double, Double],
       opM: BinOp[Multiply, Double, Long, Double]
-  ) = new VecVecDot[Double, Long, Double](opA, opM)
+  ): VecVecDot[Double, Long, Double]= new VecVecDot[Double, Long, Double](opA, opM)
   implicit def VecVecDotOpDID(implicit
       opA: BinOp[Add, Double, Double, Double],
       opM: BinOp[Multiply, Double, Int, Double]
-  ) = new VecVecDot[Double, Int, Double](opA, opM)
+  ): VecVecDot[Double, Int, Double]= new VecVecDot[Double, Int, Double](opA, opM)
 
   implicit def VecVecDotOpLDD(implicit
       opA: BinOp[Add, Double, Double, Double],
       opM: BinOp[Multiply, Long, Double, Double]
-  ) = new VecVecDot[Long, Double, Double](opA, opM)
+  ):VecVecDot[Long, Double, Double] = new VecVecDot[Long, Double, Double](opA, opM)
   implicit def VecVecDotOpLLL(implicit
       opA: BinOp[Add, Long, Long, Long],
       opM: BinOp[Multiply, Long, Long, Long]
-  ) = new VecVecDot[Long, Long, Long](opA, opM)
+  ):VecVecDot[Long, Long, Long] = new VecVecDot[Long, Long, Long](opA, opM)
   implicit def VecVecDotOpLIL(implicit
       opA: BinOp[Add, Long, Long, Long],
       opM: BinOp[Multiply, Long, Int, Long]
-  ) = new VecVecDot[Long, Int, Long](opA, opM)
+  ):  VecVecDot[Long, Int, Long]= new VecVecDot[Long, Int, Long](opA, opM)
 
   implicit def VecVecDotOpIDD(implicit
       opA: BinOp[Add, Double, Double, Double],
       opM: BinOp[Multiply, Int, Double, Double]
-  ) = new VecVecDot[Int, Double, Double](opA, opM)
+  ):VecVecDot[Int, Double, Double] = new VecVecDot[Int, Double, Double](opA, opM)
   implicit def VecVecDotOpILL(implicit
       opA: BinOp[Add, Long, Long, Long],
       opM: BinOp[Multiply, Int, Long, Long]
-  ) = new VecVecDot[Int, Long, Long](opA, opM)
+  ) :VecVecDot[Int, Long, Long]= new VecVecDot[Int, Long, Long](opA, opM)
   implicit def VecVecDotOpIII(implicit
       opA: BinOp[Add, Int, Int, Int],
       opM: BinOp[Multiply, Int, Int, Int]
-  ) = new VecVecDot[Int, Int, Int](opA, opM)
+  ) :VecVecDot[Int, Int, Int]= new VecVecDot[Int, Int, Int](opA, opM)
 
   // Binary outer product of two vectors
 
@@ -296,31 +296,31 @@ trait BinOpVec {
 
   implicit def VecVecOuterOpDDD(implicit
       opM: BinOp[Multiply, Double, Double, Double]
-  ) = new VecVecOuter[Double, Double, Double](opM)
+  ): VecVecOuter[Double, Double, Double] = new VecVecOuter[Double, Double, Double](opM)
   implicit def VecVecOuterOpDLD(implicit
       opM: BinOp[Multiply, Double, Long, Double]
-  ) = new VecVecOuter[Double, Long, Double](opM)
+  ): VecVecOuter[Double, Long, Double] = new VecVecOuter[Double, Long, Double](opM)
   implicit def VecVecOuterOpDID(implicit
       opM: BinOp[Multiply, Double, Int, Double]
-  ) = new VecVecOuter[Double, Int, Double](opM)
+  ): VecVecOuter[Double, Int, Double] = new VecVecOuter[Double, Int, Double](opM)
 
   implicit def VecVecOuterOpLDD(implicit
       opM: BinOp[Multiply, Long, Double, Double]
-  ) = new VecVecOuter[Long, Double, Double](opM)
+  ): VecVecOuter[Long, Double, Double] = new VecVecOuter[Long, Double, Double](opM)
   implicit def VecVecOuterOpLLL(implicit
       opM: BinOp[Multiply, Long, Long, Long]
-  ) = new VecVecOuter[Long, Long, Long](opM)
+  ): VecVecOuter[Long, Long, Long] = new VecVecOuter[Long, Long, Long](opM)
   implicit def VecVecOuterOpLIL(implicit
       opM: BinOp[Multiply, Long, Int, Long]
-  ) = new VecVecOuter[Long, Int, Long](opM)
+  ): VecVecOuter[Long, Int, Long] = new VecVecOuter[Long, Int, Long](opM)
 
   implicit def VecVecOuterOpIDD(implicit
       opM: BinOp[Multiply, Int, Double, Double]
-  ) = new VecVecOuter[Int, Double, Double](opM)
+  ): VecVecOuter[Int, Double, Double] = new VecVecOuter[Int, Double, Double](opM)
   implicit def VecVecOuterOpILL(implicit
       opM: BinOp[Multiply, Int, Long, Long]
-  ) = new VecVecOuter[Int, Long, Long](opM)
-  implicit def VecVecOuterOpIII(implicit opM: BinOp[Multiply, Int, Int, Int]) =
+  ): VecVecOuter[Int, Long, Long] = new VecVecOuter[Int, Long, Long](opM)
+  implicit def VecVecOuterOpIII(implicit opM: BinOp[Multiply, Int, Int, Int]):VecVecOuter[Int, Int, Int] =
     new VecVecOuter[Int, Int, Int](opM)
 }
 
@@ -348,29 +348,29 @@ trait BinOpVecInPlace {
   // math ops
   implicit def VecSclrElmOpDDDIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) = new VecSclrElemOpIp[Op, Double, Double](op)
+  ): VecSclrElemOpIp[Op,Double, Double] = new VecSclrElemOpIp[Op, Double, Double](op)
   implicit def VecSclrElmOpDLDIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) = new VecSclrElemOpIp[Op, Double, Long](op)
+  ): VecSclrElemOpIp[Op,Double, Long] = new VecSclrElemOpIp[Op, Double, Long](op)
   implicit def VecSclrElmOpDIDIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ) = new VecSclrElemOpIp[Op, Double, Int](op)
+  ): VecSclrElemOpIp[Op,Double, Int] = new VecSclrElemOpIp[Op, Double, Int](op)
 
   implicit def VecSclrElmOpLLLIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ) = new VecSclrElemOpIp[Op, Long, Long](op)
+  ): VecSclrElemOpIp[Op,Long, Long] = new VecSclrElemOpIp[Op, Long, Long](op)
   implicit def VecSclrElmOpLILIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ) = new VecSclrElemOpIp[Op, Long, Int](op)
+  ): VecSclrElemOpIp[Op,Long, Int] = new VecSclrElemOpIp[Op, Long, Int](op)
 
   implicit def VecSclrElmOpIIIIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ) = new VecSclrElemOpIp[Op, Int, Int](op)
+  ): VecSclrElemOpIp[Op,Int, Int] = new VecSclrElemOpIp[Op, Int, Int](op)
 
   // and, or ops
   implicit def VecSclrElmOpBBBIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Boolean, Boolean, Boolean]
-  ) = new VecSclrElemOpIp[Op, Boolean, Boolean](op)
+  ): VecSclrElemOpIp[Op,Boolean, Boolean] = new VecSclrElemOpIp[Op, Boolean, Boolean](op)
 
   // ***************
 
@@ -397,27 +397,27 @@ trait BinOpVecInPlace {
   // math ops
   implicit def VecVelElemOpDDDIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) = new VecVecElemOpIp[Op, Double, Double](op)
+  ): VecVecElemOpIp[Op, Double, Double] = new VecVecElemOpIp[Op, Double, Double](op)
   implicit def VecVelElemOpDLDIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) = new VecVecElemOpIp[Op, Double, Long](op)
+  ): VecVecElemOpIp[Op, Double, Long] = new VecVecElemOpIp[Op, Double, Long](op)
   implicit def VecVelElemOpDIDIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ) = new VecVecElemOpIp[Op, Double, Int](op)
+  ): VecVecElemOpIp[Op, Double, Int] = new VecVecElemOpIp[Op, Double, Int](op)
 
   implicit def VecVelElemOpLLLIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ) = new VecVecElemOpIp[Op, Long, Long](op)
+  ): VecVecElemOpIp[Op, Long, Long] = new VecVecElemOpIp[Op, Long, Long](op)
   implicit def VecVelElemOpLILIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ) = new VecVecElemOpIp[Op, Long, Int](op)
+  ): VecVecElemOpIp[Op, Long, Int] = new VecVecElemOpIp[Op, Long, Int](op)
 
   implicit def VecVelElemOpIIIIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ) = new VecVecElemOpIp[Op, Int, Int](op)
+  ): VecVecElemOpIp[Op, Int, Int] = new VecVecElemOpIp[Op, Int, Int](op)
 
   // and, or ops
   implicit def VecVecElemOpBBBIp[Op <: ScalarOp](implicit
       op: BinOp[Op, Boolean, Boolean, Boolean]
-  ) = new VecVecElemOpIp[Op, Boolean, Boolean](op)
+  ): VecVecElemOpIp[Op, Boolean, Boolean] = new VecVecElemOpIp[Op, Boolean, Boolean](op)
 }
