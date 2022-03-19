@@ -384,6 +384,30 @@ Let’s look at some ways to instantiated a Frame:
  Frame(Seq(v, u), Index("a", "b"))              // col index specified
 ```
 
+The factory methods which construct a Frame from columns as Series come in two flavors 
+regarding their behavior upon non-unique indices in the series (duplicate row index values).
+- The Frame.apply methods create a full cross product of the respective indices. 
+This means that for a given value of the row index all respective items will be paired with all other,
+leading to a combinatorial explosion of the number of rows of the resulting Frame.
+- The Frame.fromColumns methods disambiguate the non-unique indices before joining. 
+This avoids the combinatorial increase in the number of rows, at the cost of arbitrarily joining
+items with the same index value.
+
+An example for the difference between Frame.apply and Frame.fromColumns, note the rows with 0 index:
+```scala mdoc
+  Frame.fromColumns(
+        Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
+        Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
+        Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
+      )
+
+  Frame.apply(
+        Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
+        Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
+        Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
+      )
+```
+
 You’ll notice that if an index is not provided, a default int index is set where the index ranges between 0 and the length of the data.
 
 If you want to set or reset the index, these methods are your friends:

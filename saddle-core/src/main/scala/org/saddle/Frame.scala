@@ -1965,7 +1965,7 @@ object Frame extends BinOpFrame {
     *
     * This methods avoids a combinatorial increase in the resulting row count in
     * case of duplicate elements in the row indices, however the join of rows
-    * with the same index is arbitrary.
+    * with the same index is arbitrary. Alternatively see Frame.apply .
     */
   @scala.annotation.nowarn
   def fromColumns[RX: ST: ORD, T: ST](
@@ -2006,7 +2006,7 @@ object Frame extends BinOpFrame {
     *
     * This methods avoids a combinatorial increase in the resulting row count in
     * case of duplicate elements in the row indices, however the join of rows
-    * with the same index is arbitrary.
+    * with the same index is arbitrary. Alternatively see Frame.apply .
     */
   def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
@@ -2058,7 +2058,7 @@ object Frame extends BinOpFrame {
     *
     * This methods avoids a combinatorial increase in the resulting row count in
     * case of duplicate elements in the row indices, however the join of rows
-    * with the same index is arbitrary.
+    * with the same index is arbitrary. Alternatively see Frame.apply .
     */
   def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
