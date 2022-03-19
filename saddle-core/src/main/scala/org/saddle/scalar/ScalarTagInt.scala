@@ -23,6 +23,8 @@ import org.saddle.array.Sorter
 /** Int ScalarTag
   */
 object ScalarTagInt extends ScalarTag[Int] {
+
+  val classTag = scala.reflect.classTag[Int]
   def missing: Int = Int.MinValue
   def isMissing(v: Int): Boolean = v == Int.MinValue
   override def notMissing(v: Int): Boolean = !isMissing(v)

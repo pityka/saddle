@@ -23,6 +23,8 @@ import org.saddle.Buffer
 /** Boolean ScalarTag. No support for missing value.
   */
 object ScalarTagBool extends ScalarTag[Boolean] {
+
+  val classTag = scala.reflect.classTag[Boolean]
   def missing: Boolean = false
   def isMissing(v: Boolean): Boolean = false
   override def notMissing(v: Boolean): Boolean = true

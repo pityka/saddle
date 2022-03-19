@@ -24,6 +24,8 @@ import org.saddle.util.DoubleTotalOrder
 import org.saddle.scalar.FromScalars
 import org.saddle.scalar.FromScalarGen
 import org.saddle.scalar.ScalarGen
+import org.saddle.na.naToInt
+import org.saddle.scalar.ScalarTagInt.{missing => naI}
 
 /** Test on properties of Vec
   */
@@ -243,12 +245,12 @@ class VecCheck extends Specification with ScalaCheck {
     "map works" in {
       forAll { (v: Vec[Double]) =>
         val data = v.contents
-        v.map(_ + 1.0) must_== Vec(data.map(_ + 1.0))
+        v.map(_ + 1.0) must_== Vec(data.toSeq.map(_ + 1.0).toArray)
         v.map(_ => 5.0) must_== Vec(
-          data.map(d => if (d.isNaN) na.to[Double] else 5.0)
+          data.toSeq.map(d => if (d.isNaN) na.to[Double] else 5.0).toArray
         )
         v.map(_ => 5) must_== Vec[Int](
-          data.map(d => if (d.isNaN) na.to[Int] else 5)
+          data.toSeq.map(d => if (d.isNaN) na.to[Int] else 5).toArray
         )
       }
     }
@@ -363,54 +365,54 @@ class VecCheck extends Specification with ScalaCheck {
     "fillNA works" in {
       forAll { (v: Vec[Double]) =>
         val res = v.fillNA(_ => 5.0)
-        val exp = Vec(v.contents.map(x => if (x.isNaN) 5.0 else x))
+        val exp = Vec(v.contents.toSeq.map(x => if (x.isNaN) 5.0 else x).toArray)
         res.hasNA must beFalse
         res must_== exp
       }
     }
 
     "fillForward fills values forward" in {
-      val v = Vec[Int](1, na, na, 2, na, na)
+      val v = Vec[Int](1, naI, naI, 2, naI, naI)
       v.fillForward() mustEqual Vec[Int](1, 1, 1, 2, 2, 2)
     }
 
     "fillForward fills last value forward" in {
-      val v = Vec[Int](1, 2, na, na)
+      val v = Vec[Int](1, 2, naI, naI)
       v.fillForward() mustEqual Vec[Int](1, 2, 2, 2)
     }
 
     "fillForward fills values forward until the limit if greater than 0" in {
-      val v = Vec[Int](1, na, na, 2, na, na, na)
+      val v = Vec[Int](1, naI, naI, 2, naI, naI, naI)
       v.fillForward(0) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, 2)
-      v.fillForward(1) mustEqual Vec[Int](1, 1, na, 2, 2, na, na)
-      v.fillForward(2) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, na)
+      v.fillForward(1) mustEqual Vec[Int](1, 1, naI, 2, 2, naI, naI)
+      v.fillForward(2) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, naI)
     }
 
     "fillForward fills values forward only" in {
-      val v = Vec[Int](na, na, 2, na, na)
-      v.fillForward() mustEqual Vec[Int](na, na, 2, 2, 2)
+      val v = Vec[Int](naI, naI, 2, naI, naI)
+      v.fillForward() mustEqual Vec[Int](naI, naI, 2, 2, 2)
     }
 
     "fillBackward fills values backward" in {
-      val v = Vec[Int](na, na, 1, na, na, 2)
+      val v = Vec[Int](naI, naI, 1, naI, naI, 2)
       v.fillBackward() mustEqual Vec[Int](1, 1, 1, 2, 2, 2)
     }
 
     "fillBackward fills last value backward" in {
-      val v = Vec[Int](na, na, 2, 1)
+      val v = Vec[Int](naI, naI, 2, 1)
       v.fillBackward() mustEqual Vec[Int](2, 2, 2, 1)
     }
 
     "fillBackword fills values backward until the limit if greater than 0" in {
-      val v = Vec[Int](na, na, na, 2, na, na, 1)
+      val v = Vec[Int](naI, naI, naI, 2, naI, naI, 1)
       v.fillBackward(0) mustEqual Vec[Int](2, 2, 2, 2, 1, 1, 1)
-      v.fillBackward(1) mustEqual Vec[Int](na, na, 2, 2, na, 1, 1)
-      v.fillBackward(2) mustEqual Vec[Int](na, 2, 2, 2, 1, 1, 1)
+      v.fillBackward(1) mustEqual Vec[Int](naI, naI, 2, 2, naI, 1, 1)
+      v.fillBackward(2) mustEqual Vec[Int](naI, 2, 2, 2, 1, 1, 1)
     }
 
     "fillBackward fills values backward only" in {
-      val v = Vec[Int](na, na, 2, na, na)
-      v.fillBackward() mustEqual Vec[Int](2, 2, 2, na, na)
+      val v = Vec[Int](naI, naI, 2, naI, naI)
+      v.fillBackward() mustEqual Vec[Int](2, 2, 2, naI, naI)
     }
 
     "sliceAt works" in {
@@ -485,7 +487,7 @@ class VecCheck extends Specification with ScalaCheck {
     "negation works" in {
       forAll { (v: Vec[Double]) =>
         val res = -v
-        val exp = Vec(v.toArray.map(_ * -1))
+        val exp = Vec(v.toArray.toSeq.map(_ * -1).toArray)
         res must_== exp
       }
     }
@@ -496,7 +498,7 @@ class VecCheck extends Specification with ScalaCheck {
           val idx = Gen.listOfN(3, Gen.choose(0, v.length - 1))
           forAll(idx) { i =>
             val res = v.take(i.toArray)
-            val exp = Vec(i.toArray.map(v.raw(_)))
+            val exp = Vec(i.toArray.toSeq.map(v.raw(_)).toArray)
             res must_== exp
             res must_== v.take(i: _*)
           }

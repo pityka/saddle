@@ -22,6 +22,8 @@ import org.saddle.Buffer
 import org.saddle.na
 
 class ScalarTagAny[T: CLM] extends ScalarTag[T] {
+
+  val classTag = implicitly[CLM[T]]
   def missing: T = null.asInstanceOf[T]
   def isMissing(v: T): Boolean = v == missing || v == na
 

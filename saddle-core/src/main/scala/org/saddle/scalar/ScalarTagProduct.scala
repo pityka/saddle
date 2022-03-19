@@ -17,6 +17,8 @@ package org.saddle.scalar
 import org.saddle.CLM
 
 class ScalarTagProduct[T <: Product: CLM] extends ScalarTagAny[T] {
+
+  override val classTag = implicitly[CLM[T]]
   override def isTuple = true
 
   override def strList(v: T) =

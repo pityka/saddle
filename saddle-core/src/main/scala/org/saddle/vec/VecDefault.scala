@@ -16,6 +16,7 @@ package org.saddle.vec
 
 import scala.{specialized => spec}
 import org.saddle.scalar.{Scalar, NA, ScalarTagDouble}
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import org.saddle.ops.NumericOps
 import org.saddle.{ST, Vec, array, NUM, util, ORD, PctMethod, RankTie, Mat}
 import org.saddle.index.Slice
@@ -578,7 +579,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     */
   def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
     {
-          val sca = implicitly[ST[T]]
+    val sca = implicitly[ST[T]]
     val sz = length
     if (sz == 0) -1
     else {

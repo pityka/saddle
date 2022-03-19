@@ -28,7 +28,7 @@ class IndexDouble(keys: Vec[Double], val ord: ORD[Double])
     extends Index[Double] {
   val scalarTag = ScalarTagDouble
 
-  implicit private def o = ord
+  implicit private def o: ORD[Double] = ord
 
   private lazy val (kmap, IndexProperties(contiguous, monotonic)) =
     IndexImpl.keys2map(this)

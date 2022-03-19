@@ -20,6 +20,8 @@ import org.saddle.array.Sorter
 /** Short ScalarTag
   */
 object ScalarTagShort extends ScalarTagAny[Short] {
+
+  override val classTag = scala.reflect.classTag[Short]
   override def parse(s: String) = s.toByte
   override def makeSorter(implicit ord: ORD[Short]): Sorter[Short] =
     Sorter.shortSorter

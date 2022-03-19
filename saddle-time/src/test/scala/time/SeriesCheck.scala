@@ -21,6 +21,7 @@ import org.scalacheck.Prop._
 import org.joda.time._
 import org.saddle.time._
 import org.saddle.order._
+import org.saddle.na._
 
 class SeriesCheck extends Specification with ScalaCheck {
 

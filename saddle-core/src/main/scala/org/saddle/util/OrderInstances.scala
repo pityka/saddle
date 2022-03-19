@@ -75,20 +75,23 @@ trait OrderInstances {
   implicit def stringOrd: ORD[String] =
     cats.kernel.instances.string.catsKernelStdOrderForString
 
-  implicit def fromOrdering[T](implicit ordering: Ordering[T]) =
+  implicit def fromOrdering[T](implicit ordering: Ordering[T]) : ORD[T] =
     Order.fromOrdering(ordering)
 
-  implicit def tuple1[T: ORD] =
+  implicit def tuple1[T: ORD]: ORD[Tuple1[T]] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple1[T]
   implicit def tuple2[T1: ORD, T2: ORD]: ORD[(T1, T2)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple2[T1, T2]
-  implicit def tuple3[T1: ORD, T2: ORD, T3: ORD] =
+  implicit def tuple3[T1: ORD, T2: ORD, T3: ORD]: ORD[(T1, T2, T3)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple3[T1, T2, T3]
-  implicit def tuple4[T1: ORD, T2: ORD, T3: ORD, T4: ORD] =
+  implicit def tuple4[T1: ORD, T2: ORD, T3: ORD, T4: ORD]
+      : ORD[(T1, T2, T3, T4)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple4[T1, T2, T3, T4]
-  implicit def tuple5[T1: ORD, T2: ORD, T3: ORD, T4: ORD, T5: ORD] =
+  implicit def tuple5[T1: ORD, T2: ORD, T3: ORD, T4: ORD, T5: ORD]
+      : ORD[(T1, T2, T3, T4, T5)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple5[T1, T2, T3, T4, T5]
-  implicit def tuple6[T1: ORD, T2: ORD, T3: ORD, T4: ORD, T5: ORD, T6: ORD] =
+  implicit def tuple6[T1: ORD, T2: ORD, T3: ORD, T4: ORD, T5: ORD, T6: ORD]
+      : ORD[(T1, T2, T3, T4, T5, T6)] =
     cats.kernel.instances.tuple
       .catsKernelStdOrderForTuple6[T1, T2, T3, T4, T5, T6]
   implicit def tuple7[
@@ -99,7 +102,7 @@ trait OrderInstances {
       T5: ORD,
       T6: ORD,
       T7: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7)] =
     cats.kernel.instances.tuple
       .catsKernelStdOrderForTuple7[T1, T2, T3, T4, T5, T6, T7]
   implicit def tuple8[
@@ -111,7 +114,7 @@ trait OrderInstances {
       T6: ORD,
       T7: ORD,
       T8: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8)] =
     cats.kernel.instances.tuple
       .catsKernelStdOrderForTuple8[T1, T2, T3, T4, T5, T6, T7, T8]
   implicit def tuple9[
@@ -124,7 +127,7 @@ trait OrderInstances {
       T7: ORD,
       T8: ORD,
       T9: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9)] =
     cats.kernel.instances.tuple
       .catsKernelStdOrderForTuple9[T1, T2, T3, T4, T5, T6, T7, T8, T9]
   implicit def tuple10[
@@ -138,7 +141,7 @@ trait OrderInstances {
       T8: ORD,
       T9: ORD,
       T10: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)] =
     cats.kernel.instances.tuple
       .catsKernelStdOrderForTuple10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]
   implicit def tuple11[
@@ -153,7 +156,7 @@ trait OrderInstances {
       T9: ORD,
       T10: ORD,
       T11: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple11[
       T1,
       T2,
@@ -180,7 +183,7 @@ trait OrderInstances {
       T10: ORD,
       T11: ORD,
       T12: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple12[
       T1,
       T2,
@@ -209,7 +212,7 @@ trait OrderInstances {
       T11: ORD,
       T12: ORD,
       T13: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple13[
       T1,
       T2,
@@ -240,7 +243,7 @@ trait OrderInstances {
       T12: ORD,
       T13: ORD,
       T14: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple14[
       T1,
       T2,
@@ -273,7 +276,7 @@ trait OrderInstances {
       T13: ORD,
       T14: ORD,
       T15: ORD
-  ] =
+  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple15[
       T1,
       T2,
@@ -308,6 +311,8 @@ trait OrderInstances {
       T14: ORD,
       T15: ORD,
       T16: ORD
+  ]: ORD[
+    (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple16[
       T1,
@@ -345,6 +350,8 @@ trait OrderInstances {
       T15: ORD,
       T16: ORD,
       T17: ORD
+  ]: ORD[
+    (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17)
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple17[
       T1,
@@ -384,6 +391,27 @@ trait OrderInstances {
       T16: ORD,
       T17: ORD,
       T18: ORD
+  ]: ORD[
+    (
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        T7,
+        T8,
+        T9,
+        T10,
+        T11,
+        T12,
+        T13,
+        T14,
+        T15,
+        T16,
+        T17,
+        T18
+    )
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple18[
       T1,
@@ -425,6 +453,28 @@ trait OrderInstances {
       T17: ORD,
       T18: ORD,
       T19: ORD
+  ]: ORD[
+    (
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        T7,
+        T8,
+        T9,
+        T10,
+        T11,
+        T12,
+        T13,
+        T14,
+        T15,
+        T16,
+        T17,
+        T18,
+        T19
+    )
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple19[
       T1,
@@ -468,6 +518,29 @@ trait OrderInstances {
       T18: ORD,
       T19: ORD,
       T20: ORD
+  ]: ORD[
+    (
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        T7,
+        T8,
+        T9,
+        T10,
+        T11,
+        T12,
+        T13,
+        T14,
+        T15,
+        T16,
+        T17,
+        T18,
+        T19,
+        T20
+    )
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple20[
       T1,
@@ -513,6 +586,30 @@ trait OrderInstances {
       T19: ORD,
       T20: ORD,
       T21: ORD
+  ]: ORD[
+    (
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        T7,
+        T8,
+        T9,
+        T10,
+        T11,
+        T12,
+        T13,
+        T14,
+        T15,
+        T16,
+        T17,
+        T18,
+        T19,
+        T20,
+        T21
+    )
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple21[
       T1,
@@ -560,6 +657,31 @@ trait OrderInstances {
       T20: ORD,
       T21: ORD,
       T22: ORD
+  ]: ORD[
+    (
+        T1,
+        T2,
+        T3,
+        T4,
+        T5,
+        T6,
+        T7,
+        T8,
+        T9,
+        T10,
+        T11,
+        T12,
+        T13,
+        T14,
+        T15,
+        T16,
+        T17,
+        T18,
+        T19,
+        T20,
+        T21,
+        T22
+    )
   ] =
     cats.kernel.instances.tuple.catsKernelStdOrderForTuple22[
       T1,

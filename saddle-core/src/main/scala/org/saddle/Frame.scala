@@ -27,6 +27,7 @@ import org.saddle.index.{
   Stacker,
   Splitter
 }
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import org.saddle.groupby.{FrameGrouper, IndexGrouper}
 import org.saddle.ops.{NumericOps, BinOpFrame}
 import scalar.Scalar
@@ -35,6 +36,8 @@ import org.saddle.mat.MatCols
 import org.saddle.order._
 import _root_.cats.kernel.Order
 import org.saddle.array.Sorter.intSorter
+import org.saddle.ORD
+import org.saddle.ST
 
 /** `Frame` is an immutable container for 2D data which is indexed along both
   * axes (rows, columns) by associated keys (i.e., indexes).
@@ -531,38 +534,6 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
 
   // -----------------------------------------
   // access columns by type
-
-  /** Extract columns from a heterogeneous Frame which match the provided type.
-    * The result is a homogeneous frame consisting of the selected data.
-    * @tparam U
-    *   The type of columns to extract
-    */
-  def colType[U: ST]: Frame[RX, CX, U] = {
-    val (columns, locs) = values.takeType[U]
-    Frame(columns, rowIx, colIx.take(locs))
-  }
-
-  /** Extract columns from a heterogeneous Frame which match either of the
-    * provided types. The result is a heterogeneous frame consisting of the
-    * selected data.
-    * @tparam U1
-    *   First type of columns to extract
-    * @tparam U2
-    *   Second type of columns to extract
-    */
-  def colType[U1: ST, U2: ST]: Frame[RX, CX, Any] = {
-    val (columns1, locs1) = values.takeType[U1]
-    val (columns2, locs2) = values.takeType[U2]
-
-    val frm = Panel(
-      columns1 ++ columns2,
-      rowIx,
-      colIx.take(locs1) concat colIx.take(locs2)
-    )
-    val tkr = array.argsort(array.flatten(Seq(locs1, locs2)))
-
-    frm.colAt(tkr)
-  }
 
   // ----------------------------------------
   // generate or use a new index
@@ -1270,7 +1241,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     *   Output type (tuple of arity N + M)
     */
   def melt[W](implicit melter: Melter[RX, CX, W]): Series[W, T] = {
-    val ix = Array.ofDim[W](numRows * numCols)(melter.tag)
+    val ix = Array.ofDim[W](numRows * numCols)(melter.tag.classTag)
 
     var k = 0
     var i = 0
@@ -1367,8 +1338,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       m1: ST[O1],
       m2: ST[O2]
   ): Frame[O1, V, T] = {
-    implicit def ordV = stkr.ord
-    implicit def clmV = stkr.tag
+    implicit def ordV: ORD[V]  = stkr.ord
+    implicit def clmV: ST[V] = stkr.tag
 
     val (lft, rgt) =
       splt(rowIx) // lft = row index w/o pivot level; rgt = pivot level

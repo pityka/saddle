@@ -15,6 +15,7 @@
 package org.saddle
 
 import scala.{specialized => spec}
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 
 /*
  * Some matrix utilities

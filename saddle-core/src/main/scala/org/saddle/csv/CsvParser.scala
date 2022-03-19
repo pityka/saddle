@@ -23,7 +23,7 @@ import scala.{specialized => spec}
 import java.nio.CharBuffer
 import java.io.File
 import java.nio.charset.CharsetDecoder
-
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 /** Csv parsing utilities
   */
 object CsvParser {

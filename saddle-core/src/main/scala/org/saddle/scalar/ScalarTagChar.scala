@@ -24,4 +24,6 @@ object ScalarTagChar extends ScalarTagAny[Char] {
   override def makeSorter(implicit ord: ORD[Char]): Sorter[Char] =
     Sorter.charSorter
   override def missing: Char = Char.MinValue
+
+  override val classTag = scala.reflect.classTag[Char]
 }

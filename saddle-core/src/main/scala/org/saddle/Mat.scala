@@ -15,6 +15,7 @@
 package org.saddle
 
 import scalar.{Scalar, ScalarTag}
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import ops.NumericOps
 import scala.{specialized => spec}
 import java.io.OutputStream
@@ -65,7 +66,7 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     values: Array[T],
     val scalarTag: ScalarTag[T]
 ) extends NumericOps[Mat[T]] {
-  implicit private[this] def st = scalarTag
+  implicit private[this] def st : ScalarTag[T] = scalarTag
 
   /** Returns the backing array of this Mat Mutations to this array are visible
     * to this Mat

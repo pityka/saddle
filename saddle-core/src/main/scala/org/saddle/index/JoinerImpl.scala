@@ -18,6 +18,7 @@ import scala.{specialized => spec}
 import org.saddle.{ST, ORD, Vec, Index, array}
 import org.saddle.locator.Locator
 import org.saddle.Buffer
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 
 /** Concrete implementation of Joiner instance which is specialized on basic
   * types.

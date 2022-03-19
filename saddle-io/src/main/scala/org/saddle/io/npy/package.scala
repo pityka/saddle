@@ -10,12 +10,12 @@ import java.nio.ByteOrder
 
 package object npy {
 
-  sealed trait DType { def width: Int }
-  case object DoubleType extends DType { val width = 8 }
-  case object FloatType extends DType { val width = 4 }
-  case object LongType extends DType { val width = 8 }
-  case object ByteType extends DType { val width = 1 }
-  case object IntType extends DType { val width = 4 }
+  sealed trait DType[T] { def width: Int }
+  case object DoubleType extends DType[Double] { val width = 8 }
+  case object FloatType extends DType[Float] { val width = 4 }
+  case object LongType extends DType[Long] { val width = 8 }
+  case object ByteType extends DType[Byte] { val width = 1 }
+  case object IntType extends DType[Int] { val width = 4 }
 
   case class Descriptor(fortran: Boolean, shape: List[Long], dtype: String)
 
@@ -28,11 +28,11 @@ package object npy {
     bb.flip
   }
 
-  def parse(
-      tpe: DType,
+  def parse[T](
+      tpe: DType[T],
       size: Int,
       from: ByteBuffer
-  ): Either[String, Array[_]] =
+  ): Either[String, Array[T]] =
     tpe match {
       case DoubleType =>
         Right {
@@ -64,7 +64,7 @@ package object npy {
           to.asInstanceOf[ByteBuffer].put(from)
           to.array
         }
-      case other => Left(s"Type $other not supported.")
+      case null => Left(s"null type not supported (likely programmer error).")
     }
 
   def parseHeader(s: String): Descriptor = {
@@ -120,11 +120,11 @@ package object npy {
     }
   }
 
-  def readDataFromChannel(
-      tpe: DType,
+  def readDataFromChannel[T](
+      tpe: DType[T],
       channel: ReadableByteChannel,
       len: Long
-  ): Iterator[Either[String, Array[_]]] = {
+  ): Iterator[Either[String, Array[T]]] = {
     val maxBufferSize = 1073741816
     val width = tpe.width
     val neededSize = width * len
@@ -144,10 +144,10 @@ package object npy {
 
   }
 
-  def readFromChannel(
-      dtype: DType,
+  def readFromChannel[T](
+      dtype: DType[T],
       channel: ReadableByteChannel
-  ): Either[String, (Descriptor, Iterator[Either[String, Array[_]]])] = {
+  ): Either[String, (Descriptor, Iterator[Either[String, Array[T]]])] = {
     readHeaderFromChannel(channel).map { descriptor =>
       (
         descriptor,

@@ -23,7 +23,7 @@ import scala.reflect.ClassTag
 import cats.kernel.Order
 import org.saddle.order._
 
-/** ==Saddle==
+/** == Saddle ==
   *
   * Saddle is a '''S'''cala '''D'''ata '''L'''ibrary.
   *
@@ -68,11 +68,14 @@ package object saddle {
     */
   type ST[C] = ScalarTag[C]
 
+
   // *********************
-  implicit val doubleOrd = doubleIsNumeric
-  implicit val floatOrd = floatIsNumeric
-  implicit val intOrd = intIsNumeric
-  implicit val longOrd = longIsNumeric
+  implicit val doubleOrd: Numeric[Double] with util.DoubleTotalOrderTrait =
+    doubleIsNumeric
+  implicit val floatOrd: Numeric[Float] with util.FloatTotalOrderTrait =
+    floatIsNumeric
+  implicit val intOrd: Numeric[Int] = intIsNumeric
+  implicit val longOrd: Numeric[Long] = longIsNumeric
 
   // **********************
 
@@ -96,8 +99,8 @@ package object saddle {
     *   val u = v(0 -> 2)
     * }}}
     */
-  implicit def pair2Slice[T](p: (T, T)) = Slice(p._1, p._2)
-  implicit def any2Slice[T](p: T) = Slice(p, p)
+  implicit def pair2Slice[T](p: (T, T)): Slice[T] = Slice(p._1, p._2)
+  implicit def any2Slice[T](p: T): Slice[T] = Slice(p, p)
 
   /** Syntactic sugar, allow '* -> ' to generate an (inclusive) index slice,
     * open on left
@@ -107,7 +110,7 @@ package object saddle {
     *   val u = v(* -> 2)
     * }}}
     */
-  implicit def pair2SliceTo[T](p: (SliceAll, T)) = SliceTo(p._2)
+  implicit def pair2SliceTo[T](p: (SliceAll, T)): SliceTo[T] = SliceTo(p._2)
 
   /** Syntactic sugar, allow ' -> *' to generate an (inclusive) index slice,
     * open on right
@@ -117,7 +120,9 @@ package object saddle {
     *   val u = v(1 -> *)
     * }}}
     */
-  implicit def pair2SliceFrom[T](p: (T, SliceAll)) = SliceFrom(p._1)
+  implicit def pair2SliceFrom[T](p: (T, SliceAll)): SliceFrom[T] = SliceFrom(
+    p._1
+  )
 
   /** Syntactic sugar, placeholder for 'slice-all'
     *

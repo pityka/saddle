@@ -20,6 +20,8 @@ import org.saddle.array.Sorter
 /** Float ScalarTag
   */
 object ScalarTagFloat extends ScalarTagAny[Float] {
+
+  override val classTag = scala.reflect.classTag[Float]
   override def parse(s: String) =
     try {
       s.toFloat

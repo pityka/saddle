@@ -23,6 +23,8 @@ import org.saddle.array.Sorter
 /** Double ScalarTag
   */
 object ScalarTagDouble extends ScalarTag[Double] {
+
+  val classTag = scala.reflect.classTag[Double]
   @inline def missing: Double = Double.NaN
   @inline def isMissing(v: Double): Boolean = (v != v)
   @inline override def notMissing(v: Double): Boolean = (v == v)

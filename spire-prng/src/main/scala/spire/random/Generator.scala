@@ -13,7 +13,7 @@ abstract class Generator {
     gen
   }
 
-  protected[this] def copyInit: Generator
+  protected[random] def copyInit: Generator
 
   def getSeedBytes(): Array[Byte]
 
@@ -487,11 +487,12 @@ trait GeneratorCompanion[G, @sp(Int, Long) S] {
 }
 
 object Generator {
-  implicit val rng = GlobalRng
+  implicit val rng: LongBasedGenerator = GlobalRng
 }
 
 object GlobalRng extends LongBasedGenerator {
-  private val rng = org.saddle.spire.random.rng.Cmwc5.fromTime()
+  private val rng: LongBasedGenerator =
+    org.saddle.spire.random.rng.Cmwc5.fromTime()
 
   def copyInit: Generator = rng.copyInit
 

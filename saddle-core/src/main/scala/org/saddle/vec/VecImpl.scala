@@ -19,6 +19,7 @@ import org.saddle.{ST, Vec}
 import org.saddle.Buffer
 import org.saddle.vec.VecImpl.Fill.Forward
 import org.saddle.vec.VecImpl.Fill.Backward
+import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 
 // Specialized method implementations for code reuse in implementations of Vec; NA-safe
 private[saddle] object VecImpl {
