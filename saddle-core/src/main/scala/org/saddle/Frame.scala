@@ -1935,6 +1935,7 @@ object Frame extends BinOpFrame {
     * This method repeatedly joins the rows indices. 
     * Mind the combinatorial semantics of joins, 
     * if the indices contain duplicates, the resulting Frame can grow quickly.
+    * An alternative is Frame.fromCols.
     */
   @scala.annotation.nowarn
   def apply[RX: ST: ORD, T: ST: ID](
@@ -1968,7 +1969,7 @@ object Frame extends BinOpFrame {
     * with the same index is arbitrary. Alternatively see Frame.apply .
     */
   @scala.annotation.nowarn
-  def fromColumns[RX: ST: ORD, T: ST](
+  def fromCols[RX: ST: ORD, T: ST](
       values: Series[RX, T]*
   ): Frame[RX, Int, T] = {
     if (values.forall(_.index.isUnique)) Frame(values: _*)
@@ -1985,6 +1986,7 @@ object Frame extends BinOpFrame {
     * This method repeatedly joins the rows indices. 
     * Mind the combinatorial semantics of joins, 
     * if the indices contain duplicates, the resulting Frame can grow quickly.
+    * An alternative is Frame.fromCols.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
@@ -2008,7 +2010,7 @@ object Frame extends BinOpFrame {
     * case of duplicate elements in the row indices, however the join of rows
     * with the same index is arbitrary. Alternatively see Frame.apply .
     */
-  def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
+  def fromCols[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
       colIx: Index[CX]
   ): Frame[RX, CX, T] = {
@@ -2030,6 +2032,7 @@ object Frame extends BinOpFrame {
     * This method repeatedly joins the rows indices. 
     * Mind the combinatorial semantics of joins, 
     * if the indices contain duplicates, the resulting Frame can grow quickly.
+    * An alternative is Frame.fromCols.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
@@ -2060,7 +2063,7 @@ object Frame extends BinOpFrame {
     * case of duplicate elements in the row indices, however the join of rows
     * with the same index is arbitrary. Alternatively see Frame.apply .
     */
-  def fromColumns[RX: ST: ORD, CX: ST: ORD, T: ST](
+  def fromCols[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
   ): Frame[RX, CX, T] = {
     if (values.forall(_._2.index.isUnique)) Frame(values: _*)

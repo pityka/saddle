@@ -389,13 +389,13 @@ regarding their behavior upon non-unique indices in the series (duplicate row in
 - The Frame.apply methods create a full cross product of the respective indices. 
 This means that for a given value of the row index all respective items will be paired with all other,
 leading to a combinatorial explosion of the number of rows of the resulting Frame.
-- The Frame.fromColumns methods disambiguate the non-unique indices before joining. 
+- The Frame.fromCols methods disambiguate the non-unique indices before joining. 
 This avoids the combinatorial increase in the number of rows, at the cost of arbitrarily joining
 items with the same index value.
 
-An example for the difference between Frame.apply and Frame.fromColumns, note the rows with 0 index:
+An example for the difference between Frame.apply and Frame.fromCols, note the rows with 0 index:
 ```scala mdoc
-  Frame.fromColumns(
+  Frame.fromCols(
         Series(0 -> 1, 2 -> 2, 1 -> 3, 0 -> 4),
         Series(1 -> 1, 2 -> 2, 0 -> 3, 0 -> 4),
         Series(0 -> 1, 1 -> 2, 2 -> 3, 0 -> 4)
