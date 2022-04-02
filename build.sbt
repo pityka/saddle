@@ -363,7 +363,7 @@ lazy val io = crossProject(JSPlatform, JVMPlatform)
 
 lazy val docs = project
   .in(file("saddle-docs"))
-  .dependsOn(coreJVM, linalg, circeJVM, binary)
+  .dependsOn(coreJVM, linalg, circeJVM, binary, inlinedOps)
   .settings(
     scalaVersion := scalaVersionInBuild,
     crossScalaVersions := Nil,
