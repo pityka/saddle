@@ -28,7 +28,7 @@ import org.saddle.scalar.ScalarTag.scalarTagToClassTag
   */
 object CsvParser {
 
-  val asciiSilentCharsetDecoder = org.saddle.io.csv.asciiSilentCharsetDecoder
+  val asciiSilentCharsetDecoder : CharsetDecoder = org.saddle.io.csv.asciiSilentCharsetDecoder
 
   def readFile(
       file: File,

@@ -130,7 +130,7 @@ object CsvWriter {
       withColIx: Boolean = true,
       withRowIx: Boolean = true,
       settings: CsvSettings = new CsvSettings()
-  ) = {
+  ): Unit = {
 
     val newLine = "\r\n".getBytes(settings.encoding)
 

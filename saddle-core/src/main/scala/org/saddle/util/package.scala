@@ -40,7 +40,7 @@ package object util {
     * @param break
     *   Produces a string to insert as a break
     */
-  def buildStr(
+  private[saddle] def buildStr(
       count: Int,
       total: Int,
       callback: Int => String,
@@ -74,6 +74,6 @@ package object util {
     * @param n
     *   Number of elements to take
     */
-  def grab[T](arr: Array[T], n: Int): Seq[T] =
+  private[saddle] def grab[T](arr: Array[T], n: Int): Seq[T] =
     arr.take(n).toIndexedSeq ++ arr.takeRight(n).toIndexedSeq
 }

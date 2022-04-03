@@ -88,7 +88,7 @@ trait Locator[@spec(Boolean, Int, Long, Double) T] {
 }
 
 object Locator {
-  val INIT_CAPACITY = 16
+  private[saddle] val INIT_CAPACITY = 16
 
   /** Factory method to create a new Locator instance.
     * @param sz

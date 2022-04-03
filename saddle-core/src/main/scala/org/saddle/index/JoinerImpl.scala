@@ -23,7 +23,7 @@ import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 /** Concrete implementation of Joiner instance which is specialized on basic
   * types.
   */
-class JoinerImpl[@spec(Boolean, Int, Long, Double) T: ST: ORD]
+private[saddle] class JoinerImpl[@spec(Boolean, Int, Long, Double) T: ST: ORD]
     extends Joiner[T] {
   import scala.language.implicitConversions
   private implicit def wrapArray(arr: Array[Int]): Option[Array[Int]] =

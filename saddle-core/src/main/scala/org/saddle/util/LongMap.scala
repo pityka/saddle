@@ -35,7 +35,7 @@ package org.saddle.util
   * 500 million). The maximum capacity is 2^30, but performance will degrade
   * rapidly as 2^30 is approached.
   */
-final class LongMap(
+private[saddle] final class LongMap(
     defaultEntry: Long => Int,
     initialBufferSize: Int,
     initBlank: Boolean

@@ -79,19 +79,6 @@ package object saddle {
 
   // **********************
 
-  /** Allow timing of an operation
-    *
-    * {{{
-    *   clock { bigMat.T dot bigMat }
-    * }}}
-    */
-  def clock[T](op: => T): (Double, T) = {
-    val s = System.nanoTime
-    val r = op
-    val e = System.nanoTime
-    ((e - s) / 1e9, r)
-  }
-
   /** Syntactic sugar, allow '->' to generate an (inclusive) index slice
     *
     * {{{
@@ -132,56 +119,6 @@ package object saddle {
     * }}}
     */
   def * = SliceAll()
-
-  /** `na` provides syntactic sugar for constructing primitives recognized as
-    * NA. A use case is be:
-    *
-    * {{{
-    *   Vec[Int](1,2,na,4)
-    * }}}
-    *
-    * `na` will implicitly convert to a primitive having the designated missing
-    * value bit pattern. That pattern is as follows:
-    *
-    *   1. byte => Byte.MinValue
-    *   1. char => Char.MinValue
-    *   1. short => Short.Minvalue
-    *   1. int => Int.MinValue
-    *   1. long => Long.MinValue
-    *   1. float => Float.NaN
-    *   1. double => Double.NaN
-    *
-    * The NA bit pattern for integral types is `MinValue` because it induces a
-    * symmetry on the remaining bound of values; e.g. the remaining `Byte` bound
-    * is (-127, +127).
-    *
-    * Note since `Boolean`s can only take on two values, it has no `na`
-    * primitive bit pattern.
-    */
-  object na {
-
-    /** Generates a primitive missing value bit pattern.
-      */
-    def to[T](implicit fn: na.type => T): T = fn(this)
-
-    implicit val naToByte: na.type => Byte = (_: na.type) =>
-      scalar.ScalarTagByte.missing
-    implicit val naToChar: na.type => Char = (_: na.type) =>
-      scalar.ScalarTagChar.missing
-    implicit val naToShort: na.type => Short = (_: na.type) =>
-      scalar.ScalarTagShort.missing
-
-    implicit val naToInt: na.type => Int = (_: na.type) =>
-      scalar.ScalarTagInt.missing
-    implicit val naToLong: na.type => Long = (_: na.type) =>
-      scalar.ScalarTagLong.missing
-    implicit val naToFloat: na.type => Float = (_: na.type) =>
-      scalar.ScalarTagFloat.missing
-    implicit val naToDouble: na.type => Double = (_: na.type) =>
-      scalar.ScalarTagDouble.missing
-
-    override def toString = "na"
-  }
 
   // Augment Seq with a few conversion methods
   //
@@ -312,7 +249,7 @@ package object saddle {
 
   /** Constant used in string byte-level manipulation
     */
-  val UTF8 = "UTF-8"
+  private[saddle] val UTF8 = "UTF-8"
 
   /** Specialized methods for Vec[Double]
     *
@@ -467,4 +404,27 @@ package object saddle {
   abstract class FillMethod private[saddle] ()
   case object FillForward extends FillMethod() {}
   case object FillBackward extends FillMethod() {}
+
+    implicit class VecToBoolLogic(v: Vec[Boolean]) {
+
+    /** True if all elements are true
+      */
+    def all: Boolean = -1 == v.findOne(_ == false)
+
+    /** True if some elements are true
+      */
+    def some: Boolean = -1 != v.findOne(_ == true)
+
+    /** True if no elements are true
+      */
+    def none: Boolean = !some
+
+    /** Number of elements which are true
+      */
+    def countT: Int = v.foldLeft(0)((a, b) => a + (if (b) 1 else 0))
+
+    /** Number of elements which are false
+      */
+    def countF: Int = v.foldLeft(0)((a, b) => a + (if (b) 0 else 1))
+  }
 }

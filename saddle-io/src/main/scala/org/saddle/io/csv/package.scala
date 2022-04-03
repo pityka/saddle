@@ -398,7 +398,7 @@ package object csv {
     }
   }
 
-  val asciiSilentCharsetDecoder = Charset
+  val asciiSilentCharsetDecoder: CharsetDecoder = Charset
     .forName("US-ASCII")
     .newDecoder()
     .onMalformedInput(CodingErrorAction.REPLACE)

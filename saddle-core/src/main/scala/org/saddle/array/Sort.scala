@@ -65,8 +65,8 @@ object InsertionSort {
   * arrays.
   */
 object MergeSort {
-  @inline final def startWidth: Int = 8
-  @inline final def startStep: Int = 16
+  @inline final private def startWidth: Int = 8
+  @inline final private def startStep: Int = 16
 
   /** Uses merge sort to sort the array `data` in place.
     *
@@ -142,7 +142,7 @@ object MergeSort {
     * @tparam A
     *   a member of the type class `Order`
     */
-  @inline final def merge[@sp A](
+  @inline final private def merge[@sp A](
       in: Array[A],
       out: Array[A],
       start: Int,
@@ -221,8 +221,8 @@ object PermuteInsertionSort {
   * arrays.
   */
 object PermuteMergeSort {
-  @inline final def startWidth: Int = 8
-  @inline final def startStep: Int = 16
+  @inline final private def startWidth: Int = 8
+  @inline final private def startStep: Int = 16
 
   final def sort[@sp A: ORD](
       data: Array[A],
@@ -267,7 +267,7 @@ object PermuteMergeSort {
     if (!buf1.eq(perm)) System.arraycopy(buf1, 0, perm, 0, len)
   }
 
-  @inline final def mergePerm[@sp A](
+  @inline final private def mergePerm[@sp A](
       data: Array[A],
       in: Array[Int],
       out: Array[Int],
