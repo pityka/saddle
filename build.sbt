@@ -440,7 +440,8 @@ lazy val root = (project in file("."))
     spireJS,
     io.jvm,
     io.js,
-    inlinedOpsMacroImpl
+    inlinedOpsMacroImpl,
+    inlinedOps
   )
 
 ThisBuild / parallelExecution := false
