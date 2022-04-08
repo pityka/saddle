@@ -23,10 +23,6 @@ case class Descriptor(fortran: Boolean, shape: List[Int], dtype: String)
 
 object Reader {
 
-  def parseHeader(s: String): Descriptor = {
-    val d = org.saddle.io.npy.parseHeader(s)
-    Descriptor(d.fortran, d.shape.map(_.toInt), d.dtype)
-  }
   private[npy] def width[T: ST] =
     implicitly[ST[T]] match {
       case ScalarTagDouble => Right(8)
@@ -54,7 +50,8 @@ object Reader {
       case ScalarTagByte   => Right(org.saddle.io.npy.ByteType)
       case other           => Left(s"Type $other not supported.")
     }
-  def parse[T: ST](size: Int, from: ByteBuffer): Either[String, Array[T]] =
+
+  private def parse[T: ST](size: Int, from: ByteBuffer): Either[String, Array[T]] =
     implicitly[ST[T]] match {
       case ScalarTagDouble =>
         Right {
@@ -99,24 +96,13 @@ object Reader {
       case other => Left(s"Type $other not supported.")
     }
 
-  def sequence[A, B](s: Seq[Either[A, B]]): Either[A, Seq[B]] =
+  private def sequence[A, B](s: Seq[Either[A, B]]): Either[A, Seq[B]] =
     if (s.forall(_.isRight))
       Right(s.map(_.toOption.get))
     else s.find(_.isLeft).get.asInstanceOf[Left[A, Seq[B]]]
 
-  def readFully(bb: ByteBuffer, channel: ReadableByteChannel) =
+  private def readFully(bb: ByteBuffer, channel: ReadableByteChannel) =
     org.saddle.io.npy.readFully(bb, channel)
-
-  def readHeaderFromChannel[T: ST](channel: ReadableByteChannel) =
-    dtype[T].flatMap { expectedDataType =>
-      org.saddle.io.npy.readHeaderFromChannel(channel).flatMap { descr =>
-        if (descr.dtype != expectedDataType) Left("Unexpected dtype")
-        else
-          Right(
-            Descriptor(descr.fortran, descr.shape.map(_.toInt), descr.dtype)
-          )
-      }
-    }
 
   def readMatFromChannel[T: ST](
       channel: ReadableByteChannel
@@ -152,7 +138,7 @@ object Reader {
     }
   }
 
-  class ByteChannel(src: ByteBuffer) extends ReadableByteChannel {
+  private class ByteChannel(src: ByteBuffer) extends ReadableByteChannel {
     def read(dst: ByteBuffer) = {
       var i = 0
       while (dst.hasRemaining() && src.hasRemaining()) {
@@ -170,24 +156,6 @@ object Reader {
   ): Either[String, Mat[T]] =
     readMatFromChannel(new ByteChannel(ByteBuffer.wrap(array)))
 
-  def readMatDataFromChannel[T: ST](
-      channel: ReadableByteChannel,
-      numRows: Int,
-      numCols: Int,
-      width: Int
-  ): Either[String, Mat[T]] = {
-    val bb = ByteBuffer
-      .allocate(width * numRows * numCols)
-      .order(ByteOrder.LITTLE_ENDIAN)
-    readFully(bb, channel)
-    parse[T](numRows * numCols, bb).flatMap { data =>
-      if (data.size != numRows * numCols) {
-        Left("Premature end of input")
-      } else {
-        Right(Mat(numRows, numCols, data.asInstanceOf[Array[T]]))
-      }
-    }
-  }
   def readVecDataFromChannel[T: ST](
       channel: ReadableByteChannel,
       len: Int,

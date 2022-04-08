@@ -93,14 +93,8 @@ lazy val commonSettings = Seq(
     ProblemFilters.exclude[ReversedMissingMethodProblem](
       "*"
     ),
-    ProblemFilters.exclude[MissingClassProblem]("org.saddle.ops.macroImpl.*"),
-    ProblemFilters.exclude[IncompatibleMethTypeProblem](
-      "org.saddle.binary.Reader#ByteChannel.this"
-    ),
-    ProblemFilters.exclude[DirectMissingMethodProblem](
-      "org.saddle.binary.Writer.put"
-    ),
-    ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.stats.*")
+    ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.stats.*"),
+    ProblemFilters.exclude[MissingClassProblem]("org.saddle.ops.macroImpl.*")
   )
 )
 
@@ -133,7 +127,22 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.scalar.ScalarTagFloat.isMissing"),
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.scalar.ScalarTagBool.notMissing"),
       ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.scalar.ScalarTagInt.notMissing"),
-      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.scalar.ScalarTagLong.notMissing")
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.scalar.ScalarTagLong.notMissing"),
+      // These helper methods should not be part of public api
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.csv.CsvParser.readFile"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.csv.CsvParser.readFile"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.readMatDataFromChannel"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.readHeaderFromChannel"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.readFully"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.sequence"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.parse"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.parseHeader"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.parseHeader"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.parse"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.sequence"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.readFully"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.readHeaderFromChannel"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.npy.Reader.readMatDataFromChannel")
       // format: on
     )
   )
@@ -246,7 +255,33 @@ lazy val binary = project
   .settings(
     libraryDependencies ++= Seq(
       "com.lihaoyi" %% "ujson" % "1.4.2"
-    ) ++ scalaTest
+    ) ++ scalaTest,
+    mimaBinaryIssueFilters := Seq(
+      // format: off      
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Reader.sequence"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Reader.readMatDataFromChannel"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Reader.readHeaderFromChannel"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.writeFully"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.createHeader"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.createFrameDescriptor"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.createMatDescriptor"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_rowix"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_colix"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_v"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_rowmajor"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_numrows"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_numcols"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.KEY_datatype"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.createMatDescriptor"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.createFrameDescriptor"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.createHeader"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.writeFully"),
+      ProblemFilters.exclude[IncompatibleMethTypeProblem]("org.saddle.binary.Reader#ByteChannel.this"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Writer.put"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Reader.readFrameDataFromChannel"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.binary.Reader.readFully")
+      // format: on
+    )
   )
   .dependsOn(coreJVM)
 
@@ -323,7 +358,13 @@ lazy val io = crossProject(JSPlatform, JVMPlatform)
   .settings(commonSettings: _*)
   .settings(
     name := "saddle-io",
-    scalaVersion := scalaVersionInBuild
+    scalaVersion := scalaVersionInBuild,
+    mimaBinaryIssueFilters := Seq(
+      // format: off
+      ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.io.npy.package.readFully"),
+      ProblemFilters.exclude[IncompatibleResultTypeProblem]("org.saddle.io.npy.package.readFully")
+      // format: on
+    )
   )
   .jsSettings(
     fork := false

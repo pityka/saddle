@@ -69,12 +69,12 @@ object Reader {
       case other => Left(s"Type $other not supported.")
     }
 
-  def sequence[A, B](s: Seq[Either[A, B]]): Either[A, Seq[B]] =
+  private def sequence[A, B](s: Seq[Either[A, B]]): Either[A, Seq[B]] =
     if (s.forall(_.isRight))
       Right(s.map(_.toOption.get))
     else s.find(_.isLeft).get.asInstanceOf[Left[A, Seq[B]]]
 
-  def readFully(bb: ByteBuffer, channel: ReadableByteChannel) = {
+  private def readFully(bb: ByteBuffer, channel: ReadableByteChannel) : Unit = {
     bb.clear
     var i = 0
     while (bb.hasRemaining && i >= 0) {
@@ -83,7 +83,7 @@ object Reader {
     bb.flip
   }
 
-  def readHeaderFromChannel[T: ST](channel: ReadableByteChannel) =
+  private def readHeaderFromChannel[T: ST](channel: ReadableByteChannel) =
     dtype[T].flatMap { expectedDataType =>
       val magicAndVersion = Array.ofDim[Byte](8)
       readFully(ByteBuffer.wrap(magicAndVersion), channel)
@@ -111,7 +111,7 @@ object Reader {
       }
     }
 
-  def readMatDataFromChannel[T: ST](
+  private def readMatDataFromChannel[T: ST](
       channel: ReadableByteChannel,
       numRows: Int,
       numCols: Int,
@@ -158,7 +158,7 @@ object Reader {
     }
   }
 
-  def readFrameDataFromChannel[T: ST](
+  private def readFrameDataFromChannel[T: ST](
       channel: ReadableByteChannel,
       rowIx: Index[String],
       colIx: Index[String],
