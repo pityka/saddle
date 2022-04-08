@@ -19,7 +19,7 @@ package object npy {
 
   case class Descriptor(fortran: Boolean, shape: List[Long], dtype: String)
 
-  private def readFully(bb: ByteBuffer, channel: ReadableByteChannel) = {
+  private def readFully(bb: ByteBuffer, channel: ReadableByteChannel) : Unit = {
     bb.clear
     var i = 0
     while (bb.hasRemaining && i >= 0) {
