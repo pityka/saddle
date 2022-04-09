@@ -591,8 +591,8 @@ class SolveSuite extends AnyFunSuite {
     )
 
     val x = a.solve(b).get
-    assert((a mm x) == b1)
-    assert((a mm (a \ b).get) == b1)
+    assert((a mm x).roundTo(10) == b1.roundTo(10))
+    assert((a mm (a \ b).get).roundTo(10) == b1.roundTo(10))
 
   }
 
