@@ -231,8 +231,11 @@ lazy val linalg = project
   .settings(
     name := "saddle-linalg",
     libraryDependencies ++= Seq(
-      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly (),
-      "net.sourceforge.f2j" % "arpack_combined_all" % "0.1"
+      "dev.ludovic.netlib" % "blas" % "2.2.1",
+      "dev.ludovic.netlib" % "lapack" % "2.2.1",
+      // "dev.ludovic.netlib" % "arpack" % "2.2.1",
+      // "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly (),
+      // "net.sourceforge.f2j" % "arpack_combined_all" % "0.1"
     ) ++ scalaTest
   )
   .dependsOn(coreJVM, inlinedOps)

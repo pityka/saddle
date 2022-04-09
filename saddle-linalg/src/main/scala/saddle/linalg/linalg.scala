@@ -34,7 +34,7 @@ case class EigenDecompositionNonSymmetric(
 case class EigenDecompositionSymmetric(q: Mat[Double], lambdaReal: Vec[Double])
 
 object NetLib {
-  lazy val BLAS = com.github.fommil.netlib.BLAS.getInstance
+  lazy val BLAS = dev.ludovic.netlib.BLAS.getInstance()
 
-  lazy val LAPACK = com.github.fommil.netlib.LAPACK.getInstance
+  lazy val LAPACK = dev.ludovic.netlib.LAPACK.getInstance
 }
