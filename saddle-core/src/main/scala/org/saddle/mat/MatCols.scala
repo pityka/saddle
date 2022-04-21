@@ -115,9 +115,9 @@ private[saddle] class MatCols[@spec(Int, Long, Double) A](
     val bSt = implicitly[ST[B]]
     val filt = cols.zipWithIndex.filter { case (col, _) =>
       col.scalarTag.runtimeClass.isPrimitive && (bSt.isAny || bSt.isAnyVal) ||
-        !bSt.isAnyVal && bSt.runtimeClass.isAssignableFrom(
-          col.scalarTag.runtimeClass
-        )
+      !bSt.isAnyVal && bSt.runtimeClass.isAssignableFrom(
+        col.scalarTag.runtimeClass
+      )
     }
     val (vecs, locs) = filt.unzip
     (vecs.asInstanceOf[IndexedSeq[Vec[B]]], locs.toArray)
