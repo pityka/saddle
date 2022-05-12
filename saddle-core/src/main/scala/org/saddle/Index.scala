@@ -15,7 +15,6 @@
 package org.saddle
 
 import scala.{specialized => spec, Array}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import index.{
   Slice,
   Splitter,

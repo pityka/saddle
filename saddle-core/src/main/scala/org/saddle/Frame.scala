@@ -27,7 +27,6 @@ import org.saddle.index.{
   Stacker,
   Splitter
 }
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import org.saddle.groupby.{FrameGrouper, IndexGrouper}
 import org.saddle.ops.{NumericOps, BinOpFrame}
 import scalar.Scalar
@@ -1241,7 +1240,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     *   Output type (tuple of arity N + M)
     */
   def melt[W](implicit melter: Melter[RX, CX, W]): Series[W, T] = {
-    val ix = Array.ofDim[W](numRows * numCols)(melter.tag.classTag)
+    val ix = Array.ofDim[W](numRows * numCols)(melter.tag)
 
     var k = 0
     var i = 0

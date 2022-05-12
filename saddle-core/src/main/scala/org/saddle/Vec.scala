@@ -20,7 +20,6 @@ import vec.VecDefault
 import index.Slice
 import ops.NumericOps
 import scalar.{Scalar, ScalarTag}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import java.io.OutputStream
 
 object Vec {

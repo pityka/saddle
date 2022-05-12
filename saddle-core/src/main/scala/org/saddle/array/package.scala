@@ -16,7 +16,7 @@ package org.saddle
 
 import scala.{specialized => spec}
 import org.saddle.spire.random.rng.Cmwc5
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
+
 /** This package contains utilities for working with arrays that are specialized
   * for numeric types.
   */

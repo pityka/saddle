@@ -17,7 +17,6 @@ package org.saddle.mat
 import scala.Int
 import scala.{specialized => spec}
 import org.saddle.{ST, Mat}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 
 /** Houses specialized method implementations for code reuse in Mat subclasses
   */

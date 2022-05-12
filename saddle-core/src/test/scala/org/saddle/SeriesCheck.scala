@@ -21,8 +21,6 @@ import org.scalacheck.Prop._
 import org.saddle.ops.BinOps._
 import org.saddle.order._
 import org.saddle.Arbitraries._
-import org.saddle.na.naToInt
-import org.saddle.scalar.ScalarTagInt.{missing => naI}
 
 class SeriesCheck extends Specification with ScalaCheck {
 
@@ -503,7 +501,7 @@ class SeriesCheck extends Specification with ScalaCheck {
       Series(Vec(1, 2, 3), Index(10, 20, 30))
         .reindex(Index(10, 11, 12, 13, 20, 21, 22, 23), FillForward, limit=1)
         .values
-        .must_==(Vec[Int](1, 1, naI, naI, 2, 2, naI, naI))
+        .must_==(Vec[Int](1, 1, na, na, 2, 2, na, na))
     }
   }
 }

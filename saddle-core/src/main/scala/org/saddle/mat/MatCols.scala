@@ -19,7 +19,6 @@ import org.saddle.{ST, Vec, array, Mat}
 import org.saddle.scalar.Scalar
 import scala.collection.compat._
 import immutable.ArraySeq
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 
 /** An IndexedSeq of Vecs which must all have the same length; a container for
   * 2D data for a Frame.

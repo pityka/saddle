@@ -29,11 +29,11 @@ import immutable.ArraySeq
   * required when dealing with objects in Saddle
   */
 trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
-    extends SpecializedFactory[T]
+    extends ClassTag[T]
+    with SpecializedFactory[T]
     with CouldBeOrdered[T]
     with CouldBeNumber[T]
     with ScalarHelperOps[T] {
-  def classTag: ClassTag[T]
   // representation of missing data
   def missing: T
   def isMissing(t: T): Boolean
@@ -53,42 +53,62 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
   /* Must hold: parse(asString(v)) == v */
   def asString(v: T): String = show(v)
 
+  // Workaround: Scala types Any, AnyRef, AnyVal all have runtimeClass java.lang.Object; workaround continues
+  // via ScalarTag implicit resolution hierarchy below.
+  def isAny = false
+  def isAnyVal = false
+
   override def hashCode(): Int =
-     runtimeClass.hashCode() 
+    isAny
+      .hashCode() + isAnyVal.hashCode() * 31 + runtimeClass.hashCode() * 31 * 31
 
   override def equals(o: Any): Boolean = o match {
     case s: ScalarTag[_] =>
-      (this eq s) || runtimeClass == s.runtimeClass
+      (this eq s) || runtimeClass == s.runtimeClass && isAny == s.isAny && isAnyVal == s.isAnyVal
     case _ => false
   }
 
   override def toString = "ScalarTag[%s]" format runtimeClass
+
+  override def erasure = runtimeClass
 
   // forward 2.10 compatibility
   def runtimeClass: Class[_]
 }
 
 object ScalarTag extends ScalarTagImplicits {
-  implicit def scalarTagToClassTag[T](implicit st: ST[T]) : ClassTag[T] = st.classTag
   implicit val stChar: ST[Char] = ScalarTagChar
-  implicit val stByte : ST[Byte]= ScalarTagByte
+  implicit val stByte: ST[Byte] = ScalarTagByte
   implicit val stBool: ST[Boolean] = ScalarTagBool
   implicit val stShort: ST[Short] = ScalarTagShort
   implicit val stInt: ST[Int] = ScalarTagInt
   implicit val stFloat: ST[Float] = ScalarTagFloat
-  implicit val stLong : ST[Long]= ScalarTagLong
-  implicit val stDouble : ST[Double]= ScalarTagDouble
+  implicit val stLong: ST[Long] = ScalarTagLong
+  implicit val stDouble: ST[Double] = ScalarTagDouble
 }
 
 trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
-  implicit def stPrd[T <: Product: CLM] : ScalarTagProduct[T] = new ScalarTagProduct[T]
+  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTagAny[T] =
+    new ScalarTagProduct[T]()(ev)
 }
 
-trait ScalarTagImplicitsL1 {
-  implicit def stAnyVal[T: CLM] : ScalarTagAny[T] = new ScalarTagAny[T]
+trait ScalarTagImplicitsL1 extends ScalarTagImplicitsL2 {
+  implicit def stAnyVal[T <: AnyVal](implicit ev: CLM[T]): ScalarTagAny[T] =
+    new ScalarTagAny[T]()(ev) {
+      override def isAnyVal = true
+    }
 }
 
+trait ScalarTagImplicitsL2 extends ScalarTagImplicitsL3 {
+  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTagAny[T] = new ScalarTagAny[T]()(ev)
+}
 
+trait ScalarTagImplicitsL3 {
+  implicit def stAny[T](implicit ev: CLM[T]): ScalarTagAny[T]=
+    new ScalarTagAny[T]()(ev) {
+      override def isAny = true
+    }
+}
 
 trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {
   // for comparable scalars
@@ -128,10 +148,10 @@ trait SpecializedFactory[@spec(Boolean, Int, Long, Float, Double) T] {
     */
   final def makeMat(arr: Array[Vec[T]])(implicit st: ST[T]): Mat[T] = {
     val c = arr.length
-    if (c == 0) st.makeMat(0, 0, st.classTag.newArray(0))
+    if (c == 0) st.makeMat(0, 0, st.newArray(0))
     else {
       val r = arr(0).length
-      if (r == 0) st.makeMat(0, 0, st.classTag.newArray(0))
+      if (r == 0) st.makeMat(0, 0, st.newArray(0))
       else {
         require(
           arr.foldLeft(true)(_ && _.length == r),

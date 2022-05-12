@@ -24,7 +24,6 @@ import org.saddle.util.DoubleTotalOrder
 import org.saddle.scalar.FromScalars
 import org.saddle.scalar.FromScalarGen
 import org.saddle.scalar.ScalarGen
-import org.saddle.na.naToInt
 import org.saddle.scalar.ScalarTagInt.{missing => naI}
 
 /** Test on properties of Vec

@@ -15,7 +15,6 @@
 package org.saddle
 
 import scalar.{Scalar, ScalarTag}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import ops.NumericOps
 import scala.{specialized => spec}
 import java.io.OutputStream

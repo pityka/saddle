@@ -16,7 +16,7 @@ package org.saddle.vec
 
 import scala.{specialized => spec}
 import org.saddle.scalar.{Scalar, NA, ScalarTagDouble}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
+
 import org.saddle.ops.NumericOps
 import org.saddle.{ST, Vec, array, NUM, util, ORD, PctMethod, RankTie, Mat}
 import org.saddle.index.Slice

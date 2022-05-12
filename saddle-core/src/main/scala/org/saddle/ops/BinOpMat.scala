@@ -15,7 +15,6 @@
 package org.saddle.ops
 
 import scala.{specialized => spec}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import org.saddle.{ST, Mat}
 
 /** Provides concrete implementations of binary operations for

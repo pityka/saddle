@@ -16,7 +16,6 @@ package org.saddle.locator
 
 import org.saddle.ST
 import org.saddle.Buffer
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 
 class LocatorAny[T: ST](sz: Int = Locator.INIT_CAPACITY) extends Locator[T] {
   val keyOrder = new Buffer(new Array[T](sz), 0)

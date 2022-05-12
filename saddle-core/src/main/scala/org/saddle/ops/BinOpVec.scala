@@ -15,7 +15,6 @@
 package org.saddle.ops
 
 import scala.{specialized => spec}
-import org.saddle.scalar.ScalarTag.scalarTagToClassTag
 import org.saddle.{ST, Vec, NUM, Mat}
 import org.saddle.{doubleOrd,longOrd,intOrd}
 
