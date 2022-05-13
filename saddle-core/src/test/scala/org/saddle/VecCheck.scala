@@ -33,14 +33,14 @@ class VecCheck extends Specification with ScalaCheck {
     implicit val fromScalarGenVec = new FromScalarGen[Vec] {
       override def apply[T](sg: ScalarGen[T]): Gen[Vec[T]] =
         VecArbitraries.vec(sg.gen)(sg.tag)
-      }
+    }
     "takeLeft" in {
       forAll { (fs: FromScalars[Vec]) =>
         implicit val st = fs.tag
         val v = fs.value
         v.takeLeft(5) must_== v.toSeq.take(5).toVec
+      }
     }
-  }
 
     "takeRight" in {
       forAll { (fs: FromScalars[Vec]) =>
@@ -100,7 +100,7 @@ class VecCheck extends Specification with ScalaCheck {
         val data = v.contents
         v.dropNA must_== Vec(data.filter(st.notMissing))
       }
-        }
+    }
 
     "hasNA works" in {
       forAll { (fs: FromScalars[Vec]) =>
