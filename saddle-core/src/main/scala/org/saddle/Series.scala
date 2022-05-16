@@ -27,8 +27,6 @@ import org.saddle.locator.Locator
 import org.saddle.order._
 import org.saddle.index.OuterJoin
 
-import scala.annotation.unused
-
 /** `Series` is an immutable container for 1D homogeneous data which is indexed
   * by a an associated sequence of keys.
   *
@@ -261,8 +259,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
   /** Create a new Series whose index is `newIx` and whose values are derived
     * from the original Series. For keys in `newIx` not contained in this
     * series's index, the associated values are derived based on the filling
-    * method `fillMethod` against this series. 
-    * This series must be monotonic, othrwise IllegalArgumentException is thrown.
+    * method `fillMethod` against this series. This series must be monotonic,
+    * othrwise IllegalArgumentException is thrown.
     * @param keys
     *   Sequence of keys to be the index of the result series
     * @param fillMethod
@@ -422,8 +420,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     */
   def shift(n: Int = 1): Series[X, T] = Series(values.shift(n), index)
 
-  /** Fill NA values in series with result of a function which acts on the
-    * index of the particular NA value found.
+  /** Fill NA values in series with result of a function which acts on the index
+    * of the particular NA value found.
     *
     * @param f
     *   A function X => A to be applied at NA location
@@ -936,7 +934,7 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     */
   def proxyWith(
       proxy: Series[X, T]
-  )(@unused implicit fn: org.saddle.scalar.NA.type => T): Series[X, T] = {
+  ): Series[X, T] = {
     require(proxy.index.isUnique, "Proxy index must be unique")
 
     this.fillNA { key =>

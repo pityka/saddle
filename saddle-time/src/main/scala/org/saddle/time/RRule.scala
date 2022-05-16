@@ -20,7 +20,6 @@ import org.joda.time.DateTime
 import scala.jdk.CollectionConverters._
 import com.google.ical.iter.RecurrenceIteratorFactory
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory
-import scala.collection.compat._
 
 /** Wrapper of a RFC 2445 RRULE or EXRULE as implemented in the google rfc2445
   * java library.
@@ -238,7 +237,7 @@ case class RRule private (
           )
         else if (i > 0)
           // counting occurrences forward
-          outer.from(dt).to(immutable.LazyList).drop(i - 1).head
+          outer.from(dt).to(collection.immutable.LazyList).drop(i - 1).head
         else {
           // counting occurrences backward
           val iabs = i.abs

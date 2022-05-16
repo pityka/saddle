@@ -20,8 +20,7 @@ import org.saddle.{CLM, ORD, NUM, Vec, Mat, Index, ST}
 import org.saddle.locator.Locator
 import org.saddle.array.Sorter
 import org.saddle.Buffer
-import scala.collection.compat._
-import immutable.ArraySeq
+import collection.immutable.ArraySeq
 
 /** Typeclass definition for scalar tags. A ScalarTag contains important
   * meta-data regarding a scalar type, including how to instantiate a

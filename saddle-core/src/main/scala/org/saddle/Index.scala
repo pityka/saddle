@@ -28,8 +28,7 @@ import scalar.{Scalar, NA, ScalarTag}
 import locator.Locator
 import vec.VecImpl
 import java.io.OutputStream
-import scala.collection.compat._
-import immutable.ArraySeq
+import collection.immutable.ArraySeq
 
 /** Index provides a constant-time look-up of a value within array-backed
   * storage, as well as operations to support joining and slicing.
