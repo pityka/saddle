@@ -3,7 +3,8 @@ title: 'Getting started'
 weight: 1
 ---
 
-Add any of these lines to your build.sbt:
+## Saddle modules
+Add the appropriate saddle modules to your build.sbt:
 ```scala
 // The core library
 libraryDependencies += "io.github.pityka" % "saddle-core" % "@VERSION@"
@@ -21,7 +22,7 @@ libraryDependencies += "io.github.pityka" % "saddle-time" % "@VERSION@"
 libraryDependencies += "io.github.pityka" % "saddle-stats" % "@VERSION@"
 ```
 
-### Dependencies
+## Dependencies
 The actively maintained artifacts have minimal dependencies:
 
 - `saddle-core` depends on [cats-kernel](https://github.com/typelevel/cats)
@@ -29,17 +30,31 @@ The actively maintained artifacts have minimal dependencies:
 - `saddle-binary` depends on [ujson](http://www.lihaoyi.com/upickle/)
 - `saddle-circe` depends on [circe](https://github.com/circe/circe)
 
-### Example: SVD on the Iris dataset
-```scala mdoc
+## Imports
+You most likely need the following two imports:
+```scala
+import org.saddle._
+import org.saddle.order._
+```
+
+Note that `org.saddle.order._` imports `cats.kernel.Order[_]` typeclass instances into the scope. 
+If you import cats instances an other way then you should not import `org.saddle.order._`. 
+
+The `Order[Double]` and `Order[Float]` instances in `org.saddle.order` define a total ordering and 
+order `NaN` above all other values, consistent with `java.lang.Double.compare`.
+
+## Example: SVD on the Iris dataset
+```scala mdoc:silent
 import scala.io.Source
 import org.saddle._
+import org.saddle.linalg._
 val irisURL = "https://gist.githubusercontent.com/pityka/d05bb892541d71c2a06a0efb6933b323/raw/639388c2cbc2120a14dcf466e85730eb8be498bb/iris.csv"
 val iris = csv.CsvParser.parseSourceWithHeader[Double](
       source = Source.fromURL(irisURL), 
       cols = List(0,1,2,3), 
       recordSeparator = "\n").toOption.get
-
-import org.saddle.linalg._
+```
+```scala mdoc
 val centered = iris.mapVec(_.demeaned)
 val SVDResult(u, s, vt) = centered.toMat.svd(2)
 val pca = u.mDiagFromRight(s).toFrame

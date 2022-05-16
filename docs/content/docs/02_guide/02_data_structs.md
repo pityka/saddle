@@ -1,31 +1,25 @@
 ---
-title: 'Usage'
+title: 'Data Structures'
 weight: 2
 ---
 
-### Imports
-You most likely need the following two imports:
-```scala
-import org.saddle._
-import org.saddle.order._
-```
+# Introduction to Saddle data structures
 
-Note that `org.saddle.order._` imports `cats.kernel.Order[_]` typeclass instances into the scope. 
-If you import cats instances an other way then you should not import `org.saddle.order._`. 
+Saddle functionnalities are provided by three main data structures: 
+[`Vec[T]`]({{< relref "#vector" >}}),
+[`Series[K, V]`]({{< relref "#series" >}}) 
+and [`Frame[RI, CI, V]`]({{< relref "#frame" >}}).
+## Vector
 
-The `Order[Double]` and `Order[Float]` instances in `org.saddle.order` define a total ordering and 
-order `NaN` above all other values, consistent with `java.lang.Double.compare`.
+Vector is an immutable, memory-efficient, indexed by offset, sequence. Its main implementation is a wrapper around an `Array`. Alternative implementation can exist, for ranges for example. It is the underlying structure of `Series` and `Frame`.
 
-### 1D vector: Vec[T]
-
-Factories:
+Construction:
 ```scala mdoc
 import org.saddle._
-Vec(1, 2, 3)  
-Vec(1 to 3 : _*)    
-Vec(Array(1,2,3))
 Vec.empty[Double] 
-
+Vec(1, 2, 3)  
+Vec(Array(1,2,3))
+Vec(1 to 3 : _*)    
 vec.ones(2)
 vec.zeros(3)
 vec.rand(20)
@@ -57,14 +51,15 @@ Slicing:
 import org.saddle._
 import org.saddle.ops.BinOps._
 Vec(1,2,3).at(2) // Boxes and keeps NA
-Vec(1,2,3).raw(2)  
+Vec(1,2,3).raw(2) 
 Vec(1,2,3).apply(2) // same as raw
 Vec(1,2,3).take(0,2)
 Vec(1,2,3).take(1 -> *)
 Vec(1,2,3).take(* -> 1)
 ```
 
-### 1D vector with index: Series[K,V]
+## Series 
+
 A Series combines a Vec with an Index that provides an ordered key-value mapping. We’ll talk more about the details of Index later. 
 
 The key type of a must have a natural ordering (ie, an Ordering of that type within the implicit scope). However, the Series maintains the order in which its data was supplied unless ordered othewise.
@@ -249,7 +244,7 @@ We mentioned joins. Let’s look at a few join operations; the result is a Frame
  a.join(b, how=index.OuterJoin)
 ``` 
 
-### Matrix: Mat[T]
+## Matrix
 
 A `Mat[T]` represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.
 
@@ -355,7 +350,7 @@ Some other interesting methods on Mat:
  mat.rand(2,2).roundTo(2)
 ``` 
 
-### Homogeneous table with row and column index (data frame) : Frame[RX,CX,T]
+## Frame 
 
 A Frame combines a Mat with a row index and a column index which provides a way to index into the Mat. 
 
