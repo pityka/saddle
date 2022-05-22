@@ -20,6 +20,7 @@ import scala.{specialized => spec}
 import java.io.OutputStream
 import org.saddle.index.{Slice, IndexIntRange}
 import org.saddle.mat.{MatImpl, MatMath}
+import scala.collection.compat.immutable.ArraySeq
 
 /** `Mat` is an immutable container for 2D homogeneous data (a "matrix"). It is
   * backed by a single array. Data is stored in row-major order.
@@ -682,6 +683,27 @@ object Mat {
     */
   def apply[T: ST](values: Vec[T]*): Mat[T] =
     implicitly[ST[T]].makeMat(values.toArray)
+
+  /** Factory method to create a Mat from a sequence of Vec. Each inner Vec will
+    * become a row of the new Mat instance.
+    * @param values
+    *   Sequence of Vec, each of which is to be a row
+    * @tparam T
+    *   Type of elements in array
+    */
+  def fromRows[T: ST](rows: Vec[T]*): Mat[T] = {
+    val r = rows.length
+    val st = implicitly[ST[T]]
+    if (r == 0) st.makeMat(0, 0, st.newArray(0))
+    else {
+      val c = rows(0).length
+      st.makeMat(
+        r,
+        c,
+        st.concat(ArraySeq.unsafeWrapArray(rows.toArray)).toArray
+      )
+    }
+  }
 
   /** Factory method to create an identity matrix; ie with ones along the
     * diagonal and zeros off-diagonal.

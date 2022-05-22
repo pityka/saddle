@@ -862,6 +862,15 @@ class MatCheck extends Specification with ScalaCheck {
       }
     }
 
+    "fromRows works" in {
+      forAll { (m: Mat[Double]) =>
+        (m.numRows > 0) ==> {
+            Mat.fromRows(m.rows:_*) must_== m
+          
+        }
+      }
+    }
+
     "withoutRows works" in {
       forAll { (m: Mat[Double]) =>
         (m.numRows > 0) ==> {
