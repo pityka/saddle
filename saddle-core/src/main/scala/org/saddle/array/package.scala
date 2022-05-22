@@ -43,6 +43,16 @@ package object array {
     }
   }
 
+  def copySlice[@spec(Boolean, Int, Long, Double) T: ST](
+      from: Int,
+      until: Int,
+      source: Array[T]
+  ): Array[T] = {
+    val target = empty[T](until - from)
+    System.arraycopy(source, from, target, 0, until - from)
+    target
+  }
+
   /** Create a new initialized empty array
     */
   def empty[@spec(Boolean, Int, Long, Double) T: ST](len: Int): Array[T] =

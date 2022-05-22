@@ -368,7 +368,9 @@ final class Mat[@spec(Boolean, Int, Long, Double) T](
     */
   def row(slice: Slice[Int]): Mat[T] = {
     val (a, b) = slice(IndexIntRange(numRows))
-    takeRows(a until b toArray)
+    val offsetA = a * numCols
+    val offsetB = b * numCols
+    Mat(b - a, numCols, array.copySlice(offsetA, offsetB, values))
   }
 
   /** Returns rows of matrix as an indexed sequence of Vec instances
