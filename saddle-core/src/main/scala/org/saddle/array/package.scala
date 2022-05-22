@@ -43,6 +43,16 @@ package object array {
     }
   }
 
+  /** Copies a contiguous segment of the array into a new array.
+    *
+    * @param from
+    *   start index, inclusive
+    * @param until
+    *   end index, exclusive
+    * @param source
+    *   source array to copy
+    * @return
+    */
   def copySlice[@spec(Boolean, Int, Long, Double) T: ST](
       from: Int,
       until: Int,
