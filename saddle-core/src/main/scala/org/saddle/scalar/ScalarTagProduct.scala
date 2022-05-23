@@ -16,7 +16,7 @@ package org.saddle.scalar
 
 import org.saddle.CLM
 
-class ScalarTagProduct[T <: Product: CLM] extends ScalarTagAny[T] {
+final class ScalarTagProduct[T <: Product: CLM] extends ScalarTagAny[T] {
   override def isTuple = true
 
   override def strList(v: T) =

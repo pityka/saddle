@@ -28,7 +28,7 @@ import immutable.ArraySeq
   * Buffer/Vec/Mat/Index of that type, as well as an array. Often implicitly
   * required when dealing with objects in Saddle
   */
-trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
+protected[saddle] trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
     extends ClassTag[T]
     with SpecializedFactory[T]
     with CouldBeOrdered[T]

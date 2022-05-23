@@ -115,6 +115,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     name := "saddle-core",
     mimaBinaryIssueFilters := Seq(
       // format: off
+      // ScalarTags are not for extension by client code
+      ProblemFilters.exclude[FinalClassProblem]("org.saddle.scalar.ScalarTagProduct"),
       // private
       ProblemFilters.exclude[Problem]("org.saddle.vec.VecImpl*"),
       // Vec has package private methods, which prevent user extensions of it.

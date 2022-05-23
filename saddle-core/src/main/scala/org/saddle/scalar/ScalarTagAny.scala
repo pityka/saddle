@@ -21,7 +21,7 @@ import org.saddle.array.Sorter
 import org.saddle.Buffer
 import org.saddle.na
 
-class ScalarTagAny[T: CLM] extends ScalarTag[T] {
+protected[saddle] class ScalarTagAny[T: CLM] extends ScalarTag[T] {
   def missing: T = null.asInstanceOf[T]
   def isMissing(v: T): Boolean = v == missing || v == na
 
