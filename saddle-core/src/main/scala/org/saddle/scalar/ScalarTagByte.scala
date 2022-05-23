@@ -24,4 +24,12 @@ object ScalarTagByte extends ScalarTagAny[Byte] {
   override def makeSorter(implicit ord: ORD[Byte]): Sorter[Byte] =
     Sorter.byteSorter
   override def missing: Byte = Byte.MinValue
+
+  override def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[Byte]
+  ): Array[Byte] = {
+    java.util.Arrays.copyOfRange(source, from, to)
+  }
 }

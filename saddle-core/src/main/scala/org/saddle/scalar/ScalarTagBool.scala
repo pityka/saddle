@@ -57,4 +57,12 @@ object ScalarTagBool extends ScalarTag[Boolean] {
   def parse(s: String) = s.toBoolean
 
   override def toString = "ScalarTagBool"
+
+  override def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[Boolean]
+  ): Array[Boolean] = {
+    java.util.Arrays.copyOfRange(source, from, to)
+  }
 }

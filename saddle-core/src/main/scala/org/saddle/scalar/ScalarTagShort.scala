@@ -25,4 +25,12 @@ object ScalarTagShort extends ScalarTagAny[Short] {
     Sorter.shortSorter
 
   override def missing: Short = Short.MinValue
+
+  override def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[Short]
+  ): Array[Short] = {
+    java.util.Arrays.copyOfRange(source, from, to)
+  }
 }

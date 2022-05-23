@@ -24,4 +24,12 @@ object ScalarTagChar extends ScalarTagAny[Char] {
   override def makeSorter(implicit ord: ORD[Char]): Sorter[Char] =
     Sorter.charSorter
   override def missing: Char = Char.MinValue
+
+  override def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[Char]
+  ): Array[Char] = {
+    java.util.Arrays.copyOfRange(source, from, to)
+  }
 }

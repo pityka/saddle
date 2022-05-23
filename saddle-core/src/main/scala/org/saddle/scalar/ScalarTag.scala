@@ -74,6 +74,22 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
 
   // forward 2.10 compatibility
   def runtimeClass: Class[_]
+
+  /** Copies a contiguous segment of the array into a new array.
+    *
+    * @param from
+    *   start index, inclusive
+    * @param to
+    *   end index, exclusive
+    * @param source
+    *   source array to copy
+    * @return
+    */
+  def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[T]
+  ): Array[T] 
 }
 
 object ScalarTag extends ScalarTagImplicits {

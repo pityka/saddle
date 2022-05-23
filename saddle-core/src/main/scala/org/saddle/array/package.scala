@@ -58,7 +58,7 @@ package object array {
       to: Int,
       source: Array[T]
   ): Array[T] = {
-    java.util.Arrays.copyOfRange(source,from,to)
+    implicitly[ST[T]].copySlice(from,to,source)
   }
 
   /** Create a new initialized empty array

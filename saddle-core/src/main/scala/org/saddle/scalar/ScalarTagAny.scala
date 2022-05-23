@@ -62,4 +62,14 @@ class ScalarTagAny[T: CLM] extends ScalarTag[T] {
 
   def concat(arrs: IndexedSeq[Vec[T]]): Vec[T] =
     Vec(array.flatten(arrs.map(_.toArray)))
+
+  def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[T]
+  ): Array[T] = {
+    val target = array.empty[T](to - from)
+    System.arraycopy(source, from, target, 0, to - from)
+    target
+  }
 }

@@ -67,4 +67,12 @@ object ScalarTagDouble extends ScalarTag[Double] {
     Vec(array.flatten(arrs.map(_.toArray)))
 
   override def toString = "ScalarTagDouble"
+
+  def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[Double]
+  ): Array[Double] = {
+    java.util.Arrays.copyOfRange(source, from, to)
+  }
 }

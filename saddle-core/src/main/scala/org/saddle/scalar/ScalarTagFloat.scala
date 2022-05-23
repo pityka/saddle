@@ -26,7 +26,15 @@ object ScalarTagFloat extends ScalarTagAny[Float] {
     } catch { case _: NumberFormatException => Float.NaN }
   override def makeSorter(implicit ord: ORD[Float]): Sorter[Float] =
     Sorter.floatSorter
-  
+
   override def missing: Float = Float.NaN
   override def isMissing(v: Float): Boolean = v != v
+
+  override def copySlice(
+      from: Int,
+      to: Int,
+      source: Array[Float]
+  ): Array[Float] = {
+    java.util.Arrays.copyOfRange(source, from, to)
+  }
 }
