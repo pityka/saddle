@@ -39,21 +39,12 @@ class VecPimp(val self: Vec[Double]) {
     var s = 0d
     val M = self.length
 
-    val m = M % 5
-    while (i < m) {
-      s += self.raw(i) * other.raw(i)
-      i += 1
-    }
+    val ar1 = self.toArray
+    val ar2 = other.toArray
 
     while (i < M) {
-      val v1 = self.raw(i) * other.raw(i)
-      val v2 = self.raw(i + 1) * other.raw(i + 1)
-      val v3 = self.raw(i + 2) * other.raw(i + 2)
-      val v4 = self.raw(i + 3) * other.raw(i + 3)
-      val v5 = self.raw(i + 4) * other.raw(i + 4)
-
-      s += v1 + v2 + v3 + v4 + v5
-      i += 5
+      s += ar1(i) * ar2(i)
+      i += 1
     }
     s
   }

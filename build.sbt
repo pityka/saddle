@@ -223,6 +223,25 @@ lazy val time = project
   )
   .dependsOn(coreJVM)
 
+lazy val exploremain = project
+  .in(file("exploremain"))
+  .settings(
+    name := "saddle-explore",
+    publish / skip := true,
+    publishArtifact := false,
+    fork := true,
+    scalaVersion := scalaVersionInBuild,
+    Global / cancelable := true,
+    run / javaOptions ++= Seq(
+    "-XX:+UnlockDiagnosticVMOptions",
+    // in addition of these one needs a shared library - hsdis - from the jdk
+    // https://blogs.oracle.com/javamagazine/post/java-hotspot-hsdis-disassembler
+    "-XX:CompileCommand=print,org/saddle/macros/BinOpVecVecInPlace$$anon$1.apply",
+    "-XX:CompileCommand=print,org/saddle/ops/BinOpVecInPlace$VecVecElemOpIp$mcDD$sp.apply$mcDD$sp",
+    "-XX:-UseCompressedOops")
+  )
+  .dependsOn(coreJVM, linalg, inlinedOps)
+
 lazy val stats = project
   .in(file("saddle-stats"))
   .settings(commonSettings: _*)
