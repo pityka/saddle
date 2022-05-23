@@ -47,7 +47,7 @@ package object array {
     *
     * @param from
     *   start index, inclusive
-    * @param until
+    * @param to
     *   end index, exclusive
     * @param source
     *   source array to copy
@@ -55,12 +55,10 @@ package object array {
     */
   def copySlice[@spec(Boolean, Int, Long, Double) T: ST](
       from: Int,
-      until: Int,
+      to: Int,
       source: Array[T]
   ): Array[T] = {
-    val target = empty[T](until - from)
-    System.arraycopy(source, from, target, 0, until - from)
-    target
+    java.util.Arrays.copyOfRange(source,from,to)
   }
 
   /** Create a new initialized empty array
