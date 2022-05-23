@@ -2,12 +2,22 @@ package org.saddle
 
 import org.openjdk.jmh.annotations._
 @State(Scope.Benchmark)
-@Warmup(iterations = 4, time=3)
-@Measurement(iterations = 6, time=5)
-@Fork(1)
+@Warmup(iterations = 4, time = 3)
+@Measurement(iterations = 6, time = 5)
+@Fork(
+  value = 1,
+  jvmArgsPrepend = Array(
+    "-XX:+UnlockDiagnosticVMOptions",
+    // in addition of these one needs a shared library - hsdis - from the jdk
+    // https://blogs.oracle.com/javamagazine/post/java-hotspot-hsdis-disassembler
+    "-XX:CompileCommand=print,org/saddle/linalg/VecPimp.vv_java",
+    "-XX:CompileCommand=print,org/saddle/DotBench.vv_java_unrolled",
+    "-XX:-UseCompressedOops"
+  )
+)
 @Threads(1)
 class DotBench {
-  @Param(Array("500", "1000", "10000"))
+  @Param(Array("1000"))
   var size: Int = _
 
   var v1: Vec[Double] = _
@@ -42,14 +52,14 @@ class DotBench {
     v1 = vec.randn(size)
     v2 = vec.randn(size)
   }
-  @Benchmark
+  // @Benchmark
   def blas(): Double = {
     import org.saddle.linalg._
     v1 vv_blas v2
   }
   @Benchmark
   def raw_unrolled(): Double = {
-    vv_java_unrolled(v1,v2)
+    vv_java_unrolled(v1, v2)
   }
   @Benchmark
   def raw(): Double = {
