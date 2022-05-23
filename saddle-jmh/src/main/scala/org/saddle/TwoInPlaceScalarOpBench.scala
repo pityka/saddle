@@ -3,12 +3,12 @@ package org.saddle
 import org.openjdk.jmh.annotations._
 
 @State(Scope.Benchmark)
-@Warmup(iterations = 10)
-@Measurement(iterations = 10)
+@Warmup(iterations = 4)
+@Measurement(iterations = 10, time=3)
 @Fork(1)
 @Threads(1)
 class TwoInPlaceScalarOpBench {
-  @Param(Array("10", "100"))
+  @Param(Array("10", "100", "10000"))
   var size: Int = _
 
   var m1: Mat[Double] = _
@@ -17,7 +17,7 @@ class TwoInPlaceScalarOpBench {
   @Setup(Level.Iteration)
   def setup() = {
     m1 = mat.randn(size, size)
-    b = scala.util.Random.nextDouble
+    b = scala.util.Random.nextDouble()
   }
   @Benchmark
   def saddleVirtual(): Mat[Double] = {

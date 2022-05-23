@@ -98,8 +98,8 @@ class TestImpl(self: Mat[Double]) {
 }
 
 @State(Scope.Benchmark)
-@Warmup(iterations = 10)
-@Measurement(iterations = 10)
+@Warmup(iterations = 4, time=3)
+@Measurement(iterations = 6, time=5)
 @Fork(1)
 @Threads(1)
 class DiagOuterMBench {
