@@ -431,7 +431,8 @@ lazy val docs = project
         circeJS,
         spireJS,
         io.js,
-        jsoniter.js
+        jsoniter.js,
+        linalgScala3
       )),
     publish / skip := true,
     publishArtifact := false,
