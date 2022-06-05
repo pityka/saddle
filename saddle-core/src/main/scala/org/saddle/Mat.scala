@@ -20,7 +20,7 @@ import scala.{specialized => spec}
 import java.io.OutputStream
 import org.saddle.index.{Slice, IndexIntRange}
 import org.saddle.mat.{MatImpl, MatMath}
-import scala.collection.compat.immutable.ArraySeq
+import scala.collection.immutable.ArraySeq
 
 /** `Mat` is an immutable container for 2D homogeneous data (a "matrix"). It is
   * backed by a single array. Data is stored in row-major order.
