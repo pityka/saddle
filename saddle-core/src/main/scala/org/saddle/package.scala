@@ -23,6 +23,7 @@ import scala.reflect.ClassTag
 import cats.kernel.Order
 import org.saddle.order._
 import scala.annotation.unused
+import org.saddle.index.SliceDefault
 
 /** ==Saddle==
   *
@@ -70,12 +71,10 @@ package object saddle {
   type ST[C] = ScalarTag[C]
 
   // *********************
-  implicit val doubleOrd: Numeric[Double] with util.DoubleTotalOrderTrait =
-    doubleIsNumeric
-  implicit val floatOrd: Numeric[Float] with util.FloatTotalOrderTrait =
-    floatIsNumeric
-  implicit val intOrd: Numeric[Int] = intIsNumeric
-  implicit val longOrd: Numeric[Long] = longIsNumeric
+  implicit val doubleOrd: doubleIsNumeric.type = doubleIsNumeric
+  implicit val floatOrd: floatIsNumeric.type = floatIsNumeric
+  implicit val intOrd: intIsNumeric.type = intIsNumeric
+  implicit val longOrd: longIsNumeric.type = longIsNumeric
 
   // **********************
 
@@ -99,8 +98,8 @@ package object saddle {
     *   val u = v(0 -> 2)
     * }}}
     */
-  implicit def pair2Slice[T](p: (T, T)): Slice[T] = Slice(p._1, p._2)
-  implicit def any2Slice[T](p: T): Slice[T] = Slice(p, p)
+  implicit def pair2Slice[T](p: (T, T)): SliceDefault[T] = Slice(p._1, p._2)
+  implicit def any2Slice[T](p: T): SliceDefault[T] = Slice(p, p)
 
   /** Syntactic sugar, allow '* -> ' to generate an (inclusive) index slice,
     * open on left

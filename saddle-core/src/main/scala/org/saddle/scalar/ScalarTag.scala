@@ -76,18 +76,18 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
 }
 
 object ScalarTag extends ScalarTagImplicits {
-  implicit val stChar: ST[Char] = ScalarTagChar
-  implicit val stByte: ST[Byte] = ScalarTagByte
-  implicit val stBool: ST[Boolean] = ScalarTagBool
-  implicit val stShort: ST[Short] = ScalarTagShort
-  implicit val stInt: ST[Int] = ScalarTagInt
-  implicit val stFloat: ST[Float] = ScalarTagFloat
-  implicit val stLong: ST[Long] = ScalarTagLong
-  implicit val stDouble: ST[Double] = ScalarTagDouble
+  implicit val stChar: ScalarTagChar.type = ScalarTagChar
+  implicit val stByte: ScalarTagByte.type = ScalarTagByte
+  implicit val stBool: ScalarTagBool.type = ScalarTagBool
+  implicit val stShort: ScalarTagShort.type = ScalarTagShort
+  implicit val stInt: ScalarTagInt.type = ScalarTagInt
+  implicit val stFloat: ScalarTagFloat.type = ScalarTagFloat
+  implicit val stLong: ScalarTagLong.type = ScalarTagLong
+  implicit val stDouble: ScalarTagDouble.type = ScalarTagDouble
 }
 
 trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
-  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTagAny[T] =
+  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTagProduct[T] =
     new ScalarTagProduct[T]()(ev)
 }
 
