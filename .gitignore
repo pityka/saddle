@@ -16,3 +16,4 @@ _gen/
 project/metals.sbt
 .vscode/settings.json
 .bsp
+saddle-linalg/target3/

@@ -167,7 +167,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel" %% "cats-kernel" % "2.6.1"
     ) ++ specs ++ (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) => Nil
-      case Some((2, _)) => List("org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0")
+      case Some((2, _)) =>
+        List("org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0")
     })
   )
   .jsSettings(
@@ -178,7 +179,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.specs2" %%% "specs2-scalacheck" % "4.15.0" % "test"
     ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) => Nil
-      case Some((2, _)) => List("org.scala-lang.modules" %%%  "scala-collection-compat" % "2.7.0")
+      case Some((2, _)) =>
+        List("org.scala-lang.modules" %%% "scala-collection-compat" % "2.7.0")
     })
   )
   .dependsOn(spire, io)
@@ -261,12 +263,32 @@ lazy val linalg = project
   .settings(commonSettings: _*)
   .settings(
     name := "saddle-linalg",
+    crossScalaVersions := Seq(scalaVersion213),
     libraryDependencies ++= Seq(
       "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly (),
       "net.sourceforge.f2j" % "arpack_combined_all" % "0.1"
     ) ++ scalaTest
   )
-  .dependsOn(coreJVM)
+  .dependsOn(
+    coreJVM,
+    inlinedOps
+  )
+lazy val linalgScala3 = project
+  .in(file("saddle-linalg"))
+  .settings(commonSettings: _*)
+  .settings(
+    target := file("saddle-linalg/target3/"),
+    name := "saddle-linalg",
+    scalaVersion := scalaVersion3,
+    crossScalaVersions := Nil,
+    libraryDependencies ++= Seq(
+      "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly (),
+      "net.sourceforge.f2j" % "arpack_combined_all" % "0.1"
+    ) ++ scalaTest
+  )
+  .dependsOn(
+    coreJVM
+  )
 
 lazy val binary = project
   .in(file("saddle-binary"))
@@ -434,6 +456,7 @@ lazy val root = (project in file("."))
     time,
     stats,
     linalg,
+    linalgScala3,
     binary,
     circeJS,
     circeJVM,
