@@ -221,7 +221,7 @@ lazy val inlinedOps = project
     name := "saddle-ops-inlined",
     libraryDependencies ++= specs
   )
-  .dependsOn(coreJVM, inlinedOpsMacroImpl % "compile->compile;test->test")
+  .dependsOn(coreJVM % "compile->compile;test->test", inlinedOpsMacroImpl )
 
 lazy val bench =
   project
