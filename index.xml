@@ -13,7 +13,7 @@
       
       <guid>https://pityka.github.io/saddle/docs/getting_started/</guid>
       <description>Add any of these lines to your build.sbt:
-// The core library libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-core&amp;#34; % &amp;#34;0.0.0+1-40a65a8e-SNAPSHOT&amp;#34; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-ops-inlined&amp;#34; % &amp;#34;0.0.0+1-40a65a8e-SNAPSHOT&amp;#34; // Linear algebra interface to BLAS libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-linalg&amp;#34; % &amp;#34;0.0.0+1-40a65a8e-SNAPSHOT&amp;#34; // Binary representation of data frames and matrices libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-binary&amp;#34; % &amp;#34;0.0.0+1-40a65a8e-SNAPSHOT&amp;#34; // Circe Encoder and Decoder instances libraryDependencies += &amp;#34;io.</description>
+// The core library libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-core&amp;#34; % &amp;#34;3.4.0&amp;#34; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-ops-inlined&amp;#34; % &amp;#34;3.4.0&amp;#34; // Linear algebra interface to BLAS libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-linalg&amp;#34; % &amp;#34;3.4.0&amp;#34; // Binary representation of data frames and matrices libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-binary&amp;#34; % &amp;#34;3.4.0&amp;#34; // Circe Encoder and Decoder instances libraryDependencies += &amp;#34;io.</description>
     </item>
     
     <item>
