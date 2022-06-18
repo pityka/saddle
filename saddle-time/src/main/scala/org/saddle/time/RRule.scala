@@ -21,6 +21,7 @@ import scala.jdk.CollectionConverters._
 import com.google.ical.iter.RecurrenceIteratorFactory
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory
 
+
 /** Wrapper of a RFC 2445 RRULE or EXRULE as implemented in the google rfc2445
   * java library.
   *
@@ -55,7 +56,7 @@ import com.google.ical.compat.jodatime.DateTimeIteratorFactory
   * -- http://labix.org/python-dateutil
   * -- https://pypi.python.org/pypi/python-dateutil
   */
-case class RRule private (
+case class RRule private[saddle] (
     freq: Frequency,
     interval: Int = 1,
     wkst: Option[Weekday] = None,
@@ -227,7 +228,7 @@ case class RRule private (
     * Note that in both cases, if the 'from' date conforms to the recurrence
     * rule, it will be counted.
     */
-  def counting(i: Int) = {
+  def counting(i: Int): AnyRef{def from(dt: org.joda.time.DateTime): org.joda.time.DateTime} = {
     val outer = this
     new {
       def from(dt: DateTime): DateTime = {

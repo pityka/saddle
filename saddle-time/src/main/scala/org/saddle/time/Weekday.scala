@@ -37,7 +37,7 @@ object Weekday {
 
   /** Allow for implicit Weekday => WeekdayNum conversion: e.g., MO => MO(0)
     */
-  implicit def w2wn(w: Weekday) = WeekdayNum(0, w)
+  implicit def w2wn(w: Weekday) : WeekdayNum = WeekdayNum(0, w)
 }
 
 case object SU extends Weekday

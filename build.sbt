@@ -239,7 +239,6 @@ lazy val time = project
   .settings(commonSettings: _*)
   .settings(
     name := "saddle-time",
-    crossScalaVersions := Seq(scalaVersion213),
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0",
       "joda-time" % "joda-time" % "2.1",
