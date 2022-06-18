@@ -19,6 +19,9 @@ import org.specs2.ScalaCheck
 import org.scalacheck.Prop.forAll
 import org.saddle.{VecArbitraries, Vec}
 import org.scalacheck.{Gen, Arbitrary}
+import org.saddle.doubleOrd
+import org.saddle.intOrd
+import org.saddle.longOrd
 
 // check stats implementation against apache math
 import org.apache.commons.math.stat.descriptive.DescriptiveStatistics
@@ -359,7 +362,7 @@ class VecStatsCheck extends Specification with ScalaCheck with StatsHelper {
 
       forAll { (v: Vec[Double]) =>
         (v.length > 3) ==> {
-          implicit val win =
+          implicit val win: Arbitrary[Window] =
             Arbitrary(for (sz <- Gen.choose(2, v.length)) yield Window(sz))
 
           forAll { (k: Window) =>
