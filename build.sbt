@@ -253,7 +253,6 @@ lazy val stats = project
   .settings(commonSettings: _*)
   .settings(
     name := "saddle-stats",
-    crossScalaVersions := Seq(scalaVersion213),
     libraryDependencies ++= Seq(
       "org.apache.commons" % "commons-math" % "2.2" % "test"
     ) ++ specs
