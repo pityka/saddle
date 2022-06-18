@@ -206,22 +206,25 @@ lazy val inlinedOpsMacroImpl = project
   .in(file("saddle-ops-inlined-macroimpl"))
   .settings(commonSettings: _*)
   .settings(
-    crossScalaVersions := Seq(scalaVersion213),
     name := "saddle-ops-inlined-macroimpl",
-    libraryDependencies ++= Seq(
-      "org.scala-lang" % "scala-reflect" % scalaVersion.value
-    ) ++ specs
+    libraryDependencies ++=
+      (CrossVersion.partialVersion(scalaVersion.value) match {
+        case Some((3, _)) => Nil
+        case Some((2, _)) =>
+          Seq(
+            "org.scala-lang" % "scala-reflect" % scalaVersion.value
+          )
+      }) ++ specs
   )
   .dependsOn(coreJVM)
 lazy val inlinedOps = project
   .in(file("saddle-ops-inlined"))
   .settings(commonSettings: _*)
   .settings(
-    crossScalaVersions := Seq(scalaVersion213),
     name := "saddle-ops-inlined",
     libraryDependencies ++= specs
   )
-  .dependsOn(coreJVM % "compile->compile;test->test", inlinedOpsMacroImpl )
+  .dependsOn(coreJVM % "compile->compile;test->test", inlinedOpsMacroImpl)
 
 lazy val bench =
   project
@@ -263,7 +266,6 @@ lazy val linalg = project
   .settings(commonSettings: _*)
   .settings(
     name := "saddle-linalg",
-    crossScalaVersions := Seq(scalaVersion213),
     libraryDependencies ++= Seq(
       "com.github.fommil.netlib" % "all" % "1.1.2" pomOnly (),
       "net.sourceforge.f2j" % "arpack_combined_all" % "0.1"
@@ -413,7 +415,7 @@ lazy val docs = project
         circeJS,
         spireJS,
         io.js,
-        jsoniter.js,
+        jsoniter.js
       )),
     publish / skip := true,
     publishArtifact := false,
