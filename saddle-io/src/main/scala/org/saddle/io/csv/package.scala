@@ -122,35 +122,43 @@ package object csv {
         // what column locations to extract
         if (locs.length == 0) locs = (0 until firstLine.length).toArray
 
-        prepare(locs.length)
-
-        def addToBuffer(s: String, buf: Int) = {
-          dataCallback(s, buf)
-        }
-
-        val fields = locs.map(i => firstLine(i)).toArray
-        val colIndex = if (header) {
-          Some(fields.toArray)
+        if (locs.exists(i => i >= firstLine.length)) {
+          Left(
+            s"Header line to short to locs ${locs.toList.mkString("[", ", ", "]")}. Header line: ${firstLine
+              .mkString("[", ", ", "]")}"
+          )
         } else {
-          fields.toSeq.zipWithIndex.map { case (s, i) => addToBuffer(s, i) }
-          None
-        }
 
-        // parse remaining rows
-        val errorMessage = extractFields(
-          data,
-          addToBuffer,
-          locs,
-          quoteChar,
-          fieldSeparator,
-          recordSeparator.toCharArray,
-          maxLines - 1
-        )
+          prepare(locs.length)
 
-        if (errorMessage.nonEmpty) Left(errorMessage)
-        else {
+          def addToBuffer(s: String, buf: Int) = {
+            dataCallback(s, buf)
+          }
 
-          Right(colIndex)
+          val fields = locs.map(i => firstLine(i)).toArray
+          val colIndex = if (header) {
+            Some(fields.toArray)
+          } else {
+            fields.toSeq.zipWithIndex.map { case (s, i) => addToBuffer(s, i) }
+            None
+          }
+
+          // parse remaining rows
+          val errorMessage = extractFields(
+            data,
+            addToBuffer,
+            locs,
+            quoteChar,
+            fieldSeparator,
+            recordSeparator.toCharArray,
+            maxLines - 1
+          )
+
+          if (errorMessage.nonEmpty) Left(errorMessage)
+          else {
+
+            Right(colIndex)
+          }
         }
       }
     }
