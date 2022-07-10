@@ -583,7 +583,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     */
   def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
     {
-          val sca = implicitly[ST[T]]
+    val sca = implicitly[ST[T]]
     val sz = length
     if (sz == 0) -1
     else {

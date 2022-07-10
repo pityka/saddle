@@ -20,8 +20,7 @@ import org.saddle.{CLM, ORD, NUM, Vec, Mat, Index, ST}
 import org.saddle.locator.Locator
 import org.saddle.array.Sorter
 import org.saddle.Buffer
-import scala.collection.compat._
-import immutable.ArraySeq
+import collection.immutable.ArraySeq
 
 /** Typeclass definition for scalar tags. A ScalarTag contains important
   * meta-data regarding a scalar type, including how to instantiate a
@@ -77,32 +76,37 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
 }
 
 object ScalarTag extends ScalarTagImplicits {
-  implicit val stChar = ScalarTagChar
-  implicit val stByte = ScalarTagByte
-  implicit val stBool = ScalarTagBool
-  implicit val stShort = ScalarTagShort
-  implicit val stInt = ScalarTagInt
-  implicit val stFloat = ScalarTagFloat
-  implicit val stLong = ScalarTagLong
-  implicit val stDouble = ScalarTagDouble
+  implicit val stChar: ScalarTagChar.type = ScalarTagChar
+  implicit val stByte: ScalarTagByte.type = ScalarTagByte
+  implicit val stBool: ScalarTagBool.type = ScalarTagBool
+  implicit val stShort: ScalarTagShort.type = ScalarTagShort
+  implicit val stInt: ScalarTagInt.type = ScalarTagInt
+  implicit val stFloat: ScalarTagFloat.type = ScalarTagFloat
+  implicit val stLong: ScalarTagLong.type = ScalarTagLong
+  implicit val stDouble: ScalarTagDouble.type = ScalarTagDouble
 }
 
 trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
-  implicit def stPrd[T <: Product: CLM] = new ScalarTagProduct[T]
+  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTagProduct[T] =
+    new ScalarTagProduct[T]()(ev)
 }
 
 trait ScalarTagImplicitsL1 extends ScalarTagImplicitsL2 {
-  implicit def stAnyVal[T <: AnyVal: CLM] = new ScalarTagAny[T] {
-    override def isAnyVal = true
-  }
+  implicit def stAnyVal[T <: AnyVal](implicit ev: CLM[T]): ScalarTagAny[T] =
+    new ScalarTagAny[T]()(ev) {
+      override def isAnyVal = true
+    }
 }
 
 trait ScalarTagImplicitsL2 extends ScalarTagImplicitsL3 {
-  implicit def stAnyRef[T <: AnyRef: CLM] = new ScalarTagAny[T]
+  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTagAny[T] = new ScalarTagAny[T]()(ev)
 }
 
 trait ScalarTagImplicitsL3 {
-  implicit def stAny[T: CLM] = new ScalarTagAny[T] { override def isAny = true }
+  implicit def stAny[T](implicit ev: CLM[T]): ScalarTagAny[T]=
+    new ScalarTagAny[T]()(ev) {
+      override def isAny = true
+    }
 }
 
 trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {

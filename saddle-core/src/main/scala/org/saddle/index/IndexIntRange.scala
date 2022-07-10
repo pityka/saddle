@@ -28,7 +28,7 @@ class IndexIntRange(val length: Int, val from: Int = 0, val ord: ORD[Int])
     extends Index[Int] {
   require(length >= 0, "Length must be non-negative!")
 
-  private implicit def o = ord
+  private implicit def o : ORD[Int]= ord
 
   @transient lazy val scalarTag = ScalarTagInt
 

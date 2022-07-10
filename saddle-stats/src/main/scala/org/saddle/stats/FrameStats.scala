@@ -44,17 +44,17 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
   /** Sum of the natural logs of the elements of each column, ignoring NA
     * values.
     */
-  def logsum(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(_.logsum)
+  def logsum(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(v => ev(v).logsum)
 
   /** Geometric mean of each column
     */
   def geomean(implicit ev: S2Stats): Series[CX, Double] =
-    frame.reduce(_.geomean)
+    frame.reduce(v => ev(v).geomean)
 
   /** Sample variance of each column
     */
   def variance(implicit ev: S2Stats): Series[CX, Double] =
-    frame.reduce(_.variance)
+    frame.reduce(v => ev(v).variance)
 
   /** Sample standard deviation of each column
     */
@@ -63,18 +63,18 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
 
   /** Sample skewness of each column
     */
-  def skew(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(_.skew)
+  def skew(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(v => ev(v).skew)
 
   /** Sample kurtosis of each column
     */
-  def kurt(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(_.kurt)
+  def kurt(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(v => ev(v).kurt)
 
   private type V2Stats = Vec[T] => VecStats[T]
 
   /** Demean each column in the frame
     */
   def demeaned(implicit ev: V2Stats): Frame[RX, CX, Double] =
-    frame.mapVec(_.demeaned)
+    frame.mapVec(v => ev(v).demeaned)
 
   private type V2RollingStats = Vec[T] => VecRollingStats[T]
 
@@ -85,7 +85,7 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
     */
   def rollingCount(winSz: Int)(implicit
       ev: V2RollingStats
-  ): Frame[RX, CX, Int] = frame.mapVec(_.rollingCount(winSz))
+  ): Frame[RX, CX, Int] = frame.mapVec(v => ev(v).rollingCount(winSz))
 
   /** Rolling sum; compute sum of elements in columns of Frame over a sliding
     * window, ignoring any NA values.
@@ -93,7 +93,7 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
     *   Size of the sliding window
     */
   def rollingSum(winSz: Int)(implicit ev: V2RollingStats): Frame[RX, CX, T] =
-    frame.mapVec(_.rollingSum(winSz))
+    frame.mapVec(v => ev(v).rollingSum(winSz))
 
   /** Rolling mean; compute mean of elements in columns of Frame over a sliding
     * window, ignoring any NA values.
@@ -102,7 +102,7 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
     */
   def rollingMean(winSz: Int)(implicit
       ev: V2RollingStats
-  ): Frame[RX, CX, Double] = frame.mapVec(_.rollingMean(winSz))
+  ): Frame[RX, CX, Double] = frame.mapVec(v => ev(v).rollingMean(winSz))
 
   /** Rolling median; compute median of elements in columns of Frame over a
     * sliding window, ignoring any NA values.
@@ -111,7 +111,7 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
     */
   def rollingMedian(winSz: Int)(implicit
       ev: V2RollingStats
-  ): Frame[RX, CX, Double] = frame.mapVec(_.rollingMedian(winSz))
+  ): Frame[RX, CX, Double] = frame.mapVec(v => ev(v).rollingMedian(winSz))
 
   private type V2ExpandingStats = Vec[T] => VecExpandingStats[T]
 
@@ -119,29 +119,29 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
     * the cumulative count from the initial element, ignoring NAs.
     */
   def cumCount(implicit ev: V2ExpandingStats): Frame[RX, CX, Int] =
-    frame.mapVec(_.cumCount)
+    frame.mapVec(v => ev(v).cumCount)
 
   /** Cumulative sum for each column; each successive element of the output is
     * the cumulative sum from the initial element, ignoring NAs.
     */
   def cumSum(implicit ev: V2ExpandingStats): Frame[RX, CX, T] =
-    frame.mapVec(_.cumSum)
+    frame.mapVec(v => ev(v).cumSum)
 
   /** Cumulative product for each column; each successive element of the output
     * is the cumulative product from the initial element, ignoring NAs.
     */
   def cumProd(implicit ev: V2ExpandingStats): Frame[RX, CX, T] =
-    frame.mapVec(_.cumProd)
+    frame.mapVec(v => ev(v).cumProd)
 
   /** Cumulative min for each column; each successive element of the output is
     * the cumulative min from the initial element, ignoring NAs.
     */
   def cumMin(implicit ev: V2ExpandingStats): Frame[RX, CX, T] =
-    frame.mapVec(_.cumMin)
+    frame.mapVec(v => ev(v).cumMin)
 
   /** Cumulative max for each column; each successive element of the output is
     * the cumulative max from the initial element, ignoring NAs.
     */
   def cumMax(implicit ev: V2ExpandingStats): Frame[RX, CX, T] =
-    frame.mapVec(_.cumMax)
+    frame.mapVec(v => ev(v).cumMax)
 }

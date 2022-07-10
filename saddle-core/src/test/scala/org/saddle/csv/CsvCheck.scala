@@ -326,6 +326,16 @@ class CsvCheck extends Specification with ScalaCheck {
       "Unclosed quote.. line=0, field=0"
     )
   }
+  "csv fails on too short header" in {
+    val data =
+      s"""a,a""".stripMargin
+
+    val src = scala.io.Source.fromString(data)
+
+    CsvParser.parseSource[String](src, cols = List(2)) must_==
+      Left("Header line to short to locs [2]. Header line: [a, a]")
+
+  }
 
   "csv parsing still works when final field is empty" in {
     val data =

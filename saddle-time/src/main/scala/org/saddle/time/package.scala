@@ -222,7 +222,7 @@ package object time {
 
   /** Provides an implicit ordering for DateTime
     */
-  implicit val dtOrdering = new Ordering[DateTime] {
+  implicit val dtOrdering: Ordering[DateTime] = new Ordering[DateTime] {
     def compare(x: DateTime, y: DateTime) = x.compareTo(y)
   }
 

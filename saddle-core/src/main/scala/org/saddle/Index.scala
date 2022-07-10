@@ -28,8 +28,7 @@ import scalar.{Scalar, NA, ScalarTag}
 import locator.Locator
 import vec.VecImpl
 import java.io.OutputStream
-import scala.collection.compat._
-import immutable.ArraySeq
+import collection.immutable.ArraySeq
 
 /** Index provides a constant-time look-up of a value within array-backed
   * storage, as well as operations to support joining and slicing.
@@ -379,8 +378,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     * @tparam U
     *   Type of elements of result index
     */
-  @scala.annotation.nowarn
-  def dropLevel[U, _](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
+  def dropLevel[U](implicit ev: Splitter[T, U, _]): Index[U] = ev(this)._1
 
   /** Given this index whose elements have arity N and another index of arity 1,
     * form a result index whose entries are tuples of arity N+1 reflecting the

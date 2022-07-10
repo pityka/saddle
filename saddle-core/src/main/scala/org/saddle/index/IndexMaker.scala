@@ -40,26 +40,26 @@ object IndexMaker extends IndexMakerLowPriority {
   // -------------------------
   // IndexMaker instances
 
-  implicit def make2V[T[K] <: IndexedSeq[K], I1: ORD, I2: ORD] =
+  implicit def make2V[T[K] <: IndexedSeq[K], I1: ORD, I2: ORD] : IndexMaker[(T[I1], T[I2]), (I1, I2)]=
     new IndexMaker[(T[I1], T[I2]), (I1, I2)] {
       def apply(in: (T[I1], T[I2])) = zip2V(in._1, in._2)
     }
 
-  implicit def make2Vec[I1: ORD, I2: ORD] =
+  implicit def make2Vec[I1: ORD, I2: ORD] :IndexMaker[(Vec[I1], Vec[I2]), (I1, I2)] =
     new IndexMaker[(Vec[I1], Vec[I2]), (I1, I2)] {
       def apply(in: (Vec[I1], Vec[I2])) = zip2Vec(in._1, in._2)
     }
 
   implicit def make3V[T[K] <: IndexedSeq[
     K
-  ], I1: ORD, I2: ORD, I3: ORD] =
+  ], I1: ORD, I2: ORD, I3: ORD] : IndexMaker[(T[I1], T[I2], T[I3]), (I1, I2, I3)]=
     new IndexMaker[(T[I1], T[I2], T[I3]), (I1, I2, I3)] {
       def apply(in: (T[I1], T[I2], T[I3])) = zip3V(in._1, in._2, in._3)
     }
 
   implicit def make4V[T[K] <: IndexedSeq[
     K
-  ], I1: ORD, I2: ORD, I3: ORD, I4: ORD] =
+  ], I1: ORD, I2: ORD, I3: ORD, I4: ORD] : IndexMaker[(T[I1], T[I2], T[I3], T[I4]), (I1, I2, I3, I4)]=
     new IndexMaker[(T[I1], T[I2], T[I3], T[I4]), (I1, I2, I3, I4)] {
       def apply(in: (T[I1], T[I2], T[I3], T[I4])) =
         zip4V(in._1, in._2, in._3, in._4)
@@ -67,7 +67,7 @@ object IndexMaker extends IndexMakerLowPriority {
 
   implicit def make5V[T[K] <: IndexedSeq[
     K
-  ], I1: ORD, I2: ORD, I3: ORD, I4: ORD, I5: ORD] =
+  ], I1: ORD, I2: ORD, I3: ORD, I4: ORD, I5: ORD] :IndexMaker[(T[I1], T[I2], T[I3], T[I4], T[I5]), (I1, I2, I3, I4, I5)] =
     new IndexMaker[(T[I1], T[I2], T[I3], T[I4], T[I5]), (I1, I2, I3, I4, I5)] {
       def apply(in: (T[I1], T[I2], T[I3], T[I4], T[I5])) =
         zip5V(in._1, in._2, in._3, in._4, in._5)
@@ -178,7 +178,7 @@ trait IndexMakerLowPriority {
   implicit def make1V[T[K] <: IndexedSeq[K], A](implicit
       st: ST[A],
       org: ORD[A]
-  ) =
+  ):IndexMaker[T[A], A] =
     new IndexMaker[T[A], A] {
       def apply(in: T[A]): Index[A] = {
         val sz = in.length

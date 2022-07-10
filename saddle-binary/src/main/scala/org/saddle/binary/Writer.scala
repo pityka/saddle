@@ -28,15 +28,15 @@ object Writer {
       .array
   }
 
-  val KEY_datatype = "datatype"
-  val KEY_numcols = "numcols"
-  val KEY_numrows = "numrows"
-  val KEY_rowmajor = "rowmajor"
-  val KEY_v = "v"
-  val KEY_colix = "colix"
-  val KEY_rowix = "rowix"
+  private[binary] val KEY_datatype = "datatype"
+  private[binary] val KEY_numcols = "numcols"
+  private[binary] val KEY_numrows = "numrows"
+  private[binary] val KEY_rowmajor = "rowmajor"
+  private[binary] val KEY_v = "v"
+  private[binary] val KEY_colix = "colix"
+  private[binary] val KEY_rowix = "rowix"
 
-  def createMatDescriptor[T: ST](
+  private def createMatDescriptor[T: ST](
       mat: Mat[T]
   ) = dtype[T].map { dtype =>
     ujson
@@ -50,7 +50,7 @@ object Writer {
         )
       )
   }
-  def createFrameDescriptor[RX, CX, T: ST](
+  private def createFrameDescriptor[RX, CX, T: ST](
       frame: Frame[RX, CX, T]
   ) = dtype[T].map { dtype =>
     ujson
@@ -65,7 +65,7 @@ object Writer {
       )
   }
 
-  def createHeader(
+  private def createHeader(
       descriptor: Either[String, String]
   ): Either[String, Array[Byte]] = {
     descriptor.map { descriptorJson =>
@@ -181,7 +181,7 @@ object Writer {
     }
   }
 
-  def writeFully(bb: ByteBuffer, channel: WritableByteChannel) = {
+  private def writeFully(bb: ByteBuffer, channel: WritableByteChannel) = {
     bb.rewind
     while (bb.hasRemaining) {
       channel.write(bb)

@@ -19,6 +19,8 @@ import org.saddle.index.InnerJoin
 import org.saddle.ops.BinOps._
 import org.saddle.order._
 import cats.kernel.Order
+import org.saddle.scalar.Scalar
+import org.saddle.scalar.NA
 
 /** Specs for a Frame
   */
@@ -218,6 +220,11 @@ class FrameSpec extends Specification {
       4 -> null,
       5 -> "5,3"
     )
+  }
+  "get" in {
+    testFrame.get(1, 2) must_== Scalar("1,2")
+    testFrame.get(2, 3) must_== Scalar("2,3")
+    testFrame.get(3, 3) must_== NA
   }
   "apply" in {
     testFrame.apply(1 -> 4, 2 -> 5) must_==

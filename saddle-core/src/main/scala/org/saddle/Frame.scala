@@ -35,6 +35,9 @@ import org.saddle.mat.MatCols
 import org.saddle.order._
 import _root_.cats.kernel.Order
 import org.saddle.array.Sorter.intSorter
+import org.saddle.ORD
+import org.saddle.ST
+import org.saddle.FillMethod
 
 /** `Frame` is an immutable container for 2D data which is indexed along both
   * axes (rows, columns) by associated keys (i.e., indexes).
@@ -763,6 +766,15 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     if (loc == -1) emptyCol else colAt(loc)
   }
 
+  /** Return scalar of first row and column found
+    *
+    * @param r
+    *   Row to match
+    * @param c
+    *   Column to match
+    */
+  def get(r: RX, c: CX): Scalar[T] = firstCol(c).get(r)
+
   /** Return empty series of type equivalent to a row of frame
     */
   def emptyRow: Series[CX, T] = Series.empty[CX, T]
@@ -1378,8 +1390,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       m1: ST[O1],
       m2: ST[O2]
   ): Frame[O1, V, T] = {
-    implicit def ordV = stkr.ord
-    implicit def clmV = stkr.tag
+    implicit def ordV: ORD[V]  = stkr.ord
+    implicit def clmV: ST[V] = stkr.tag
 
     val (lft, rgt) =
       splt(rowIx) // lft = row index w/o pivot level; rgt = pivot level
