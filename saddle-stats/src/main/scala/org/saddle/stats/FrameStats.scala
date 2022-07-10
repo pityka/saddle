@@ -44,7 +44,8 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
   /** Sum of the natural logs of the elements of each column, ignoring NA
     * values.
     */
-  def logsum(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(v => ev(v).logsum)
+  def logsum(implicit ev: S2Stats): Series[CX, Double] =
+    frame.reduce(v => ev(v).logsum)
 
   /** Geometric mean of each column
     */
@@ -63,11 +64,13 @@ class FrameStats[RX, CX, T: ST](frame: Frame[RX, CX, T]) {
 
   /** Sample skewness of each column
     */
-  def skew(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(v => ev(v).skew)
+  def skew(implicit ev: S2Stats): Series[CX, Double] =
+    frame.reduce(v => ev(v).skew)
 
   /** Sample kurtosis of each column
     */
-  def kurt(implicit ev: S2Stats): Series[CX, Double] = frame.reduce(v => ev(v).kurt)
+  def kurt(implicit ev: S2Stats): Series[CX, Double] =
+    frame.reduce(v => ev(v).kurt)
 
   private type V2Stats = Vec[T] => VecStats[T]
 

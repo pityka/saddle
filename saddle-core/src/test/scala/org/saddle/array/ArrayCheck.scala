@@ -172,7 +172,8 @@ class ArrayCheck extends Specification with ScalaCheck {
       forAll { (arr1: Seq[Int]) =>
         array.argsort(arr1.toArray).toSeq must_== arr1.toArray.zipWithIndex
           .sortBy(_._1)
-          .map(_._2).toSeq
+          .map(_._2)
+          .toSeq
       }
     }
     "shuffle" in {
