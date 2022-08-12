@@ -25,7 +25,8 @@ class IndexCheck extends Specification with ScalaCheck {
   "Int Index Tests" in {
     implicit val arbIndex = Arbitrary(IndexArbitraries.indexIntWithDups)
     implicit val arbIndexLong = Arbitrary(IndexArbitraries.indexLongWithDups)
-    implicit val arbIndexDouble = Arbitrary(IndexArbitraries.indexDoubleWithDups)
+    implicit val arbIndexDouble =
+      Arbitrary(IndexArbitraries.indexDoubleWithDups)
     implicit val arbIndexBool = Arbitrary(IndexArbitraries.indexBoolWithDups)
 
     "access works" in {
@@ -106,7 +107,7 @@ class IndexCheck extends Specification with ScalaCheck {
           ).isMonotonic must_== true)
       }
     }
-    
+
     "lsearch and rsearch works long" in {
       forAll { (ix1: Index[Long], elem: Long) =>
         val ix = ix1.sorted
@@ -276,41 +277,41 @@ class IndexCheck extends Specification with ScalaCheck {
     "key counts / uniques work int" in {
       forAll { (ix: Index[Int]) =>
         (ix.length > 0) ==> {
-          val uq = ix.uniques.toVec 
+          val uq = ix.uniques.toVec
           val c = ix.counts.toVec
           assert(uq.length == c.length)
-          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
-         
+          uq.zipMap(c)((k, c) => ix.count(k) == c).countT must_== uq.length
+
         }
       }
     }
     "key counts / uniques work long" in {
       forAll { (ix: Index[Long]) =>
         (ix.length > 0) ==> {
-          val uq = ix.uniques.toVec 
+          val uq = ix.uniques.toVec
           val c = ix.counts.toVec
           assert(uq.length == c.length)
-          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
+          uq.zipMap(c)((k, c) => ix.count(k) == c).countT must_== uq.length
         }
       }
     }
     "key counts / uniques work double" in {
       forAll { (ix: Index[Double]) =>
         (ix.length > 0) ==> {
-          val uq = ix.uniques.toVec 
+          val uq = ix.uniques.toVec
           val c = ix.counts.toVec
           assert(uq.length == c.length)
-          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
+          uq.zipMap(c)((k, c) => ix.count(k) == c).countT must_== uq.length
         }
       }
     }
     "key counts / uniques work bool" in {
       forAll { (ix: Index[Boolean]) =>
         (ix.length > 0) ==> {
-          val uq = ix.uniques.toVec 
+          val uq = ix.uniques.toVec
           val c = ix.counts.toVec
           assert(uq.length == c.length)
-          uq.zipMap(c)((k,c) => ix.count(k) == c ).countT must_== uq.length
+          uq.zipMap(c)((k, c) => ix.count(k) == c).countT must_== uq.length
         }
       }
     }

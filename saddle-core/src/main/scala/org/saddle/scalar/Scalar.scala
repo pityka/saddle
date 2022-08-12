@@ -67,7 +67,7 @@ object Scalar {
     * non-NA
     */
   // `with AnyRef` done for binary compat. To be removed in next major version.
-  implicit def ord[T: ORD] : ORD[Scalar[T]] with AnyRef = new ORD[Scalar[T]] {
+  implicit def ord[T: ORD]: ORD[Scalar[T]] with AnyRef = new ORD[Scalar[T]] {
     def compare(x: Scalar[T], y: Scalar[T]): Int = (x, y) match {
       case (NA, NA) => 0
       case (NA, _)  => 1

@@ -73,7 +73,8 @@ trait Stacker[I, J, O] {
 /** Companion object which houses implicit Stacker instances.
   */
 object Stacker extends StackerLowPriority {
-  implicit def stack3rd[T1: ORD, T2: ORD, T3: ORD] : Stacker[(T1, T2), T3, (T1, T2, T3)]  =
+  implicit def stack3rd[T1: ORD, T2: ORD, T3: ORD]
+      : Stacker[(T1, T2), T3, (T1, T2, T3)] =
     new Stacker[(T1, T2), T3, (T1, T2, T3)] {
       def apply(ix1: Index[(T1, T2)], ix2: Index[T3]) = {
         val data =
@@ -85,7 +86,8 @@ object Stacker extends StackerLowPriority {
       def tag = implicitly[ST[(T1, T2, T3)]]
     }
 
-  implicit def stack4th[T1: ORD, T2: ORD, T3: ORD, T4: ORD] : Stacker[(T1, T2, T3), T4, (T1, T2, T3, T4)]=
+  implicit def stack4th[T1: ORD, T2: ORD, T3: ORD, T4: ORD]
+      : Stacker[(T1, T2, T3), T4, (T1, T2, T3, T4)] =
     new Stacker[(T1, T2, T3), T4, (T1, T2, T3, T4)] {
       def apply(ix1: Index[(T1, T2, T3)], ix2: Index[T4]) = {
         val data =
@@ -103,7 +105,7 @@ object Stacker extends StackerLowPriority {
       T3: ORD,
       T4: ORD,
       T5: ORD
-  ] : Stacker[(T1, T2, T3, T4), T5, (T1, T2, T3, T4, T5)]=
+  ]: Stacker[(T1, T2, T3, T4), T5, (T1, T2, T3, T4, T5)] =
     new Stacker[(T1, T2, T3, T4), T5, (T1, T2, T3, T4, T5)] {
       def apply(ix1: Index[(T1, T2, T3, T4)], ix2: Index[T5]) = {
         val data =
@@ -144,7 +146,7 @@ object Stacker extends StackerLowPriority {
       T5: ORD,
       T6: ORD,
       T7: ORD
-  ] : Stacker[(T1, T2, T3, T4, T5, T6), T7, (T1, T2, T3, T4, T5, T6, T7)] =
+  ]: Stacker[(T1, T2, T3, T4, T5, T6), T7, (T1, T2, T3, T4, T5, T6, T7)] =
     new Stacker[(T1, T2, T3, T4, T5, T6), T7, (T1, T2, T3, T4, T5, T6, T7)] {
       def apply(ix1: Index[(T1, T2, T3, T4, T5, T6)], ix2: Index[T7]) = {
         val data =
@@ -166,11 +168,11 @@ object Stacker extends StackerLowPriority {
       T6: ORD,
       T7: ORD,
       T8: ORD
-  ] :  Stacker[
-      (T1, T2, T3, T4, T5, T6, T7),
-      T8,
-      (T1, T2, T3, T4, T5, T6, T7, T8)
-    ]=
+  ]: Stacker[
+    (T1, T2, T3, T4, T5, T6, T7),
+    T8,
+    (T1, T2, T3, T4, T5, T6, T7, T8)
+  ] =
     new Stacker[
       (T1, T2, T3, T4, T5, T6, T7),
       T8,
@@ -197,11 +199,11 @@ object Stacker extends StackerLowPriority {
       T7: ORD,
       T8: ORD,
       T9: ORD
-  ]:  Stacker[
-      (T1, T2, T3, T4, T5, T6, T7, T8),
-      T9,
-      (T1, T2, T3, T4, T5, T6, T7, T8, T9)
-    ] =
+  ]: Stacker[
+    (T1, T2, T3, T4, T5, T6, T7, T8),
+    T9,
+    (T1, T2, T3, T4, T5, T6, T7, T8, T9)
+  ] =
     new Stacker[
       (T1, T2, T3, T4, T5, T6, T7, T8),
       T9,
@@ -227,7 +229,7 @@ object Stacker extends StackerLowPriority {
   * we want to specialize the case when the left index is composed of Tuples.
   */
 trait StackerLowPriority {
-  implicit def stack2nd[T1: ORD, T2: ORD] : Stacker[T1, T2, (T1, T2)]=
+  implicit def stack2nd[T1: ORD, T2: ORD]: Stacker[T1, T2, (T1, T2)] =
     new Stacker[T1, T2, (T1, T2)] {
       def apply(ix1: Index[T1], ix2: Index[T2]) = {
         val data = for (x <- ix1.toArray; y <- ix2.toArray) yield (x, y)

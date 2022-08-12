@@ -75,7 +75,7 @@ trait OrderInstances {
   implicit def stringOrd: ORD[String] =
     cats.kernel.instances.string.catsKernelStdOrderForString
 
-  implicit def fromOrdering[T](implicit ordering: Ordering[T]) : ORD[T] =
+  implicit def fromOrdering[T](implicit ordering: Ordering[T]): ORD[T] =
     Order.fromOrdering(ordering)
 
   implicit def tuple1[T: ORD]: ORD[Tuple1[T]] =

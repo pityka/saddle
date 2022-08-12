@@ -49,7 +49,7 @@ package object scalar {
         E(apply[Long]),
         E(apply[Float]),
         E(apply[Double]),
-        E(apply[String]),
+        E(apply[String])
       )
 
     val genWithoutBool: Gen[EScalarGen] =
@@ -61,7 +61,7 @@ package object scalar {
         E(apply[Long]),
         E(apply[Float]),
         E(apply[Double]),
-        E(apply[String]),
+        E(apply[String])
       )
 
     val genWithoutNA: Gen[EScalarGen] =
@@ -102,8 +102,8 @@ package object scalar {
     }
   }
 
-  /** This trait must be introduced because there is not support for
-    * polymorphic or path-dependent function types in scala 2.
+  /** This trait must be introduced because there is not support for polymorphic
+    * or path-dependent function types in scala 2.
     */
   trait FromScalarGen[F[_]] {
     def apply[T](sg: ScalarGen[T]): Gen[F[T]]
