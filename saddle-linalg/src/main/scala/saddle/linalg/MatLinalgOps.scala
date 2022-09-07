@@ -24,6 +24,8 @@ class MatPimp(val self: Mat[Double]) {
 
   def linalg = this
 
+  private val twoZeros = Array.ofDim[Double](2)
+
   def invert: Mat[Double] = {
     val m = self
     assert(m.numCols > 0)
@@ -927,7 +929,7 @@ class MatPimp(val self: Mat[Double]) {
       wi,
       vl,
       m.numRows,
-      null,
+      twoZeros, // native blas does not reference this (null works). f2j needs an array of 2
       1,
       workQuery,
       -1,
@@ -946,7 +948,7 @@ class MatPimp(val self: Mat[Double]) {
       wi,
       vl,
       m.numRows,
-      null,
+      twoZeros, // native blas does not reference this (null works). f2j needs an array of 2
       1,
       work,
       work.size,
