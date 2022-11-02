@@ -28,7 +28,8 @@ import java.nio.charset.CharsetDecoder
   */
 object CsvParser {
 
-  val asciiSilentCharsetDecoder : CharsetDecoder = org.saddle.io.csv.asciiSilentCharsetDecoder
+  val asciiSilentCharsetDecoder: CharsetDecoder =
+    org.saddle.io.csv.asciiSilentCharsetDecoder
 
   private[saddle] def readFile(
       file: File,

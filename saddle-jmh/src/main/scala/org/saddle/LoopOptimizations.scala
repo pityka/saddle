@@ -2,11 +2,12 @@ package org.saddle
 
 import org.openjdk.jmh.annotations._
 
-/** Benchmark suite comparing different loop patterns and the impact of loop optimizations.
+/** Benchmark suite comparing different loop patterns and the impact of loop
+  * optimizations.
   * https://wiki.openjdk.java.net/pages/viewpage.action?pageId=20415918
   */
 @State(Scope.Benchmark)
-@Warmup(iterations = 10) 
+@Warmup(iterations = 10)
 @Measurement(iterations = 10)
 @Fork(1)
 @Threads(1)
@@ -46,7 +47,6 @@ class LoopOptimisations {
     }
     arr
   }
-
 
   /** hand-unrolled loops prevent vectorization and potentially other
     * optimisations

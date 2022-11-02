@@ -99,11 +99,12 @@ trait ScalarTagImplicitsL1 extends ScalarTagImplicitsL2 {
 }
 
 trait ScalarTagImplicitsL2 extends ScalarTagImplicitsL3 {
-  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTagAny[T] = new ScalarTagAny[T]()(ev)
+  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTagAny[T] =
+    new ScalarTagAny[T]()(ev)
 }
 
 trait ScalarTagImplicitsL3 {
-  implicit def stAny[T](implicit ev: CLM[T]): ScalarTagAny[T]=
+  implicit def stAny[T](implicit ev: CLM[T]): ScalarTagAny[T] =
     new ScalarTagAny[T]()(ev) {
       override def isAny = true
     }
