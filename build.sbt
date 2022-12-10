@@ -2,7 +2,7 @@ import com.typesafe.tools.mima.core._
 
 lazy val scalaTestVersion = "3.2.11"
 
-lazy val scalaVersion213 = "2.13.8"
+lazy val scalaVersion213 = "2.13.10"
 lazy val scalaVersion3 = "3.2.1"
 lazy val scalaVersionInBuild = scalaVersion213
 
