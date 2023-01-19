@@ -22,7 +22,6 @@ import org.saddle.doubleOrd
 import org.saddle.intOrd
 import org.saddle.longOrd
 
-
 /** Expanding statistical methods made available on numeric Vec objects via
   * enrichment. These methods scan over the Vec and compute cumulative values.
   */

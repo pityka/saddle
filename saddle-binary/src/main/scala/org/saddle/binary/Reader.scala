@@ -74,7 +74,7 @@ object Reader {
       Right(s.map(_.toOption.get))
     else s.find(_.isLeft).get.asInstanceOf[Left[A, Seq[B]]]
 
-  private def readFully(bb: ByteBuffer, channel: ReadableByteChannel) : Unit = {
+  private def readFully(bb: ByteBuffer, channel: ReadableByteChannel): Unit = {
     bb.clear
     var i = 0
     while (bb.hasRemaining && i >= 0) {
@@ -196,7 +196,8 @@ object Reader {
     }
   }
 
-  private class ByteChannel(srcs: IndexedSeq[ByteBuffer]) extends ReadableByteChannel {
+  private class ByteChannel(srcs: IndexedSeq[ByteBuffer])
+      extends ReadableByteChannel {
 
     var i = 0
     var src = srcs(i)
@@ -226,7 +227,9 @@ object Reader {
   def readMatFromArrays[T: ST](
       arrays: IndexedSeq[Array[Byte]]
   ): Either[String, Mat[T]] =
-    readMatFromChannel(new ByteChannel(arrays.map(array => ByteBuffer.wrap(array))))
+    readMatFromChannel(
+      new ByteChannel(arrays.map(array => ByteBuffer.wrap(array)))
+    )
   def readMatFromArray[T: ST](
       array: Array[Byte]
   ): Either[String, Mat[T]] =

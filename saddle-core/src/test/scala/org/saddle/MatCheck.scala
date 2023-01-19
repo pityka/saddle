@@ -658,7 +658,8 @@ class MatCheck extends Specification with ScalaCheck {
   }
 
   "Double Mat Tests" in {
-    implicit val arbMat: Arbitrary[Mat[Double]] = Arbitrary(MatArbitraries.matDouble)
+    implicit val arbMat: Arbitrary[Mat[Double]] =
+      Arbitrary(MatArbitraries.matDouble)
     "scalar operation in place works" in {
       forAll { (m: Mat[Double], b: Int) =>
         val m2 = m * b
@@ -755,7 +756,11 @@ class MatCheck extends Specification with ScalaCheck {
     "map works" in {
       forAll { (m: Mat[Double]) =>
         val data = m.contents.toList
-        m.map(_ + 1.0) must_== Mat(m.numRows, m.numCols, data.map(_ + 1.0).toArray)
+        m.map(_ + 1.0) must_== Mat(
+          m.numRows,
+          m.numCols,
+          data.map(_ + 1.0).toArray
+        )
         m.map(_ => 5.0) must_== Mat(
           m.numRows,
           m.numCols,
@@ -865,8 +870,8 @@ class MatCheck extends Specification with ScalaCheck {
     "fromRows works" in {
       forAll { (m: Mat[Double]) =>
         (m.numRows > 0) ==> {
-            Mat.fromRows(m.rows:_*) must_== m
-          
+          Mat.fromRows(m.rows: _*) must_== m
+
         }
       }
     }
@@ -986,9 +991,12 @@ class MatCheck extends Specification with ScalaCheck {
 
     "roundTo works" in {
       forAll { (ma: Mat[Double]) =>
-        ma.contents.toList.map((v: Double) => math.round(v * 100) / 100d) must_== ma
+        ma.contents.toList.map((v: Double) =>
+          math.round(v * 100) / 100d
+        ) must_== ma
           .roundTo(2)
-          .contents.toList
+          .contents
+          .toList
       }
     }
     "isEmpty works" in {
