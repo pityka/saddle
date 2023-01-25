@@ -27,7 +27,7 @@ class BeCloseToVec[T: Numeric](v: Vec[T], delta: T) extends Matcher[Vec[T]] {
       v.length == 0 || {
         val res = v.toSeq.zipWithIndex map { case (n, i) =>
           num.lteqv(num.minus(n, delta), x.value.raw(i)) &&
-            num.lteqv(x.value.raw(i), num.plus(n, delta))
+          num.lteqv(x.value.raw(i), num.plus(n, delta))
         }
         Vec(res: _*).all
       },
