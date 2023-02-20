@@ -18,7 +18,7 @@ package org.saddle.csv
 
 import java.io.{OutputStream, BufferedOutputStream, FileOutputStream}
 
-import org.saddle.{UTF8, ST, ORD, Series, Frame}
+import org.saddle.{ST, ORD, Series, Frame}
 import org.saddle.scalar.ScalarTag
 import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
