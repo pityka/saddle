@@ -21,6 +21,7 @@ import org.joda.time._
 import scala.{specialized => spec}
 import org.saddle.time._
 import org.saddle.order._
+import scala.annotation.nowarn
 
 /** A compact native int representation of posix times at millisecond resolution
   * which conforms to and extends the interface of Vec[DateTime]
@@ -35,6 +36,7 @@ class VecTime(
     val tzone: DateTimeZone = ISO_CHRONO.getZone
 ) extends VecDefault[DateTime](null, ScalarTagTime) {
 
+  @nowarn
   @transient override val scalarTag = ScalarTagTime
 
   @transient lazy val chrono = ISO_CHRONO.withZone(tzone)
