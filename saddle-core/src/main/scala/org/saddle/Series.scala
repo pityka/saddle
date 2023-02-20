@@ -26,7 +26,6 @@ import org.saddle.mat.MatCols
 import org.saddle.locator.Locator
 import org.saddle.order._
 import org.saddle.index.OuterJoin
-import scala.annotation.unused
 
 /** `Series` is an immutable container for 1D homogeneous data which is indexed
   * by a an associated sequence of keys.
@@ -935,7 +934,7 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     */
   def proxyWith(
       proxy: Series[X, T]
-  )(implicit @unused fn: org.saddle.scalar.NA.type => T): Series[X, T] = {
+  ): Series[X, T] = {
     require(proxy.index.isUnique, "Proxy index must be unique")
 
     this.fillNA { key =>
