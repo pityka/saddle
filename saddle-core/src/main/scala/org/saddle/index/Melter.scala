@@ -197,7 +197,8 @@ object Melter extends MelterLowPriority {
       B: ORD,
       C: ORD,
       D: ORD,
-  ] :Melter[(A,B,C),(C,D),(A,B,C,C,D)]= makeMelter { (a: (A, B, C), b: (C, D)) => (a._1, a._2, a._3, b._1, b._2) }
+      E: ORD,
+  ] :Melter[(A,B,C),(D,E),(A,B,C,D,E)]= makeMelter { (a: (A, B, C), b: (D, E)) => (a._1, a._2, a._3, b._1, b._2) }
 
   implicit def melt2_4[
       A: ORD,
