@@ -325,10 +325,6 @@ package object saddle {
       }
   }
 
-  /** Constant used in string byte-level manipulation
-    */
-  val UTF8 = "UTF-8"
-
   /** Specialized methods for Vec[Double]
     *
     * Methods in this class do not filter out NAs, e.g. Vec(NA,1d).max2 == NA

@@ -21,6 +21,8 @@ import java.io.{OutputStream, BufferedOutputStream, FileOutputStream}
 import org.saddle.{UTF8, ST, ORD, Series, Frame}
 import org.saddle.scalar.ScalarTag
 import java.io.ByteArrayOutputStream
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 
 /** Settings for writing a CSV file
   *
@@ -35,7 +37,7 @@ case class CsvSettings(
     separChar: Char = ',',
     quoteChar: Char = '"',
     useQuote: Boolean = true,
-    encoding: String = UTF8
+    encoding: Charset = StandardCharsets.UTF_8
 )
 
 object CsvWriter {
