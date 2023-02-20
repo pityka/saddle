@@ -22,7 +22,6 @@ import org.saddle.scalar.ScalarTag
 import scala.reflect.ClassTag
 import cats.kernel.Order
 import org.saddle.order._
-import scala.annotation.unused
 import org.saddle.index.SliceDefault
 
 /** ==Saddle==
@@ -139,16 +138,6 @@ package object saddle {
     *   Vec[Int](1,2,na,4)
     * }}}
     *
-    * `na` will implicitly convert to a primitive having the designated missing
-    * value bit pattern. That pattern is as follows:
-    *
-    *   1. byte => Byte.MinValue
-    *   1. char => Char.MinValue
-    *   1. short => Short.Minvalue
-    *   1. int => Int.MinValue
-    *   1. long => Long.MinValue
-    *   1. float => Float.NaN
-    *   1. double => Double.NaN
     *
     * The NA bit pattern for integral types is `MinValue` because it induces a
     * symmetry on the remaining bound of values; e.g. the remaining `Byte` bound
@@ -161,42 +150,12 @@ package object saddle {
 
     /** Generates a primitive missing value bit pattern.
       */
-    def to[T](implicit fn: na.type => T): T = fn(this)
-
-    @deprecated
-    val naToByte: na.type => Byte = (_: na.type) => scalar.ScalarTagByte.missing
-    implicit def naToByteConv(@unused it: na.type): Byte =
-      scalar.ScalarTagByte.missing
-    @deprecated
-    val naToChar: na.type => Char = (_: na.type) => scalar.ScalarTagChar.missing
-    implicit def naToCharConv(@unused it: na.type): Char =
-      scalar.ScalarTagChar.missing
-    @deprecated
-    val naToShort: na.type => Short = (_: na.type) =>
-      scalar.ScalarTagShort.missing
-    implicit def naToShortConv(@unused it: na.type): Short =
-      scalar.ScalarTagShort.missing
-    @deprecated
-    val naToInt: na.type => Int = (_: na.type) => scalar.ScalarTagInt.missing
-    implicit def naToIntConv(@unused it: na.type): Int =
-      scalar.ScalarTagInt.missing
-    @deprecated
-    val naToLong: na.type => Long = (_: na.type) => scalar.ScalarTagLong.missing
-    implicit def naToLongConv(@unused it: na.type): Long =
-      scalar.ScalarTagLong.missing
-    @deprecated
-    val naToFloat: na.type => Float = (_: na.type) =>
-      scalar.ScalarTagFloat.missing
-    implicit def naToFloatConv(@unused it: na.type): Float =
-      scalar.ScalarTagFloat.missing
-    @deprecated
-    val naToDouble: na.type => Double = (_: na.type) =>
-      scalar.ScalarTagDouble.missing
-    implicit def naToDoubleConv(@unused it: na.type): Double =
-      scalar.ScalarTagDouble.missing
+    def to[T](implicit st: ST[T]): T = st.missing
 
     override def toString = "na"
   }
+
+  def na[T](implicit st: ST[T]): T = st.missing
 
   // Augment Seq with a few conversion methods
   //
