@@ -14,21 +14,17 @@
   */
 package org.saddle.scalar
 
-import org.saddle.{ORD, CLM, NUM, Vec, array, Mat, Index}
+import org.saddle.{ORD, CLM, NUM, Vec, Mat, Index}
 import org.saddle.index.IndexAny
 import org.saddle.locator.{LocatorAny, Locator}
 import org.saddle.array.Sorter
 import org.saddle.Buffer
-import org.saddle.na
 
-class ScalarTagAny[T: CLM] extends ScalarTag[T] {
-  def missing: T = null.asInstanceOf[T]
-  def isMissing(v: T): Boolean = v == missing || v == na
+private[saddle] trait ScalarTagBase[T] extends ScalarTag[T] {
+  def clm: CLM[T]
+  implicit private def clm_ : CLM[T] = clm
 
-  private[this] val string = implicitly[CLM[T]] == implicitly[CLM[String]]
-  def parse(s: String): T =
-    if (string) s.asInstanceOf[T]
-    else
+  def parse(s: String): T =    
       throw new RuntimeException(
         "parsing arbitrary types during runtime is not implemented"
       )
@@ -60,6 +56,4 @@ class ScalarTagAny[T: CLM] extends ScalarTag[T] {
     new IndexAny[T](vec)(this, ord)
   def makeSorter(implicit ord: ORD[T]): Sorter[T] = Sorter.anySorter[T]
 
-  def concat(arrs: IndexedSeq[Vec[T]]): Vec[T] =
-    Vec(array.flatten(arrs.map(_.toArray)))
 }

@@ -25,7 +25,11 @@ import org.saddle.index.IndexTime
 
 /** DateTime ScalarTag
   */
-object ScalarTagTime extends ScalarTagAny[DateTime] {
+object ScalarTagTime extends ScalarTagBase[DateTime] {
+  override def missing: DateTime = null.asInstanceOf[DateTime]
+  def isMissing(v: DateTime) = v == missing
+  def clm = implicitly[CLM[DateTime]]
+
   def time2LongArray(arr: Array[DateTime]): Array[Long] = {
     val sz = arr.length
     val larr = Array.ofDim[Long](sz)
@@ -62,6 +66,4 @@ object ScalarTagTime extends ScalarTagAny[DateTime] {
 
   override def toString = "ScalarTagTime"
 
-  override def concat(vecs: IndexedSeq[Vec[DateTime]]): VecTime =
-    VecTime.concat(vecs)
 }

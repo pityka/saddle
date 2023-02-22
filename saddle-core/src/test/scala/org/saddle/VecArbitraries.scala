@@ -28,7 +28,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 10)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency[Double]((9, Gen.chooseNum(-1e3, 1e3)), (1, na.to[Double]))
+        Gen.frequency[Double]((9, Gen.chooseNum(-1e3, 1e3)), (1, na[Double]))
       )
     } yield Vec(lst: _*)
 
@@ -44,7 +44,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1e3, 1e3)), (1, na.to[Double]))
+        Gen.frequency((9, Gen.chooseNum(-1e3, 1e3)), (1, na[Double]))
       )
     } yield Vec(lst.filter(_ > 0): _*)
 
@@ -61,7 +61,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency[Float]((9, Gen.chooseNum(-1e3f, 1e3f)), (1, na.to[Float]))
+        Gen.frequency[Float]((9, Gen.chooseNum(-1e3f, 1e3f)), (1, na[Float]))
       )
     } yield Vec(lst: _*)
 
@@ -76,7 +76,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1e3f, 1e3f)), (1, na.to[Float]))
+        Gen.frequency((9, Gen.chooseNum(-1e3f, 1e3f)), (1, na[Float]))
       )
     } yield Vec(lst.filter(_ > 0): _*)
 
@@ -93,7 +93,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1000L, 1000L)), (1, na.to[Long]))
+        Gen.frequency((9, Gen.chooseNum(-1000L, 1000L)), (1, na[Long]))
       )
     } yield Vec(lst: _*)
 
@@ -108,7 +108,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1000L, 1000L)), (1, na.to[Long]))
+        Gen.frequency((9, Gen.chooseNum(-1000L, 1000L)), (1, na[Long]))
       )
     } yield Vec(lst.filter(_ > 0): _*)
 
@@ -125,7 +125,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1000, 1000)), (1, na.to[Int]))
+        Gen.frequency((9, Gen.chooseNum(-1000, 1000)), (1, na[Int]))
       )
     } yield Vec(lst: _*)
 
@@ -140,7 +140,7 @@ object VecArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1000, 1000)), (1, na.to[Int]))
+        Gen.frequency((9, Gen.chooseNum(-1000, 1000)), (1, na[Int]))
       )
     } yield Vec(lst.filter(_ > 0): _*)
 

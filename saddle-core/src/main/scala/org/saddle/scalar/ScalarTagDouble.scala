@@ -14,7 +14,7 @@
   */
 package org.saddle.scalar
 
-import org.saddle.{NUM, ORD, Vec, Index, Mat, array}
+import org.saddle.{NUM, ORD, Vec, Index, Mat}
 import org.saddle.Buffer
 import org.saddle.index.IndexDouble
 import org.saddle.locator.{LocatorDouble, Locator}
@@ -37,7 +37,6 @@ object ScalarTagDouble extends ScalarTag[Double] {
     if (x == y) 0 else if (x > y) 1 else if (x < y) -1 else 0
 
   def toDouble(t: Double)(implicit ev: NUM[Double]): Double = t
-  @inline override def isDouble = true
 
   @inline def zero(implicit ev: NUM[Double]) = 0d
   @inline def one(implicit ev: NUM[Double]) = 1d
@@ -62,9 +61,6 @@ object ScalarTagDouble extends ScalarTag[Double] {
     new IndexDouble(vec, ord)
   def makeSorter(implicit ord: ORD[Double]): Sorter[Double] =
     Sorter.doubleSorter
-
-  def concat(arrs: IndexedSeq[Vec[Double]]): Vec[Double] =
-    Vec(array.flatten(arrs.map(_.toArray)))
 
   override def toString = "ScalarTagDouble"
 }

@@ -179,19 +179,19 @@ class SeriesCheck extends Specification with ScalaCheck {
       Series(1, 2, 3, 4).scanLeft(0)(_ + _) must_== Series(1, 3, 6, 10)
     }
     "joinMap" in {
-      Series(1, na.to[Int], 3, 4)
-        .joinMap(Series(1, 2, na.to[Int], 4))(_ + _) must_== Series(
+      Series(1, na[Int], 3, 4)
+        .joinMap(Series(1, 2, na[Int], 4))(_ + _) must_== Series(
         2,
-        na.to[Int],
-        na.to[Int],
+        na[Int],
+        na[Int],
         8
       )
     }
     "sorted" in {
       forAll { (s: Series[Int, Double]) =>
         (s.sorted.dropNA must_== s.toSeq.sortBy(_._2).toSeries.dropNA) and
-          (Series(1, na.to[Int], 2).sorted must_== Series(
-            1 -> na.to[Int],
+          (Series(1, na[Int], 2).sorted must_== Series(
+            1 -> na[Int],
             0 -> 1,
             2 -> 2
           ))
@@ -239,14 +239,14 @@ class SeriesCheck extends Specification with ScalaCheck {
         s.shift(1).index must_== s.index
 
         if (!s.isEmpty) {
-          val exp = Vec(na.to[Double]) concat s.values.slice(0, s.length - 1)
+          val exp = Vec(na[Double]) concat s.values.slice(0, s.length - 1)
           s.shift(1).values must_== exp
         } else s.shift(1).isEmpty must beTrue
 
         s.shift(-1).index must_== s.index
 
         if (!s.isEmpty) {
-          val exp = s.values.slice(1, s.length) concat Vec(na.to[Double])
+          val exp = s.values.slice(1, s.length) concat Vec(na[Double])
           s.shift(-1).values must_== exp
         } else s.shift(1).isEmpty must beTrue
       }
@@ -448,7 +448,7 @@ class SeriesCheck extends Specification with ScalaCheck {
       val c = a concat b
 
       val dat1 = v1.toDoubleArray
-      val dat2 = v3.sliceBy(0, 5).toDoubleArray ++ Array(na.to[Double]) ++ v3
+      val dat2 = v3.sliceBy(0, 5).toDoubleArray ++ Array(na[Double]) ++ v3
         .sliceBy(6, 7)
         .toDoubleArray
       val exp = Frame(Mat(2, 8, dat1 ++ dat2), Index("a", "b"), x1.map(_._2))
@@ -501,7 +501,7 @@ class SeriesCheck extends Specification with ScalaCheck {
       Series(Vec(1, 2, 3), Index(10, 20, 30))
         .reindex(Index(10, 11, 12, 13, 20, 21, 22, 23), FillForward, limit=1)
         .values
-        .must_==(Vec[Int](1, 1, na, na, 2, 2, na, na))
+        .must_==(Vec[Int](1, 1, na[Int], na[Int], 2, 2, na[Int], na[Int]))
     }
   }
 }

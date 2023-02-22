@@ -14,7 +14,7 @@
   */
 package org.saddle.scalar
 
-import org.saddle.{ORD, NUM, Vec, Mat, Index, array}
+import org.saddle.{ORD, NUM, Vec, Mat, Index}
 import org.saddle.index.IndexAny
 import org.saddle.locator.{LocatorBool, Locator}
 import org.saddle.array.Sorter
@@ -50,9 +50,6 @@ object ScalarTagBool extends ScalarTag[Boolean] {
     new IndexAny[Boolean](vec)
   def makeSorter(implicit ord: ORD[Boolean]): Sorter[Boolean] =
     Sorter.boolSorter
-
-  def concat(arrs: IndexedSeq[Vec[Boolean]]): Vec[Boolean] =
-    Vec(array.flatten(arrs.map(_.toArray)))
 
   def parse(s: String) = s.toBoolean
 

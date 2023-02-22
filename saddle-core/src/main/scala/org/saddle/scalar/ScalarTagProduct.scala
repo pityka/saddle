@@ -16,8 +16,11 @@ package org.saddle.scalar
 
 import org.saddle.CLM
 
-class ScalarTagProduct[T <: Product: CLM] extends ScalarTagAny[T] {
-  override def isTuple = true
+final class ScalarTagProduct[T <: Product: CLM] extends ScalarTagBase[T] {
+
+  def missing : T = null.asInstanceOf[T]
+  def isMissing(v:T) = v == null
+
 
   override def strList(v: T) =
     v.productArity match {
@@ -26,4 +29,5 @@ class ScalarTagProduct[T <: Product: CLM] extends ScalarTagAny[T] {
     }
 
   override def toString = "ScalarTagProduct"
+  def clm = implicitly[CLM[T]]
 }

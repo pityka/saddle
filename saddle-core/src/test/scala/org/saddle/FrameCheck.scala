@@ -44,8 +44,8 @@ class FrameCheck extends Specification with ScalaCheck {
     }
 
     "frame equality - NA" in {
-      val f = Frame(0 -> Series[Int, Double](0 -> na.to[Double]))
-      val f2 = Frame(0 -> Series[Int, Double](0 -> na.to[Double]))
+      val f = Frame(0 -> Series[Int, Double](0 -> na[Double]))
+      val f2 = Frame(0 -> Series[Int, Double](0 -> na[Double]))
       f must_== f2
     }
 

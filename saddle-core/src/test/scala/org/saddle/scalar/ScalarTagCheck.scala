@@ -15,10 +15,11 @@
 package org.saddle
 
 import org.specs2.mutable.Specification
-import org.saddle.scalar.ScalarTagAny
 import org.scalacheck.Prop._
 import org.specs2.ScalaCheck
 import org.saddle.scalar._
+
+case class SomeAnyValType(i: Int) extends AnyVal
 
 class ScalarTagCheck extends Specification with ScalaCheck {
 
@@ -40,14 +41,40 @@ class ScalarTagCheck extends Specification with ScalaCheck {
     }
   }
 
-  "ScalarTagAny" should {
-    val tag = implicitly[ScalarTagAny[Any]]
+  "ScalarTagAnyRef" should {
+    val tag = implicitly[ScalarTag[AnyRef]]
     "treat null as missing" in {
-      tag.isMissing(na: AnyRef)
+      tag.isMissing(null: AnyRef)
     }
-    "treat plain na as missing" in {
-      tag.isMissing(na)
+    "treat non null String: Any as not missing" in {
+      !tag.isMissing("str": AnyRef)
     }
+
+  }
+  "ScalarTagString" should {
+    val tag = implicitly[ScalarTag[String]]
+    "treat null as missing" in {
+      tag.isMissing(null: String)
+    }
+    "treat non null String: Any as not missing" in {
+      !tag.isMissing("str": String)
+    }
+    "return itself from parse" in {
+      tag.parse("something") == "something"
+    }
+
+  }
+
+  "ScalarTagProduct" should {
+
+    val tag = implicitly[ScalarTag[(Int, Int)]]
+    "treat null as missing" in {
+      tag.isMissing(null.asInstanceOf[(Int, Int)])
+    }
+    "treat non null as not missing" in {
+      !tag.isMissing((1, 0))
+    }
+
   }
 
   // primitive cases to cover automatic (un)boxing issues

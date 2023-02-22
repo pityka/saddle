@@ -702,7 +702,7 @@ object Mat {
       st.makeMat(
         r,
         c,
-        st.concat(ArraySeq.unsafeWrapArray(rows.toArray)).toArray
+        org.saddle.concat(ArraySeq.unsafeWrapArray(rows.toArray)).toArray
       )
     }
   }

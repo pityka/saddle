@@ -245,10 +245,10 @@ class VecCheck extends Specification with ScalaCheck {
         val data = v.contents
         v.map(_ + 1.0) must_== Vec(data.toSeq.map(_ + 1.0).toArray)
         v.map(_ => 5.0) must_== Vec(
-          data.toSeq.map(d => if (d.isNaN) na.to[Double] else 5.0).toArray
+          data.toSeq.map(d => if (d.isNaN) na[Double] else 5.0).toArray
         )
         v.map(_ => 5) must_== Vec[Int](
-          data.toSeq.map(d => if (d.isNaN) na.to[Int] else 5).toArray
+          data.toSeq.map(d => if (d.isNaN) na[Int] else 5).toArray
         )
       }
     }
@@ -265,21 +265,21 @@ class VecCheck extends Specification with ScalaCheck {
     }
 
     "findOne works" in {
-      val v = Vec(1d, 2, 3, na.to[Double], 5)
+      val v = Vec(1d, 2, 3, na[Double], 5)
       v.findOne(_ == 3d) must_== 2
       v.findOne(_ == 5d) must_== 4
       v.findOne(_ == 7d) must_== -1
     }
 
     "find works" in {
-      val v = Vec(1d, 2, 3, na.to[Double], 3, 4)
+      val v = Vec(1d, 2, 3, na[Double], 3, 4)
       v.find(_ == 3d) must_== Vec(2, 4)
       v.find(_ == 4d) must_== Vec(5)
       v.find(_ == 7d) must_== Vec.empty[Int]
     }
 
     "exists works" in {
-      val v = Vec(1d, 2, 3, na.to[Double], 3, 4)
+      val v = Vec(1d, 2, 3, na[Double], 3, 4)
       v.exists(_ == 3d) must beTrue
       v.exists(_ == 2d) must beTrue
       v.exists(_ == 9d) must beFalse
@@ -370,47 +370,47 @@ class VecCheck extends Specification with ScalaCheck {
     }
 
     "fillForward fills values forward" in {
-      val v = Vec[Int](1, na, na, 2, na, na)
+      val v = Vec[Int](1, na[Int], na[Int], 2, na[Int], na[Int])
       v.fillForward() mustEqual Vec[Int](1, 1, 1, 2, 2, 2)
     }
 
     "fillForward fills last value forward" in {
-      val v = Vec[Int](1, 2, na, na)
+      val v = Vec[Int](1, 2, na[Int], na[Int])
       v.fillForward() mustEqual Vec[Int](1, 2, 2, 2)
     }
 
     "fillForward fills values forward until the limit if greater than 0" in {
-      val v = Vec[Int](1, na, na, 2, na, na, na)
+      val v = Vec[Int](1, na[Int], na[Int], 2, na[Int], na[Int], na[Int])
       v.fillForward(0) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, 2)
-      v.fillForward(1) mustEqual Vec[Int](1, 1, na, 2, 2, na, na)
-      v.fillForward(2) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, na)
+      v.fillForward(1) mustEqual Vec[Int](1, 1, na[Int], 2, 2, na[Int], na[Int])
+      v.fillForward(2) mustEqual Vec[Int](1, 1, 1, 2, 2, 2, na[Int])
     }
 
     "fillForward fills values forward only" in {
-      val v = Vec[Int](na, na, 2, na, na)
-      v.fillForward() mustEqual Vec[Int](na, na, 2, 2, 2)
+      val v = Vec[Int](na[Int], na[Int], 2, na[Int], na[Int])
+      v.fillForward() mustEqual Vec[Int](na[Int], na[Int], 2, 2, 2)
     }
 
     "fillBackward fills values backward" in {
-      val v = Vec[Int](na, na, 1, na, na, 2)
+      val v = Vec[Int](na[Int], na[Int], 1, na[Int], na[Int], 2)
       v.fillBackward() mustEqual Vec[Int](1, 1, 1, 2, 2, 2)
     }
 
     "fillBackward fills last value backward" in {
-      val v = Vec[Int](na, na, 2, 1)
+      val v = Vec[Int](na[Int], na[Int], 2, 1)
       v.fillBackward() mustEqual Vec[Int](2, 2, 2, 1)
     }
 
     "fillBackword fills values backward until the limit if greater than 0" in {
-      val v = Vec[Int](na, na, na, 2, na, na, 1)
+      val v = Vec[Int](na[Int], na[Int], na[Int], 2, na[Int], na[Int], 1)
       v.fillBackward(0) mustEqual Vec[Int](2, 2, 2, 2, 1, 1, 1)
-      v.fillBackward(1) mustEqual Vec[Int](na, na, 2, 2, na, 1, 1)
-      v.fillBackward(2) mustEqual Vec[Int](na, 2, 2, 2, 1, 1, 1)
+      v.fillBackward(1) mustEqual Vec[Int](na[Int], na[Int], 2, 2, na[Int], 1, 1)
+      v.fillBackward(2) mustEqual Vec[Int](na[Int], 2, 2, 2, 1, 1, 1)
     }
 
     "fillBackward fills values backward only" in {
-      val v = Vec[Int](na, na, 2, na, na)
-      v.fillBackward() mustEqual Vec[Int](2, 2, 2, na, na)
+      val v = Vec[Int](na[Int], na[Int], 2, na[Int], na[Int])
+      v.fillBackward() mustEqual Vec[Int](2, 2, 2, na[Int], na[Int])
     }
 
     "sliceAt works" in {

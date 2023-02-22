@@ -14,21 +14,12 @@
   */
 package org.saddle.scalar
 
-import org.saddle.{CLM, ORD}
-import org.saddle.array.Sorter
+import org.saddle.CLM
 
-/** Float ScalarTag
-  */
-object ScalarTagFloat extends ScalarTagBase[Float] {
-  override def parse(s: String) =
-    try {
-      s.toFloat
-    } catch { case _: NumberFormatException => Float.NaN }
-  override def makeSorter(implicit ord: ORD[Float]): Sorter[Float] =
-    Sorter.floatSorter
-  
-  override def missing: Float = Float.NaN
-  override def isMissing(v: Float): Boolean = v != v
-    def clm = implicitly[CLM[Float]]
+final class ScalarTagAnyRef[T <: AnyRef](implicit val clm: CLM[T])
+    extends ScalarTagBase[T] {
+  override def toString = "ScalarTagAnyRef"
+  def missing: T = null.asInstanceOf[T]
 
+  def isMissing(v: T): Boolean = (v == missing)
 }

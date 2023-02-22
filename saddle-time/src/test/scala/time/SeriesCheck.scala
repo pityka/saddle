@@ -75,14 +75,14 @@ class SeriesCheck extends Specification with ScalaCheck {
         s.shift(1).index must_== s.index
 
         if (!s.isEmpty) {
-          val exp = Vec(na.to[Double]) concat s.values.slice(0, s.length - 1)
+          val exp = Vec(na[Double]) concat s.values.slice(0, s.length - 1)
           s.shift(1).values must_== exp
         } else s.shift(1).isEmpty must beTrue
 
         s.shift(-1).index must_== s.index
 
         if (!s.isEmpty) {
-          val exp = s.values.slice(1, s.length) concat Vec(na.to[Double])
+          val exp = s.values.slice(1, s.length) concat Vec(na[Double])
           s.shift(-1).values must_== exp
         } else s.shift(1).isEmpty must beTrue
       }
@@ -278,7 +278,7 @@ class SeriesCheck extends Specification with ScalaCheck {
       val c = a concat b
 
       val dat1 = v1.toDoubleArray
-      val dat2 = v3.sliceBy(0, 5).toDoubleArray ++ Array(na.to[Double]) ++ v3
+      val dat2 = v3.sliceBy(0, 5).toDoubleArray ++ Array(na[Double]) ++ v3
         .sliceBy(6, 7)
         .toDoubleArray
       val exp = Frame(Mat(2, 8, dat1 ++ dat2), Index("a", "b"), x1.map(_._2))

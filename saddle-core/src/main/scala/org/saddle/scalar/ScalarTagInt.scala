@@ -14,7 +14,7 @@
   */
 package org.saddle.scalar
 
-import org.saddle.{NUM, ORD, Vec, array, Mat, Index}
+import org.saddle.{NUM, ORD, Vec, Mat, Index}
 import org.saddle.Buffer
 import org.saddle.index.IndexInt
 import org.saddle.locator.{LocatorInt, Locator}
@@ -55,9 +55,6 @@ object ScalarTagInt extends ScalarTag[Int] {
   def makeIndex(vec: Vec[Int])(implicit ord: ORD[Int]): Index[Int] =
     new IndexInt(vec, ord)
   def makeSorter(implicit ord: ORD[Int]): Sorter[Int] = Sorter.intSorter
-
-  def concat(arrs: IndexedSeq[Vec[Int]]): Vec[Int] =
-    Vec(array.flatten(arrs.map(_.toArray)))
 
   override def toString = "ScalarTagInt"
 }

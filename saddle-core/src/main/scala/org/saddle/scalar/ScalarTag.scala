@@ -31,17 +31,13 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
     extends ClassTag[T]
     with SpecializedFactory[T]
     with CouldBeOrdered[T]
-    with CouldBeNumber[T]
-    with ScalarHelperOps[T] {
+    with CouldBeNumber[T] {
   // representation of missing data
   def missing: T
   def isMissing(t: T): Boolean
   def notMissing(t: T): Boolean = !isMissing(t)
 
   def parse(s: String): T
-
-  def isTuple: Boolean = false
-  def isDouble: Boolean = false
 
   def strList(v: T) = List(show(v))
   def strListLossless(v: T) = strList(v)
@@ -52,18 +48,12 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
   /* Must hold: parse(asString(v)) == v */
   def asString(v: T): String = show(v)
 
-  // Workaround: Scala types Any, AnyRef, AnyVal all have runtimeClass java.lang.Object; workaround continues
-  // via ScalarTag implicit resolution hierarchy below.
-  def isAny = false
-  def isAnyVal = false
-
   override def hashCode(): Int =
-    isAny
-      .hashCode() + isAnyVal.hashCode() * 31 + runtimeClass.hashCode() * 31 * 31
+    runtimeClass.hashCode()
 
   override def equals(o: Any): Boolean = o match {
     case s: ScalarTag[_] =>
-      (this eq s) || runtimeClass == s.runtimeClass && isAny == s.isAny && isAnyVal == s.isAnyVal
+      (this eq s) || runtimeClass == s.runtimeClass
     case _ => false
   }
 
@@ -76,37 +66,25 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
 }
 
 object ScalarTag extends ScalarTagImplicits {
-  implicit val stChar: ScalarTagChar.type = ScalarTagChar
-  implicit val stByte: ScalarTagByte.type = ScalarTagByte
-  implicit val stBool: ScalarTagBool.type = ScalarTagBool
-  implicit val stShort: ScalarTagShort.type = ScalarTagShort
-  implicit val stInt: ScalarTagInt.type = ScalarTagInt
-  implicit val stFloat: ScalarTagFloat.type = ScalarTagFloat
-  implicit val stLong: ScalarTagLong.type = ScalarTagLong
-  implicit val stDouble: ScalarTagDouble.type = ScalarTagDouble
+  implicit val stBool: ScalarTag[Boolean] = ScalarTagBool
+  implicit val stChar: ScalarTag[Char] = ScalarTagChar
+  implicit val stByte: ScalarTag[Byte] = ScalarTagByte
+  implicit val stShort: ScalarTag[Short] = ScalarTagShort
+  implicit val stInt: ScalarTag[Int] = ScalarTagInt
+  implicit val stFloat: ScalarTag[Float] = ScalarTagFloat
+  implicit val stLong: ScalarTag[Long] = ScalarTagLong
+  implicit val stDouble: ScalarTag[Double] = ScalarTagDouble
+  implicit val stString: ScalarTag[String] = ScalarTagString
 }
 
 trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
-  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTagProduct[T] =
+  implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTag[T] =
     new ScalarTagProduct[T]()(ev)
 }
 
-trait ScalarTagImplicitsL1 extends ScalarTagImplicitsL2 {
-  implicit def stAnyVal[T <: AnyVal](implicit ev: CLM[T]): ScalarTagAny[T] =
-    new ScalarTagAny[T]()(ev) {
-      override def isAnyVal = true
-    }
-}
-
-trait ScalarTagImplicitsL2 extends ScalarTagImplicitsL3 {
-  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTagAny[T] = new ScalarTagAny[T]()(ev)
-}
-
-trait ScalarTagImplicitsL3 {
-  implicit def stAny[T](implicit ev: CLM[T]): ScalarTagAny[T]=
-    new ScalarTagAny[T]()(ev) {
-      override def isAny = true
-    }
+trait ScalarTagImplicitsL1 {
+  implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTag[T] =
+    new ScalarTagAnyRef[T]()(ev)
 }
 
 trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {
@@ -117,17 +95,9 @@ trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {
   def iseq(a: T, b: T)(implicit ev: ORD[T]) = compare(a, b) == 0
 }
 
-trait ScalarHelperOps[@spec(Boolean, Int, Long, Float, Double) T] {
-
-  /** Offer a type-specific way to concat vecs
-    */
-  def concat(vecs: IndexedSeq[Vec[T]]): Vec[T]
-}
-
 trait CouldBeNumber[@spec(Boolean, Int, Long, Float, Double) T] {
   // for numeric scalars
   def toDouble(t: T)(implicit ev: NUM[T]): Double
-  def isDouble: Boolean
 
   def zero(implicit ev: NUM[T]): T
   def one(implicit ev: NUM[T]): T
@@ -167,5 +137,5 @@ trait SpecializedFactory[@spec(Boolean, Int, Long, Float, Double) T] {
   protected def altMatConstructor(r: Int, c: Int, arr: Array[Vec[T]])(implicit
       st: ST[T]
   ): Mat[T] =
-    makeMat(c, r, st.concat(ArraySeq.unsafeWrapArray(arr)).toArray).T
+    makeMat(c, r, org.saddle.concat(ArraySeq.unsafeWrapArray(arr)).toArray).T
 }

@@ -138,23 +138,10 @@ package object saddle {
     *   Vec[Int](1,2,na,4)
     * }}}
     *
-    *
     * The NA bit pattern for integral types is `MinValue` because it induces a
     * symmetry on the remaining bound of values; e.g. the remaining `Byte` bound
     * is (-127, +127).
-    *
-    * Note since `Boolean`s can only take on two values, it has no `na`
-    * primitive bit pattern.
     */
-  object na {
-
-    /** Generates a primitive missing value bit pattern.
-      */
-    def to[T](implicit st: ST[T]): T = st.missing
-
-    override def toString = "na"
-  }
-
   def na[T](implicit st: ST[T]): T = st.missing
 
   // Augment Seq with a few conversion methods
@@ -437,4 +424,9 @@ package object saddle {
   abstract class FillMethod private[saddle] ()
   case object FillForward extends FillMethod() {}
   case object FillBackward extends FillMethod() {}
+
+  def concat[T: ST](vecs: IndexedSeq[Vec[T]]): Vec[T] = {
+    val ar = array.flatten(vecs.map(_.toArray))
+    Vec(ar)
+  }
 }

@@ -291,7 +291,7 @@ class CsvCheck extends Specification with ScalaCheck {
       .withColIndex(0)
       .resetRowIndex
       .mapValues(implicitly[ST[Int]].parse)
-    val expect = Frame(Vec(1, 4, 7), Vec(2, 5, 8), Vec(3, na.to[Int], 9))
+    val expect = Frame(Vec(1, 4, 7), Vec(2, 5, 8), Vec(3, na[Int], 9))
       .setColIndex(Index("a", "b,c,d", "e"))
     frame must_== expect
   }

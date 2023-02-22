@@ -759,12 +759,12 @@ class MatCheck extends Specification with ScalaCheck {
         m.map(_ => 5.0) must_== Mat(
           m.numRows,
           m.numCols,
-          (data.map(d => if (d.isNaN) na.to[Double] else 5.0).toArray)
+          (data.map(d => if (d.isNaN) na[Double] else 5.0).toArray)
         )
         m.map(_ => 5) must_== Mat[Int](
           m.numRows,
           m.numCols,
-          data.map(d => if (d.isNaN) na.to[Int] else 5).toArray
+          data.map(d => if (d.isNaN) na[Int] else 5).toArray
         )
       }
     }

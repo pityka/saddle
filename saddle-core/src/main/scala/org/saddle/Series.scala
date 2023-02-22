@@ -860,27 +860,6 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     Frame(MatCols(lseq, rseq), indexer.index, Index(Array(0, 1)))
   }
 
-  /** Perform a (heterogeneous) join with another Series[X, _] according to its
-    * index. The values of the other Series do not need to have the same type.
-    * The result is a Frame whose index is the result of the join, and whose
-    * column index is {0, 1}, and whose values are sourced from the original
-    * Series.
-    *
-    * @param other
-    *   Series to join with
-    * @param how
-    *   How to perform the join
-    */
-  def hjoin(
-      other: Series[X, _],
-      how: JoinType = LeftJoin
-  ): Frame[X, Int, Any] = {
-    val indexer = this.index.join(other.index, how)
-    val lft = indexer.lTake.map(this.values.take(_)) getOrElse this.values
-    val rgt = indexer.rTake.map(other.values.take(_)) getOrElse other.values
-    Panel(Seq(lft, rgt), indexer.index, IndexIntRange(2))
-  }
-
   /** Perform a join with a Frame[X, _, T] according to its row index. The
     * values of the other Frame must have the same type as the Series. The
     * result is a Frame whose row index is the result of the join, and whose
