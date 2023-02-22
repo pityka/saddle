@@ -62,6 +62,10 @@ class SeriesSpec extends Specification {
     s.groupBy.combine(_.first.getOrElse(0)) must_== Series('a' -> 1, 'b' -> 2)
   }
 
+  "swap works" in {
+    val s = Series('a' -> 1, 'b' -> 2, 'b' -> 3,'c' -> 3)
+    s.swap must_== Series(1 -> 'a', 2 -> 'b', 3 -> 'b', 3 -> 'c')
+  }
   "map works" in {
     val s = Series('a' -> 1, 'b' -> 2, 'b' -> 3)
     s.map { case (k, v) => (k, v + 1) } must_== s + 1
