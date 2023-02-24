@@ -18,9 +18,8 @@ import org.saddle.CLM
 
 final class ScalarTagProduct[T <: Product: CLM] extends ScalarTagBase[T] {
 
-  def missing : T = null.asInstanceOf[T]
-  def isMissing(v:T) = v == null
-
+  def missing: T = null.asInstanceOf[T]
+  def isMissing(v: T) = v == null
 
   override def strList(v: T) =
     v.productArity match {

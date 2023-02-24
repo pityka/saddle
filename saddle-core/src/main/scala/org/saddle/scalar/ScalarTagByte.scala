@@ -24,7 +24,7 @@ object ScalarTagByte extends ScalarTagBase[Byte] {
   override def makeSorter(implicit ord: ORD[Byte]): Sorter[Byte] =
     Sorter.byteSorter
   override def missing: Byte = Byte.MinValue
-  def isMissing(v:Byte) = v == missing
-  def clm  = implicitly[CLM[Byte]]
+  def isMissing(v: Byte) = v == missing
+  def clm = implicitly[CLM[Byte]]
 
 }

@@ -530,11 +530,13 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
     */
   def fillNA(f: Int => T): Vec[T] = VecImpl.vecfillNA(this)(f)(scalarTag)
 
-  def fillNA(method: FillMethod, limit: Int=0): Vec[T] = VecImpl.fillNA(this, method, limit)(scalarTag)
+  def fillNA(method: FillMethod, limit: Int = 0): Vec[T] =
+    VecImpl.fillNA(this, method, limit)(scalarTag)
 
   def fillForward(limit: Int): Vec[T] = VecImpl.fillNA(this, FillForward, limit)
 
-  def fillBackward(limit: Int): Vec[T] = VecImpl.fillNA(this, FillBackward, limit)
+  def fillBackward(limit: Int): Vec[T] =
+    VecImpl.fillNA(this, FillBackward, limit)
 
   /** Converts Vec to an indexed sequence (default implementation is
     * immutable.Vector)
@@ -581,8 +583,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
   /** Integer offset of the minimum element of the Vec, if one exists, or else
     * -1
     */
-  def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int =
-    {
+  def argmin(implicit na: NUM[T], st: ST[T], ord: ORD[T]): Int = {
     val sca = implicitly[ST[T]]
     val sz = length
     if (sz == 0) -1
@@ -599,7 +600,7 @@ class VecDefault[@spec(Boolean, Int, Long, Double) T](
       }
       arg
     }
-    }
+  }
 
   /** Integer offset of the minimum element of the Vec, if one exists, or else
     * -1

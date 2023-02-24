@@ -27,7 +27,7 @@ import org.saddle.locator.Locator
 class IndexInt(keys: Vec[Int], val ord: ORD[Int]) extends Index[Int] {
   val scalarTag = ScalarTagInt
 
-  private implicit def o : ORD[Int]= ord
+  private implicit def o: ORD[Int] = ord
 
   private lazy val (lmap, IndexProperties(contiguous, monotonic)) =
     IndexImpl.keys2map(this)

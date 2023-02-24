@@ -470,12 +470,11 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     Series(values.take(offset), nix)
   }
 
-  /** Return a series with the current index as values and 
-   * current values as index
-   */
-  def swap(implicit ord: ORD[T]): Series[T,X] = 
-    Series(Index(this.values),this.index.toVec)
-  
+  /** Return a series with the current index as values and current values as
+    * index
+    */
+  def swap(implicit ord: ORD[T]): Series[T, X] =
+    Series(Index(this.values), this.index.toVec)
 
   // filtering
 

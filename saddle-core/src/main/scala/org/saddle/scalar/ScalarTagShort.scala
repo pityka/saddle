@@ -25,6 +25,6 @@ object ScalarTagShort extends ScalarTagBase[Short] {
     Sorter.shortSorter
 
   override def missing: Short = Short.MinValue
-  def isMissing(v:Short) = v == missing
+  def isMissing(v: Short) = v == missing
   def clm = implicitly[CLM[Short]]
 }

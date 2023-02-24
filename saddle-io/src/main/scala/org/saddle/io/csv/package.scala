@@ -125,7 +125,7 @@ package object csv {
         if (locs.exists(i => i >= firstLine.length)) {
           Left(
             s"Header line to short to locs ${locs.toList.mkString("[", ", ", "]")}. Header line: ${firstLine
-              .mkString("[", ", ", "]")}"
+                .mkString("[", ", ", "]")}"
           )
         } else {
 

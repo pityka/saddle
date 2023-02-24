@@ -50,8 +50,9 @@ trait MelterLowerPriority {
       def ord = implicitly[ORD[C]]
     }
 
-  implicit def melt[A: ORD, B: ORD] : Melter[A,B,(A,B)]= makeMelter { (a: A, b: B) =>
-    (a, b)
+  implicit def melt[A: ORD, B: ORD]: Melter[A, B, (A, B)] = makeMelter {
+    (a: A, b: B) =>
+      (a, b)
   }
 }
 
@@ -59,10 +60,12 @@ trait MelterLowerPriority {
   * and a Tuple,,N,, and produces a Tuple,,N+1,,
   */
 trait MelterLowPriority extends MelterLowerPriority {
-  implicit def melt1_2[A: ORD, B: ORD, C: ORD] : Melter[A,(B,C),(A,B,C)]= makeMelter {
-    (a: A, b: (B, C)) => (a, b._1, b._2)
-  }
-  implicit def melt1_3[A: ORD, B: ORD, C: ORD, D: ORD] : Melter[A,(B,C,D),(A,B,C,D)]=
+  implicit def melt1_2[A: ORD, B: ORD, C: ORD]: Melter[A, (B, C), (A, B, C)] =
+    makeMelter { (a: A, b: (B, C)) =>
+      (a, b._1, b._2)
+    }
+  implicit def melt1_3[A: ORD, B: ORD, C: ORD, D: ORD]
+      : Melter[A, (B, C, D), (A, B, C, D)] =
     makeMelter { (a: A, b: (B, C, D)) => (a, b._1, b._2, b._3) }
   implicit def melt1_4[
       A: ORD,
@@ -70,7 +73,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       C: ORD,
       D: ORD,
       E: ORD
-  ] : Melter[A,(B,C,D,E),(A,B,C,D,E)]= makeMelter { (a: A, b: (B, C, D, E)) => (a, b._1, b._2, b._3, b._4) }
+  ]: Melter[A, (B, C, D, E), (A, B, C, D, E)] = makeMelter {
+    (a: A, b: (B, C, D, E)) => (a, b._1, b._2, b._3, b._4)
+  }
   implicit def melt1_5[
       A: ORD,
       B: ORD,
@@ -78,8 +83,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       D: ORD,
       E: ORD,
       F: ORD
-  ] : Melter[A,(B,C,D,E,F),(A,B,C,D,E,F)] = makeMelter { (a: A, b: (B, C, D, E, F)) =>
-    (a, b._1, b._2, b._3, b._4, b._5)
+  ]: Melter[A, (B, C, D, E, F), (A, B, C, D, E, F)] = makeMelter {
+    (a: A, b: (B, C, D, E, F)) =>
+      (a, b._1, b._2, b._3, b._4, b._5)
   }
   implicit def melt1_6[
       A: ORD,
@@ -89,8 +95,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       E: ORD,
       F: ORD,
       G: ORD
-  ] : Melter[A,(B,C,D,E,F,G),(A,B,C,D,E,F,G)]= makeMelter { (a: A, b: (B, C, D, E, F, G)) =>
-    (a, b._1, b._2, b._3, b._4, b._5, b._6)
+  ]: Melter[A, (B, C, D, E, F, G), (A, B, C, D, E, F, G)] = makeMelter {
+    (a: A, b: (B, C, D, E, F, G)) =>
+      (a, b._1, b._2, b._3, b._4, b._5, b._6)
   }
   implicit def melt1_7[
       A: ORD,
@@ -101,8 +108,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] : Melter[A,(B,C,D,E,F,G,H),(A,B,C,D,E,F,G,H)]= makeMelter { (a: A, b: (B, C, D, E, F, G, H)) =>
-    (a, b._1, b._2, b._3, b._4, b._5, b._6, b._7)
+  ]: Melter[A, (B, C, D, E, F, G, H), (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: A, b: (B, C, D, E, F, G, H)) =>
+      (a, b._1, b._2, b._3, b._4, b._5, b._6, b._7)
   }
   implicit def melt1_8[
       A: ORD,
@@ -114,14 +122,17 @@ trait MelterLowPriority extends MelterLowerPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ] : Melter[A,(B,C,D,E,F,G,H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: A, b: (B, C, D, E, F, G, H,I)) =>
-    (a, b._1, b._2, b._3, b._4, b._5, b._6, b._7,b._8)
-  }
+  ]: Melter[A, (B, C, D, E, F, G, H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: A, b: (B, C, D, E, F, G, H, I)) =>
+      (a, b._1, b._2, b._3, b._4, b._5, b._6, b._7, b._8)
+    }
 
-  implicit def melt2_1[A: ORD, B: ORD, C: ORD] : Melter[(A,B),C,(A,B,C)]= makeMelter {
-    (a: (A, B), b: C) => (a._1, a._2, b)
-  }
-  implicit def melt3_1[A: ORD, B: ORD, C: ORD, D: ORD] : Melter[(A,B,C),D,(A,B,C,D)]=
+  implicit def melt2_1[A: ORD, B: ORD, C: ORD]: Melter[(A, B), C, (A, B, C)] =
+    makeMelter { (a: (A, B), b: C) =>
+      (a._1, a._2, b)
+    }
+  implicit def melt3_1[A: ORD, B: ORD, C: ORD, D: ORD]
+      : Melter[(A, B, C), D, (A, B, C, D)] =
     makeMelter { (a: (A, B, C), b: D) => (a._1, a._2, a._3, b) }
   implicit def melt4_1[
       A: ORD,
@@ -129,7 +140,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       C: ORD,
       D: ORD,
       E: ORD
-  ] : Melter[(A,B,C,D),E,(A,B,C,D,E)]= makeMelter { (a: (A, B, C, D), b: E) => (a._1, a._2, a._3, a._4, b) }
+  ]: Melter[(A, B, C, D), E, (A, B, C, D, E)] = makeMelter {
+    (a: (A, B, C, D), b: E) => (a._1, a._2, a._3, a._4, b)
+  }
   implicit def melt5_1[
       A: ORD,
       B: ORD,
@@ -137,8 +150,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       D: ORD,
       E: ORD,
       F: ORD
-  ] : Melter[(A,B,C,D,E),F,(A,B,C,D,E,F)]= makeMelter { (a: (A, B, C, D, E), b: F) =>
-    (a._1, a._2, a._3, a._4, a._5, b)
+  ]: Melter[(A, B, C, D, E), F, (A, B, C, D, E, F)] = makeMelter {
+    (a: (A, B, C, D, E), b: F) =>
+      (a._1, a._2, a._3, a._4, a._5, b)
   }
   implicit def melt6_1[
       A: ORD,
@@ -148,8 +162,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       E: ORD,
       F: ORD,
       G: ORD
-  ] : Melter[(A,B,C,D,E,F),G,(A,B,C,D,E,F,G)] = makeMelter { (a: (A, B, C, D, E, F), b: G) =>
-    (a._1, a._2, a._3, a._4, a._5, a._6, b)
+  ]: Melter[(A, B, C, D, E, F), G, (A, B, C, D, E, F, G)] = makeMelter {
+    (a: (A, B, C, D, E, F), b: G) =>
+      (a._1, a._2, a._3, a._4, a._5, a._6, b)
   }
   implicit def melt7_1[
       A: ORD,
@@ -160,8 +175,9 @@ trait MelterLowPriority extends MelterLowerPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] : Melter[(A,B,C,D,E,F,G),H,(A,B,C,D,E,F,G,H)]= makeMelter { (a: (A, B, C, D, E, F, G), b: H) =>
-    (a._1, a._2, a._3, a._4, a._5, a._6, a._7, b)
+  ]: Melter[(A, B, C, D, E, F, G), H, (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: (A, B, C, D, E, F, G), b: H) =>
+      (a._1, a._2, a._3, a._4, a._5, a._6, a._7, b)
   }
   implicit def melt8_1[
       A: ORD,
@@ -173,16 +189,18 @@ trait MelterLowPriority extends MelterLowerPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ]: Melter[(A,B,C,D,E,F,G,H),I,(A,B,C,D,E,F,G,H,I)] = makeMelter { (a: (A, B, C, D, E, F, G, H), b: I) =>
-    (a._1, a._2, a._3, a._4, a._5, a._6, a._7, a._8, b)
-  }
+  ]: Melter[(A, B, C, D, E, F, G, H), I, (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B, C, D, E, F, G, H), b: I) =>
+      (a._1, a._2, a._3, a._4, a._5, a._6, a._7, a._8, b)
+    }
 }
 
 /** Normal priority melter implicit instances takes one a Tuple,,N,, and a
   * Tuple,,M,, and produce a Tuple,,N+M,,
   */
 object Melter extends MelterLowPriority {
-  implicit def melt2_2[A: ORD, B: ORD, C: ORD, D: ORD]  :Melter[(A,B),(C,D),(A,B,C,D)]=
+  implicit def melt2_2[A: ORD, B: ORD, C: ORD, D: ORD]
+      : Melter[(A, B), (C, D), (A, B, C, D)] =
     makeMelter { (a: (A, B), b: (C, D)) => (a._1, a._2, b._1, b._2) }
 
   implicit def melt2_3[
@@ -191,14 +209,18 @@ object Melter extends MelterLowPriority {
       C: ORD,
       D: ORD,
       E: ORD
-  ]  :Melter[(A,B),(C,D,E),(A,B,C,D,E)]= makeMelter { (a: (A, B), b: (C, D, E)) => (a._1, a._2, b._1, b._2, b._3) }
+  ]: Melter[(A, B), (C, D, E), (A, B, C, D, E)] = makeMelter {
+    (a: (A, B), b: (C, D, E)) => (a._1, a._2, b._1, b._2, b._3)
+  }
   implicit def melt3_2[
       A: ORD,
       B: ORD,
       C: ORD,
       D: ORD,
-      E: ORD,
-  ] :Melter[(A,B,C),(D,E),(A,B,C,D,E)]= makeMelter { (a: (A, B, C), b: (D, E)) => (a._1, a._2, a._3, b._1, b._2) }
+      E: ORD
+  ]: Melter[(A, B, C), (D, E), (A, B, C, D, E)] = makeMelter {
+    (a: (A, B, C), b: (D, E)) => (a._1, a._2, a._3, b._1, b._2)
+  }
 
   implicit def melt2_4[
       A: ORD,
@@ -207,8 +229,9 @@ object Melter extends MelterLowPriority {
       D: ORD,
       E: ORD,
       F: ORD
-  ] :Melter[(A,B),(C,D,E,F),(A,B,C,D,E,F)]= makeMelter { (a: (A, B), b: (C, D, E, F)) =>
-    (a._1, a._2, b._1, b._2, b._3, b._4)
+  ]: Melter[(A, B), (C, D, E, F), (A, B, C, D, E, F)] = makeMelter {
+    (a: (A, B), b: (C, D, E, F)) =>
+      (a._1, a._2, b._1, b._2, b._3, b._4)
   }
   implicit def melt3_3[
       A: ORD,
@@ -217,8 +240,9 @@ object Melter extends MelterLowPriority {
       D: ORD,
       E: ORD,
       F: ORD
-  ] :Melter[(A,B,C),(D,E,F),(A,B,C,D,E,F)]= makeMelter { (a: (A, B, C), b: (D, E, F)) =>
-    (a._1, a._2, a._3, b._1, b._2, b._3)
+  ]: Melter[(A, B, C), (D, E, F), (A, B, C, D, E, F)] = makeMelter {
+    (a: (A, B, C), b: (D, E, F)) =>
+      (a._1, a._2, a._3, b._1, b._2, b._3)
   }
   implicit def melt4_2[
       A: ORD,
@@ -227,8 +251,9 @@ object Melter extends MelterLowPriority {
       D: ORD,
       E: ORD,
       F: ORD
-  ] :Melter[(A,B,C,D),(E,F),(A,B,C,D,E,F)]= makeMelter { (a: (A, B, C, D), b: (E, F)) =>
-    (a._1, a._2, a._3, a._4, b._1, b._2)
+  ]: Melter[(A, B, C, D), (E, F), (A, B, C, D, E, F)] = makeMelter {
+    (a: (A, B, C, D), b: (E, F)) =>
+      (a._1, a._2, a._3, a._4, b._1, b._2)
   }
 
   implicit def melt2_5[
@@ -239,8 +264,9 @@ object Melter extends MelterLowPriority {
       E: ORD,
       F: ORD,
       G: ORD
-  ]  :Melter[(A,B),(C,D,E,F,G),(A,B,C,D,E,F,G)] = makeMelter { (a: (A, B), b: (C, D, E, F, G)) =>
-    (a._1, a._2, b._1, b._2, b._3, b._4, b._5)
+  ]: Melter[(A, B), (C, D, E, F, G), (A, B, C, D, E, F, G)] = makeMelter {
+    (a: (A, B), b: (C, D, E, F, G)) =>
+      (a._1, a._2, b._1, b._2, b._3, b._4, b._5)
   }
   implicit def melt3_4[
       A: ORD,
@@ -250,8 +276,9 @@ object Melter extends MelterLowPriority {
       E: ORD,
       F: ORD,
       G: ORD
-  ] :Melter[(A,B,C),(D,E,F,G),(A,B,C,D,E,F,G)]= makeMelter { (a: (A, B, C), b: (D, E, F, G)) =>
-    (a._1, a._2, a._3, b._1, b._2, b._3, b._4)
+  ]: Melter[(A, B, C), (D, E, F, G), (A, B, C, D, E, F, G)] = makeMelter {
+    (a: (A, B, C), b: (D, E, F, G)) =>
+      (a._1, a._2, a._3, b._1, b._2, b._3, b._4)
   }
   implicit def melt4_3[
       A: ORD,
@@ -261,8 +288,9 @@ object Melter extends MelterLowPriority {
       E: ORD,
       F: ORD,
       G: ORD
-  ] :Melter[(A,B,C,D),(E,F,G),(A,B,C,D,E,F,G)]= makeMelter { (a: (A, B, C, D), b: (E, F, G)) =>
-    (a._1, a._2, a._3, a._4, b._1, b._2, b._3)
+  ]: Melter[(A, B, C, D), (E, F, G), (A, B, C, D, E, F, G)] = makeMelter {
+    (a: (A, B, C, D), b: (E, F, G)) =>
+      (a._1, a._2, a._3, a._4, b._1, b._2, b._3)
   }
   implicit def melt5_2[
       A: ORD,
@@ -272,8 +300,9 @@ object Melter extends MelterLowPriority {
       E: ORD,
       F: ORD,
       G: ORD
-  ] :Melter[(A,B,C,D,E),(F,G),(A,B,C,D,E,F,G)]= makeMelter { (a: (A, B, C, D, E), b: (F, G)) =>
-    (a._1, a._2, a._3, a._4, a._5, b._1, b._2)
+  ]: Melter[(A, B, C, D, E), (F, G), (A, B, C, D, E, F, G)] = makeMelter {
+    (a: (A, B, C, D, E), b: (F, G)) =>
+      (a._1, a._2, a._3, a._4, a._5, b._1, b._2)
   }
 
   implicit def melt2_6[
@@ -285,8 +314,9 @@ object Melter extends MelterLowPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] :Melter[(A,B),(C,D,E,F,G,H),(A,B,C,D,E,F,G,H)]= makeMelter { (a: (A, B), b: (C, D, E, F, G, H)) =>
-    (a._1, a._2, b._1, b._2, b._3, b._4, b._5, b._6)
+  ]: Melter[(A, B), (C, D, E, F, G, H), (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: (A, B), b: (C, D, E, F, G, H)) =>
+      (a._1, a._2, b._1, b._2, b._3, b._4, b._5, b._6)
   }
   implicit def melt3_5[
       A: ORD,
@@ -297,8 +327,9 @@ object Melter extends MelterLowPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] :Melter[(A,B,C),(D,E,F,G,H),(A,B,C,D,E,F,G,H)]= makeMelter { (a: (A, B, C), b: (D, E, F, G, H)) =>
-    (a._1, a._2, a._3, b._1, b._2, b._3, b._4, b._5)
+  ]: Melter[(A, B, C), (D, E, F, G, H), (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: (A, B, C), b: (D, E, F, G, H)) =>
+      (a._1, a._2, a._3, b._1, b._2, b._3, b._4, b._5)
   }
   implicit def melt4_4[
       A: ORD,
@@ -309,8 +340,9 @@ object Melter extends MelterLowPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] :Melter[(A,B,C,D),(E,F,G,H),(A,B,C,D,E,F,G,H)]= makeMelter { (a: (A, B, C, D), b: (E, F, G, H)) =>
-    (a._1, a._2, a._3, a._4, b._1, b._2, b._3, b._4)
+  ]: Melter[(A, B, C, D), (E, F, G, H), (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: (A, B, C, D), b: (E, F, G, H)) =>
+      (a._1, a._2, a._3, a._4, b._1, b._2, b._3, b._4)
   }
   implicit def melt5_3[
       A: ORD,
@@ -321,8 +353,9 @@ object Melter extends MelterLowPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] :Melter[(A,B,C,D,E),(F,G,H),(A,B,C,D,E,F,G,H)]= makeMelter { (a: (A, B, C, D, E), b: (F, G, H)) =>
-    (a._1, a._2, a._3, a._4, a._5, b._1, b._2, b._3)
+  ]: Melter[(A, B, C, D, E), (F, G, H), (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: (A, B, C, D, E), b: (F, G, H)) =>
+      (a._1, a._2, a._3, a._4, a._5, b._1, b._2, b._3)
   }
   implicit def melt6_2[
       A: ORD,
@@ -333,8 +366,9 @@ object Melter extends MelterLowPriority {
       F: ORD,
       G: ORD,
       H: ORD
-  ] :Melter[(A,B,C,D,E,F),(G,H),(A,B,C,D,E,F,G,H)]= makeMelter { (a: (A, B, C, D, E, F), b: (G, H)) =>
-    (a._1, a._2, a._3, a._4, a._5, a._6, b._1, b._2)
+  ]: Melter[(A, B, C, D, E, F), (G, H), (A, B, C, D, E, F, G, H)] = makeMelter {
+    (a: (A, B, C, D, E, F), b: (G, H)) =>
+      (a._1, a._2, a._3, a._4, a._5, a._6, b._1, b._2)
   }
 
   implicit def melt2_7[
@@ -347,9 +381,10 @@ object Melter extends MelterLowPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ]  :Melter[(A,B),(C,D,E,F,G,H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: (A, B), b: (C, D, E, F, G, H, I)) =>
-    (a._1, a._2, b._1, b._2, b._3, b._4, b._5, b._6, b._7)
-  }
+  ]: Melter[(A, B), (C, D, E, F, G, H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B), b: (C, D, E, F, G, H, I)) =>
+      (a._1, a._2, b._1, b._2, b._3, b._4, b._5, b._6, b._7)
+    }
   implicit def melt3_6[
       A: ORD,
       B: ORD,
@@ -360,9 +395,10 @@ object Melter extends MelterLowPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ] :Melter[(A,B,C),(D,E,F,G,H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: (A, B, C), b: (D, E, F, G, H, I)) =>
-    (a._1, a._2, a._3, b._1, b._2, b._3, b._4, b._5, b._6)
-  }
+  ]: Melter[(A, B, C), (D, E, F, G, H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B, C), b: (D, E, F, G, H, I)) =>
+      (a._1, a._2, a._3, b._1, b._2, b._3, b._4, b._5, b._6)
+    }
   implicit def melt4_5[
       A: ORD,
       B: ORD,
@@ -373,9 +409,10 @@ object Melter extends MelterLowPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ] :Melter[(A,B,C,D),(E,F,G,H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: (A, B, C, D), b: (E, F, G, H, I)) =>
-    (a._1, a._2, a._3, a._4, b._1, b._2, b._3, b._4, b._5)
-  }
+  ]: Melter[(A, B, C, D), (E, F, G, H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B, C, D), b: (E, F, G, H, I)) =>
+      (a._1, a._2, a._3, a._4, b._1, b._2, b._3, b._4, b._5)
+    }
   implicit def melt5_4[
       A: ORD,
       B: ORD,
@@ -386,9 +423,10 @@ object Melter extends MelterLowPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ] :Melter[(A,B,C,D,E),(F,G,H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: (A, B, C, D, E), b: (F, G, H, I)) =>
-    (a._1, a._2, a._3, a._4, a._5, b._1, b._2, b._3, b._4)
-  }
+  ]: Melter[(A, B, C, D, E), (F, G, H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B, C, D, E), b: (F, G, H, I)) =>
+      (a._1, a._2, a._3, a._4, a._5, b._1, b._2, b._3, b._4)
+    }
   implicit def melt6_3[
       A: ORD,
       B: ORD,
@@ -399,9 +437,10 @@ object Melter extends MelterLowPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ] :Melter[(A,B,C,D,E,F),(G,H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: (A, B, C, D, E, F), b: (G, H, I)) =>
-    (a._1, a._2, a._3, a._4, a._5, a._6, b._1, b._2, b._3)
-  }
+  ]: Melter[(A, B, C, D, E, F), (G, H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B, C, D, E, F), b: (G, H, I)) =>
+      (a._1, a._2, a._3, a._4, a._5, a._6, b._1, b._2, b._3)
+    }
   implicit def melt7_2[
       A: ORD,
       B: ORD,
@@ -412,7 +451,8 @@ object Melter extends MelterLowPriority {
       G: ORD,
       H: ORD,
       I: ORD
-  ] :Melter[(A,B,C,D,E,F,G),(H,I),(A,B,C,D,E,F,G,H,I)]= makeMelter { (a: (A, B, C, D, E, F, G), b: (H, I)) =>
-    (a._1, a._2, a._3, a._4, a._5, a._6, a._7, b._1, b._2)
-  }
+  ]: Melter[(A, B, C, D, E, F, G), (H, I), (A, B, C, D, E, F, G, H, I)] =
+    makeMelter { (a: (A, B, C, D, E, F, G), b: (H, I)) =>
+      (a._1, a._2, a._3, a._4, a._5, a._6, a._7, b._1, b._2)
+    }
 }

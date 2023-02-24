@@ -828,14 +828,14 @@ class MatPimp(val self: Mat[Double]) {
     assert(m.numRows > 0)
     val K = math.min(k, math.min(m.numRows, m.numCols))
 
-    def mult(a: Vec[Double], b: Double) : Vec[Double] = {
+    def mult(a: Vec[Double], b: Double): Vec[Double] = {
       val c = Array.ofDim[Double](a.length)
       val aa = a.toArray
-      var i = 0 
+      var i = 0
       val N = c.length
       while (i < N) {
         c(i) = aa(i) * b
-        i+=1
+        i += 1
       }
       Vec(c)
     }
@@ -849,7 +849,9 @@ class MatPimp(val self: Mat[Double]) {
       val utm = u tmm m
 
       // inv(diag(sigma)) * utm
-      val vt = Mat(utm.rows.zip(sigmainv.toSeq).map(x => mult(x._1 , x._2)): _*).T
+      val vt = Mat(
+        utm.rows.zip(sigmainv.toSeq).map(x => mult(x._1, x._2)): _*
+      ).T
       SVDResult(u, sigma, vt)
     } else {
       val xtx = m.innerM
@@ -859,7 +861,7 @@ class MatPimp(val self: Mat[Double]) {
 
       val mv = m mm v
       // mv * inv(diag(sigma))
-      val u = Mat(mv.cols.zip(sigmainv.toSeq).map(x => mult(x._1 , x._2)): _*)
+      val u = Mat(mv.cols.zip(sigmainv.toSeq).map(x => mult(x._1, x._2)): _*)
 
       SVDResult(u, sigma, v.T)
     }

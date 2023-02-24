@@ -265,7 +265,7 @@ lazy val linalg = project
   .settings(
     name := "saddle-linalg",
     libraryDependencies ++= Seq(
-      "io.github.pityka" % "netlib-java" % "0.1.0",
+      "io.github.pityka" % "netlib-java" % "0.1.0"
     ) ++ scalaTest
   )
   .dependsOn(

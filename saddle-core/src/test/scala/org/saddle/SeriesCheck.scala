@@ -499,7 +499,7 @@ class SeriesCheck extends Specification with ScalaCheck {
 
     "reindex with filling applies the limit" in {
       Series(Vec(1, 2, 3), Index(10, 20, 30))
-        .reindex(Index(10, 11, 12, 13, 20, 21, 22, 23), FillForward, limit=1)
+        .reindex(Index(10, 11, 12, 13, 20, 21, 22, 23), FillForward, limit = 1)
         .values
         .must_==(Vec[Int](1, 1, na[Int], na[Int], 2, 2, na[Int], na[Int]))
     }

@@ -63,7 +63,7 @@ class SeriesSpec extends Specification {
   }
 
   "swap works" in {
-    val s = Series('a' -> 1, 'b' -> 2, 'b' -> 3,'c' -> 3)
+    val s = Series('a' -> 1, 'b' -> 2, 'b' -> 3, 'c' -> 3)
     s.swap must_== Series(1 -> 'a', 2 -> 'b', 3 -> 'b', 3 -> 'c')
   }
   "map works" in {

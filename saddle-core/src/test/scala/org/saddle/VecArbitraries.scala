@@ -155,6 +155,6 @@ object VecArbitraries {
     lst <- Gen.listOfN(n, gen)
   } yield Vec(lst: _*)
 
-  def vecSorted[T: ST: ORD](gen: Gen[T]): Gen[Vec[T]] = 
+  def vecSorted[T: ST: ORD](gen: Gen[T]): Gen[Vec[T]] =
     vec(gen).map(_.sorted)
 }
