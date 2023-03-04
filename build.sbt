@@ -265,7 +265,7 @@ lazy val linalg = project
   .settings(
     name := "saddle-linalg",
     libraryDependencies ++= Seq(
-      "io.github.pityka" % "netlib-java" % "0.1.0",
+      "io.github.pityka" % "netlib-java" % "0.1.0"
     ) ++ scalaTest
   )
   .dependsOn(
@@ -321,13 +321,13 @@ lazy val circe = crossProject(JSPlatform, JVMPlatform)
   )
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "io.circe" %% "circe-core" % "0.14.1"
+      "io.circe" %% "circe-core" % "0.14.5"
     ) ++ scalaTest
   )
   .jsSettings(
     fork := false,
     libraryDependencies ++= Seq(
-      "io.circe" %%% "circe-core" % "0.14.1",
+      "io.circe" %%% "circe-core" % "0.14.5",
       "org.scalatest" %%% "scalatest" % scalaTestVersion % "test"
     )
   )
