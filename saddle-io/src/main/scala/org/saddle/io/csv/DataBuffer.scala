@@ -1,4 +1,4 @@
-package org.saddle.io.csv2
+package org.saddle.io.csv
 
 import java.nio.CharBuffer
 import java.nio.ByteBuffer
@@ -9,7 +9,7 @@ import java.nio.charset.CharsetDecoder
 import java.nio.charset.Charset
 import java.nio.charset.CodingErrorAction
 
-private[csv2] object DataBuffer {
+private[csv] object DataBuffer {
 
   def elementWiseEqual3TSV(
       a: CharBuffer,
@@ -1104,7 +1104,7 @@ private[csv2] object DataBuffer {
   }
 }
 
-private[csv2] sealed trait DataBuffer {
+private[csv] sealed trait DataBuffer {
   def hasNext: Boolean
 
   def bufferTooShort: Boolean
@@ -1113,7 +1113,7 @@ private[csv2] sealed trait DataBuffer {
   def emitRest: (Array[Char], Array[Int], Array[Int], Int)
 }
 
-private[csv2] final class DataBuffer1(
+private[csv] final class DataBuffer1(
     data: Iterator[CharBuffer],
     quoteChar: Char,
     fieldSeparator: Char,
@@ -1231,7 +1231,7 @@ private[csv2] final class DataBuffer1(
   }
 
 }
-private[csv2] final class DataBuffer2(
+private[csv] final class DataBuffer2(
     data: Iterator[CharBuffer],
     quoteChar: Char,
     fieldSeparator: Char,

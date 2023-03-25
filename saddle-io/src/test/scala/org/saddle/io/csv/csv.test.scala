@@ -12,7 +12,7 @@
   * License for the specific language governing permissions and limitations
   * under the License.
   */
-package org.saddle.io.csv2
+package org.saddle.io.csv
 
 import org.scalatest.funsuite.AnyFunSuite
 import java.nio.CharBuffer
@@ -28,7 +28,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -46,7 +46,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -85,7 +85,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -125,7 +125,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -165,7 +165,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -204,7 +204,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 12,
@@ -242,7 +242,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -280,7 +280,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -298,7 +298,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -316,7 +316,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -334,7 +334,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -352,7 +352,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -370,7 +370,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -389,7 +389,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -408,7 +408,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -426,7 +426,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -534,7 +534,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    val res = org.saddle.io.csv2.parse(
+    val res = org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 4,
@@ -552,7 +552,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    val res = org.saddle.io.csv2.parse(
+    val res = org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -592,7 +592,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 12,
@@ -631,7 +631,7 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 12,

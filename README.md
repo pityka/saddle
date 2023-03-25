@@ -99,6 +99,10 @@ see its header.
 
 Code in spire-prng has different copyright terms, see the spire-prng/COPYING.
 
+Code in FastDoubleParser.scala is a translation of https://github.com/wrandelshofer/FastDoubleParser.
+The original Java code is licensed as Copyright © 2022. Werner Randelshofer, Switzerland. MIT License.
+The test data for FastDoubleParser.scala is licensed as Copyright © Nigel Tao, Apache License Version 2.0.
+
 About the Copyright Holders
 ===========================
 
@@ -112,7 +116,5 @@ data analysis library written in Python.
 
 Code in the saddle-linalg/ folder is contributed by Istvan Bartha.
 
-Code in FastDoubleParser.scala is a translation of  https://github.com/wrandelshofer/FastDoubleParser.
-The original Java code is licensed as Copyright © 2022. Werner Randelshofer, Switzerland. MIT License.
-The test data for FastDoubleParser.scala is licensed as Copyright © Nigel Tao, Apache License Version 2.0.
+
 

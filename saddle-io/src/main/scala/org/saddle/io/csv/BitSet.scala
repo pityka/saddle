@@ -1,6 +1,6 @@
-package org.saddle.io.csv2
+package org.saddle.io.csv
 
-private[csv2] object BitSet {
+private[csv] object BitSet {
 
   final val LogWL = 6
   final val WordLength = 64
@@ -19,7 +19,7 @@ private[csv2] object BitSet {
 
 }
 
-private[csv2] final class BitSet(final val elems: Array[Long]) {
+private[csv] final class BitSet(final val elems: Array[Long]) {
   import BitSet._
 
   def array = (0 until elems.size * WordLength).map { i =>

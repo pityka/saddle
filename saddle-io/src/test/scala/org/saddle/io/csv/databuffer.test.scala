@@ -1,4 +1,4 @@
-package org.saddle.io.csv2
+package org.saddle.io.csv
 
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
@@ -147,18 +147,19 @@ class DataBufferSpec extends Specification with ScalaCheck {
 
     val iter = ByteChannel.prep(data)
     val buffer =
-      new org.saddle.io.csv2.DataBuffer1(iter, '"', ',', '[', 4)
+      new org.saddle.io.csv.DataBuffer1(iter, '"', ',', '[', 4)
     buffer.hasNext must_== true
-    val (chars, from, to, len) = buffer.nextBatch
-    chars.toString must_== data
-    from.toList must_== List(0, 2, -1, 0)
-    to.toList must_== List(1, 3, 0, 0)
+    val (chars : Array[Char], from, to, len) = buffer.nextBatch
+ 
+    chars.toList must_== List(97, 44, 97, 0)
+    from.toList must_== List(0, 2, -1, 0,0,0)
+    to.toList must_== List(1, 3, 0, 0,0,0)
     len must_== 1
     buffer.hasNext must_== false
     val (chars2, from2, to2, len2) = buffer.emitRest
-    chars2.toString must_== data
-    from2.toList must_== List(2, 2, -1, 0)
-    to2.toList must_== List(3, 3, 0, 0)
+    chars2.toList must_== List(97, 44, 97, 0)
+    from2.toList must_== List(2, 2, -1, 0,0,0)
+    to2.toList must_== List(3, 3, 0, 0,0,0)
     len must_== 1
 
     1 must_== 1

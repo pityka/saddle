@@ -33,9 +33,9 @@ class CSVParserBench {
 
   }
 
-  val noop = new org.saddle.io.csv2.Callback {
+  val noop = new org.saddle.io.csv.Callback {
     def apply(s: Array[Char], from: Array[Int], to: Array[Int], len: Int) =
-      org.saddle.io.csv2.Next
+      org.saddle.io.csv.Next
   }
 
   @Param(Array("5000"))
@@ -62,7 +62,7 @@ class CSVParserBench {
 
     val byteChannel = ByteChannel(v1)
 
-    org.saddle.io.csv2.parse(
+    org.saddle.io.csv.parse(
       byteChannel,
       noop,
       recordSeparator = "\n"

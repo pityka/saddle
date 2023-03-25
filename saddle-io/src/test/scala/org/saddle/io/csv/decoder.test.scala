@@ -12,7 +12,7 @@
   * License for the specific language governing permissions and limitations
   * under the License.
   */
-package org.saddle.io.csv2
+package org.saddle.io.csv
 
 import org.scalatest.funsuite.AnyFunSuite
 import java.nio.CharBuffer
