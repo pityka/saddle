@@ -24,7 +24,7 @@ private[saddle] trait ScalarTagBase[T] extends ScalarTag[T] {
   def clm: CLM[T]
   implicit private def clm_ : CLM[T] = clm
 
-  def parse(s: String): T =    
+  def parse(s: Array[Char], from: Int, to: Int): T =    
       throw new RuntimeException(
         "parsing arbitrary types during runtime is not implemented"
       )
@@ -47,7 +47,7 @@ private[saddle] trait ScalarTagBase[T] extends ScalarTag[T] {
   override def runtimeClass = implicitly[CLM[T]].runtimeClass
 
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY): Buffer[T] =
-    new Buffer(new Array[T](sz), 0)
+    Buffer.empty[T](sz)
   def makeLoc(sz: Int = Locator.INIT_CAPACITY): Locator[T] =
     new LocatorAny[T](sz)(this)
   def makeVec(arr: Array[T]): Vec[T] = Vec(arr)(this)

@@ -334,9 +334,9 @@ class JoinerImpl[@spec(Boolean, Int, Long, Double) T: ST: ORD]
     // want to scan over the smaller one; make lft the smaller one
     val szhint = if (left.length > right.length) right.length else left.length
 
-    val res = new Buffer(new Array[T](szhint), 0)
-    val lft = new Buffer(new Array[Int](szhint), 0)
-    val rgt = new Buffer(new Array[Int](szhint), 0)
+    val res = Buffer.empty[T](szhint)
+    val lft = Buffer.empty[Int](szhint)
+    val rgt = Buffer.empty[Int](szhint)
 
     val switchLR = left.length > right.length
 
@@ -572,9 +572,9 @@ class JoinerImpl[@spec(Boolean, Int, Long, Double) T: ST: ORD]
     // hits hashmap
     val szhint = left.length + right.length
 
-    val res = new Buffer[T](new Array[T](szhint), 0)
-    val lft = new Buffer[Int](new Array[Int](szhint), 0)
-    val rgt = new Buffer[Int](new Array[Int](szhint), 0)
+    val res = Buffer.empty[T](szhint) 
+    val lft = Buffer.empty[Int](szhint)
+    val rgt = Buffer.empty[Int](szhint)
 
     var i = 0
     while (i < left.length) {

@@ -20,7 +20,7 @@ import org.saddle.array.Sorter
 /** Char ScalarTag
   */
 object ScalarTagChar extends ScalarTagBase[Char] {
-  override def parse(s: String) = s.head
+  override def parse(s: Array[Char], from: Int, to: Int) = s(from)
   override def makeSorter(implicit ord: ORD[Char]): Sorter[Char] =
     Sorter.charSorter
   override def missing: Char = Char.MinValue

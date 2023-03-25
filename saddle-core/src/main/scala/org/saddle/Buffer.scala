@@ -1,6 +1,6 @@
 /** This code is copied from https://github.com/denisrosset/meta The MIT License
   * (MIT)
-  * =====================
+  * \=====================
   *
   * Copyright (c) 2015 Denis Rosset Hash set and hash map implementations based
   * on code (c) 2012-2014 Eirk Osheim
@@ -26,36 +26,48 @@
 package org.saddle
 
 import scala.reflect.ClassTag
+import scala.collection.mutable.ArrayBuffer
 
-final class Buffer[@specialized V](var array: Array[V], var length: Int)(
-    implicit val ctV: ClassTag[V]
+final class Buffer[@specialized V] private[saddle] (
+    private var arrays: ArrayBuffer[Array[V]],
+    var length: Int
+)(implicit
+    val ctV: ClassTag[V]
 ) {
+
+  private var cursor = 0
 
   final def toArray: Array[V] = {
     val res = ctV.newArray(length.toInt)
-    Array.copy(array, 0, res, 0, length)
+    var i = 0
+    var j = 0
+    arrays.foreach { array =>
+      val l =
+        if (j == arrays.length - 1) length - i
+        else array.length
+      Array.copy(array, 0, res, i, l)
+      j += 1
+      i += array.length
+
+    }
     res
   }
 
-  def +=(elem: V): this.type = {
-    ensureLength(length + 1)
-    array(length.toInt) = elem
+  final def +=(elem: V): this.type = {
+    arrays.last(cursor) = elem
     length += 1
+    cursor += 1
+    fill()
     this
   }
 
   /** Grow if necessary the underlying array to accomodate at least n elements.
     */
-  def ensureLength(n: Long): Buffer.Dummy[V] = {
-    def max(l1: Long, l2: Long) = if (l1 > l2) l1 else l2
-    val arrayLength: Long = array.length
-    if (n > arrayLength) {
-      var newLength: Long = max(arrayLength.toLong * 2, 1)
-      while (n > newLength) newLength = newLength * 2
-      if (newLength > Int.MaxValue) newLength = Int.MaxValue
-      val newArray = ctV.newArray(newLength.toInt)
-      Array.copy(array, 0, newArray, 0, length.toInt)
-      array = newArray
+  private final def fill(): Buffer.Dummy[V] = {
+    if (arrays.last.length <= cursor) {
+      val newArray = ctV.newArray(math.min(Buffer.maxSize,arrays.last.length*2))
+      arrays.append(newArray)
+      cursor = 0
     }
     null
   }
@@ -71,16 +83,17 @@ object Buffer {
     implicit def apply[@specialized A]: Dummy[A] = null
   }
 
-  val startSize = 8
+  val startSize = 256
+  val maxSize = 65536
 
   val INIT_CAPACITY = startSize
 
   def empty[@specialized(Int, Double, Boolean, Float) T: ClassTag]: Buffer[T] =
-    new Buffer(new Array[T](startSize), 0)
+    new Buffer(ArrayBuffer(new Array[T](startSize)), 0)
 
   def empty[@specialized(Int, Double, Boolean, Float) T: ClassTag](
       initSize: Int
   ): Buffer[T] =
-    new Buffer(new Array[T](initSize), 0)
+    new Buffer(ArrayBuffer(new Array[T](initSize)), 0)
 
 }

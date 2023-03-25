@@ -23,12 +23,20 @@ import scala.{specialized => spec}
 import java.nio.CharBuffer
 import java.io.File
 import java.nio.charset.CharsetDecoder
+import java.nio.charset.Charset
+import java.nio.charset.CodingErrorAction
 
 /** Csv parsing utilities
   */
 object CsvParser {
 
-  val asciiSilentCharsetDecoder : CharsetDecoder = org.saddle.io.csv.asciiSilentCharsetDecoder
+  def makeAsciiSilentCharsetDecoder: CharsetDecoder = {
+    Charset
+      .forName("US-ASCII")
+      .newDecoder()
+      .onMalformedInput(CodingErrorAction.REPLACE)
+      .onUnmappableCharacter(CodingErrorAction.REPLACE)
+  }
 
   private[saddle] def readFile(
       file: File,
@@ -48,7 +56,7 @@ object CsvParser {
       recordSeparator: String = "\r\n",
       bufferSize: Int = 8192,
       maxLines: Long = Long.MaxValue,
-      charsetDecoder: CharsetDecoder = asciiSilentCharsetDecoder
+      charsetDecoder: CharsetDecoder = makeAsciiSilentCharsetDecoder
   )(implicit st: ST[T]): Either[String, Frame[Int, Int, T]] = {
     val is = new java.io.FileInputStream(file)
     val channel = is.getChannel
@@ -74,7 +82,7 @@ object CsvParser {
       recordSeparator: String = "\r\n",
       bufferSize: Int = 8192,
       maxLines: Long = Long.MaxValue,
-      charsetDecoder: CharsetDecoder = asciiSilentCharsetDecoder
+      charsetDecoder: CharsetDecoder = makeAsciiSilentCharsetDecoder
   )(implicit st: ST[T]): Either[String, Frame[Int, String, T]] = {
     val is = new java.io.FileInputStream(file)
     val channel = is.getChannel
@@ -166,20 +174,16 @@ object CsvParser {
     var bufdata: Seq[Buffer[T]] = null
 
     def prepare(headerLength: Int) = {
-
       if (locs.length == 0) locs = (0 until headerLength).toArray
 
       // set up buffers to store parsed data
       bufdata =
-        for { _ <- locs.toIndexedSeq } yield new Buffer[T](
-          Array.ofDim[T](1024),
-          0
-        )
+        for { _ <- locs.toIndexedSeq } yield Buffer.empty[T](1024)
     }
 
     def addToBuffer(s: String, buf: Int) = {
       import scala.Predef.{wrapRefArray => _}
-      bufdata(buf).+=(st.parse(s))
+      bufdata(buf).+=(st.parse(s.toCharArray(),0,s.length))
     }
 
     val done = org.saddle.io.csv.parseFromIteratorCallback(
@@ -193,54 +197,57 @@ object CsvParser {
     )(prepare, addToBuffer)
 
     done.flatMap { colIndex =>
-      val columns = bufdata map { b => Vec(b.toArray) }
-      if (columns.map(_.length).distinct.size != 1)
-        Left(s"Uneven length ${columns.map(_.length).toVector} columns")
-      else
-        Right((Frame(columns: _*), colIndex.map(i => Index(i))))
-    }
-  }
-
-  private[csv] class DataBuffer(
-      data: Iterator[CharBuffer],
-      var buffer: CharBuffer,
-      var position: Int,
-      var save: Boolean
-  ) {
-    private def concat(buffer1: CharBuffer, buffer2: CharBuffer) = {
-      val b = CharBuffer.allocate(buffer1.remaining + buffer2.remaining)
-      b.put(buffer1)
-      b.put(buffer2)
-      b.flip
-      b
-    }
-    @scala.annotation.tailrec
-    private def fillBuffer: Boolean = {
-      if (!data.hasNext) false
+      if (bufdata == null) Right((Frame.empty, Option.empty))
       else {
-        if (!save) {
-          buffer = data.next()
-          position = 0
-        } else {
-          buffer = concat(buffer, data.next())
-        }
-        if (buffer.length > position) true
-        else fillBuffer
+        val columns = bufdata map { b => Vec(b.toArray) }
+        if (columns.map(_.length).distinct.size != 1)
+          Left(s"Uneven length ${columns.map(_.length).toVector} columns")
+        else
+          Right((Frame(columns: _*), colIndex.map(i => Index(i))))
       }
     }
-    @inline final def hasNext = position < buffer.length || fillBuffer
-
-    @inline final def next =
-      if (position < buffer.length) {
-        val c = buffer.get(position)
-        position += 1
-        c
-      } else {
-        fillBuffer
-        val c = buffer.get(position)
-        position += 1
-        c
-      }
   }
+
+  // private[csv] class DataBuffer(
+  //     data: Iterator[CharBuffer],
+  //     var buffer: CharBuffer,
+  //     var position: Int,
+  //     var save: Boolean
+  // ) {
+  //   private def concat(buffer1: CharBuffer, buffer2: CharBuffer) = {
+  //     val b = CharBuffer.allocate(buffer1.remaining + buffer2.remaining)
+  //     b.put(buffer1)
+  //     b.put(buffer2)
+  //     b.flip
+  //     b
+  //   }
+  //   @scala.annotation.tailrec
+  //   private def fillBuffer: Boolean = {
+  //     if (!data.hasNext) false
+  //     else {
+  //       if (!save) {
+  //         buffer = data.next()
+  //         position = 0
+  //       } else {
+  //         buffer = concat(buffer, data.next())
+  //       }
+  //       if (buffer.length > position) true
+  //       else fillBuffer
+  //     }
+  //   }
+  //   @inline final def hasNext = position < buffer.length || fillBuffer
+
+  //   @inline final def next =
+  //     if (position < buffer.length) {
+  //       val c = buffer.get(position)
+  //       position += 1
+  //       c
+  //     } else {
+  //       fillBuffer
+  //       val c = buffer.get(position)
+  //       position += 1
+  //       c
+  //     }
+  // }
 
 }

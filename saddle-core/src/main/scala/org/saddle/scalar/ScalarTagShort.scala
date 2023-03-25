@@ -20,11 +20,16 @@ import org.saddle.array.Sorter
 /** Short ScalarTag
   */
 object ScalarTagShort extends ScalarTagBase[Short] {
-  override def parse(s: String) = s.toByte
+  override def parse(s: Array[Char], from: Int, to: Int) = {
+    val i = ScalarTagInt.parse(s, from, to)
+
+    if (i < Short.MinValue.toInt || i > Short.MaxValue.toInt) Short.MinValue
+    else i.toShort
+  }
   override def makeSorter(implicit ord: ORD[Short]): Sorter[Short] =
     Sorter.shortSorter
 
   override def missing: Short = Short.MinValue
-  def isMissing(v:Short) = v == missing
+  def isMissing(v: Short) = v == missing
   def clm = implicitly[CLM[Short]]
 }

@@ -60,7 +60,7 @@ class ScalarTagCheck extends Specification with ScalaCheck {
       !tag.isMissing("str": String)
     }
     "return itself from parse" in {
-      tag.parse("something") == "something"
+      tag.parse("something".toArray, 0, 9) == "something"
     }
 
   }
@@ -107,6 +107,74 @@ class ScalarTagCheck extends Specification with ScalaCheck {
         ScalarTagInt.isMissing(v) must_== (v == Int.MinValue)
       prop(Int.MinValue)
       forAll { (v: Int) => prop(v) }
+    }
+    "parse correctly int" in {
+
+      val m = Array.ofDim[Array[Char]](5000000)
+      val k = Array.ofDim[Int](5000000)
+      0 until m.length foreach { i =>
+        val ar =
+          scala.util.Random
+            .nextInt()
+            .toString
+            .toCharArray 
+        m(i) = ar
+        k(i) = (m(i).length)
+      }
+      m(0) = Int.MaxValue.toString.toCharArray()
+      k(0) = m(0).length
+      m(1) = Int.MinValue.toString.toCharArray()
+      k(1) = m(1).length
+      m(2) = 9.toString.toCharArray() 
+      k(2)  = 1
+
+      var i = 0
+      val n = m.length
+      var t = System.nanoTime()
+      while (i < n) {
+        assert(
+          org.saddle.scalar.ScalarTagInt
+            .parse(m(i), 0, k(i))
+            .toLong == new String(m(i)).toInt.toLong,
+          new String(m(i))
+        )
+        i += 1
+      }
+      1 must_== 1
+
+    }
+    "parse correctly long" in {
+
+      val m = Array.ofDim[Array[Char]](5000000)
+      val k = Array.ofDim[Int](5000000)
+      0 until m.length foreach { i =>
+        val ar =
+          scala.util.Random
+            .nextLong()
+            .toString
+            .toCharArray 
+        m(i) = ar
+        k(i) = (m(i).length)
+      }
+      m(0) = Long.MaxValue.toString.toCharArray()
+      k(0) = m(0).length
+      m(1) = Long.MinValue.toString.toCharArray()
+      k(1) = m(1).length
+
+      var i = 0
+      val n = m.length
+      var t = System.nanoTime()
+      while (i < n) {
+        assert(
+          org.saddle.scalar.ScalarTagLong
+            .parse(m(i), 0, k(i))
+            .toLong == new String(m(i)).toLong,
+          new String(m(i))
+        )
+        i += 1
+      }
+      1 must_== 1
+
     }
   }
   "ScalarTagLong" should {

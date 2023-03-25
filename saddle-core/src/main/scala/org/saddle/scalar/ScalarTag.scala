@@ -37,7 +37,7 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
   def isMissing(t: T): Boolean
   def notMissing(t: T): Boolean = !isMissing(t)
 
-  def parse(s: String): T
+  def parse(s: Array[Char], from: Int, to: Int): T
 
   def strList(v: T) = List(show(v))
   def strListLossless(v: T) = strList(v)
