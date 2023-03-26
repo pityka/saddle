@@ -203,7 +203,7 @@ object FastDoubleParser {
           }
         }
         if (!break) {
-        index += 1
+          index += 1
         }
       }
       exponentOfTruncatedSignificand =
