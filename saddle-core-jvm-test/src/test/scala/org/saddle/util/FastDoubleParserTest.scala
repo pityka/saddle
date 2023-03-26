@@ -67,6 +67,10 @@ class FastDoubleParserTest extends Specification with ScalaCheck {
       Double.MinValue.toString,
       Double.MinValue
     )
+    testOK("Infinity", Double.PositiveInfinity)
+    testOK("+Infinity", Double.PositiveInfinity)
+    testOK("-Infinity", Double.NegativeInfinity)
+    testOK("-Infinity", Double.NegativeInfinity)
     testOK("0", 0)
     testOK("00", 0)
     testOK("007", 7)

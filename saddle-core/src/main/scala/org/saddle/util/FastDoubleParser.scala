@@ -448,11 +448,13 @@ object FastDoubleParser {
     return java.lang.Double.longBitsToDouble(bits);
   }
 
-  /** Parses a {@code FloatValue} production with optional leading and trailing
-    * white space. <blockquote> <dl> <dt><i>FloatValueWithWhiteSpace:</i></dt>
-    * <dd><i>[WhiteSpace] FloatValue [WhiteSpace]</i></dd> </dl> </blockquote>
-    * See {@link ch.randelshofer.fastdoubleparser} for the grammar of {@code
-    * FloatValue}.
+  /** Parses a float production. Does no accept leading or trailing white space.
+    * Does not accept trailing type suffix ('d' or 'f' etc) Does not accept
+    * hexadecimal literal float notation.
+    *
+    * Accepts decimals with a '.' as decimal separator. Accepts scientific
+    * notation with 'e' or 'E' as exponent separator. Accepts 'NaN' or
+    * 'Infinity' or '+Infinity' or '-Infinity'.
     *
     * @param str
     *   a string containing a {@code FloatValueWithWhiteSpace}
@@ -532,6 +534,7 @@ object FastDoubleParser {
       endIndex: Int,
       negative: Boolean
   ): Double = {
+
     if (
       index + 7 < endIndex
       && str(index) == 'I'
@@ -543,7 +546,7 @@ object FastDoubleParser {
       && str(index + 6) == 't'
       && str(index + 7) == 'y'
     ) {
-      if (index == endIndex) {
+      if (index + 8 == endIndex) {
         return if (negative) Double.NegativeInfinity
         else Double.PositiveInfinity
       }
