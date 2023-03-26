@@ -96,23 +96,14 @@ private[csv] final class BitSet(final val elems: Array[Long]) {
   def |(other: BitSet): BitSet = {
     var i = 0
     val othernwords = other.nwords
-    val o = BitSet.allocate(math.max(this.capacity, other.capacity))
+    val o = BitSet.allocate(this.capacity)
     while (i < othernwords) {
-      o.elems(i) = elems(i) | other.elems(i)
+      o.elems(i) = (elems(i) | other.elems(i))
       i += 1
     }
     o
   }
-  def &(other: BitSet): BitSet = {
-    var i = 0
-    val othernwords = other.nwords
-    val o = BitSet.allocate(math.max(this.capacity, other.capacity))
-    while (i < othernwords) {
-      o.elems(i) = elems(i) & other.elems(i)
-      i += 1
-    }
-    o
-  }
+
   def negateInplace(): Unit = {
     var i = 0
     while (i < nwords) {
@@ -136,7 +127,7 @@ private[csv] final class BitSet(final val elems: Array[Long]) {
     //     x &= x - 1;
     // }
     // return r;
-    val carry = 0L // or -1L
+    var carry = 0L // or -1L
 
     val o = Array.ofDim[Long](elems.length)
     var i = 0
@@ -150,7 +141,7 @@ private[csv] final class BitSet(final val elems: Array[Long]) {
         x &= x - 1
       }
       o(i) = r ^ carry
-      x = r >>> 63
+      carry = -(r >>> 63)
       i += 1
     }
 

@@ -1,6 +1,5 @@
 /** This code is copied from https://github.com/denisrosset/meta The MIT License
-  * (MIT)
-  * \=====================
+  * (MIT) \=====================
   *
   * Copyright (c) 2015 Denis Rosset Hash set and hash map implementations based
   * on code (c) 2012-2014 Eirk Osheim
@@ -53,6 +52,19 @@ final class Buffer[@specialized V] private[saddle] (
     res
   }
 
+  final def toArrays: List[Array[V]] = {
+    arrays.zipWithIndex.toList.map { case (array, idx) =>
+      if (idx < arrays.size - 1) {
+        array
+      } else {
+        val res = ctV.newArray(cursor)
+        Array.copy(array, 0, res, 0, res.length)
+        res
+      }
+    }
+
+  }
+
   final def +=(elem: V): this.type = {
     arrays.last(cursor) = elem
     length += 1
@@ -61,11 +73,10 @@ final class Buffer[@specialized V] private[saddle] (
     this
   }
 
-  /** Grow if necessary the underlying array to accomodate at least n elements.
-    */
   private final def fill(): Buffer.Dummy[V] = {
     if (arrays.last.length <= cursor) {
-      val newArray = ctV.newArray(math.min(Buffer.maxSize,arrays.last.length*2))
+      val newArray =
+        ctV.newArray(math.min(Buffer.maxSize, arrays.last.length * 2))
       arrays.append(newArray)
       cursor = 0
     }
@@ -84,7 +95,7 @@ object Buffer {
   }
 
   val startSize = 256
-  val maxSize = 65536
+  val maxSize = 16777216
 
   val INIT_CAPACITY = startSize
 

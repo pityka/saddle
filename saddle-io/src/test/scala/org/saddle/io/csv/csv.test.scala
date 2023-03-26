@@ -20,6 +20,48 @@ import java.nio.ByteBuffer
 
 class CSVSuite extends AnyFunSuite {
 
+  test("quote on the 64th") {
+    val lf = "]"
+    val data =
+      s"""key,pivot,value${lf}0,"a","v1"${lf}0,"b","v2"${lf}0,"b","v3"${lf}1,"c","v4"${lf}2,"a","v5"${lf}0,"c","v6"${lf}3,"d","v7"${lf}"""
+    val src = ByteChannel(data)
+    val buffer = new BufferCallback
+    org.saddle.io.csv.parse(
+      src,
+      buffer,
+      recordSeparator = lf,
+      bufferSize = 128
+    )
+    assert(
+      buffer.toList == List(
+        "key",
+        "pivot",
+        "value",
+        "0",
+        "a",
+        "v1",
+        "0",
+        "b",
+        "v2",
+        "0",
+        "b",
+        "v3",
+        "1",
+        "c",
+        "v4",
+        "2",
+        "a",
+        "v5",
+        "0",
+        "c",
+        "v6",
+        "3",
+        "d",
+        "v7"
+      )
+    )
+  }
+
   test("single line") {
     val crlf = "[]"
     val lf = "]"

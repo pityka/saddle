@@ -26,6 +26,7 @@ import java.nio.charset.CharsetDecoder
 import java.nio.channels.ReadableByteChannel
 import org.saddle.io.csv.Callback
 import org.saddle.io.csv.Control
+import java.io.InputStream
 
 /** Csv parsing utilities
   */
@@ -62,6 +63,33 @@ object CsvParser {
       channel.close()
     }
   }
+  def parseInputStream[@spec(Int, Double, Long, Float) T](
+      inputStream: InputStream,
+      cols: Seq[Int] = Nil,
+      fieldSeparator: Char = ',',
+      quoteChar: Char = '"',
+      recordSeparator: String = "\r\n",
+      maxLines: Long = Long.MaxValue,
+      charset: CharsetDecoder = makeAsciiSilentCharsetDecoder,
+      bufferSize: Int = 8192
+  )(implicit st: ST[T]): Either[String, Frame[Int, Int, T]] = {
+    val channel = java.nio.channels.Channels.newChannel(inputStream)
+    try {
+      parseFromChannel(
+        channel = channel,
+        cols = cols,
+        fieldSeparator = fieldSeparator,
+        quoteChar = quoteChar,
+        recordSeparator = recordSeparator,
+        maxLines = maxLines,
+        header = false,
+        charset = charset,
+        bufferSize = bufferSize
+      ).map { case (frame, _) => frame}
+    } finally {
+      channel.close()
+    }
+  }
 
   def parseFileWithHeader[@spec(Int, Double, Long, Float) T](
       file: File,
@@ -75,6 +103,33 @@ object CsvParser {
   )(implicit st: ST[T]): Either[String, Frame[Int, String, T]] = {
     val is = new java.io.FileInputStream(file)
     val channel = is.getChannel
+    try {
+      parseFromChannel(
+        channel = channel,
+        cols = cols,
+        fieldSeparator = fieldSeparator,
+        quoteChar = quoteChar,
+        recordSeparator = recordSeparator,
+        maxLines = maxLines,
+        header = true,
+        charset = charset,
+        bufferSize = bufferSize
+      ).map { case (frame, colIndex) => frame.setColIndex(colIndex.get) }
+    } finally {
+      channel.close()
+    }
+  }
+  def parseInputStreamWithHeader[@spec(Int, Double, Long, Float) T](
+      inputStream: InputStream,
+      cols: Seq[Int] = Nil,
+      fieldSeparator: Char = ',',
+      quoteChar: Char = '"',
+      recordSeparator: String = "\r\n",
+      maxLines: Long = Long.MaxValue,
+      charset: CharsetDecoder = makeAsciiSilentCharsetDecoder,
+      bufferSize: Int = 8192
+  )(implicit st: ST[T]): Either[String, Frame[Int, String, T]] = {
+    val channel = java.nio.channels.Channels.newChannel(inputStream)
     try {
       parseFromChannel(
         channel = channel,
@@ -157,7 +212,7 @@ object CsvParser {
 
   }
 
-  class ColumnBufferCallback[@spec(Int, Double, Long, Float) T](
+  private[csv] class ColumnBufferCallback[@spec(Int, Double, Long, Float) T](
       locs: Array[Int],
       maxLines: Long,
       header: Boolean
@@ -165,7 +220,7 @@ object CsvParser {
       st: ST[T]
   ) extends Callback {
 
-    val locsIdx = Index(locs)
+    private val locsIdx = Index(locs)
 
     val headerFields = scala.collection.mutable.ArrayBuffer[String]()
     val allHeaderFields = scala.collection.mutable.ArrayBuffer[String]()
@@ -174,15 +229,15 @@ object CsvParser {
     var numFields = 0
 
 
-    val emptyLoc = locs.length == 0
+    private val emptyLoc = locs.length == 0
 
     private final def add(s: Array[Char],from:Int,to:Int, buf: Int) = {
       import scala.Predef.{wrapRefArray => _}
       bufdata(buf).+=(st.parse(s,from, to))
     }
 
-    var loc = 0
-    var line = 0L
+    private var loc = 0
+    private var line = 0L
     def apply(
         s: Array[Char],
         from: Array[Int],
