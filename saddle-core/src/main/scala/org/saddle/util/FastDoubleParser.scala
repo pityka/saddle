@@ -137,7 +137,7 @@ object FastDoubleParser {
     // Parse exponent number
     // ---------------------
     var expNumber = 0;
-    var hasExponent = (ch == 'e') || (ch == 'E');
+    var hasExponent = ((ch | 0x20) == 'e');
     if (hasExponent) {
       index += 1
       ch = if (index < endIndex) str(index) else 0
