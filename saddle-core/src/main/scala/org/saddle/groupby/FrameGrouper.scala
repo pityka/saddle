@@ -24,6 +24,7 @@ class FrameGrouper[Z: ST: ORD, X: ST: ORD, Y: ST: ORD, T](
     sorted: Boolean = true
 ) {
 
+  @scala.annotation.nowarn
   private lazy val uniq: Array[Z] = {
     val arr = ix.uniques.toArray
     if (sorted && !ix.isMonotonic)

@@ -14,7 +14,6 @@
   */
 package org.saddle.io.csv
 
-import org.scalatest.funsuite.AnyFunSuite
 
 object TestCallbacks {
   val noop = new Callback {

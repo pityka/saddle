@@ -17,7 +17,7 @@ class FourInPlaceScalarLongOpBench {
   @Setup(Level.Iteration)
   def setup() = {
     m1 = mat.randn(size, size).map(x => (x * 1000).toLong)
-    b = scala.util.Random.nextInt.toLong
+    b = scala.util.Random.nextInt().toLong
   }
   @Benchmark
   def saddleVirtual(): Mat[Long] = {

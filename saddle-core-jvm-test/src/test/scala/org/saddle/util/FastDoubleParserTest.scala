@@ -5,7 +5,6 @@ package org.saddle.util
 
 import org.specs2.mutable.Specification
 import org.specs2.ScalaCheck
-import org.scalacheck.Prop._
 
 class FastDoubleParserTest extends Specification with ScalaCheck {
 
@@ -16,6 +15,7 @@ class FastDoubleParserTest extends Specification with ScalaCheck {
       s"chars: '$s'  expected: $exp , but got $got"
     )
   }
+  @scala.annotation.nowarn
   def testOK(comment: String, s: String, exp: Double) = {
     assert(
       FastDoubleParser.parseFloatValue(s.toCharArray(), 0, s.length) == exp

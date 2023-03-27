@@ -15,7 +15,6 @@
 package org.saddle.io.csv
 
 import org.scalatest.funsuite.AnyFunSuite
-import java.nio.CharBuffer
 import java.nio.ByteBuffer
 import java.nio.channels.ReadableByteChannel
 import java.nio.charset.Charset

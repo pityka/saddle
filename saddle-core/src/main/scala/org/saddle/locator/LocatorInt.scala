@@ -17,6 +17,7 @@ package org.saddle.locator
 import org.saddle.Buffer
 import org.saddle.util.IntMap
 
+@scala.annotation.nowarn
 class LocatorInt(sz: Int = Locator.INIT_CAPACITY) extends Locator[Int] {
   val keyOrder = Buffer.empty[Int]
   val map = new IntMap

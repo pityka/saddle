@@ -33,7 +33,7 @@ class IntParserBench {
       try{
       java.lang.Integer.parseInt(v2(i))
       } catch {
-        case _ => Int.MinValue
+        case _ : Throwable => Int.MinValue
       }
       i+=1
     }

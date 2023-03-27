@@ -17,15 +17,12 @@ package org.saddle.csv
 import org.saddle.{Frame, Vec, ST}
 import org.saddle.order._
 import org.saddle.Index
-import scala.io.Source
 import org.saddle.Buffer
 import scala.{specialized => spec}
-import java.nio.CharBuffer
 import java.io.File
 import java.nio.charset.CharsetDecoder
 import java.nio.channels.ReadableByteChannel
 import org.saddle.io.csv.Callback
-import org.saddle.io.csv.Control
 import java.io.InputStream
 
 /** Csv parsing utilities

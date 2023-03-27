@@ -42,10 +42,6 @@ private[saddle] object FastDoubleParser {
     */
   private val MAX_EXPONENT_NUMBER = 1024;
 
-  /** Special value in {@link #CHAR_TO_HEX_MAP} for the decimal point character.
-    */
-  private val DECIMAL_POINT_CLASS = -4;
-
   private def isDigit(c: Char) = {
     '0' <= c && c <= '9'
   }
@@ -82,7 +78,7 @@ private[saddle] object FastDoubleParser {
     //       arbitrary integer multiplication.
     var index = index0
     var significand = 0L; // significand is treated as an unsigned long
-    var significandStartIndex = index;
+    val significandStartIndex = index;
     var virtualIndexOfPoint = -1;
     var ch = 0.toChar;
     var break1 = false
@@ -98,7 +94,7 @@ private[saddle] object FastDoubleParser {
         }
         virtualIndexOfPoint = index;
         while (index < endIndex - 8 && !break2) {
-          var eightDigits = tryToParseEightDigits(str, index + 1);
+          val eightDigits = tryToParseEightDigits(str, index + 1);
           if (eightDigits >= 0) {
             // This might overflow, we deal with it later.
             significand = 100_000_000L * significand + eightDigits;
@@ -115,7 +111,7 @@ private[saddle] object FastDoubleParser {
       }
     }
     var digitCount = 0
-    var significandEndIndex = index;
+    val significandEndIndex = index;
     var exponent = 0
     if (virtualIndexOfPoint < 0) {
       digitCount = index - significandStartIndex;
@@ -129,11 +125,11 @@ private[saddle] object FastDoubleParser {
     // Parse exponent number
     // ---------------------
     var expNumber = 0;
-    var hasExponent = ((ch | 0x20) == 'e');
+    val hasExponent = ((ch | 0x20) == 'e');
     if (hasExponent) {
       index += 1
       ch = if (index < endIndex) str(index) else 0
-      var neg_exp = ch == '-';
+      val neg_exp = ch == '-';
       if (neg_exp || ch == '+') {
         index += 1
         ch = if (index < endIndex) str(index) else 0
@@ -206,7 +202,7 @@ private[saddle] object FastDoubleParser {
       exponentOfTruncatedSignificand = 0;
     }
 
-    var d = tryDecFloatToDoubleTruncated(
+    val d = tryDecFloatToDoubleTruncated(
       isNegative,
       significand,
       exponent,
@@ -241,12 +237,12 @@ private[saddle] object FastDoubleParser {
         DOUBLE_MIN_EXPONENT_POWER_OF_TEN <= exponentOfTruncatedSignificand
         && exponentOfTruncatedSignificand <= DOUBLE_MAX_EXPONENT_POWER_OF_TEN
       ) {
-        var withoutRounding = tryDecFloatToDouble(
+        val withoutRounding = tryDecFloatToDouble(
           isNegative,
           significand,
           exponentOfTruncatedSignificand
         );
-        var roundedUp = tryDecFloatToDouble(
+        val roundedUp = tryDecFloatToDouble(
           isNegative,
           significand + 1,
           exponentOfTruncatedSignificand
@@ -296,7 +292,7 @@ private[saddle] object FastDoubleParser {
       significand0: Long,
       power: Int
   ): Double = {
-    var significand = significand0
+    val significand = significand0
     // we start with a fast path
     // It was described in Clinger WD (1990).
     if (
@@ -332,7 +328,7 @@ private[saddle] object FastDoubleParser {
     // and power <= DOUBLE_MAX_EXPONENT_POWER_OF_TEN
     // We recover the mantissa of the power, it has a leading 1. It is always
     // rounded down.
-    var factorMantissa = MANTISSA_64(power - DOUBLE_MIN_EXPONENT_POWER_OF_TEN);
+    val factorMantissa = MANTISSA_64(power - DOUBLE_MIN_EXPONENT_POWER_OF_TEN);
 
     // The exponent is 1023 + 64 + power + floor(log(5**power)/log(2)).
     //
@@ -361,16 +357,16 @@ private[saddle] object FastDoubleParser {
     // The 1<<16 value is a power of two; we could use a
     // larger power of 2 if we wanted to.
     //
-    var exponent =
+    val exponent =
       (((152170L + 65536L) * power) >> 16) + DOUBLE_EXPONENT_BIAS + 64;
     // We want the most significant bit of digits to be 1. Shift if needed.
     var lz = java.lang.Long.numberOfLeadingZeros(significand);
-    var shiftedSignificand = significand << lz;
+    val shiftedSignificand = significand << lz;
     // We want the most significant 64 bits of the product. We know
     // this will be non-zero because the most significant bit of digits is
     // 1.
-    var product = fullMultiplication(shiftedSignificand, factorMantissa);
-    var upper = product.high;
+    val product = fullMultiplication(shiftedSignificand, factorMantissa);
+    val upper = product.high;
 
     // The computed 'product' is always sufficient.
     // Mathematical proof:
@@ -378,7 +374,7 @@ private[saddle] object FastDoubleParser {
 
     // The final mantissa should be 53 bits with a leading 1.
     // We shift it so that it occupies 54 bits with a leading 1.
-    var upperbit = upper >>> 63;
+    val upperbit = upper >>> 63;
     var mantissa = upper >>> (upperbit + 9);
     lz += (1 ^ upperbit).toInt;
     // Here we have mantissa < (1<<54).
@@ -424,7 +420,7 @@ private[saddle] object FastDoubleParser {
 
     mantissa &= ~(1L << (DOUBLE_SIGNIFICAND_WIDTH - 1));
 
-    var realExponent = exponent - lz;
+    val realExponent = exponent - lz;
     // we have to check that realExponent is in range, otherwise we bail out
     if (
       (realExponent < 1) || (realExponent > DOUBLE_MAX_EXPONENT_POWER_OF_TWO + DOUBLE_EXPONENT_BIAS)
@@ -432,7 +428,7 @@ private[saddle] object FastDoubleParser {
       return Double.NaN;
     }
 
-    var bits =
+    val bits =
       mantissa | realExponent << (DOUBLE_SIGNIFICAND_WIDTH - 1) | (if (
                                                                      isNegative
                                                                    ) 1L << 63
@@ -568,19 +564,19 @@ private[saddle] object FastDoubleParser {
   }
 
   private def tryToParseEightDigits(a: Array[Char], offset: Int): Int = {
-    var first: Long = a(offset).toLong | a(offset + 1).toLong << 16 | a(
+    val first: Long = a(offset).toLong | a(offset + 1).toLong << 16 | a(
       offset + 2
     ).toLong << 32 | a(offset + 3).toLong << 48;
 
-    var second = a(offset + 4).toLong | a(offset + 5).toLong << 16 | a(
+    val second = a(offset + 4).toLong | a(offset + 5).toLong << 16 | a(
       offset + 6
     ).toLong << 32 | a(offset + 7).toLong << 48;
 
     var fval = first - 0x0030_0030_0030_0030L;
     var sval = second - 0x0030_0030_0030_0030L;
 
-    var fdet = ((first + 0x0046_0046_0046_0046L) | fval);
-    var sdet = ((second + 0x0046_0046_0046_0046L) | sval);
+    val fdet = ((first + 0x0046_0046_0046_0046L) | fval);
+    val sdet = ((second + 0x0046_0046_0046_0046L) | sval);
     if (((fdet | sdet) & 0xff80_ff80_ff80_ff80L) != 0L) {
       return -1
     }

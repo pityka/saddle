@@ -16,6 +16,7 @@ package org.saddle.locator
 
 import org.saddle.Buffer
 import org.saddle.util.DoubleMap
+@scala.annotation.nowarn
 class LocatorDouble(sz: Int = Locator.INIT_CAPACITY) extends Locator[Double] {
   val keyOrder = Buffer.empty[Double]
   val map = new DoubleMap

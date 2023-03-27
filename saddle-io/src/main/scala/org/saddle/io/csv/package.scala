@@ -2,8 +2,6 @@ package org.saddle.io
 
 import java.nio.CharBuffer
 import java.nio.ByteBuffer
-import scala.annotation.tailrec
-import scala.collection.mutable.ArrayBuffer
 import java.nio.channels.ReadableByteChannel
 import java.nio.charset.CharsetDecoder
 import java.nio.charset.Charset

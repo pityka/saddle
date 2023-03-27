@@ -130,7 +130,6 @@ class ScalarTagCheck extends Specification with ScalaCheck {
 
       var i = 0
       val n = m.length
-      var t = System.nanoTime()
       while (i < n) {
         assert(
           org.saddle.scalar.ScalarTagInt
@@ -163,7 +162,6 @@ class ScalarTagCheck extends Specification with ScalaCheck {
 
       var i = 0
       val n = m.length
-      var t = System.nanoTime()
       while (i < n) {
         assert(
           org.saddle.scalar.ScalarTagLong

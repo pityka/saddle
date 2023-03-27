@@ -15,8 +15,7 @@
 package org.saddle.io.csv
 
 import org.scalatest.funsuite.AnyFunSuite
-import java.nio.CharBuffer
-import java.nio.ByteBuffer
+
 
 class CSVSuite extends AnyFunSuite {
 
@@ -98,7 +97,6 @@ class CSVSuite extends AnyFunSuite {
 
   test("single line") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,b,c,d,e"""
 
@@ -116,7 +114,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("test1") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,"b,c,d",e${crlf}1,25,36,${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9",   """
 
@@ -153,7 +150,6 @@ class CSVSuite extends AnyFunSuite {
 
   }
   test("test1 tsv") {
-    val crlf = "[]"
     val lf = "\n"
     val tab = "\t"
     val data =
@@ -193,7 +189,6 @@ class CSVSuite extends AnyFunSuite {
 
   }
   test("test1 csv lf") {
-    val crlf = "[]"
     val lf = "\n"
     val tab = ","
     val data =
@@ -234,7 +229,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("test1 csv crlf") {
     val crlf = "\r\n"
-    val lf = "\n"
     val tab = ","
     val data =
       s"""a$tab"b${tab}c${tab}d"${tab}e${crlf}1${tab}25${tab}36${tab}${crlf}4${tab}55${tab}"6"${crlf}5${tab}9${tab}38${crlf}7${tab}"8"${tab}"9"${tab}   """
@@ -274,7 +268,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("test1 - quote in quote") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,"b,""c"",d",e${crlf}1,25,36,${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9",   """
 
@@ -311,7 +304,6 @@ class CSVSuite extends AnyFunSuite {
 
   }
   test("test2") {
-    val crlf = "[]"
     val lf = "]"
     val data =
       s"""a,"b,c,d",e${lf}1,25,36,${lf}4,55,"6"${lf}5,9,38${lf}7,"8","9",   """
@@ -349,7 +341,6 @@ class CSVSuite extends AnyFunSuite {
 
   }
   test("test3") {
-    val crlf = "[]"
     val lf = "]"
     val data =
       s"""a,a""".stripMargin
@@ -368,7 +359,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("test4") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,,c,d${crlf},,"",""".stripMargin
 
@@ -386,7 +376,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("test4b") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,,c,d${crlf},,"",$crlf""".stripMargin
 
@@ -403,7 +392,6 @@ class CSVSuite extends AnyFunSuite {
 
   }
   test("test4 lf") {
-    val crlf = "[]"
     val lf = "]"
     val data =
       s"""a,,c,d${lf},,"",""".stripMargin
@@ -421,7 +409,6 @@ class CSVSuite extends AnyFunSuite {
 
   }
   test("test4b lf") {
-    val crlf = "[]"
     val lf = "]"
     val data =
       s"""a,,c,d${lf},,"",$lf""".stripMargin
@@ -440,7 +427,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("test5") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s""""a"a""".stripMargin
 
@@ -459,7 +445,6 @@ class CSVSuite extends AnyFunSuite {
 
   test("empty final") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       """,""".stripMargin
 
@@ -478,7 +463,6 @@ class CSVSuite extends AnyFunSuite {
 
   test("quoted empty string") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""""${crlf}1"""
 
@@ -496,7 +480,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("many empty fields crlf") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,b,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o"""
 
@@ -604,7 +587,6 @@ class CSVSuite extends AnyFunSuite {
   }
   test("string parsing with too short buffer") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,"b,c,d",e${crlf}1,25,36,${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9",   """
 
@@ -622,13 +604,12 @@ class CSVSuite extends AnyFunSuite {
   }
   test("string parsing ") {
     val crlf = "[]"
-    val lf = "]"
     val data =
       s"""a,"b,c,d",e${crlf}1,25,36,${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9""""
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    val res = org.saddle.io.csv.parse(
+    org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
@@ -661,7 +642,6 @@ class CSVSuite extends AnyFunSuite {
     "csv string parsing works with double quotes and quoted CRLF and unquoted CR"
   ) {
     val crlf = "[]"
-    val lf = "]"
     val cr = "["
     val data =
       s""","b,""c"",d",e${crlf}1,25${cr}1,${cr}${cr}${cr}36,${crlf}4,5${cr}${cr}5,"6${crlf}1"${crlf}5,  ,38${crlf}7,"8${cr}1","",   """
@@ -699,7 +679,6 @@ class CSVSuite extends AnyFunSuite {
   test(
     "csv string parsing works with double quotes and quoted CRLF and unquoted CR with LF ending"
   ) {
-    val crlf = "[]"
     val lf = "]"
     val cr = "["
     val data =

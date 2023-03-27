@@ -19,6 +19,7 @@ import org.saddle.{ST, ORD, Index, array}
 /** Creates groups for each unique key in an index
   */
 class IndexGrouper[Y: ST: ORD](ix: Index[Y], sorted: Boolean = true) {
+  @scala.annotation.nowarn
   private lazy val uniq: Array[Y] = {
     val arr = ix.uniques.toArray
     if (sorted && !ix.isMonotonic)
