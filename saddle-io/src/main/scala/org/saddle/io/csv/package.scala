@@ -18,8 +18,28 @@ package object csv {
   case class Error(error: String) extends Control
 
   trait Callback {
+
+    /** Callback of CSV parser.
+      *
+      * Called whenever the parser detects tokens in the buffer.
+      *
+      * @param chars
+      *   Character array. This is a shared array owned by the parser. Do not
+      *   modify, copy out whatever is needed.
+      * @param from
+      *   Int array of indices of starting offsets of tokens in the `char`
+      *   array. Owned by the parser.
+      * @param to
+      *   Int array of indices of end (exclusive) offsets of tokens in the
+      *   `char` array. Owned by the parser.
+      * @param len
+      *   Number of tokens. Do not read the index arrays beyond this number.
+      * @return
+      *   a control object which can be Done, Next or Error. The parser stops on
+      *   Done. It continues on Next and it stops and reports error on Error
+      */
     def apply(
-        t: Array[Char],
+        chars: Array[Char],
         from: Array[Int],
         to: Array[Int],
         len: Int
@@ -34,9 +54,15 @@ package object csv {
     *   Within matching quotes, treat separChar as normal char; default is
     *   double-quote
     * @param recordSeparator
-    *   Record separator (line ending)
-    * @param source
-    *   The csv data source to operate on
+    *   Record separator (line ending). Its length must be one or two.
+    * @param channel
+    *   The csv data channel to read from 
+    * @param callback
+    *   An instance of the `Callback` which will be called on a group of tokens.
+    * @param charset
+    *   A charset decoder. Must be in new or reset state.
+    * @param bufferSize
+    *   Must be larger than the longest token (CSV cell) in the data. 
     */
   @noinline
   def parse(

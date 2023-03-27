@@ -19,7 +19,7 @@ object FloatTotalOrder extends FloatTotalOrderTrait
   * See https://github.com/scala/scala/pull/8721 See
   * https://github.com/scala/scala/blob/39e82c3f904380f0b40d106723747faf881640d4/src/library/scala/math/Ordering.scala#L465
   */
-trait DoubleTotalOrderTrait extends Order[Double] with Hash[Double] {
+private[saddle] trait DoubleTotalOrderTrait extends Order[Double] with Hash[Double] {
 
   def hash(x: Double): Int = x.hashCode()
   def compare(x: Double, y: Double): Int =
@@ -40,7 +40,7 @@ trait DoubleTotalOrderTrait extends Order[Double] with Hash[Double] {
 
 /** See DoubleTotalOrder
   */
-trait FloatTotalOrderTrait extends Order[Float] with Hash[Float] {
+private[saddle] trait FloatTotalOrderTrait extends Order[Float] with Hash[Float] {
 
   def hash(x: Float): Int = x.hashCode()
   def compare(x: Float, y: Float): Int =
@@ -59,7 +59,7 @@ trait FloatTotalOrderTrait extends Order[Float] with Hash[Float] {
     if (lteqv(x, y)) x else y
 }
 
-trait OrderInstances {
+private[saddle] trait OrderInstances {
   implicit def intOrd: ORD[Int] =
     cats.kernel.instances.int.catsKernelStdOrderForInt
   implicit def longOrd: ORD[Long] =

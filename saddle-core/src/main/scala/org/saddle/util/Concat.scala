@@ -22,7 +22,7 @@ import org.saddle.{ST, array}
   *
   * Key method is Concat.append(array1, array2)
   */
-object Concat {
+private[saddle] object Concat {
 
   /** Append two arrays of possibly different types together by intelligently
     * promoting primitive types where possible.

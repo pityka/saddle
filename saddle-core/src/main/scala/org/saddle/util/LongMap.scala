@@ -35,7 +35,7 @@ package org.saddle.util
   * 500 million). The maximum capacity is 2^30, but performance will degrade
   * rapidly as 2^30 is approached.
   */
-final class LongMap(
+private[saddle] final class LongMap(
     defaultEntry: Long => Int,
     initialBufferSize: Int,
     initBlank: Boolean
@@ -236,7 +236,7 @@ final class LongMap(
 
 }
 
-object LongMap {
+private[saddle] object LongMap {
   private final val IndexMask = 0x3fffffff
   private final val MissingBit = 0x80000000
   private final val VacantBit = 0x40000000

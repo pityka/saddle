@@ -1,7 +1,7 @@
 package org.saddle.spire
 package math
 
-object UInt {
+private[spire]  object UInt {
   @inline final def apply(n: Int): UInt = new UInt(n)
   @inline final def apply(n: Long): UInt = new UInt(n.toInt)
 
@@ -9,7 +9,7 @@ object UInt {
   @inline final val MaxValue: UInt = UInt(-1)
 }
 
-class UInt(val signed: Int) extends AnyVal {
+private[spire] class UInt(val signed: Int) extends AnyVal {
   def toByte: Byte = signed.toByte
   def toChar: Char = signed.toChar
   def toShort: Short = signed.toShort

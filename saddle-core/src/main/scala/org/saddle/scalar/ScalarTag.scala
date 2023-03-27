@@ -37,6 +37,19 @@ trait ScalarTag[@spec(Boolean, Int, Long, Float, Double) T]
   def isMissing(t: T): Boolean
   def notMissing(t: T): Boolean = !isMissing(t)
 
+  /** Parses from a char array
+    *
+    * Does not throw on erroneous input, rather returns the missing value.
+    *
+    * @param s
+    *   characters
+    * @param from
+    *   first index, inclusive
+    * @param to
+    *   last index, exclusive
+    * @return
+    *   a parsed value, or the missing value if any error occurs
+    */
   def parse(s: Array[Char], from: Int, to: Int): T
 
   def strList(v: T) = List(show(v))
@@ -77,17 +90,19 @@ object ScalarTag extends ScalarTagImplicits {
   implicit val stString: ScalarTag[String] = ScalarTagString
 }
 
-trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
+private[saddle] trait ScalarTagImplicits extends ScalarTagImplicitsL1 {
   implicit def stPrd[T <: Product](implicit ev: CLM[T]): ScalarTag[T] =
     new ScalarTagProduct[T]()(ev)
 }
 
-trait ScalarTagImplicitsL1 {
+private[saddle] trait ScalarTagImplicitsL1 {
   implicit def stAnyRef[T <: AnyRef](implicit ev: CLM[T]): ScalarTag[T] =
     new ScalarTagAnyRef[T]()(ev)
 }
 
-trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {
+private[saddle] trait CouldBeOrdered[
+    @spec(Boolean, Int, Long, Float, Double) T
+] {
   // for comparable scalars
   def compare(a: T, b: T)(implicit ev: ORD[T]): Int
   def lt(a: T, b: T)(implicit ev: ORD[T]) = compare(a, b) < 0
@@ -95,7 +110,9 @@ trait CouldBeOrdered[@spec(Boolean, Int, Long, Float, Double) T] {
   def iseq(a: T, b: T)(implicit ev: ORD[T]) = compare(a, b) == 0
 }
 
-trait CouldBeNumber[@spec(Boolean, Int, Long, Float, Double) T] {
+private[saddle] trait CouldBeNumber[
+    @spec(Boolean, Int, Long, Float, Double) T
+] {
   // for numeric scalars
   def toDouble(t: T)(implicit ev: NUM[T]): Double
 
@@ -105,7 +122,9 @@ trait CouldBeNumber[@spec(Boolean, Int, Long, Float, Double) T] {
   def negInf(implicit ev: NUM[T]): T
 }
 
-trait SpecializedFactory[@spec(Boolean, Int, Long, Float, Double) T] {
+private[saddle] trait SpecializedFactory[
+    @spec(Boolean, Int, Long, Float, Double) T
+] {
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY): Buffer[T]
   def makeLoc(sz: Int = Locator.INIT_CAPACITY): Locator[T]
   def makeVec(arr: Array[T]): Vec[T]
