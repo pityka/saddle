@@ -1109,6 +1109,19 @@ private[csv] sealed trait DataBuffer {
 
   def bufferTooShort: Boolean
 
+  /** The returned arrays are reused in the next invocation. The caller must
+    * copy out whatever it needs from the character array between invocations of
+    * this method.
+    *
+    * Returns a 4-tuple with:
+    *   - a character array (first element)
+    *   - an integer array with the 'from' indices
+    *   - an integer array with the 'until' (exclusive) indices. If negative
+    *     then this is the last element in the row.
+    *   - an integer indicating the number of elements valid in the index
+    *     arrays. Elements present in the index array after this length are
+    *     should not get read.
+    */
   def nextBatch: (Array[Char], Array[Int], Array[Int], Int)
   def emitRest: (Array[Char], Array[Int], Array[Int], Int)
 }

@@ -31,8 +31,7 @@
  */
 package org.saddle.util
 
-/** Parses a {@code FloatValue} from a {@code char} array. <p> See {@link
-  * ch.randelshofer.fastdoubleparser} for the grammar of {@code FloatValue}.
+/** Parses a {@code FloatValue} from a {@code char} array.
   */
 object FastDoubleParser {
 
@@ -51,14 +50,7 @@ object FastDoubleParser {
     '0' <= c && c <= '9'
   }
 
-  /** Parses a {@code DecimalFloatingPointLiteral} production with optional
-    * trailing white space until the end of the text. Given that we have already
-    * consumed the optional leading zero of the {@code DecSignificand}.
-    * <blockquote> <dl>
-    * <dt><i>DecimalFloatingPointLiteralWithWhiteSpace:</i></dt>
-    * <dd><i>DecimalFloatingPointLiteral [WhiteSpace] EOT</i></dd> </dl>
-    * </blockquote> See {@link ch.randelshofer.fastdoubleparser} for the grammar
-    * of {@code DecimalFloatingPointLiteral} and {@code DecSignificand}.
+  /** Parses a {@code DecimalFloatingPointLiteral} production.
     *
     * @param str
     *   a string
