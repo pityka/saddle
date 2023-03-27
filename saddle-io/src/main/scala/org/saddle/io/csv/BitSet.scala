@@ -140,8 +140,9 @@ private[csv] final class BitSet(final val elems: Array[Long]) {
         r ^= -x ^ x
         x &= x - 1
       }
-      o(i) = r ^ carry
-      carry = -(r >>> 63)
+      val p = r ^ carry
+      o(i) = p
+      carry = -(p >>> 63)
       i += 1
     }
 

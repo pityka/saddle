@@ -20,6 +20,40 @@ import java.nio.ByteBuffer
 
 class CSVSuite extends AnyFunSuite {
 
+  test("carry in quote") {
+    val lf = "]"
+    val data =
+      s"""hint,hfloat,htime,hbool,htext${lf}1,1.5,2020-01-01T00:00:00Z,false,"something, something"${lf}2,2.5,2021-01-01T00:00:00Z,true,"something,"${lf}2,3.0,2021-01-01T00:00:00Z,true,"a,""""
+    val src = ByteChannel(data)
+    val buffer = new BufferCallback
+    org.saddle.io.csv.parse(
+      src,
+      buffer,
+      recordSeparator = "\n",
+      bufferSize = 256
+    )
+    assert(
+      buffer.toList == List(
+        "hint",
+        "hfloat",
+        "htime",
+        "hbool",
+        "htext]1",
+        "1.5",
+        "2020-01-01T00:00:00Z",
+        "false",
+        """something, something"]""",
+        "2.5",
+        "2021-01-01T00:00:00Z",
+        "true",
+        """something,"]""",
+        "3.0",
+        "2021-01-01T00:00:00Z",
+        "true",
+        "a,"
+      )
+    )
+  }
   test("quote on the 64th") {
     val lf = "]"
     val data =
