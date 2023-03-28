@@ -16,11 +16,12 @@ package org.saddle.scalar
 
 import org.saddle.CLM
 
-object ScalarTagString extends ScalarTagBase[String] {
+object ScalarTagString
+    extends ScalarTagBase[String] {
   override def toString = "ScalarTagString"
   def missing: String = null.asInstanceOf[String]
 
   def isMissing(v: String): Boolean = (v == missing)
   def clm = implicitly[CLM[String]]
-  override def parse(s: String): String = s
+  override def parse(s:String) : String = s
 }

@@ -497,4 +497,5 @@ class FrameSpec extends Specification {
     f.flatMap { case (r, c, v) => Some((r, c, v + 1)) } must_== f + 1
   }
 
+  
 }
