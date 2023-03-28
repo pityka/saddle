@@ -17,7 +17,7 @@ class TwoInPlaceScalarOpBench {
   @Setup(Level.Iteration)
   def setup() = {
     m1 = mat.randn(size, size)
-    b = scala.util.Random.nextDouble
+    b = scala.util.Random.nextDouble()
   }
   @Benchmark
   def saddleVirtual(): Mat[Double] = {

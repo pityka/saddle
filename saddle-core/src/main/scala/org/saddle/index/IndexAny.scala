@@ -41,6 +41,7 @@ class IndexAny[T: ST: ORD](keys: Vec[T]) extends Index[T] {
   // get the key at the position specified
   def raw(idx: Int): T = keys.raw(idx)
 
+  @scala.annotation.nowarn
   def take(locs: Array[Int]): Index[T] =
     Index(array.take(keys.toArray, locs, IndexImpl.sentinelErr))
 

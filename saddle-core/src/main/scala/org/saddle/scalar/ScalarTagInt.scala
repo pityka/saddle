@@ -27,10 +27,111 @@ object ScalarTagInt extends ScalarTag[Int] {
   def isMissing(v: Int): Boolean = v == Int.MinValue
   override def notMissing(v: Int): Boolean = !isMissing(v)
 
-  override def parse(s: String) =
-    try {
-      s.toInt
-    } catch { case _: NumberFormatException => Int.MinValue }
+  private final val _max = Int.MaxValue / 10
+
+  override final def parse(s: Array[Char], from: Int, to: Int): Int = {
+    
+    val radix = 10
+    var length = to - from
+    if (length == 0 || length > 11) return Int.MinValue
+
+    val firstChar = s(from)
+
+    val positive = firstChar == '+'
+    val negative = firstChar == '-'
+    var offset = from
+    if (positive || negative) {
+      offset += 1
+      length -= 1
+    }
+    
+    if (offset > from && length == 1) return Int.MinValue
+
+    var result = 0
+    if (length > 3) {
+      // SWAR validation and parsing of the first max 8 characters
+
+      // pack into a long, little endian
+      var p = 0L
+      length match {
+        case 4 =>
+          p = ((s(offset) & 0xff).toLong) |
+            ((s(offset + 1) & 0xff).toLong << 8) |
+            ((s(offset + 2) & 0xff).toLong << 16) |
+            ((s(offset + 3) & 0xff).toLong << 24)
+        case 5 =>
+          p = ((s(offset) & 0xff).toLong) |
+            ((s(offset + 1) & 0xff).toLong << 8) |
+            ((s(offset + 2) & 0xff).toLong << 16) |
+            ((s(offset + 3) & 0xff).toLong << 24) |
+            ((s(offset + 4) & 0xff).toLong << 32)
+        case 6 =>
+          p = ((s(offset) & 0xff).toLong) |
+            ((s(offset + 1) & 0xff).toLong << 8) |
+            ((s(offset + 2) & 0xff).toLong << 16) |
+            ((s(offset + 3) & 0xff).toLong << 24) |
+            ((s(offset + 4) & 0xff).toLong << 32) |
+            ((s(offset + 5) & 0xff).toLong << 40)
+        case 7 =>
+          p = ((s(offset) & 0xff).toLong) |
+            ((s(offset + 1) & 0xff).toLong << 8) |
+            ((s(offset + 2) & 0xff).toLong << 16) |
+            ((s(offset + 3) & 0xff).toLong << 24) |
+            ((s(offset + 4) & 0xff).toLong << 32) |
+            ((s(offset + 5) & 0xff).toLong << 40) |
+            ((s(offset + 6) & 0xff).toLong << 48)
+        case _ =>
+          p = ((s(offset) & 0xff).toLong) |
+            ((s(offset + 1) & 0xff).toLong << 8) |
+            ((s(offset + 2) & 0xff).toLong << 16) |
+            ((s(offset + 3) & 0xff).toLong << 24) |
+            ((s(offset + 4) & 0xff).toLong << 32) |
+            ((s(offset + 5) & 0xff).toLong << 40) |
+            ((s(offset + 6) & 0xff).toLong << 48) |
+            ((s(offset + 7) & 0xff).toLong << 56)
+      }
+      // pad with '0' = 48 = 0x30
+      val m = math.max(0, 8 - length) * 8
+      p = p << m | 0x3030303030303030L
+
+      // SWAR validation
+      var q = p - 0x3030303030303030L
+      val det = ((p + 0x4646464646464646L) | q) &
+        0x8080808080808080L;
+      if (det != 0L) {
+        return Int.MinValue
+      }
+
+      // SWAR conversion
+      val mask = 0x000000ff_000000ffL;
+      q = (q * 0xa_01L) >>> 8; // 1+(10<<8)
+      q = (((q & mask) * 0x000f4240_00000064L) // 100 + (1000000 << 32)
+        + (((q >>> 16) & mask) * 0x00002710_00000001L)) >>> 32; // 1 + (10000 << 32)
+      result = q.toInt
+      offset += math.min(8, length)
+    }
+    // END SWAR, continue regularly with the remaining if any
+
+    while (offset < to) {
+      val digit = s(offset).toByte - 48
+      val next = result * radix + digit
+      if (digit < 0 || digit > 9 || _max < result || next < result) {
+        return Int.MinValue
+      }
+      result = next
+      offset += 1
+    }
+
+    if (negative) {
+      result = -result
+      if (result > 0) {
+        return Int.MinValue
+      }
+    }
+
+    result
+
+  }
 
   def compare(x: Int, y: Int)(implicit ev: ORD[Int]) =
     if (x == y) 0 else if (x > y) 1 else -1
@@ -48,7 +149,7 @@ object ScalarTagInt extends ScalarTag[Int] {
   override def runtimeClass = classOf[Int]
 
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY) =
-    new Buffer(new Array[Int](sz), 0)
+    Buffer.empty[Int](sz)
   def makeLoc(sz: Int = Locator.INIT_CAPACITY) = new LocatorInt(sz)
   def makeVec(arr: Array[Int]) = Vec(arr)(this)
   def makeMat(r: Int, c: Int, arr: Array[Int]) = Mat(r, c, arr)(this)

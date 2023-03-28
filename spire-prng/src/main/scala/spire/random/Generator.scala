@@ -401,12 +401,9 @@ abstract class Generator {
   }
 }
 
-abstract class IntBasedGenerator extends Generator { self =>
-  def nextLong(): Long =
-    ((nextInt() & 0xffffffffL) << 32) | (nextInt() & 0xffffffffL)
-}
 
-abstract class LongBasedGenerator extends Generator { self =>
+
+private[spire] abstract class LongBasedGenerator extends Generator { self =>
   def nextInt(): Int =
     (nextLong() >>> 32).toInt
 
@@ -475,7 +472,7 @@ abstract class LongBasedGenerator extends Generator { self =>
   }
 }
 
-trait GeneratorCompanion[G, @sp(Int, Long) S] {
+private[spire] trait GeneratorCompanion[G, @sp(Int, Long) S] {
   def randomSeed(): S
 
   def fromBytes(bytes: Array[Byte]): G

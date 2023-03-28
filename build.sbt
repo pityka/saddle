@@ -45,6 +45,7 @@ lazy val commonSettings = Seq(
         "-opt:l:inline",
         "-opt-inline-from:org.saddle.**",
         "-opt-warnings",
+        "-Wopt",
         "-deprecation", // Emit warning and location for usages of deprecated APIs.
         "-encoding",
         "utf-8", // Specify character encoding used by source files.
@@ -66,7 +67,7 @@ lazy val commonSettings = Seq(
         "-Xlint:private-shadow", // A private field (or class parameter) shadows a superclass field.
         "-Xlint:stars-align", // Pattern sequence wildcard must align with sequence component.
         "-Xlint:type-parameter-shadow", // A local type parameter shadows a type already in scope.
-        // "-Ywarn-dead-code", // Warn when dead code is identified.
+        "-Ywarn-dead-code", // Warn when dead code is identified.
         // "-Ywarn-numeric-widen", // Warn when numerics are widened.
         "-Ywarn-unused:implicits", // Warn if an implicit parameter is unused.
         "-Ywarn-unused:imports", // Warn if an import selector is not referenced.
@@ -386,6 +387,7 @@ lazy val io = crossProject(JSPlatform, JVMPlatform)
   .settings(
     name := "saddle-io",
     scalaVersion := scalaVersionInBuild,
+    libraryDependencies ++= scalaTest++specs,
     mimaBinaryIssueFilters := Seq(
       // format: off
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.io.npy.package.readFully"),
@@ -412,7 +414,11 @@ lazy val docs = project
         circeJS,
         spireJS,
         io.js,
-        jsoniter.js
+        jsoniter.js,
+        bench,
+        inlinedOpsMacroImpl,
+        stats,
+        time
       )),
     publish / skip := true,
     publishArtifact := false,

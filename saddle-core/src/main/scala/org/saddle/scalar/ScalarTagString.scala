@@ -23,5 +23,14 @@ object ScalarTagString
 
   def isMissing(v: String): Boolean = (v == missing)
   def clm = implicitly[CLM[String]]
-  override def parse(s:String) : String = s
+  override def parse(s:Array[Char], from: Int, to: Int) : String = new String(s,from,to-from)
 }
+// object ScalarTagCharSequence
+//     extends ScalarTagBase[CharSequence] {
+//   override def toString = "ScalarTagCharSequence"
+//   def missing: CharSequence = null.asInstanceOf[CharSequence]
+
+//   def isMissing(v: CharSequence): Boolean = (v == missing)
+//   def clm = implicitly[CLM[CharSequence]]
+//   override def parse(s:Array[Char], from: Int, to: Int) : String = new String(s,from,to-from)
+// }

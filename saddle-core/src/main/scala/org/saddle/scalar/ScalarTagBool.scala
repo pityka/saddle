@@ -42,7 +42,7 @@ object ScalarTagBool extends ScalarTag[Boolean] {
   override def runtimeClass = classOf[Boolean]
 
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY) =
-    new Buffer(new Array[Boolean](sz), 0)
+    Buffer.empty[Boolean](sz)
   def makeLoc(sz: Int = Locator.INIT_CAPACITY) = new LocatorBool()
   def makeVec(arr: Array[Boolean]) = Vec(arr)(this)
   def makeMat(r: Int, c: Int, arr: Array[Boolean]) = Mat(r, c, arr)(this)
@@ -51,7 +51,7 @@ object ScalarTagBool extends ScalarTag[Boolean] {
   def makeSorter(implicit ord: ORD[Boolean]): Sorter[Boolean] =
     Sorter.boolSorter
 
-  def parse(s: String) = s.toBoolean
+  def parse(s: Array[Char], from: Int, to: Int) = new String(s,from,to).toBoolean
 
   override def toString = "ScalarTagBool"
 }

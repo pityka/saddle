@@ -788,6 +788,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @param locs
     *   Location of columns containing values to sort on
     */
+
+  @scala.annotation.nowarn
   def sortedRows(locs: Int*)(implicit ev: ORD[T]) = {
     var order = array.range(0, numRows)
 
@@ -808,6 +810,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @param locs
     *   Location of rows containing values to sort on
     */
+  @scala.annotation.nowarn
   def sortedCols(locs: Int*)(implicit ev: ORD[T]) = {
     var order = array.range(0, numCols)
 
@@ -910,7 +913,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @param limit
     *   If > 0, propagate over a maximum of `limit` consecutive NA values.
     */
-  def fillNA(fillMethod: FillMethod, limit: Int = 0) = mapCols((_, c) => c.fillNA(fillMethod, limit))
+  def fillNA(fillMethod: FillMethod, limit: Int = 0) =
+    mapCols((_, c) => c.fillNA(fillMethod, limit))
 
   /** Joins two frames along both their indexes and applies a function to each
     * pair of values; when either value is NA, the result of the function is
@@ -1355,7 +1359,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       m1: ST[O1],
       m2: ST[O2]
   ): Frame[O1, V, T] = {
-    implicit def ordV: ORD[V]  = stkr.ord
+    implicit def ordV: ORD[V] = stkr.ord
     implicit def clmV: ST[V] = stkr.tag
 
     val (lft, rgt) =
@@ -1920,10 +1924,9 @@ object Frame extends BinOpFrame {
   /** Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
     *
-    * This method repeatedly joins the rows indices. 
-    * Mind the combinatorial semantics of joins, 
-    * if the indices contain duplicates, the resulting Frame can grow quickly.
-    * An alternative is Frame.fromCols.
+    * This method repeatedly joins the rows indices. Mind the combinatorial
+    * semantics of joins, if the indices contain duplicates, the resulting Frame
+    * can grow quickly. An alternative is Frame.fromCols.
     */
   @scala.annotation.nowarn
   def apply[RX: ST: ORD, T: ST: ID](
@@ -1971,10 +1974,9 @@ object Frame extends BinOpFrame {
     * specifying the column index to use. The row labels of the result are the
     * outer join of the indexes of the series provided.
     *
-    * This method repeatedly joins the rows indices. 
-    * Mind the combinatorial semantics of joins, 
-    * if the indices contain duplicates, the resulting Frame can grow quickly.
-    * An alternative is Frame.fromCols.
+    * This method repeatedly joins the rows indices. Mind the combinatorial
+    * semantics of joins, if the indices contain duplicates, the resulting Frame
+    * can grow quickly. An alternative is Frame.fromCols.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
@@ -2017,10 +2019,9 @@ object Frame extends BinOpFrame {
     * values. The row labels of the result are the outer join of the indexes of
     * the series provided.
     *
-    * This method repeatedly joins the rows indices. 
-    * Mind the combinatorial semantics of joins, 
-    * if the indices contain duplicates, the resulting Frame can grow quickly.
-    * An alternative is Frame.fromCols.
+    * This method repeatedly joins the rows indices. Mind the combinatorial
+    * semantics of joins, if the indices contain duplicates, the resulting Frame
+    * can grow quickly. An alternative is Frame.fromCols.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
@@ -2109,4 +2110,3 @@ object Frame extends BinOpFrame {
       .sortedCIx
   }
 }
-

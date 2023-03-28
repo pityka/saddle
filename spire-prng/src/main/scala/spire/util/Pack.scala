@@ -7,7 +7,7 @@ import java.nio.ByteBuffer
   *
   * That is, bytes[0] is the most-significant byte.
   */
-object Pack {
+private[spire] object Pack {
 
   @inline private[this] def lsm(n: Long, shift: Int): Byte =
     ((n >>> shift) & 0xffL).toByte
