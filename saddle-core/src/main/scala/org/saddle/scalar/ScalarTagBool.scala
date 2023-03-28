@@ -51,7 +51,8 @@ object ScalarTagBool extends ScalarTag[Boolean] {
   def makeSorter(implicit ord: ORD[Boolean]): Sorter[Boolean] =
     Sorter.boolSorter
 
-  def parse(s: Array[Char], from: Int, to: Int) = new String(s,from,to).toBoolean
+  def parse(s: Array[Char], from: Int, to: Int) =
+    new String(s, from, to).toBoolean
 
   override def toString = "ScalarTagBool"
 }

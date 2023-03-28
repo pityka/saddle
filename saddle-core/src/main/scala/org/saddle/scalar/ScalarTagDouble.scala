@@ -28,7 +28,7 @@ object ScalarTagDouble extends ScalarTag[Double] {
   @inline override def notMissing(v: Double): Boolean = (v == v)
 
   override def parse(s: Array[Char], from: Int, to: Int) =
-    org.saddle.util.FastDoubleParser.parseFloatValue(s,from,to-from)
+    org.saddle.util.FastDoubleParser.parseFloatValue(s, from, to - from)
 
   // note, consider N/A's equal
   def compare(x: Double, y: Double)(implicit ev: ORD[Double]) =

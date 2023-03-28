@@ -16,7 +16,6 @@ package org.saddle.io.csv
 
 import org.scalatest.funsuite.AnyFunSuite
 
-
 class CSVSuite extends AnyFunSuite {
 
   test("carry in quote") {

@@ -117,7 +117,7 @@ class ScalarTagCheck extends Specification with ScalaCheck {
           scala.util.Random
             .nextInt()
             .toString
-            .toCharArray 
+            .toCharArray
         m(i) = ar
         k(i) = (m(i).length)
       }
@@ -125,8 +125,8 @@ class ScalarTagCheck extends Specification with ScalaCheck {
       k(0) = m(0).length
       m(1) = Int.MinValue.toString.toCharArray()
       k(1) = m(1).length
-      m(2) = 9.toString.toCharArray() 
-      k(2)  = 1
+      m(2) = 9.toString.toCharArray()
+      k(2) = 1
 
       var i = 0
       val n = m.length
@@ -151,7 +151,7 @@ class ScalarTagCheck extends Specification with ScalaCheck {
           scala.util.Random
             .nextLong()
             .toString
-            .toCharArray 
+            .toCharArray
         m(i) = ar
         k(i) = (m(i).length)
       }

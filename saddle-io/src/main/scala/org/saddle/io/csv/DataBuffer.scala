@@ -2,7 +2,6 @@ package org.saddle.io.csv
 
 import java.nio.CharBuffer
 
-
 private[csv] object DataBuffer {
 
   def elementWiseEqual3TSV(

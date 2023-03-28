@@ -14,7 +14,6 @@
   */
 package org.saddle.io.csv
 
-
 object TestCallbacks {
   val noop = new Callback {
     def apply(s: Array[Char], from: Array[Int], to: Array[Int], len: Int) =

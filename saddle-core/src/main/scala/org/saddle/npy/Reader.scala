@@ -42,7 +42,7 @@ object Reader {
       case ScalarTagByte   => Right("<i1")
       case other           => Left(s"Type $other not supported.")
     }
-  private[npy] def dtype2[T: ST] : Either[String,DType[T]] =
+  private[npy] def dtype2[T: ST]: Either[String, DType[T]] =
     implicitly[ST[T]] match {
       case ScalarTagDouble => Right(org.saddle.io.npy.DoubleType)
       case ScalarTagInt    => Right(org.saddle.io.npy.IntType)
@@ -52,7 +52,10 @@ object Reader {
       case other           => Left(s"Type $other not supported.")
     }
 
-  private def parse[T: ST](size: Int, from: ByteBuffer): Either[String, Array[T]] =
+  private def parse[T: ST](
+      size: Int,
+      from: ByteBuffer
+  ): Either[String, Array[T]] =
     implicitly[ST[T]] match {
       case ScalarTagDouble =>
         Right {

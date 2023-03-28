@@ -55,7 +55,7 @@ class CSVParserBench {
       } mkString ("\n")
       str.getBytes
     }
-    print(f"Data size ${v1.size.toDouble / (1024*1024)}%.2f MB ")
+    print(f"Data size ${v1.size.toDouble / (1024 * 1024)}%.2f MB ")
   }
   @Benchmark
   def csvparser(): Unit = {

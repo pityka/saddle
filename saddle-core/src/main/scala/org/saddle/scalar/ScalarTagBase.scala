@@ -24,10 +24,10 @@ private[saddle] trait ScalarTagBase[T] extends ScalarTag[T] {
   def clm: CLM[T]
   implicit private def clm_ : CLM[T] = clm
 
-  def parse(s: Array[Char], from: Int, to: Int): T =    
-      throw new RuntimeException(
-        "parsing arbitrary types during runtime is not implemented"
-      )
+  def parse(s: Array[Char], from: Int, to: Int): T =
+    throw new RuntimeException(
+      "parsing arbitrary types during runtime is not implemented"
+    )
 
   def compare(x: T, y: T)(implicit ev: ORD[T]): Int =
     if (x == null && y == null) 0

@@ -55,7 +55,7 @@ object CsvParser {
         header = false,
         charset = charset,
         bufferSize = bufferSize
-      ).map { case (frame, _) => frame}
+      ).map { case (frame, _) => frame }
     } finally {
       channel.close()
     }
@@ -82,7 +82,7 @@ object CsvParser {
         header = false,
         charset = charset,
         bufferSize = bufferSize
-      ).map { case (frame, _) => frame}
+      ).map { case (frame, _) => frame }
     } finally {
       channel.close()
     }
@@ -199,7 +199,7 @@ object CsvParser {
 
           Left(
             s"Header line to short for given locs: ${locs.mkString("[", ", ", "]")}. Header line: ${callback.allHeaderFields
-              .mkString("[", ", ", "]")}"
+                .mkString("[", ", ", "]")}"
           )
         } else if (columns.map(_.length).distinct.size != 1)
           Left(s"Uneven length ${columns.map(_.length).toVector} columns")
@@ -225,12 +225,11 @@ object CsvParser {
     val bufdata = scala.collection.mutable.ArrayBuffer[Buffer[T]]()
     var numFields = 0
 
-
     private val emptyLoc = locs.length == 0
 
-    private final def add(s: Array[Char],from:Int,to:Int, buf: Int) = {
+    private final def add(s: Array[Char], from: Int, to: Int, buf: Int) = {
       import scala.Predef.{wrapRefArray => _}
-      bufdata(buf).+=(st.parse(s,from, to))
+      bufdata(buf).+=(st.parse(s, from, to))
     }
 
     private var loc = 0
@@ -251,7 +250,7 @@ object CsvParser {
         val toi = to(i)
         val ptoi = math.abs(toi)
         if (line == 0) {
-          allHeaderFields.append(new String(s,fromi,ptoi-fromi))
+          allHeaderFields.append(new String(s, fromi, ptoi - fromi))
           if (emptyLoc || locsIdx.contains(loc)) {
             bufdata.append(Buffer.empty[T](8192))
             numFields += 1
@@ -260,14 +259,14 @@ object CsvParser {
 
         if (emptyLoc || locsIdx.contains(loc)) {
           if (header && line == 0) {
-            headerFields.append(new String(s,fromi,ptoi-fromi))
+            headerFields.append(new String(s, fromi, ptoi - fromi))
           } else {
             if (loc >= numFields) {
               error = true
               errorString =
                 s"Too long line ${line + 1} (1-based). Expected $numFields fields, got ${loc + 1}."
             } else {
-              add(s,fromi,ptoi, loc)
+              add(s, fromi, ptoi, loc)
             }
           }
         }
@@ -277,7 +276,7 @@ object CsvParser {
             error = true
             errorString =
               s"Header line to short for given locs: ${locs.mkString("[", ", ", "]")}. Header line: ${allHeaderFields
-                .mkString("[", ", ", "]")}"
+                  .mkString("[", ", ", "]")}"
           }
           if (loc < numFields - 1) {
             error = true

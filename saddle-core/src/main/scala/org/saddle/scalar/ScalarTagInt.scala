@@ -30,7 +30,7 @@ object ScalarTagInt extends ScalarTag[Int] {
   private final val _max = Int.MaxValue / 10
 
   override final def parse(s: Array[Char], from: Int, to: Int): Int = {
-    
+
     val radix = 10
     var length = to - from
     if (length == 0 || length > 11) return Int.MinValue
@@ -44,7 +44,7 @@ object ScalarTagInt extends ScalarTag[Int] {
       offset += 1
       length -= 1
     }
-    
+
     if (offset > from && length == 1) return Int.MinValue
 
     var result = 0

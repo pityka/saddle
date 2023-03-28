@@ -54,13 +54,13 @@ package object csv {
     * @param recordSeparator
     *   Record separator (line ending). Its length must be one or two.
     * @param channel
-    *   The csv data channel to read from 
+    *   The csv data channel to read from
     * @param callback
     *   An instance of the `Callback` which will be called on a group of tokens.
     * @param charset
     *   A charset decoder. Must be in new or reset state.
     * @param bufferSize
-    *   Must be larger than the longest token (CSV cell) in the data. 
+    *   Must be larger than the longest token (CSV cell) in the data.
     */
   @noinline
   def parse(

@@ -24,6 +24,6 @@ object ScalarTagChar extends ScalarTagBase[Char] {
   override def makeSorter(implicit ord: ORD[Char]): Sorter[Char] =
     Sorter.charSorter
   override def missing: Char = Char.MinValue
-  def isMissing(c:Char) = c == missing
-  def clm   = implicitly[CLM[Char]]
+  def isMissing(c: Char) = c == missing
+  def clm = implicitly[CLM[Char]]
 }

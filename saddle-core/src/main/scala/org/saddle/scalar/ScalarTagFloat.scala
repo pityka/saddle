@@ -22,13 +22,13 @@ import org.saddle.array.Sorter
 object ScalarTagFloat extends ScalarTagBase[Float] {
   override def parse(s: Array[Char], from: Int, to: Int) =
     try {
-      java.lang.Float.parseFloat(new String(s,from,to-from))
+      java.lang.Float.parseFloat(new String(s, from, to - from))
     } catch { case _: NumberFormatException => Float.NaN }
   override def makeSorter(implicit ord: ORD[Float]): Sorter[Float] =
     Sorter.floatSorter
-  
+
   override def missing: Float = Float.NaN
   override def isMissing(v: Float): Boolean = v != v
-    def clm = implicitly[CLM[Float]]
+  def clm = implicitly[CLM[Float]]
 
 }

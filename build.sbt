@@ -266,7 +266,7 @@ lazy val linalg = project
   .settings(
     name := "saddle-linalg",
     libraryDependencies ++= Seq(
-      "io.github.pityka" % "netlib-java" % "0.1.0",
+      "io.github.pityka" % "netlib-java" % "0.1.0"
     ) ++ scalaTest
   )
   .dependsOn(
@@ -387,7 +387,7 @@ lazy val io = crossProject(JSPlatform, JVMPlatform)
   .settings(
     name := "saddle-io",
     scalaVersion := scalaVersionInBuild,
-    libraryDependencies ++= scalaTest++specs,
+    libraryDependencies ++= scalaTest ++ specs,
     mimaBinaryIssueFilters := Seq(
       // format: off
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.io.npy.package.readFully"),

@@ -48,65 +48,82 @@ trait BinOpMat {
   // concrete implementations
   implicit def MatSclrElmOpDDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) : MatSclrElemOp[Op, Double, Double, Double]= new MatSclrElemOp[Op, Double, Double, Double](op)
+  ): MatSclrElemOp[Op, Double, Double, Double] =
+    new MatSclrElemOp[Op, Double, Double, Double](op)
   implicit def MatSclrElmOpDLD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) : MatSclrElemOp[Op, Double, Long, Double]= new MatSclrElemOp[Op, Double, Long, Double](op)
+  ): MatSclrElemOp[Op, Double, Long, Double] =
+    new MatSclrElemOp[Op, Double, Long, Double](op)
   implicit def MatSclrElmOpDID[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ): MatSclrElemOp[Op, Double, Int, Double] = new MatSclrElemOp[Op, Double, Int, Double](op)
+  ): MatSclrElemOp[Op, Double, Int, Double] =
+    new MatSclrElemOp[Op, Double, Int, Double](op)
 
   implicit def MatSclrElmOpLDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Double]
-  ) :MatSclrElemOp[Op, Long, Double, Double]= new MatSclrElemOp[Op, Long, Double, Double](op)
+  ): MatSclrElemOp[Op, Long, Double, Double] =
+    new MatSclrElemOp[Op, Long, Double, Double](op)
   implicit def MatSclrElmOpLLL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ):MatSclrElemOp[Op, Long, Long, Long] = new MatSclrElemOp[Op, Long, Long, Long](op)
+  ): MatSclrElemOp[Op, Long, Long, Long] =
+    new MatSclrElemOp[Op, Long, Long, Long](op)
   implicit def MatSclrElmOpLIL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ) : MatSclrElemOp[Op, Long, Int, Long]= new MatSclrElemOp[Op, Long, Int, Long](op)
+  ): MatSclrElemOp[Op, Long, Int, Long] =
+    new MatSclrElemOp[Op, Long, Int, Long](op)
 
   implicit def MatSclrElmOpIDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Double]
-  ) :  MatSclrElemOp[Op, Int, Double, Double]= new MatSclrElemOp[Op, Int, Double, Double](op)
+  ): MatSclrElemOp[Op, Int, Double, Double] =
+    new MatSclrElemOp[Op, Int, Double, Double](op)
   implicit def MatSclrElmOpILL[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Long, Long]
-  ) : MatSclrElemOp[Op, Int, Long, Long]= new MatSclrElemOp[Op, Int, Long, Long](op)
+  ): MatSclrElemOp[Op, Int, Long, Long] =
+    new MatSclrElemOp[Op, Int, Long, Long](op)
   implicit def MatSclrElmOpIII[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ) : MatSclrElemOp[Op, Int, Int, Int]= new MatSclrElemOp[Op, Int, Int, Int](op)
+  ): MatSclrElemOp[Op, Int, Int, Int] = new MatSclrElemOp[Op, Int, Int, Int](op)
 
   implicit def MatSclrElmOpBBB[Op <: ScalarOp](implicit
       op: BinOp[Op, Boolean, Boolean, Boolean]
-  ) :MatSclrElemOp[Op, Boolean, Boolean, Boolean]= new MatSclrElemOp[Op, Boolean, Boolean, Boolean](op)
+  ): MatSclrElemOp[Op, Boolean, Boolean, Boolean] =
+    new MatSclrElemOp[Op, Boolean, Boolean, Boolean](op)
 
   implicit def MatSclrElmOpDDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Boolean]
-  ):MatSclrElemOp[Op, Double, Double, Boolean] = new MatSclrElemOp[Op, Double, Double, Boolean](op)
+  ): MatSclrElemOp[Op, Double, Double, Boolean] =
+    new MatSclrElemOp[Op, Double, Double, Boolean](op)
 
   implicit def MatSclrElmOpDLB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Boolean]
-  ) :MatSclrElemOp[Op, Double, Long, Boolean]= new MatSclrElemOp[Op, Double, Long, Boolean](op)
+  ): MatSclrElemOp[Op, Double, Long, Boolean] =
+    new MatSclrElemOp[Op, Double, Long, Boolean](op)
 
   implicit def MatSclrElmOpLDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Boolean]
-  ):MatSclrElemOp[Op, Long, Double, Boolean] = new MatSclrElemOp[Op, Long, Double, Boolean](op)
+  ): MatSclrElemOp[Op, Long, Double, Boolean] =
+    new MatSclrElemOp[Op, Long, Double, Boolean](op)
 
   implicit def MatSclrElmOpIDB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Boolean]
-  ) : MatSclrElemOp[Op, Int, Double, Boolean]= new MatSclrElemOp[Op, Int, Double, Boolean](op)
+  ): MatSclrElemOp[Op, Int, Double, Boolean] =
+    new MatSclrElemOp[Op, Int, Double, Boolean](op)
   implicit def MatSclrElmOpDIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Boolean]
-  ) :MatSclrElemOp[Op, Double, Int, Boolean]= new MatSclrElemOp[Op, Double, Int, Boolean](op)
+  ): MatSclrElemOp[Op, Double, Int, Boolean] =
+    new MatSclrElemOp[Op, Double, Int, Boolean](op)
   implicit def MatSclrElmOpIIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Boolean]
-  ) :MatSclrElemOp[Op, Int, Int, Boolean]= new MatSclrElemOp[Op, Int, Int, Boolean](op)
+  ): MatSclrElemOp[Op, Int, Int, Boolean] =
+    new MatSclrElemOp[Op, Int, Int, Boolean](op)
   implicit def MatSclrElmOpLLB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Boolean]
-  ) :MatSclrElemOp[Op, Long, Long, Boolean]= new MatSclrElemOp[Op, Long, Long, Boolean](op)
+  ): MatSclrElemOp[Op, Long, Long, Boolean] =
+    new MatSclrElemOp[Op, Long, Long, Boolean](op)
   implicit def MatSclrElmOpLIB[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Boolean]
-  ) :MatSclrElemOp[Op, Long, Int, Boolean]= new MatSclrElemOp[Op, Long, Int, Boolean](op)
+  ): MatSclrElemOp[Op, Long, Int, Boolean] =
+    new MatSclrElemOp[Op, Long, Int, Boolean](op)
   // ***************
 
   /** Binary element-wise operation on two Mats
@@ -171,33 +188,41 @@ trait BinOpMat {
   // concrete implementations
   implicit def MatMatElemOpDDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) : MatMatElemOp[Op, Double, Double, Double]= new MatMatElemOp[Op, Double, Double, Double](op)
+  ): MatMatElemOp[Op, Double, Double, Double] =
+    new MatMatElemOp[Op, Double, Double, Double](op)
   implicit def MatMatElemOpDLD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ):MatMatElemOp[Op, Double, Long, Double] = new MatMatElemOp[Op, Double, Long, Double](op)
+  ): MatMatElemOp[Op, Double, Long, Double] =
+    new MatMatElemOp[Op, Double, Long, Double](op)
   implicit def MatMatElemOpDID[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ):MatMatElemOp[Op, Double, Int, Double] = new MatMatElemOp[Op, Double, Int, Double](op)
+  ): MatMatElemOp[Op, Double, Int, Double] =
+    new MatMatElemOp[Op, Double, Int, Double](op)
 
   implicit def MatMatElemOpLDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Double, Double]
-  ) :MatMatElemOp[Op, Long, Double, Double]= new MatMatElemOp[Op, Long, Double, Double](op)
+  ): MatMatElemOp[Op, Long, Double, Double] =
+    new MatMatElemOp[Op, Long, Double, Double](op)
   implicit def MatMatElemOpLLL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ):MatMatElemOp[Op, Long, Long, Long] = new MatMatElemOp[Op, Long, Long, Long](op)
+  ): MatMatElemOp[Op, Long, Long, Long] =
+    new MatMatElemOp[Op, Long, Long, Long](op)
   implicit def MatMatElemOpLIL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ) :MatMatElemOp[Op, Long, Int, Long]= new MatMatElemOp[Op, Long, Int, Long](op)
+  ): MatMatElemOp[Op, Long, Int, Long] =
+    new MatMatElemOp[Op, Long, Int, Long](op)
 
   implicit def MatMatElemOpIDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Double, Double]
-  ) :MatMatElemOp[Op, Int, Double, Double]= new MatMatElemOp[Op, Int, Double, Double](op)
+  ): MatMatElemOp[Op, Int, Double, Double] =
+    new MatMatElemOp[Op, Int, Double, Double](op)
   implicit def MatMatElemOpILL[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Long, Long]
-  ) : MatMatElemOp[Op, Int, Long, Long]= new MatMatElemOp[Op, Int, Long, Long](op)
+  ): MatMatElemOp[Op, Int, Long, Long] =
+    new MatMatElemOp[Op, Int, Long, Long](op)
   implicit def MatMatElemOpIII[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ):MatMatElemOp[Op, Int, Int, Int] = new MatMatElemOp[Op, Int, Int, Int](op)
+  ): MatMatElemOp[Op, Int, Int, Int] = new MatMatElemOp[Op, Int, Int, Int](op)
 
 }
 
@@ -225,24 +250,26 @@ trait BinOpMatInPlace {
   // concrete implementations
   implicit def MatSclrElmOpIpDDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ) :MatSclrElemOpIp[Op, Double, Double]= new MatSclrElemOpIp[Op, Double, Double](op)
+  ): MatSclrElemOpIp[Op, Double, Double] =
+    new MatSclrElemOpIp[Op, Double, Double](op)
   implicit def MatSclrElmOpIpDLD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) :MatSclrElemOpIp[Op, Double, Long]= new MatSclrElemOpIp[Op, Double, Long](op)
+  ): MatSclrElemOpIp[Op, Double, Long] =
+    new MatSclrElemOpIp[Op, Double, Long](op)
   implicit def MatSclrElmOpIpDID[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ):MatSclrElemOpIp[Op, Double, Int] = new MatSclrElemOpIp[Op, Double, Int](op)
+  ): MatSclrElemOpIp[Op, Double, Int] = new MatSclrElemOpIp[Op, Double, Int](op)
 
   implicit def MatSclrElmOpIpLLL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ) :MatSclrElemOpIp[Op, Long, Long]= new MatSclrElemOpIp[Op, Long, Long](op)
+  ): MatSclrElemOpIp[Op, Long, Long] = new MatSclrElemOpIp[Op, Long, Long](op)
   implicit def MatSclrElmOpIpLIL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ):MatSclrElemOpIp[Op, Long, Int] = new MatSclrElemOpIp[Op, Long, Int](op)
+  ): MatSclrElemOpIp[Op, Long, Int] = new MatSclrElemOpIp[Op, Long, Int](op)
 
   implicit def MatSclrElmOpIpIII[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ):MatSclrElemOpIp[Op, Int, Int] = new MatSclrElemOpIp[Op, Int, Int](op)
+  ): MatSclrElemOpIp[Op, Int, Int] = new MatSclrElemOpIp[Op, Int, Int](op)
 
   // ***************
 
@@ -290,23 +317,24 @@ trait BinOpMatInPlace {
   // concrete implementations
   implicit def MatMatElemOpIpDDD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Double, Double]
-  ):MatMatElemOpIp[Op, Double, Double] = new MatMatElemOpIp[Op, Double, Double](op)
+  ): MatMatElemOpIp[Op, Double, Double] =
+    new MatMatElemOpIp[Op, Double, Double](op)
   implicit def MatMatElemOpIpDLD[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Long, Double]
-  ) :MatMatElemOpIp[Op, Double, Long]= new MatMatElemOpIp[Op, Double, Long](op)
+  ): MatMatElemOpIp[Op, Double, Long] = new MatMatElemOpIp[Op, Double, Long](op)
   implicit def MatMatElemOpIpDID[Op <: ScalarOp](implicit
       op: BinOp[Op, Double, Int, Double]
-  ) :MatMatElemOpIp[Op, Double, Int]= new MatMatElemOpIp[Op, Double, Int](op)
+  ): MatMatElemOpIp[Op, Double, Int] = new MatMatElemOpIp[Op, Double, Int](op)
 
   implicit def MatMatElemOpIpLLL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Long, Long]
-  ) :MatMatElemOpIp[Op, Long, Long]= new MatMatElemOpIp[Op, Long, Long](op)
+  ): MatMatElemOpIp[Op, Long, Long] = new MatMatElemOpIp[Op, Long, Long](op)
   implicit def MatMatElemOpIpLIL[Op <: ScalarOp](implicit
       op: BinOp[Op, Long, Int, Long]
-  ):MatMatElemOpIp[Op, Long, Int] = new MatMatElemOpIp[Op, Long, Int](op)
+  ): MatMatElemOpIp[Op, Long, Int] = new MatMatElemOpIp[Op, Long, Int](op)
 
   implicit def MatMatElemOpIpIII[Op <: ScalarOp](implicit
       op: BinOp[Op, Int, Int, Int]
-  ) :MatMatElemOpIp[Op, Int, Int]= new MatMatElemOpIp[Op, Int, Int](op)
+  ): MatMatElemOpIp[Op, Int, Int] = new MatMatElemOpIp[Op, Int, Int](op)
 
 }
