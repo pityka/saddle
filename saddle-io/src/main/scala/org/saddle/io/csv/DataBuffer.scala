@@ -2,7 +2,6 @@ package org.saddle.io.csv
 
 import java.nio.CharBuffer
 
-
 private[csv] object DataBuffer {
 
   def elementWiseEqual3TSV(
@@ -1030,7 +1029,7 @@ private[csv] object DataBuffer {
       quoteMask: BitSet,
       from: Array[Int],
       to: Array[Int]
-  ) = {
+  ): Int = {
     var i = 0
     from(i) = 0
     var next = -1
@@ -1044,18 +1043,21 @@ private[csv] object DataBuffer {
       var offset = 0
 
       if (contains(quoteElems, from(i))) {
-        from(i) += 1
-        offset -= 1
+        if ((next == -2 || contains(quoteElems, next + offset - 1))) {
+          from(i) += 1
+          offset -= 1
+        } else {
+          // unclosed quote
+          return -2
+        }
       }
       to(i) = (next + offset) * p
 
       i += 1
       from(i) = next + 1
     }
+    // store the potential 'rest' token after the last element
     to(i - 1) = chars.remaining()
-    if (contains(quoteElems, to(i - 1) - 1)) {
-      to(i - 1) -= 1
-    }
     chars.position(m)
 
     i - 1
@@ -1067,7 +1069,7 @@ private[csv] object DataBuffer {
       quoteMask: BitSet,
       from: Array[Int],
       to: Array[Int]
-  ) = {
+  ): Int = {
     var i = 0
     from(i) = 0
     var next = -1
@@ -1080,18 +1082,21 @@ private[csv] object DataBuffer {
       val p = if (contains(recordSeparatorMaskElems, next)) -1 else 1
       var offset = if (p == -1) -1 else 0
       if (contains(quoteElems, from(i))) {
-        from(i) += 1
-        offset -= 1
+        if ((next == -2 || contains(quoteElems, next + offset - 1))) {
+          from(i) += 1
+          offset -= 1
+        } else {
+          // unclosed quote
+          return -2
+        }
       }
       to(i) = (next + offset) * p
 
       i += 1
       from(i) = next + 1
     }
+    // store the potential 'rest' token after the last element
     to(i - 1) = chars.remaining()
-    if (contains(quoteElems, to(i - 1) - 1)) {
-      to(i - 1) -= 1
-    }
     chars.position(m)
 
     i - 1
@@ -1129,7 +1134,10 @@ private[csv] final class DataBuffer1(
 ) extends DataBuffer {
   import DataBuffer._
   private var outputChars: Array[Char] = null
+
+  // -2 means quote unclosed
   private var outputLength = -1
+
   private val outputFrom = Array.ofDim[Int](bufferSize + 2)
   private val outputTo = Array.ofDim[Int](bufferSize + 2)
   private val quoteMask = BitSet.allocate(bufferSize)
@@ -1154,13 +1162,25 @@ private[csv] final class DataBuffer1(
   }
 
   final def emitRest =
-    if (filledNewData || !lineClosed) {
-      outputFrom(0) = outputFrom(outputLength)
-      outputTo(0) = outputTo(outputLength)
-      (outputChars, outputFrom, outputTo, 1)
-    } else {
-      (outputChars, outputFrom, outputTo, 0)
-    }
+    if (outputLength >= -1) {
+      if (filledNewData || !lineClosed) {
+        val from = outputFrom(outputLength)
+        val to = outputTo(outputLength)
+        outputFrom(0) = from
+        outputTo(0) = to
+        // check unclosed quotes
+        if (from >= 1 && outputChars(from - 1) == quoteChar) {
+          if (to > from && outputChars(to - 1) == quoteChar) {
+            outputTo(0) -= 1
+            (outputChars, outputFrom, outputTo, 1)
+          } else {
+            (outputChars, outputFrom, outputTo, -2)
+          }
+        } else (outputChars, outputFrom, outputTo, 1)
+      } else {
+        (outputChars, outputFrom, outputTo, 0)
+      }
+    } else ((outputChars, outputFrom, outputTo, outputLength))
 
   private def fillBuffer(): Boolean = {
     if (!data.hasNext) false
@@ -1249,7 +1269,10 @@ private[csv] final class DataBuffer2(
   import DataBuffer._
 
   private var outputChars: Array[Char] = null
+
+  // -2 means quote unclosed
   private var outputLength = -1
+
   private val outputFrom = Array.ofDim[Int](bufferSize + 2)
   private val outputTo = Array.ofDim[Int](bufferSize + 2)
   private val quoteMask = BitSet.allocate(bufferSize)
@@ -1273,13 +1296,25 @@ private[csv] final class DataBuffer2(
   }
 
   final def emitRest =
-    if (filledNewData || !lineClosed) {
-      outputFrom(0) = outputFrom(outputLength)
-      outputTo(0) = outputTo(outputLength)
-      (outputChars, outputFrom, outputTo, 1)
-    } else {
-      (outputChars, outputFrom, outputTo, 0)
-    }
+    if (outputLength >= -1) {
+      if (filledNewData || !lineClosed) {
+        outputFrom(0) = outputFrom(outputLength)
+        outputTo(0) = outputTo(outputLength)
+        val from = outputFrom(0)
+        val to = outputTo(0)
+        // check unclosed quotes
+        if (from >= 1 && outputChars(from - 1) == quoteChar) {
+          if (to > from && outputChars(to - 1) == quoteChar) {
+            outputTo(0) -= 1
+            (outputChars, outputFrom, outputTo, 1)
+          } else {
+            (outputChars, outputFrom, outputTo, -2)
+          }
+        } else (outputChars, outputFrom, outputTo, 1)
+      } else {
+        (outputChars, outputFrom, outputTo, 0)
+      }
+    } else (outputChars, outputFrom, outputTo, outputLength)
 
   private def fillBuffer(): Boolean = {
     if (!data.hasNext) false

@@ -48,6 +48,63 @@ class CsvCheck extends Specification with ScalaCheck {
   val crlf = "\r\n"
   val lf = "\n"
 
+  "csv string parsing works cols, empty" in {
+    val data =
+      s"""""""
+
+    val src = ByteChannel(data)
+
+    val frame =
+      CsvParser
+        .parseFromChannel[String](src, bufferSize = 8, cols = List(1))
+
+    frame must_== Left(
+      "Unclosed quote after line 0 (not necessarily in that line)"
+    )
+  }
+  "csv string parsing works cols" in {
+    val data =
+      s"""a,"b,c,d",e${crlf}1,25,36${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9""""
+
+    val src = ByteChannel(data)
+
+    val frame =
+      CsvParser
+        .parseFromChannel[String](src, bufferSize = 8, cols = List(1))
+        .toOption
+        .get
+        ._1
+        .withColIndex(0)
+        .resetRowIndex
+    val expect = Frame(
+      Vec("1", "4", "5", "7"),
+      Vec("25", "55", "9", "8"),
+      Vec("36", "6", "38", "9")
+    ).setColIndex(Index("a", "b,c,d", "e")).colAt(Array(1))
+    frame must_== expect
+  }
+  "csv string parsing works cols 0,2" in {
+    val data =
+      s"""a,"b,c,d",e${crlf}1,25,36${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9""""
+
+    val src = ByteChannel(data)
+
+    val frame =
+      CsvParser
+        .parseFromChannel[String](src, bufferSize = 8, cols = List(0, 2))
+        .toOption
+        .get
+        ._1
+        .withColIndex(0)
+        .resetRowIndex
+    val expect = Frame(
+      Vec("1", "4", "5", "7"),
+      Vec("25", "55", "9", "8"),
+      Vec("36", "6", "38", "9")
+    ).setColIndex(Index("a", "b,c,d", "e")).colAt(Array(0, 2))
+    frame must_== expect
+  }
+
   "csv with many empty fields" in {
     val data =
       s"""a,b,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o${crlf},,c,,,,d,e,f,g,h,i,j,k,l,,,,,,,,,,,m,,,o"""
@@ -340,7 +397,7 @@ class CsvCheck extends Specification with ScalaCheck {
       ._1
       .withColIndex(0)
       .resetRowIndex
-      .mapValues(s => implicitly[ST[Int]].parse(s.toCharArray,0,s.length()))
+      .mapValues(s => implicitly[ST[Int]].parse(s.toCharArray, 0, s.length()))
     val expect = Frame(Vec(1, 4, 7), Vec(2, 5, 8), Vec(3, na[Int], 9))
       .setColIndex(Index("a", "b,c,d", "e"))
     frame must_== expect

@@ -55,7 +55,7 @@ object CsvParser {
         header = false,
         charset = charset,
         bufferSize = bufferSize
-      ).map { case (frame, _) => frame}
+      ).map { case (frame, _) => frame }
     } finally {
       channel.close()
     }
@@ -82,7 +82,7 @@ object CsvParser {
         header = false,
         charset = charset,
         bufferSize = bufferSize
-      ).map { case (frame, _) => frame}
+      ).map { case (frame, _) => frame }
     } finally {
       channel.close()
     }
@@ -194,17 +194,27 @@ object CsvParser {
       case Some(error) => Left(error)
       case None =>
         val colIndex = if (header) Some(callback.headerFields) else None
-        val columns = callback.bufdata.map(b => Vec(b.toArray)).toVector
-        if (locs.length > 0 && callback.numFields != locs.length) {
+
+        if (locs.length > 0 && callback.headerLocFields != locs.length) {
 
           Left(
             s"Header line to short for given locs: ${locs.mkString("[", ", ", "]")}. Header line: ${callback.allHeaderFields
               .mkString("[", ", ", "]")}"
           )
-        } else if (columns.map(_.length).distinct.size != 1)
-          Left(s"Uneven length ${columns.map(_.length).toVector} columns")
-        else
-          Right((Frame(columns: _*), colIndex.map(i => Index(i.toVector: _*))))
+        } else {
+          val columns =
+            if (locs.nonEmpty)
+              locs.map(callback.bufdata).map(b => Vec(b.toArray)).toVector
+            else callback.bufdata.map(b => Vec(b.toArray)).toVector
+
+          if (columns.map(_.length).distinct.size != 1)
+            Left(s"Uneven length ${columns.map(_.length).toVector} columns")
+          else
+            Right(
+              (Frame(columns: _*), colIndex.map(i => Index(i.toVector: _*)))
+            )
+        }
+
     }
 
   }
@@ -223,14 +233,14 @@ object CsvParser {
     val allHeaderFields = scala.collection.mutable.ArrayBuffer[String]()
 
     val bufdata = scala.collection.mutable.ArrayBuffer[Buffer[T]]()
-    var numFields = 0
-
+    var headerAllFields = 0
+    var headerLocFields = 0
 
     private val emptyLoc = locs.length == 0
 
-    private final def add(s: Array[Char],from:Int,to:Int, buf: Int) = {
+    private final def add(s: Array[Char], from: Int, to: Int, buf: Int) = {
       import scala.Predef.{wrapRefArray => _}
-      bufdata(buf).+=(st.parse(s,from, to))
+      bufdata(buf).+=(st.parse(s, from, to))
     }
 
     private var loc = 0
@@ -246,43 +256,50 @@ object CsvParser {
       var error = false
       var errorString = ""
 
+      if (len == -2) {
+        error = true
+        errorString =
+          s"Unclosed quote after line $line (not necessarily in that line)"
+      }
+
       while (i < len && line < maxLines && !error) {
         val fromi = from(i)
         val toi = to(i)
         val ptoi = math.abs(toi)
         if (line == 0) {
-          allHeaderFields.append(new String(s,fromi,ptoi-fromi))
+          allHeaderFields.append(new String(s, fromi, ptoi - fromi))
+          headerAllFields += 1
+          bufdata.append(Buffer.empty[T](8192))
           if (emptyLoc || locsIdx.contains(loc)) {
-            bufdata.append(Buffer.empty[T](8192))
-            numFields += 1
+            headerLocFields += 1
           }
         }
 
         if (emptyLoc || locsIdx.contains(loc)) {
           if (header && line == 0) {
-            headerFields.append(new String(s,fromi,ptoi-fromi))
+            headerFields.append(new String(s, fromi, ptoi - fromi))
           } else {
-            if (loc >= numFields) {
+            if (loc >= headerAllFields) {
               error = true
               errorString =
-                s"Too long line ${line + 1} (1-based). Expected $numFields fields, got ${loc + 1}."
+                s"Too long line ${line + 1} (1-based). Expected $headerAllFields fields, got ${loc + 1}."
             } else {
-              add(s,fromi,ptoi, loc)
+              add(s, fromi, ptoi, loc)
             }
           }
         }
 
         if (toi < 0) {
-          if (line == 0 && !emptyLoc && numFields != locs.length) {
+          if (line == 0 && !emptyLoc && headerLocFields != locs.length) {
             error = true
             errorString =
               s"Header line to short for given locs: ${locs.mkString("[", ", ", "]")}. Header line: ${allHeaderFields
                 .mkString("[", ", ", "]")}"
           }
-          if (loc < numFields - 1) {
+          if (loc < headerAllFields - 1) {
             error = true
             errorString =
-              s"Too short line ${line + 1} (1-based). Expected $numFields fields, got ${loc + 1}."
+              s"Too short line ${line + 1} (1-based). Expected $headerAllFields fields, got ${loc + 1}."
           }
 
           loc = 0

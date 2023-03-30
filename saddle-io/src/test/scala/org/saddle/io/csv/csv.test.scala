@@ -16,7 +16,6 @@ package org.saddle.io.csv
 
 import org.scalatest.funsuite.AnyFunSuite
 
-
 class CSVSuite extends AnyFunSuite {
 
   test("carry in quote") {
@@ -28,7 +27,7 @@ class CSVSuite extends AnyFunSuite {
     org.saddle.io.csv.parse(
       src,
       buffer,
-      recordSeparator = "\n",
+      recordSeparator = lf,
       bufferSize = 256
     )
     assert(
@@ -37,15 +36,18 @@ class CSVSuite extends AnyFunSuite {
         "hfloat",
         "htime",
         "hbool",
-        "htext]1",
+        "htext",
+        "1",
         "1.5",
         "2020-01-01T00:00:00Z",
         "false",
-        """something, something"]""",
+        "something, something",
+        "2",
         "2.5",
         "2021-01-01T00:00:00Z",
         "true",
-        """something,"]""",
+        "something,",
+        "2",
         "3.0",
         "2021-01-01T00:00:00Z",
         "true",
@@ -432,14 +434,16 @@ class CSVSuite extends AnyFunSuite {
 
     val src = ByteChannel(data)
     val buffer = new BufferCallback
-    org.saddle.io.csv.parse(
+    val done = org.saddle.io.csv.parse(
       src,
       buffer,
       bufferSize = 8,
       recordSeparator = crlf
     )
 
-    assert(buffer.toList == List("a\"a"))
+    assert(done == Some("Unclosed quote"))
+
+    assert(buffer.toList == List())
 
   }
 

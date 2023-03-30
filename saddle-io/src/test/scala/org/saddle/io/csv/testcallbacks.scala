@@ -14,11 +14,10 @@
   */
 package org.saddle.io.csv
 
-
 object TestCallbacks {
   val noop = new Callback {
     def apply(s: Array[Char], from: Array[Int], to: Array[Int], len: Int) =
-      Next
+      if (len >= 0) Next else Error("Unclosed")
   }
 }
 class BufferCallback extends Callback {
@@ -26,11 +25,14 @@ class BufferCallback extends Callback {
   def toList = buffer.toList
   def apply(s: Array[Char], from: Array[Int], to: Array[Int], len: Int) = {
     var i = 0
-    while (i < len) {
-      buffer.append(new String(s, from(i), math.abs(to(i)) - from(i)))
-      i += 1
+    if (len < 0) Error("Unclosed quote")
+    else {
+      while (i < len) {
+        buffer.append(new String(s, from(i), math.abs(to(i)) - from(i)))
+        i += 1
+      }
+      Next
     }
-    Next
 
   }
 
@@ -41,13 +43,16 @@ class ForeachCallback(t: (CharSequence, Int) => Unit) extends Callback {
   def apply(s: Array[Char], from: Array[Int], to: Array[Int], len: Int) = {
     var i = 0
     var loc = 0
-    while (i < len) {
-      t(new String(s, from(i), math.abs(to(i)) - from(i)), loc)
-      if (to(i) < 0) loc = 0
-      else loc += 1
-      i += 1
+    if (len < 0) Error("Unclosed quote")
+    else {
+      while (i < len) {
+        t(new String(s, from(i), math.abs(to(i)) - from(i)), loc)
+        if (to(i) < 0) loc = 0
+        else loc += 1
+        i += 1
+      }
+      Next
     }
-    Next
 
   }
 
