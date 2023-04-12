@@ -76,6 +76,16 @@ class BinarySuite extends AnyFunSuite {
     val deserFrame = Reader.readFrameFromArray[Long](binaryFrame)
     assert(deserFrame.toOption.get == frame)
   }
+  test("char") {
+    val frame = Frame(
+      Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)).map(_.toChar),
+      Index("r1", "r2"),
+      Index("c1", "c2", "c3")
+    )
+    val binaryFrame = Writer.writeFrameIntoArray(frame).toOption.get
+    val deserFrame = Reader.readFrameFromArray[Char](binaryFrame)
+    assert(deserFrame.toOption.get == frame)
+  }
   test("1x3") {
     val frame = Frame(
       Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)),
