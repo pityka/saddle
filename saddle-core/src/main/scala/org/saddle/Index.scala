@@ -92,7 +92,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     */
   def firsts(keys: Array[T]): Array[Int] = {
     val szhint = keys.length
-    val result = new Buffer(new Array[Int](szhint), 0)
+    val result = Buffer.empty[Int](szhint)
     var i = 0
     while (i < szhint) {
       val elems = get(keys(i))
@@ -113,7 +113,7 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
     */
   def apply(keys: T*): Array[Int] = {
     val szhint = keys.length
-    val result = new Buffer(new Array[Int](szhint), 0)
+    val result = Buffer.empty[Int](szhint)
     var i = 0
     while (i < szhint) {
       val elems = get(keys(i))

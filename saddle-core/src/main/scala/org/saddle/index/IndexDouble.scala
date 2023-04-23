@@ -42,6 +42,7 @@ class IndexDouble(keys: Vec[Double], val ord: ORD[Double])
   // get the key at the position specified
   def raw(idx: Int): Double = keys.raw(idx)
 
+  @scala.annotation.nowarn
   def take(locs: Array[Int]): Index[Double] =
     Index(array.take(keys.toArray, locs, IndexImpl.sentinelErr))
 

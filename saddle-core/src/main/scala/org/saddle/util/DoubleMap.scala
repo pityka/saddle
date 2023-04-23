@@ -1,7 +1,7 @@
 package org.saddle.util
 import java.lang.{Double => JDouble}
 
-class DoubleMap {
+private[saddle] class DoubleMap {
   val lmap = new LongMap
   def update(key: Double, value: Int) = {
     lmap.update(JDouble.doubleToLongBits(key), value)
@@ -16,7 +16,7 @@ class DoubleMap {
   def contains(k: Double) = lmap.contains(JDouble.doubleToLongBits(k))
 }
 
-class IntMap {
+private[saddle] class IntMap {
   val lmap = new LongMap
 
   def size = lmap.size

@@ -27,7 +27,7 @@ import org.saddle.locator.Locator
 class IndexInt(keys: Vec[Int], val ord: ORD[Int]) extends Index[Int] {
   val scalarTag = ScalarTagInt
 
-  private implicit def o : ORD[Int]= ord
+  private implicit def o: ORD[Int] = ord
 
   private lazy val (lmap, IndexProperties(contiguous, monotonic)) =
     IndexImpl.keys2map(this)
@@ -41,6 +41,7 @@ class IndexInt(keys: Vec[Int], val ord: ORD[Int]) extends Index[Int] {
   // get the key at the position specified
   def raw(idx: Int): Int = keys.raw(idx)
 
+  @scala.annotation.nowarn
   def take(locs: Array[Int]): Index[Int] =
     Index(array.take(keys.toArray, locs, IndexImpl.sentinelErr))
 

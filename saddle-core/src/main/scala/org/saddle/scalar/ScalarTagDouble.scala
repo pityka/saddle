@@ -14,7 +14,7 @@
   */
 package org.saddle.scalar
 
-import org.saddle.{NUM, ORD, Vec, Index, Mat, array}
+import org.saddle.{NUM, ORD, Vec, Index, Mat}
 import org.saddle.Buffer
 import org.saddle.index.IndexDouble
 import org.saddle.locator.{LocatorDouble, Locator}
@@ -27,17 +27,14 @@ object ScalarTagDouble extends ScalarTag[Double] {
   @inline def isMissing(v: Double): Boolean = (v != v)
   @inline override def notMissing(v: Double): Boolean = (v == v)
 
-  override def parse(s: String) =
-    try {
-      s.toDouble
-    } catch { case _: NumberFormatException => Double.NaN }
+  override def parse(s: Array[Char], from: Int, to: Int) =
+    org.saddle.util.FastDoubleParser.parseFloatValue(s, from, to - from)
 
   // note, consider N/A's equal
   def compare(x: Double, y: Double)(implicit ev: ORD[Double]) =
     if (x == y) 0 else if (x > y) 1 else if (x < y) -1 else 0
 
   def toDouble(t: Double)(implicit ev: NUM[Double]): Double = t
-  @inline override def isDouble = true
 
   @inline def zero(implicit ev: NUM[Double]) = 0d
   @inline def one(implicit ev: NUM[Double]) = 1d
@@ -54,7 +51,7 @@ object ScalarTagDouble extends ScalarTag[Double] {
   override def runtimeClass = classOf[Double]
 
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY) =
-    new Buffer(new Array[Double](sz), 0)
+    Buffer.empty[Double](sz)
   def makeLoc(sz: Int = Locator.INIT_CAPACITY) = new LocatorDouble(sz)
   def makeVec(arr: Array[Double]) = Vec(arr)(this)
   def makeMat(r: Int, c: Int, arr: Array[Double]) = Mat(r, c, arr)(this)
@@ -62,9 +59,6 @@ object ScalarTagDouble extends ScalarTag[Double] {
     new IndexDouble(vec, ord)
   def makeSorter(implicit ord: ORD[Double]): Sorter[Double] =
     Sorter.doubleSorter
-
-  def concat(arrs: IndexedSeq[Vec[Double]]): Vec[Double] =
-    Vec(array.flatten(arrs.map(_.toArray)))
 
   override def toString = "ScalarTagDouble"
 }

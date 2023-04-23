@@ -14,14 +14,21 @@
   */
 package org.saddle.scalar
 
-import org.saddle.ORD
+import org.saddle.{CLM, ORD}
 import org.saddle.array.Sorter
 
 /** Byte ScalarTag
   */
-object ScalarTagByte extends ScalarTagAny[Byte] {
-  override def parse(s: String) = s.toByte
+object ScalarTagByte extends ScalarTagBase[Byte] {
+  override def parse(s: Array[Char], from: Int, to: Int) = {
+    val i = ScalarTagInt.parse(s, from, to)
+    if (i < Byte.MinValue.toInt || i > Byte.MaxValue.toInt) Byte.MinValue
+    else i.toByte
+  }
   override def makeSorter(implicit ord: ORD[Byte]): Sorter[Byte] =
     Sorter.byteSorter
   override def missing: Byte = Byte.MinValue
+  def isMissing(v: Byte) = v == missing
+  def clm = implicitly[CLM[Byte]]
+
 }

@@ -13,7 +13,7 @@ class BeCloseToMat[T: Numeric](m: Mat[T], delta: T) extends Matcher[Mat[T]] {
       m.length == 0 || {
         val res = m.contents.zipWithIndex map { case (n, i) =>
           num.lteqv(num.minus(n, delta), x.value.contents(i)) &&
-            num.lteqv(x.value.contents(i), num.plus(n, delta))
+          num.lteqv(x.value.contents(i), num.plus(n, delta))
         }
         Vec(res.toIndexedSeq: _*).all
       },

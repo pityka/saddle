@@ -631,7 +631,7 @@ package object array {
 
   /** Flatten a sequence of arrays into a single array
     */
-  def flatten[@spec(Boolean, Int, Long, Double) T: ST](
+  def flatten[@spec(Boolean, Int, Long, Double) T: CLM](
       arrs: Seq[Array[T]]
   ): Array[T] = {
     val size = arrs.map(_.length).sum

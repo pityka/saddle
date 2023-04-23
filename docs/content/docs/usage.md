@@ -347,7 +347,7 @@ There are a few ways to extract values from a Mat.
 Some other interesting methods on Mat:
 
 ```scala mdoc
- val m2 = Mat(2,2,Array(1,2,na.to[Int],4))
+ val m2 = Mat(2,2,Array(1,2,na[Int],4))
 
  m2.rowsWithNA
  m2.dropRowsWithNA

@@ -1,7 +1,7 @@
 package org.saddle
 package object spire {
-  type sp = scala.specialized
-  type tailrec = scala.annotation.tailrec
-  type ClassTag[A] = scala.reflect.ClassTag[A]
-  val ClassTag = scala.reflect.ClassTag
+  private[spire] type sp = scala.specialized
+  private[spire] type tailrec = scala.annotation.tailrec
+  private[spire] type ClassTag[A] = scala.reflect.ClassTag[A]
+  private[spire] val ClassTag = scala.reflect.ClassTag
 }

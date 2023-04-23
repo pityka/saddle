@@ -28,7 +28,7 @@ object SeriesArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1e3, 1e3)), (1, na.to[Double]))
+        Gen.frequency((9, Gen.chooseNum(-1e3, 1e3)), (1, na[Double]))
       )
     } yield Series(Vec(lst: _*))
 
@@ -40,7 +40,7 @@ object SeriesArbitraries {
       n <- Gen.choose(0, 20)
       lst <- Gen.listOfN(
         n,
-        Gen.frequency((9, Gen.chooseNum(-1e3, 1e3)), (1, na.to[Double]))
+        Gen.frequency((9, Gen.chooseNum(-1e3, 1e3)), (1, na[Double]))
       )
       idx <- Gen.listOfN(n, Gen.choose(0, 5))
     } yield Series(Vec(lst: _*), Index(idx: _*))

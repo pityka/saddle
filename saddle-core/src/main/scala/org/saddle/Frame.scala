@@ -532,41 +532,6 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     } getOrElse this
   }
 
-  // -----------------------------------------
-  // access columns by type
-
-  /** Extract columns from a heterogeneous Frame which match the provided type.
-    * The result is a homogeneous frame consisting of the selected data.
-    * @tparam U
-    *   The type of columns to extract
-    */
-  def colType[U: ST]: Frame[RX, CX, U] = {
-    val (columns, locs) = values.takeType[U]
-    Frame(columns, rowIx, colIx.take(locs))
-  }
-
-  /** Extract columns from a heterogeneous Frame which match either of the
-    * provided types. The result is a heterogeneous frame consisting of the
-    * selected data.
-    * @tparam U1
-    *   First type of columns to extract
-    * @tparam U2
-    *   Second type of columns to extract
-    */
-  def colType[U1: ST, U2: ST]: Frame[RX, CX, Any] = {
-    val (columns1, locs1) = values.takeType[U1]
-    val (columns2, locs2) = values.takeType[U2]
-
-    val frm = Panel(
-      columns1 ++ columns2,
-      rowIx,
-      colIx.take(locs1) concat colIx.take(locs2)
-    )
-    val tkr = array.argsort(array.flatten(Seq(locs1, locs2)))
-
-    frm.colAt(tkr)
-  }
-
   // ----------------------------------------
   // generate or use a new index
 
@@ -823,6 +788,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @param locs
     *   Location of columns containing values to sort on
     */
+
+  @scala.annotation.nowarn
   def sortedRows(locs: Int*)(implicit ev: ORD[T]) = {
     var order = array.range(0, numRows)
 
@@ -843,6 +810,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @param locs
     *   Location of rows containing values to sort on
     */
+  @scala.annotation.nowarn
   def sortedCols(locs: Int*)(implicit ev: ORD[T]) = {
     var order = array.range(0, numCols)
 
@@ -945,7 +913,8 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
     * @param limit
     *   If > 0, propagate over a maximum of `limit` consecutive NA values.
     */
-  def fillNA(fillMethod: FillMethod, limit: Int = 0) = mapCols((_, c) => c.fillNA(fillMethod, limit))
+  def fillNA(fillMethod: FillMethod, limit: Int = 0) =
+    mapCols((_, c) => c.fillNA(fillMethod, limit))
 
   /** Joins two frames along both their indexes and applies a function to each
     * pair of values; when either value is NA, the result of the function is
@@ -1390,7 +1359,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       m1: ST[O1],
       m2: ST[O2]
   ): Frame[O1, V, T] = {
-    implicit def ordV: ORD[V]  = stkr.ord
+    implicit def ordV: ORD[V] = stkr.ord
     implicit def clmV: ST[V] = stkr.tag
 
     val (lft, rgt) =
@@ -1446,7 +1415,7 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
   def toMat: Mat[T] = {
     synchronized {
       if (cachedMat.isEmpty) {
-        val m = Mat(values.numCols, values.numRows, st.concat(values)).T
+        val m = Mat(values.numCols, values.numRows, org.saddle.concat(values)).T
         cachedMat = Some(m)
       }
       cachedMat.get
@@ -1955,10 +1924,9 @@ object Frame extends BinOpFrame {
   /** Factory method to create a Frame from a sequence of Series. The row labels
     * of the result are the outer join of the indexes of the series provided.
     *
-    * This method repeatedly joins the rows indices. 
-    * Mind the combinatorial semantics of joins, 
-    * if the indices contain duplicates, the resulting Frame can grow quickly.
-    * An alternative is Frame.fromCols.
+    * This method repeatedly joins the rows indices. Mind the combinatorial
+    * semantics of joins, if the indices contain duplicates, the resulting Frame
+    * can grow quickly. An alternative is Frame.fromCols.
     */
   @scala.annotation.nowarn
   def apply[RX: ST: ORD, T: ST: ID](
@@ -2006,10 +1974,9 @@ object Frame extends BinOpFrame {
     * specifying the column index to use. The row labels of the result are the
     * outer join of the indexes of the series provided.
     *
-    * This method repeatedly joins the rows indices. 
-    * Mind the combinatorial semantics of joins, 
-    * if the indices contain duplicates, the resulting Frame can grow quickly.
-    * An alternative is Frame.fromCols.
+    * This method repeatedly joins the rows indices. Mind the combinatorial
+    * semantics of joins, if the indices contain duplicates, the resulting Frame
+    * can grow quickly. An alternative is Frame.fromCols.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: Seq[Series[RX, T]],
@@ -2052,10 +2019,9 @@ object Frame extends BinOpFrame {
     * values. The row labels of the result are the outer join of the indexes of
     * the series provided.
     *
-    * This method repeatedly joins the rows indices. 
-    * Mind the combinatorial semantics of joins, 
-    * if the indices contain duplicates, the resulting Frame can grow quickly.
-    * An alternative is Frame.fromCols.
+    * This method repeatedly joins the rows indices. Mind the combinatorial
+    * semantics of joins, if the indices contain duplicates, the resulting Frame
+    * can grow quickly. An alternative is Frame.fromCols.
     */
   def apply[RX: ST: ORD, CX: ST: ORD, T: ST](
       values: (CX, Series[RX, T])*
@@ -2143,153 +2109,4 @@ object Frame extends BinOpFrame {
       .sortedRIx
       .sortedCIx
   }
-}
-
-/** Convenience constructors for a Frame[RX, CX, Any] that accept
-  * arbitrarily-typed Vectors and Series as constructor parameters, leaving
-  * their internal representations unchanged.
-  */
-object Panel {
-
-  /** Factory method to create an empty Frame whose columns have type Any
-    * @tparam RX
-    *   Type of row keys
-    * @tparam CX
-    *   Type of col keys
-    */
-  def empty[RX: ST: ORD, CX: ST: ORD]: Frame[RX, CX, Any] =
-    new Frame[RX, CX, Any](
-      MatCols.empty,
-      Index.empty[RX],
-      Index.empty[CX],
-      None
-    )
-
-  // --------------------------------
-  // Construct using sequence of vectors
-
-  /** Factory method to create a Frame from a sequence of Vec objects
-    */
-  def apply(values: Vec[_]*): Frame[Int, Int, Any] =
-    if (values.isEmpty) empty[Int, Int]
-    else {
-      val asIdxSeq = values.toIndexedSeq
-      apply(
-        asIdxSeq,
-        IndexIntRange(asIdxSeq(0).length),
-        IndexIntRange(asIdxSeq.length)
-      )
-    }
-
-  /** Factory method to create a Frame from a sequence of Vec objects, a row
-    * index, and a column index.
-    */
-  def apply[RX: ST: ORD, CX: ST: ORD](
-      values: Seq[Vec[_]],
-      rowIx: Index[RX],
-      colIx: Index[CX]
-  ): Frame[RX, CX, Any] = {
-    val anySeq = values.toIndexedSeq
-    if (values.isEmpty)
-      empty[RX, CX]
-    else
-      Frame(toSeqVec(anySeq), rowIx, colIx)
-  }
-
-  /** Factory method to create a Frame from a sequence of Vec objects and a
-    * column index.
-    */
-  def apply[CX: ST: ORD](
-      values: Seq[Vec[_]],
-      colIx: Index[CX]
-  ): Frame[Int, CX, Any] =
-    if (values.isEmpty) empty[Int, CX]
-    else {
-      val asIdxSeq = values.toIndexedSeq
-      apply(asIdxSeq, IndexIntRange(asIdxSeq(0).length), colIx)
-    }
-
-  private def toSeqVec(anySeq: Seq[Vec[_]]): IndexedSeq[Vec[Any]] =
-    anySeq.toIndexedSeq.asInstanceOf[IndexedSeq[Vec[Any]]]
-
-  /** Factory method to create a Frame from tuples whose first element is the
-    * column label and the second is a Vec of values.
-    */
-  @scala.annotation.nowarn
-  def apply[CX: ST: ORD, T: ST](values: (CX, Vec[_])*): Frame[Int, CX, Any] = {
-    val asIdxSeq = values.map(_._2).toIndexedSeq
-    val idx = Index(values.map(_._1).toArray)
-    asIdxSeq.length match {
-      case 0 => empty[Int, CX]
-      case _ =>
-        Frame(toSeqVec(asIdxSeq), IndexIntRange(asIdxSeq(0).length), idx)
-    }
-  }
-
-  // --------------------------------
-  // Construct using sequence of series
-
-  private def toSeqSeries[RX](anySeq: Seq[Series[RX, _]]) =
-    anySeq.toIndexedSeq.asInstanceOf[IndexedSeq[Series[RX, Any]]]
-
-  /** Factory method to create a Frame from a sequence of Series. The row labels
-    * of the result are the outer join of the indexes of the series provided.
-    */
-  def apply[RX: ST: ORD](values: Series[RX, _]*): Frame[RX, Int, Any] = {
-    val asIdxSeq = toSeqSeries(values)
-    asIdxSeq.length match {
-      case 0 => empty[RX, Int]
-      case 1 =>
-        Frame(asIdxSeq.map(_.values), asIdxSeq(0).index, IndexIntRange(1))
-      case _ => {
-        val init =
-          Frame(Seq(asIdxSeq(0).values), asIdxSeq(0).index, Index(Array(0)))
-        val temp = asIdxSeq.tail.foldLeft(init)(_.addCol(_, OuterJoin))
-        Frame(temp.values, temp.rowIx, IndexIntRange(temp.numCols))
-      }
-    }
-  }
-
-  /** Factory method to create a Frame from a sequence of series, also
-    * specifying the column index to use. The row labels of the result are the
-    * outer join of the indexes of the series provided.
-    */
-  def apply[RX: ST: ORD, CX: ST: ORD](
-      values: Seq[Series[RX, _]],
-      colIx: Index[CX]
-  ): Frame[RX, CX, Any] = {
-    val asIdxSeq = toSeqSeries(values)
-    asIdxSeq.length match {
-      case 0 => empty[RX, CX]
-      case 1 => Frame(asIdxSeq.map(_.values), asIdxSeq(0).index, colIx)
-      case _ => {
-        val init = Frame(Seq(asIdxSeq(0).values), asIdxSeq(0).index, Index(0))
-        val temp = asIdxSeq.tail.foldLeft(init)(_.addCol(_, OuterJoin))
-        Frame(temp.values, temp.rowIx, colIx)
-      }
-    }
-  }
-
-  /** Factory method to create a Frame from a sequence of tuples, where the
-    * first element of the tuple is a column label, and the second a series of
-    * values. The row labels of the result are the outer join of the indexes of
-    * the series provided.
-    */
-  def apply[RX: ST: ORD, CX: ST: ORD](
-      values: (CX, Series[RX, _])*
-  ): Frame[RX, CX, Any] = {
-    val asIdxSeq = toSeqSeries(values.map(_._2))
-    val idx = Index(values.map(_._1).toArray)
-    asIdxSeq.length match {
-      case 0 => empty[RX, CX]
-      case 1 => Frame(asIdxSeq.map(_.values), asIdxSeq(0).index, idx)
-      case _ => {
-        val init =
-          Frame(Seq(asIdxSeq(0).values), asIdxSeq(0).index, Index(Array(0)))
-        val temp = asIdxSeq.tail.foldLeft(init)(_.addCol(_, OuterJoin))
-        Frame(temp.values, temp.rowIx, idx)
-      }
-    }
-  }
-
 }

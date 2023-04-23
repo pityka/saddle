@@ -1,7 +1,7 @@
 package org.saddle.spire
 package math
 import scala.language.implicitConversions
-object ULong {
+private[spire] object ULong {
   @inline final def apply(n: Long): ULong = new ULong(n)
 
   final def apply(s: String): ULong = fromBigInt(BigInt(s))
@@ -35,7 +35,7 @@ object ULong {
     BigInt(1) << 64
 }
 
-class ULong(val signed: Long) extends AnyVal {
+private[spire] class ULong(val signed: Long) extends AnyVal {
   final def toByte: Byte = signed.toByte
   final def toChar: Char = signed.toChar
   final def toShort: Short = signed.toShort
@@ -96,7 +96,7 @@ class ULong(val signed: Long) extends AnyVal {
     if (d == 0) {
       throw new java.lang.ArithmeticException("/ by zero")
     } else if (d < 0) {
-      ULong(if (n >= 0 || n < d) 0 else 1)
+      ULong(if (n >= 0L || n < d) 0 else 1)
     } else if (n >= 0) {
       ULong(n / d)
     } else {

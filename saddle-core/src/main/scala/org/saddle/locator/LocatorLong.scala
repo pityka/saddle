@@ -17,8 +17,9 @@ package org.saddle.locator
 import org.saddle.Buffer
 import org.saddle.util.LongMap
 
+@scala.annotation.nowarn
 class LocatorLong(sz: Int = Locator.INIT_CAPACITY) extends Locator[Long] {
-  val keyOrder = new Buffer(new Array[Long](sz), 0)
+  val keyOrder = Buffer.empty[Long]
   val map = new LongMap
   val cts = new LongMap
 
