@@ -45,7 +45,7 @@ object ScalarTagInt extends ScalarTag[Int] {
       length -= 1
     }
 
-    if (offset > from && length == 1) return Int.MinValue
+    if (length == 0) return Int.MinValue
 
     var result = 0
     if (length > 3) {
