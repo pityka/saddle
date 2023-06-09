@@ -54,13 +54,13 @@ package object csv {
     * @param recordSeparator
     *   Record separator (line ending). Its length must be one or two.
     * @param channel
-    *   The csv data channel to read from 
+    *   The csv data channel to read from
     * @param callback
     *   An instance of the `Callback` which will be called on a group of tokens.
     * @param charset
     *   A charset decoder. Must be in new or reset state.
     * @param bufferSize
-    *   Must be larger than the longest token (CSV cell) in the data. 
+    *   Must be larger than the longest token (CSV cell) in the data.
     */
   @noinline
   def parse(
@@ -151,7 +151,7 @@ package object csv {
     var eof = false
     var decFlushed = false
     charset.reset()
-    def fillBuffer() = if (!eof) {
+    def fillBuffer(): Unit = if (!eof) {
       var count = channel.read(buffer)
       while (count >= 0 && buffer.remaining > 0) {
         count = channel.read(buffer)
@@ -165,7 +165,8 @@ package object csv {
           s"Decoder error $result, buffer=${format(buffer)}, charbuffer='${charBuffer}'"
         )
       buffer.compact
-      if (count < 0) {
+      if (count < 0 && result == CoderResult.UNDERFLOW) {
+
         eof = true
         val result = charset.flush(charBuffer)
         charBuffer.flip
@@ -177,9 +178,13 @@ package object csv {
 
     } else {
       charBuffer.compact
-      charset.flush(charBuffer)
+      val result = charset.flush(charBuffer)
       charBuffer.flip
-      decFlushed = true
+      if (result == CoderResult.UNDERFLOW) { decFlushed = true }
+      else
+        throw new RuntimeException(
+          s"Decoder flush error or overflow for the second time ($result), buffer=${format(buffer)}, charbuffer='${charBuffer}. If this is an overflow then the caller must provide a larger buffer.'"
+        )
     }
     new Iterator[CharBuffer] {
       def hasNext = !decFlushed

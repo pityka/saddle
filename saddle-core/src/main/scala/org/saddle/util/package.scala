@@ -18,11 +18,17 @@ package org.saddle
   */
 package object util {
 
-  @inline private[saddle]  final def dividePositiveRoundUp(a: Int, b: Int) : Int = {
+  @inline private[saddle] final def dividePositiveRoundUp(
+      a: Int,
+      b: Int
+  ): Int = {
     val d = a / b
     if (a == b * d) d else d + 1
   }
-  @inline private[saddle]  final def dividePositiveRoundUp(a: Long, b: Long) : Long = {
+  @inline private[saddle] final def dividePositiveRoundUp(
+      a: Long,
+      b: Long
+  ): Long = {
     val d = a / b
     if (a == b * d) d else d + 1L
   }

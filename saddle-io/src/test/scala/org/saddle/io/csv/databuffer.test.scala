@@ -147,17 +147,17 @@ class DataBufferSpec extends Specification with ScalaCheck {
     val buffer =
       new org.saddle.io.csv.DataBuffer1(iter, '"', ',', '[', 4)
     buffer.hasNext must_== true
-    val (chars : Array[Char], from, to, len) = buffer.nextBatch
- 
+    val (chars: Array[Char], from, to, len) = buffer.nextBatch
+
     chars.toList must_== List(97, 44, 97, 0)
-    from.toList must_== List(0, 2, -1, 0,0,0)
-    to.toList must_== List(1, 3, 0, 0,0,0)
+    from.toList must_== List(0, 2, -1, 0, 0, 0)
+    to.toList must_== List(1, 3, 0, 0, 0, 0)
     len must_== 1
     buffer.hasNext must_== false
     val (chars2, from2, to2, len2) = buffer.emitRest
     chars2.toList must_== List(97, 44, 97, 0)
-    from2.toList must_== List(2, 2, -1, 0,0,0)
-    to2.toList must_== List(3, 3, 0, 0,0,0)
+    from2.toList must_== List(2, 2, -1, 0, 0, 0)
+    to2.toList must_== List(3, 3, 0, 0, 0, 0)
     len2 must_== 1
 
     1 must_== 1

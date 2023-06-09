@@ -1,9 +1,9 @@
 import com.typesafe.tools.mima.core._
 
-lazy val scalaTestVersion = "3.2.11"
+lazy val scalaTestVersion = "3.2.16"
 
 lazy val scalaVersion213 = "2.13.10"
-lazy val scalaVersion3 = "3.2.2"
+lazy val scalaVersion3 = "3.3.0"
 lazy val scalaVersionInBuild = scalaVersion213
 
 ThisBuild / versionScheme := Some("early-semver")
@@ -176,8 +176,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     fork := false,
     libraryDependencies ++= Seq(
       "org.typelevel" %%% "cats-core" % "2.6.1",
-      "org.specs2" %%% "specs2-core" % "4.15.0" % "test",
-      "org.specs2" %%% "specs2-scalacheck" % "4.15.0" % "test"
+      "org.specs2" %%% "specs2-core" % "4.19.2" % "test",
+      "org.specs2" %%% "specs2-scalacheck" % "4.19.2" % "test"
     ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) => Nil
       case Some((2, _)) =>
@@ -266,7 +266,7 @@ lazy val linalg = project
   .settings(
     name := "saddle-linalg",
     libraryDependencies ++= Seq(
-      "io.github.pityka" % "netlib-java" % "0.1.0",
+      "io.github.pityka" % "netlib-java" % "0.1.0"
     ) ++ scalaTest
   )
   .dependsOn(
@@ -387,7 +387,7 @@ lazy val io = crossProject(JSPlatform, JVMPlatform)
   .settings(
     name := "saddle-io",
     scalaVersion := scalaVersionInBuild,
-    libraryDependencies ++= scalaTest++specs,
+    libraryDependencies ++= scalaTest ++ specs,
     mimaBinaryIssueFilters := Seq(
       // format: off
       ProblemFilters.exclude[DirectMissingMethodProblem]("org.saddle.io.npy.package.readFully"),

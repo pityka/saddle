@@ -49,18 +49,20 @@ trait Splitter[I, OL, OR] {
 /** Companion object houses implicit instances of Splitter
   */
 object Splitter {
-  implicit def split2nd[T1: ST: ORD, T2: ST: ORD] : Splitter[(T1,T2),T1,T2]=
+  implicit def split2nd[T1: ST: ORD, T2: ST: ORD]: Splitter[(T1, T2), T1, T2] =
     new Splitter[(T1, T2), T1, T2] {
       def apply(i: Index[(T1, T2)]) = (i.map(_._1), i.map(_._2))
     }
 
-  implicit def split3rd[T1: ORD, T2: ORD, T3: ST: ORD] : Splitter[(T1,T2,T3),(T1,T2),T3]=
+  implicit def split3rd[T1: ORD, T2: ORD, T3: ST: ORD]
+      : Splitter[(T1, T2, T3), (T1, T2), T3] =
     new Splitter[(T1, T2, T3), (T1, T2), T3] {
       def apply(i: Index[(T1, T2, T3)]) =
         (i.map(t => (t._1, t._2)), i.map(_._3))
     }
 
-  implicit def split4th[T1: ORD, T2: ORD, T3: ORD, T4: ST: ORD] :Splitter[(T1,T2,T3,T4),(T1,T2,T3),T4]=
+  implicit def split4th[T1: ORD, T2: ORD, T3: ORD, T4: ST: ORD]
+      : Splitter[(T1, T2, T3, T4), (T1, T2, T3), T4] =
     new Splitter[(T1, T2, T3, T4), (T1, T2, T3), T4] {
       def apply(i: Index[(T1, T2, T3, T4)]) =
         (i.map(t => (t._1, t._2, t._3)), i.map(_._4))
@@ -72,7 +74,7 @@ object Splitter {
       T3: ORD,
       T4: ORD,
       T5: ST: ORD
-  ] :Splitter[(T1,T2,T3,T4,T5),(T1,T2,T3,T4),T5]=
+  ]: Splitter[(T1, T2, T3, T4, T5), (T1, T2, T3, T4), T5] =
     new Splitter[(T1, T2, T3, T4, T5), (T1, T2, T3, T4), T5] {
       def apply(i: Index[(T1, T2, T3, T4, T5)]) =
         (i.map(t => (t._1, t._2, t._3, t._4)), i.map(_._5))
@@ -85,7 +87,7 @@ object Splitter {
       T4: ORD,
       T5: ORD,
       T6: ST: ORD
-  ] :Splitter[(T1,T2,T3,T4,T5,T6),(T1,T2,T3,T4,T5),T6]=
+  ]: Splitter[(T1, T2, T3, T4, T5, T6), (T1, T2, T3, T4, T5), T6] =
     new Splitter[(T1, T2, T3, T4, T5, T6), (T1, T2, T3, T4, T5), T6] {
       def apply(i: Index[(T1, T2, T3, T4, T5, T6)]) =
         (i.map(t => (t._1, t._2, t._3, t._4, t._5)), i.map(_._6))
@@ -99,7 +101,7 @@ object Splitter {
       T5: ORD,
       T6: ORD,
       T7: ST: ORD
-  ]: Splitter[(T1,T2,T3,T4,T5,T6,T7),(T1,T2,T3,T4,T5,T6),T7] =
+  ]: Splitter[(T1, T2, T3, T4, T5, T6, T7), (T1, T2, T3, T4, T5, T6), T7] =
     new Splitter[(T1, T2, T3, T4, T5, T6, T7), (T1, T2, T3, T4, T5, T6), T7] {
       def apply(i: Index[(T1, T2, T3, T4, T5, T6, T7)]) =
         (i.map(t => (t._1, t._2, t._3, t._4, t._5, t._6)), i.map(_._7))
@@ -114,7 +116,11 @@ object Splitter {
       T6: ORD,
       T7: ORD,
       T8: ST: ORD
-  ] : Splitter[(T1,T2,T3,T4,T5,T6,T7,T8),(T1,T2,T3,T4,T5,T6,T7),T8] =
+  ]: Splitter[
+    (T1, T2, T3, T4, T5, T6, T7, T8),
+    (T1, T2, T3, T4, T5, T6, T7),
+    T8
+  ] =
     new Splitter[
       (T1, T2, T3, T4, T5, T6, T7, T8),
       (T1, T2, T3, T4, T5, T6, T7),
@@ -134,7 +140,11 @@ object Splitter {
       T7: ORD,
       T8: ORD,
       T9: ST: ORD
-  ] : Splitter[(T1,T2,T3,T4,T5,T6,T7,T8,T9),(T1,T2,T3,T4,T5,T6,T7,T8),T9]=
+  ]: Splitter[
+    (T1, T2, T3, T4, T5, T6, T7, T8, T9),
+    (T1, T2, T3, T4, T5, T6, T7, T8),
+    T9
+  ] =
     new Splitter[
       (T1, T2, T3, T4, T5, T6, T7, T8, T9),
       (T1, T2, T3, T4, T5, T6, T7, T8),

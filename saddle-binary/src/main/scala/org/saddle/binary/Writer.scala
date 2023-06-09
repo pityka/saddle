@@ -91,6 +91,7 @@ object Writer {
     case ScalarTagFloat  => Right("float")
     case ScalarTagLong   => Right("long")
     case ScalarTagByte   => Right("byte")
+    case ScalarTagChar   => Right("char")
     case other           => Left(s"Type $other not supported.")
   }
 
@@ -99,6 +100,7 @@ object Writer {
     case ScalarTagInt    => Right(4)
     case ScalarTagFloat  => Right(4)
     case ScalarTagLong   => Right(8)
+    case ScalarTagChar   => Right(2)
     case ScalarTagByte   => Right(1)
     case other           => Left(s"Type $other not supported.")
   }
@@ -154,6 +156,16 @@ object Writer {
         val n = t.length
         while (i < n && bb.hasRemaining()) {
           bb.put(t(i).asInstanceOf[Byte])
+          i += 1
+        }
+        i
+      }
+    case ScalarTagChar =>
+      Right {
+        var i = startOffset
+        val n = t.length
+        while (i < n && bb.hasRemaining()) {
+          bb.putChar(t(i).asInstanceOf[Char])
           i += 1
         }
         i

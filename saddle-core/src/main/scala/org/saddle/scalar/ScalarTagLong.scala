@@ -44,7 +44,7 @@ object ScalarTagLong extends ScalarTag[Long] {
       length -= 1
     }
 
-    if (offset > from && length == 1) return Long.MinValue
+    if (length == 0) return Long.MinValue
 
     var result = 0L
     if (length > 3) {

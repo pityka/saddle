@@ -38,6 +38,27 @@ class IndexSpec extends Specification {
   }
   "Index Joins" should {
 
+    "Outer join of same non-unique indexes " in {
+      val ix1 = Index(0, 0)
+      val ix2 = Index(0, 0)
+      val res = ix1.join(ix2, how = index.OuterJoin)
+      /*
+        Join two columns with repeated values should generate all possible pairs
+
+        Correct assertions:
+      res.index must_== Index(0, 0, 0, 0)
+      res.lTake.get must_== Array(0, 0, 1, 1)
+      res.rTake.get must_== Array(0, 1, 0, 1)
+
+      However the current implementation has a shortcut for identical indexes and passes the
+      below assertions. If the shortcut is disabled then the above pass.
+       */
+      res.index must_== Index(0, 0)
+      res.lTake must_== None
+      res.rTake must_== None
+
+    }
+
     "Unique sorted left join" in {
       val ix1 = Index(0, 1, 2)
       val ix2 = Index(1, 2, 3)

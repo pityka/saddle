@@ -33,14 +33,14 @@ class VecCheck extends Specification with ScalaCheck {
     implicit val fromScalarGenVec = new FromScalarGen[Vec] {
       override def apply[T](sg: ScalarGen[T]): Gen[Vec[T]] =
         VecArbitraries.vec(sg.gen)(sg.tag)
-      }
+    }
     "takeLeft" in {
       forAll { (fs: FromScalars[Vec]) =>
         implicit val st = fs.tag
         val v = fs.value
         v.takeLeft(5) must_== v.toSeq.take(5).toVec
+      }
     }
-  }
 
     "takeRight" in {
       forAll { (fs: FromScalars[Vec]) =>
@@ -100,7 +100,7 @@ class VecCheck extends Specification with ScalaCheck {
         val data = v.contents
         v.dropNA must_== Vec(data.filter(st.notMissing))
       }
-        }
+    }
 
     "hasNA works" in {
       forAll { (fs: FromScalars[Vec]) =>
@@ -363,7 +363,8 @@ class VecCheck extends Specification with ScalaCheck {
     "fillNA works" in {
       forAll { (v: Vec[Double]) =>
         val res = v.fillNA(_ => 5.0)
-        val exp = Vec(v.contents.toSeq.map(x => if (x.isNaN) 5.0 else x).toArray)
+        val exp =
+          Vec(v.contents.toSeq.map(x => if (x.isNaN) 5.0 else x).toArray)
         res.hasNA must beFalse
         res must_== exp
       }
@@ -404,7 +405,15 @@ class VecCheck extends Specification with ScalaCheck {
     "fillBackword fills values backward until the limit if greater than 0" in {
       val v = Vec[Int](na[Int], na[Int], na[Int], 2, na[Int], na[Int], 1)
       v.fillBackward(0) mustEqual Vec[Int](2, 2, 2, 2, 1, 1, 1)
-      v.fillBackward(1) mustEqual Vec[Int](na[Int], na[Int], 2, 2, na[Int], 1, 1)
+      v.fillBackward(1) mustEqual Vec[Int](
+        na[Int],
+        na[Int],
+        2,
+        2,
+        na[Int],
+        1,
+        1
+      )
       v.fillBackward(2) mustEqual Vec[Int](na[Int], 2, 2, 2, 1, 1, 1)
     }
 

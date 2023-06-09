@@ -112,12 +112,22 @@ class ScalarTagCheck extends Specification with ScalaCheck {
 
       val m = Array.ofDim[Array[Char]](5000000)
       val k = Array.ofDim[Int](5000000)
+      0 until 10000 foreach { i =>
+        val ar =
+          (i).toString.toCharArray
+        val ar2 =
+          (-i).toString.toCharArray
+        m(i) = ar
+        k(i) = (m(i).length)
+        m(i + 10000) = ar2
+        k(i + 10000) = (m(i + 10000).length)
+      }
       0 until m.length foreach { i =>
         val ar =
           scala.util.Random
             .nextInt()
             .toString
-            .toCharArray 
+            .toCharArray
         m(i) = ar
         k(i) = (m(i).length)
       }
@@ -125,8 +135,10 @@ class ScalarTagCheck extends Specification with ScalaCheck {
       k(0) = m(0).length
       m(1) = Int.MinValue.toString.toCharArray()
       k(1) = m(1).length
-      m(2) = 9.toString.toCharArray() 
-      k(2)  = 1
+      m(2) = 9.toString.toCharArray()
+      k(2) = 1
+      m(3) = (-9).toString.toCharArray()
+      k(3) = 2
 
       var i = 0
       val n = m.length
@@ -146,12 +158,22 @@ class ScalarTagCheck extends Specification with ScalaCheck {
 
       val m = Array.ofDim[Array[Char]](5000000)
       val k = Array.ofDim[Int](5000000)
-      0 until m.length foreach { i =>
+      0 until 10000 foreach { i =>
+        val ar =
+          (i).toString.toCharArray
+        val ar2 =
+          (-i).toString.toCharArray
+        m(i) = ar
+        k(i) = (m(i).length)
+        m(i + 10000) = ar2
+        k(i + 10000) = (m(i + 10000).length)
+      }
+      20000 until m.length foreach { i =>
         val ar =
           scala.util.Random
             .nextLong()
             .toString
-            .toCharArray 
+            .toCharArray
         m(i) = ar
         k(i) = (m(i).length)
       }
@@ -159,6 +181,10 @@ class ScalarTagCheck extends Specification with ScalaCheck {
       k(0) = m(0).length
       m(1) = Long.MinValue.toString.toCharArray()
       k(1) = m(1).length
+      m(2) = 9.toString.toCharArray()
+      k(2) = 1
+      m(3) = (-9).toString.toCharArray()
+      k(3) = 2
 
       var i = 0
       val n = m.length

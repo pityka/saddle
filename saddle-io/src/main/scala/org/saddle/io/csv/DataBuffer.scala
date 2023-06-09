@@ -1136,6 +1136,7 @@ private[csv] final class DataBuffer1(
   private var outputChars: Array[Char] = null
 
   // -2 means quote unclosed
+  // -1 means initial value
   private var outputLength = -1
 
   private val outputFrom = Array.ofDim[Int](bufferSize + 2)
@@ -1183,77 +1184,83 @@ private[csv] final class DataBuffer1(
     } else ((outputChars, outputFrom, outputTo, outputLength))
 
   private def fillBuffer(): Boolean = {
-    if (!data.hasNext) false
-    else {
-      filledNewData = true
+    if (!data.hasNext) {
+      false
+    } else {
       val next = data.next()
-
-      quoteMask.zero()
-      lfMask.zero()
-      fieldSeparatorMask.zero()
-
-      if (commonCSV)
-        elementWiseEqual3CSV_LF(
-          a = next,
-          o1 = quoteMask,
-          o2 = lfMask,
-          o3 = fieldSeparatorMask
-        )
-      else if (commonTSV)
-        elementWiseEqual3TSV(
-          a = next,
-          o1 = quoteMask,
-          o2 = lfMask,
-          o3 = fieldSeparatorMask
-        )
-      else
-        elementWiseEqual3Variable(
-          a = next,
-          t1 = quoteChar,
-          o1 = quoteMask,
-          t2 = recordSeparator,
-          o2 = lfMask,
-          t3 = fieldSeparator,
-          o3 = fieldSeparatorMask
-        )
-
-      val nInQuote: BitSet = prefixSumXor(quoteMask)
-      nInQuote.negateInplace()
-
-      val (structuralMask: BitSet, recordSeparatorMask: BitSet) = {
-
-        lfMask &= nInQuote
-        fieldSeparatorMask &= nInQuote
-
-        val structuralMask = lfMask | fieldSeparatorMask
-
-        (structuralMask, lfMask)
-      }
-      outputChars = next.array()
-      assert(next.arrayOffset() == 0)
-      outputLength = toIndices1(
-        chars = next,
-        structuralMask = structuralMask,
-        recordSeparatorMask = recordSeparatorMask,
-        quoteMask = quoteMask,
-        from = outputFrom,
-        to = outputTo
-      )
-
-      if (recordSeparatorMask.contains(next.limit() - 1)) {
-        lineClosed = true
-      } else {
-        lineClosed = false
-      }
-
-      if (next.position() == 0 && lastPos == 0) {
-        bufferTooShort = true
-        false
-      } else {
-        lastPos = next.position()
+      if (!next.hasRemaining()) {
+        outputLength = 0
         true
-      }
+      } else {
+        filledNewData = true
 
+        quoteMask.zero()
+        lfMask.zero()
+        fieldSeparatorMask.zero()
+
+        if (commonCSV)
+          elementWiseEqual3CSV_LF(
+            a = next,
+            o1 = quoteMask,
+            o2 = lfMask,
+            o3 = fieldSeparatorMask
+          )
+        else if (commonTSV)
+          elementWiseEqual3TSV(
+            a = next,
+            o1 = quoteMask,
+            o2 = lfMask,
+            o3 = fieldSeparatorMask
+          )
+        else
+          elementWiseEqual3Variable(
+            a = next,
+            t1 = quoteChar,
+            o1 = quoteMask,
+            t2 = recordSeparator,
+            o2 = lfMask,
+            t3 = fieldSeparator,
+            o3 = fieldSeparatorMask
+          )
+
+        val nInQuote: BitSet = prefixSumXor(quoteMask)
+        nInQuote.negateInplace()
+
+        val (structuralMask: BitSet, recordSeparatorMask: BitSet) = {
+
+          lfMask &= nInQuote
+          fieldSeparatorMask &= nInQuote
+
+          val structuralMask = lfMask | fieldSeparatorMask
+
+          (structuralMask, lfMask)
+        }
+        outputChars = next.array()
+        assert(next.arrayOffset() == 0)
+        outputLength = toIndices1(
+          chars = next,
+          structuralMask = structuralMask,
+          recordSeparatorMask = recordSeparatorMask,
+          quoteMask = quoteMask,
+          from = outputFrom,
+          to = outputTo
+        )
+
+        if (recordSeparatorMask.contains(next.limit() - 1)) {
+          lineClosed = true
+        } else {
+          lineClosed = false
+        }
+
+        if (next.position() == 0 && lastPos == 0) {
+          bufferTooShort = true
+          false
+        } else {
+          lastPos = next.position()
+          true
+        }
+
+      }
     }
   }
 
@@ -1319,76 +1326,81 @@ private[csv] final class DataBuffer2(
   private def fillBuffer(): Boolean = {
     if (!data.hasNext) false
     else {
-      filledNewData = true
       val next = data.next()
-
-      quoteMask.zero()
-      crMask.zero()
-      lfMask.zero()
-      fieldSeparatorMask.zero()
-
-      if (rfcCompatible)
-        elementWiseEqual4RFC(
-          a = next,
-          o1 = quoteMask,
-          o2 = lfMask,
-          o3 = crMask,
-          o4 = fieldSeparatorMask
-        )
-      else
-        elementWiseEqual4Variable(
-          a = next,
-          t1 = quoteChar,
-          o1 = quoteMask,
-          t2 = recordSeparator2,
-          o2 = lfMask,
-          t3 = recordSeparator1,
-          o3 = crMask,
-          t4 = fieldSeparator,
-          o4 = fieldSeparatorMask
-        )
-
-      val nInQuote: BitSet = prefixSumXor(quoteMask)
-      nInQuote.negateInplace()
-
-      val (structuralMask: BitSet, recordSeparatorMask: BitSet) = {
-
-        crMask &= nInQuote
-        lfMask &= nInQuote
-        fieldSeparatorMask &= nInQuote
-
-        // overwrites crMask
-        makeMaskFromCrLfInPlace(crMask, lfMask)
-        val structuralMask = crMask | fieldSeparatorMask
-
-        (structuralMask, crMask)
-
-      }
-      outputChars = next.array()
-      assert(next.arrayOffset() == 0)
-      outputLength = toIndices2(
-        chars = next,
-        structuralMask = structuralMask,
-        recordSeparatorMask = recordSeparatorMask,
-        quoteMask = quoteMask,
-        from = outputFrom,
-        to = outputTo
-      )
-
-      if (recordSeparatorMask.contains(next.limit() - 1)) {
-        lineClosed = true
-      } else {
-        lineClosed = false
-      }
-
-      if (next.position() == 0 && lastPos == 0) {
-        bufferTooShort = true
-        false
-      } else {
-        lastPos = next.position()
+      if (!next.hasRemaining()) {
+        outputLength = 0
         true
-      }
+      } else {
+        filledNewData = true
 
+        quoteMask.zero()
+        crMask.zero()
+        lfMask.zero()
+        fieldSeparatorMask.zero()
+
+        if (rfcCompatible)
+          elementWiseEqual4RFC(
+            a = next,
+            o1 = quoteMask,
+            o2 = lfMask,
+            o3 = crMask,
+            o4 = fieldSeparatorMask
+          )
+        else
+          elementWiseEqual4Variable(
+            a = next,
+            t1 = quoteChar,
+            o1 = quoteMask,
+            t2 = recordSeparator2,
+            o2 = lfMask,
+            t3 = recordSeparator1,
+            o3 = crMask,
+            t4 = fieldSeparator,
+            o4 = fieldSeparatorMask
+          )
+
+        val nInQuote: BitSet = prefixSumXor(quoteMask)
+        nInQuote.negateInplace()
+
+        val (structuralMask: BitSet, recordSeparatorMask: BitSet) = {
+
+          crMask &= nInQuote
+          lfMask &= nInQuote
+          fieldSeparatorMask &= nInQuote
+
+          // overwrites crMask
+          makeMaskFromCrLfInPlace(crMask, lfMask)
+          val structuralMask = crMask | fieldSeparatorMask
+
+          (structuralMask, crMask)
+
+        }
+        outputChars = next.array()
+        assert(next.arrayOffset() == 0)
+        outputLength = toIndices2(
+          chars = next,
+          structuralMask = structuralMask,
+          recordSeparatorMask = recordSeparatorMask,
+          quoteMask = quoteMask,
+          from = outputFrom,
+          to = outputTo
+        )
+
+        if (recordSeparatorMask.contains(next.limit() - 1)) {
+          lineClosed = true
+        } else {
+          lineClosed = false
+        }
+
+        if (next.position() == 0 && lastPos == 0) {
+          bufferTooShort = true
+          false
+        } else {
+          lastPos = next.position()
+          true
+        }
+
+      }
     }
   }
 

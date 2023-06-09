@@ -572,7 +572,7 @@ class JoinerImpl[@spec(Boolean, Int, Long, Double) T: ST: ORD]
     // hits hashmap
     val szhint = left.length + right.length
 
-    val res = Buffer.empty[T](szhint) 
+    val res = Buffer.empty[T](szhint)
     val lft = Buffer.empty[Int](szhint)
     val rgt = Buffer.empty[Int](szhint)
 

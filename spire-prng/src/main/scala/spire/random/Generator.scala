@@ -401,8 +401,6 @@ abstract class Generator {
   }
 }
 
-
-
 private[spire] abstract class LongBasedGenerator extends Generator { self =>
   def nextInt(): Int =
     (nextLong() >>> 32).toInt

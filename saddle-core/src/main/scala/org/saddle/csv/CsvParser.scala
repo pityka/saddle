@@ -199,7 +199,7 @@ object CsvParser {
 
           Left(
             s"Header line to short for given locs: ${locs.mkString("[", ", ", "]")}. Header line: ${callback.allHeaderFields
-              .mkString("[", ", ", "]")}"
+                .mkString("[", ", ", "]")}"
           )
         } else {
           val columns =
@@ -294,7 +294,7 @@ object CsvParser {
             error = true
             errorString =
               s"Header line to short for given locs: ${locs.mkString("[", ", ", "]")}. Header line: ${allHeaderFields
-                .mkString("[", ", ", "]")}"
+                  .mkString("[", ", ", "]")}"
           }
           if (loc < headerAllFields - 1) {
             error = true

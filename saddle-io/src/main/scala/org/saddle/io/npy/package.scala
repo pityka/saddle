@@ -19,7 +19,10 @@ package object npy {
 
   case class Descriptor(fortran: Boolean, shape: List[Long], dtype: String)
 
-  private[saddle] def readFully(bb: ByteBuffer, channel: ReadableByteChannel) : Unit = {
+  private[saddle] def readFully(
+      bb: ByteBuffer,
+      channel: ReadableByteChannel
+  ): Unit = {
     bb.clear
     var i = 0
     while (bb.hasRemaining && i >= 0) {
@@ -96,7 +99,7 @@ package object npy {
 
   def readHeaderFromChannel(
       channel: ReadableByteChannel
-  ) : Either[String, Descriptor] = {
+  ): Either[String, Descriptor] = {
     val magicAndVersion = Array.ofDim[Byte](8)
     readFully(ByteBuffer.wrap(magicAndVersion), channel)
     val magic = String.valueOf(magicAndVersion.map(_.toChar), 0, 6)
