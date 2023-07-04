@@ -20,4 +20,5 @@ Major changes in this fork:
 - Revised core APIs (e.g. no implicit conversions)
 - Artifacts are published under io.github.pityka organization name
 - Scala-js artifacts
+- More IO capabilities: fast CSV parser, npy parser, various JSON codecs, binary serialization.
 

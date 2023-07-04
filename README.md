@@ -5,25 +5,37 @@
 [![maven](https://img.shields.io/maven-central/v/io.github.pityka/saddle-core_2.13.svg)](https://repo1.maven.org/maven2/io/github/pityka/saddle-core_2.13/)
 
 
-This repository is a fork of the original Saddle library which has seen no 
-activity for some time.
-
-Saddle: Scala Data Library
-==========================
+Saddle: Scala Data Library for JVM and Scala.js
+===============================================
 
 Introduction
 ============
 
 Saddle is a data manipulation library for Scala that provides array-backed,
 indexed, one- and two-dimensional data structures that are 
-specialized on JVM primitives to avoid the overhead of boxing and unboxing.
+specialized on primitive types to avoid the overhead of boxing and unboxing.
 
 Saddle offers numerical calculations, automatic alignment of data
 along indices, robustness to missing (N/A) values, and facilities for I/O.
 
-Saddle draws inspiration from several sources, among them the R programming
-language & statistical environment, the numpy and pandas Python libraries,
-and the Scala collections library.
+Features
+========
+- All of saddle's core data structures avoid boxing of primitive types thus maintaining optimal memory efficiency and cache locality.
+- One- and two-dimensional vectors (`Vec[T]` and `Mat[T]`).
+- Constant time lookup index supporting database-like inner and outer joins (`Index[T]`).
+- Combined of index and vector types, both 1D (`Series[Key,Value]`) and 2D (`Frame[RowKey,ColumnKey,Value]`).
+- Support for multilevel indexes, and data manipulations like pivots, joins, merges, group by-s, sorts.
+- Convenient vectorized binary operations betweens the above data structures.
+- Automatic, non-boxed handling of missing values.
+- Native linear algebra backed by BLAS/LAPACK on amd64, aarch64 and Apple arm64. On linux needs a system wide installation of BLAS and LAPACK shared libraries.
+- Getting data in and out of the library:
+  - Extremely fast CSV, integer and floating point parsers doing minimal allocations and minimal branching. 
+  - CSV writer.
+  - Support for reading contigous numeric arrays from npy files.
+  - Fast and memory efficient binary serialization format.
+  - Circe and jsoniter-scala type classes.
+- Published for Scala on the JVM and Scala.js, Scala 2.13 and 3.
+
 
 Documentation
 =============
@@ -115,6 +127,9 @@ previous work with [pandas](http://pandas.pydata.org/ "pandas"), a
 data analysis library written in Python. 
 
 Code in the saddle-linalg/ folder is contributed by Istvan Bartha.
+
+This repository is a fork of the original Saddle repository which has
+seen no activity for some time.
 
 
 
