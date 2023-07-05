@@ -13,20 +13,18 @@
       
       <guid>https://pityka.github.io/saddle/docs/getting_started/</guid>
       <description>Add any of these lines to your build.sbt:
-// The core library libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-core&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-ops-inlined&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Linear algebra interface to BLAS libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-linalg&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Binary representation of data frames and matrices libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-binary&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Circe Encoder and Decoder instances libraryDependencies += &amp;#34;io.</description>
+// The core library libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-core&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-ops-inlined&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Linear algebra interface to BLAS libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-linalg&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Binary representation of data frames and matrices libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-binary&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Circe Encoder and Decoder instances libraryDependencies += &amp;#34;io.</description>
     </item>
     
     <item>
-      <title>Usage</title>
-      <link>https://pityka.github.io/saddle/docs/usage/</link>
+      <title>Imports</title>
+      <link>https://pityka.github.io/saddle/docs/imports/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://pityka.github.io/saddle/docs/usage/</guid>
+      <guid>https://pityka.github.io/saddle/docs/imports/</guid>
       <description>Imports #  You most likely need the following two imports:
 import org.saddle._ import org.saddle.order._ Note that org.saddle.order._ imports cats.kernel.Order[_] typeclass instances into the scope. If you import cats instances an other way then you should not import org.saddle.order._.
-The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare.
-1D vector: Vec[T] #  Factories:
-import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.</description>
+The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare.</description>
     </item>
     
   </channel>

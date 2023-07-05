@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data structures on SADDLE</title>
+    <link>https://pityka.github.io/saddle/docs/datastructures/</link>
+    <description>Recent content in Data structures on SADDLE</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://pityka.github.io/saddle/docs/datastructures/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Vector</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/2_vec/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/2_vec/</guid>
+      <description>1D vector: Vec[T] #  import org.saddle._ import org.saddle.order._ Factories #  import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.empty[Double] // res3: Vec[Double] = Empty Vec  vec.</description>
+    </item>
+    
+    <item>
+      <title>Indexed vector</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/3_series/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/3_series/</guid>
+      <description>1D vector with index: Series[K,V] #  A Series combines a Vec with an Index that provides an ordered key-value mapping. We’ll talk more about the details of Index later.
+The key type of a must have a natural ordering (ie, an Ordering of that type within the implicit scope). However, the Series maintains the order in which its data was supplied unless ordered othewise.
+Let’s look at a few constructions:</description>
+    </item>
+    
+    <item>
+      <title>2D array (matrix)</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/4_mat/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/4_mat/</guid>
+      <description>Matrix: Mat[T] #  import org.saddle._ import org.saddle.order._ A Mat[T] represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.
+The row-major layout is compatible with EJML, a linear algebra library running on the JVM. If you want to use a BLAS, you can take a look in saddle-linalg.
+Factories #  import org.saddle._ Mat(2,2, Array(1,2,3,4)) // res0: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // all same:  Mat(Array(Array(1,3), Array(2,4))) // res1: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Vec(1,3), Vec(2,4)) // res2: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Array(Vec(1,3), Vec(2,4))) // res3: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // identity matrix:  mat.</description>
+    </item>
+    
+    <item>
+      <title>Data frame</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/5_frame/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/5_frame/</guid>
+      <description>Homogeneous table with row and column index (data frame) : Frame[RX,CX,T] #  A Frame combines a Mat with a row index and a column index which provides a way to index into the Mat.
+A Frame is represented internally as a sequence of column Vec instances all sharing the same row index.
+Factories #  import org.saddle._ import org.saddle.order._ import org.saddle.ops.BinOps._ val v = Vec(1, 2) // given the following // v: Vec[Int] = [2 x 1] // 1 // 2 // // given the following  val u = Vec(3, 4) // u: Vec[Int] = [2 x 1] // 3 // 4 //  val s = Series(Vec(1,3,2,4), Index(&amp;#34;c&amp;#34;, &amp;#34;b&amp;#34;, &amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;)).</description>
+    </item>
+    
+    <item>
+      <title>Mutable buffer</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/6_buffer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/6_buffer/</guid>
+      <description>Buffer is a mutable data structure with two operations:
+ append an element convert the buffer to an array or arrays.   Internally it is stored as a growable sequence of arrays. It never recopies data internally during an append, but it may allocate during append. It is specialized for primitive types. It can store more elements than Int.MaxValue, however in this case toArray will throw (use toArrays).  val b = org.</description>
+    </item>
+    
+  </channel>
+</rss>

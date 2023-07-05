@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="Saddle exposes the most often used linear algebra operations through a binding to BLAS and LAPACK, thereby linear algebra on saddle is fast and hardware efficient. Data is not copied to an off heap memory segment for this to work.
+These operations are available only for Vec[Double] and Mat[Double] instances. Linear algebra needs the saddle-linalg dependency.
+The linear algebra API is exposed as a set of extension methods. See the scaladoc for the list of supported operations.">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="Categories" />
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Linear algebra" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://pityka.github.io/saddle/categories/" />
+<meta property="og:url" content="https://pityka.github.io/saddle/docs/linalg/" />
 
-<title>Categories | SADDLE</title>
+<title>Linear algebra | SADDLE</title>
 <link rel="manifest" href="/saddle/manifest.json">
 <link rel="icon" href="/saddle/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/saddle/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
@@ -18,7 +20,7 @@
   <script defer src="/saddle/en.search.min.ab7d66b1eeaa63624aded07029357535a5749cb46f010bdf8fd0305c89d78d7c.js" integrity="sha256-q31mse6qY2JK3tBwKTV1NaV0nLRvAQvfj9AwXInXjXw=" crossorigin="anonymous"></script>
 
   <script defer src="/saddle/sw.min.25cd2c10e05e54b3f070dd32a513baf694bd7bab88624b5a48dec54f36645671.js" integrity="sha256-Jc0sEOBeVLPwcN0ypRO69pS9e6uIYktaSN7FTzZkVnE=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://pityka.github.io/saddle/categories/index.xml" title="SADDLE" />
+<link rel="alternate" type="application/rss+xml" href="https://pityka.github.io/saddle/docs/linalg/index.xml" title="SADDLE" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -249,7 +251,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="https://pityka.github.io/saddle/docs/linalg/" class="">Linear algebra</a>
+    <a href="https://pityka.github.io/saddle/docs/linalg/" class=" active">Linear algebra</a>
   
 
           
@@ -314,7 +316,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/saddle/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Categories</strong>
+  <strong>Linear algebra</strong>
 
   <label for="toc-control">
     
@@ -327,29 +329,9 @@ https://github.com/alex-shpak/hugo-book
   
   <aside class="hidden clearfix">
     
-  <nav>
-  <ul>
   
-    
-    <li class="book-section-flat">
-      <strong>Categories</strong>
-      <ul>
-      
-      </ul>
-    </li>
-    
-  
-    
-    <li class="book-section-flat">
-      <strong>Tags</strong>
-      <ul>
-      
-      </ul>
-    </li>
-    
-  
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
+
 
 
   </aside>
@@ -359,9 +341,13 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  
-
-  
+  <article class="markdown"><p>Saddle exposes the most often used linear algebra operations through a binding to BLAS and LAPACK, thereby linear algebra on saddle is fast and hardware efficient. Data is not copied to an off heap memory segment for this to work.</p>
+<p>These operations are available only for Vec[Double] and Mat[Double] instances.
+Linear algebra needs the <code>saddle-linalg</code> dependency.</p>
+<p>The linear algebra API is exposed as a set of extension methods.
+See the 
+  <a href="/saddle/api/org/saddle/linalg/MatPimp.html">scaladoc</a> for the list of supported operations.</p>
+</article>
  
       
 
@@ -371,6 +357,13 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+
+  <div>
+    <a class="flex align-center" href="https://github.com/pityka/saddle/master/docs//content/docs/linalg/_index.md" target="_blank" rel="noopener">
+      <img src="/saddle/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
 
 
 </div>
@@ -395,29 +388,9 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-toc">
       <div class="book-toc-content">
         
-  <nav>
-  <ul>
   
-    
-    <li class="book-section-flat">
-      <strong>Categories</strong>
-      <ul>
-      
-      </ul>
-    </li>
-    
-  
-    
-    <li class="book-section-flat">
-      <strong>Tags</strong>
-      <ul>
-      
-      </ul>
-    </li>
-    
-  
-  </ul>
-</nav>
+<nav id="TableOfContents"></nav>
+
 
  
       </div>

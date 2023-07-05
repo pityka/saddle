@@ -2,11 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://pityka.github.io/saddle/docs/io/csv/</loc>
+  </url><url>
     <loc>https://pityka.github.io/saddle/docs/getting_started/</loc>
   </url><url>
     <loc>https://pityka.github.io/saddle/</loc>
   </url><url>
-    <loc>https://pityka.github.io/saddle/docs/usage/</loc>
+    <loc>https://pityka.github.io/saddle/docs/imports/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/io/json/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/datastructures/2_vec/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/datastructures/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/datastructures/3_series/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/io/npy/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/datastructures/4_mat/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/io/binary/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/io/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/datastructures/5_frame/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/linalg/</loc>
+  </url><url>
+    <loc>https://pityka.github.io/saddle/docs/datastructures/6_buffer/</loc>
   </url><url>
     <loc>https://pityka.github.io/saddle/categories/</loc>
   </url><url>

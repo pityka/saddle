@@ -7,26 +7,121 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://pityka.github.io/saddle/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>CSV</title>
+      <link>https://pityka.github.io/saddle/docs/io/csv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/csv/</guid>
+      <description>CSV Parser #  Saddle features a very fast CSV parser. It thrives to allocate as little as possible and make as few branching as possible during parsing. E.g. it can parse numeric tables without ever allocating a String (except for the header).
+The CSV parsing logic itself is published in the saddle-io module which is a dependency free module. The saddle specific parts are in the saddle-core module.
+import scala.</description>
+    </item>
+    
+    <item>
       <title>Getting started</title>
       <link>https://pityka.github.io/saddle/docs/getting_started/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://pityka.github.io/saddle/docs/getting_started/</guid>
       <description>Add any of these lines to your build.sbt:
-// The core library libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-core&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-ops-inlined&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Linear algebra interface to BLAS libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-linalg&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Binary representation of data frames and matrices libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-binary&amp;#34; % &amp;#34;0.0.0+1-4923831f-SNAPSHOT&amp;#34; // Circe Encoder and Decoder instances libraryDependencies += &amp;#34;io.</description>
+// The core library libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-core&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Inlined binary operation instances for Mat and Vec libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-ops-inlined&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Linear algebra interface to BLAS libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-linalg&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Binary representation of data frames and matrices libraryDependencies += &amp;#34;io.github.pityka&amp;#34; % &amp;#34;saddle-binary&amp;#34; % &amp;#34;0.0.0+1-87817368-SNAPSHOT&amp;#34; // Circe Encoder and Decoder instances libraryDependencies += &amp;#34;io.</description>
     </item>
     
     <item>
-      <title>Usage</title>
-      <link>https://pityka.github.io/saddle/docs/usage/</link>
+      <title>Imports</title>
+      <link>https://pityka.github.io/saddle/docs/imports/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://pityka.github.io/saddle/docs/usage/</guid>
+      <guid>https://pityka.github.io/saddle/docs/imports/</guid>
       <description>Imports #  You most likely need the following two imports:
 import org.saddle._ import org.saddle.order._ Note that org.saddle.order._ imports cats.kernel.Order[_] typeclass instances into the scope. If you import cats instances an other way then you should not import org.saddle.order._.
-The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare.
-1D vector: Vec[T] #  Factories:
-import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.</description>
+The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare.</description>
+    </item>
+    
+    <item>
+      <title>JSON</title>
+      <link>https://pityka.github.io/saddle/docs/io/json/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/json/</guid>
+      <description>Saddle provides type classes for circe and jsoniter scala in the saddle-circe and saddle-jsoniter modules.
+Circe #  The wildcard import import org.saddle.circe._ will import the necessary implicits for circe.
+jsoniter-scala #  The wildcard import import org.saddle.jsoniter._ will import the necessary implicits for jsoniter.</description>
+    </item>
+    
+    <item>
+      <title>Vector</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/2_vec/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/2_vec/</guid>
+      <description>1D vector: Vec[T] #  import org.saddle._ import org.saddle.order._ Factories #  import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.empty[Double] // res3: Vec[Double] = Empty Vec  vec.</description>
+    </item>
+    
+    <item>
+      <title>Indexed vector</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/3_series/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/3_series/</guid>
+      <description>1D vector with index: Series[K,V] #  A Series combines a Vec with an Index that provides an ordered key-value mapping. We’ll talk more about the details of Index later.
+The key type of a must have a natural ordering (ie, an Ordering of that type within the implicit scope). However, the Series maintains the order in which its data was supplied unless ordered othewise.
+Let’s look at a few constructions:</description>
+    </item>
+    
+    <item>
+      <title>NPY</title>
+      <link>https://pityka.github.io/saddle/docs/io/npy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/npy/</guid>
+      <description>Saddle provides methods to read matrices from numpy&amp;rsquo;s NPY format. It can not read all NPY files, only those which contain numeric arrays.
+See the short API of the org.saddle.npy.Reader object for further details.</description>
+    </item>
+    
+    <item>
+      <title>2D array (matrix)</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/4_mat/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/4_mat/</guid>
+      <description>Matrix: Mat[T] #  import org.saddle._ import org.saddle.order._ A Mat[T] represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.
+The row-major layout is compatible with EJML, a linear algebra library running on the JVM. If you want to use a BLAS, you can take a look in saddle-linalg.
+Factories #  import org.saddle._ Mat(2,2, Array(1,2,3,4)) // res0: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // all same:  Mat(Array(Array(1,3), Array(2,4))) // res1: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Vec(1,3), Vec(2,4)) // res2: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Array(Vec(1,3), Vec(2,4))) // res3: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // identity matrix:  mat.</description>
+    </item>
+    
+    <item>
+      <title>Binary</title>
+      <link>https://pityka.github.io/saddle/docs/io/binary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/binary/</guid>
+      <description>The saddle-binary module offers a saddle specific fast serialization format. Its main use is as a temporary format which can be parsed very efficiently. It can serialize Vecs, Mats, Series and Frames.
+The entry point of these APIs are the org.saddle.binary.Writer and Reader objects.
+The scaladoc documents the serialization format.
+An example:
+import org.saddle._ import org.saddle.order._ val frame = Frame( Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)), Index(&amp;#34;r1&amp;#34;, &amp;#34;r2&amp;#34;), Index(&amp;#34;c1&amp;#34;, &amp;#34;c2&amp;#34;, &amp;#34;c3&amp;#34;) ) // frame: Frame[String, String, Double] = [2 x 3] // c1 c2 c3 // ------ ------ ------ // r1 -&amp;gt; 1.</description>
+    </item>
+    
+    <item>
+      <title>Data frame</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/5_frame/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/5_frame/</guid>
+      <description>Homogeneous table with row and column index (data frame) : Frame[RX,CX,T] #  A Frame combines a Mat with a row index and a column index which provides a way to index into the Mat.
+A Frame is represented internally as a sequence of column Vec instances all sharing the same row index.
+Factories #  import org.saddle._ import org.saddle.order._ import org.saddle.ops.BinOps._ val v = Vec(1, 2) // given the following // v: Vec[Int] = [2 x 1] // 1 // 2 // // given the following  val u = Vec(3, 4) // u: Vec[Int] = [2 x 1] // 3 // 4 //  val s = Series(Vec(1,3,2,4), Index(&amp;#34;c&amp;#34;, &amp;#34;b&amp;#34;, &amp;#34;a&amp;#34;, &amp;#34;b&amp;#34;)).</description>
+    </item>
+    
+    <item>
+      <title>Mutable buffer</title>
+      <link>https://pityka.github.io/saddle/docs/datastructures/6_buffer/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/datastructures/6_buffer/</guid>
+      <description>Buffer is a mutable data structure with two operations:
+ append an element convert the buffer to an array or arrays.   Internally it is stored as a growable sequence of arrays. It never recopies data internally during an append, but it may allocate during append. It is specialized for primitive types. It can store more elements than Int.MaxValue, however in this case toArray will throw (use toArrays).  val b = org.</description>
     </item>
     
   </channel>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Getting data in and out of saddle on SADDLE</title>
+    <link>https://pityka.github.io/saddle/docs/io/</link>
+    <description>Recent content in Getting data in and out of saddle on SADDLE</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://pityka.github.io/saddle/docs/io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSV</title>
+      <link>https://pityka.github.io/saddle/docs/io/csv/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/csv/</guid>
+      <description>CSV Parser #  Saddle features a very fast CSV parser. It thrives to allocate as little as possible and make as few branching as possible during parsing. E.g. it can parse numeric tables without ever allocating a String (except for the header).
+The CSV parsing logic itself is published in the saddle-io module which is a dependency free module. The saddle specific parts are in the saddle-core module.
+import scala.</description>
+    </item>
+    
+    <item>
+      <title>JSON</title>
+      <link>https://pityka.github.io/saddle/docs/io/json/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/json/</guid>
+      <description>Saddle provides type classes for circe and jsoniter scala in the saddle-circe and saddle-jsoniter modules.
+Circe #  The wildcard import import org.saddle.circe._ will import the necessary implicits for circe.
+jsoniter-scala #  The wildcard import import org.saddle.jsoniter._ will import the necessary implicits for jsoniter.</description>
+    </item>
+    
+    <item>
+      <title>NPY</title>
+      <link>https://pityka.github.io/saddle/docs/io/npy/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/npy/</guid>
+      <description>Saddle provides methods to read matrices from numpy&amp;rsquo;s NPY format. It can not read all NPY files, only those which contain numeric arrays.
+See the short API of the org.saddle.npy.Reader object for further details.</description>
+    </item>
+    
+    <item>
+      <title>Binary</title>
+      <link>https://pityka.github.io/saddle/docs/io/binary/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://pityka.github.io/saddle/docs/io/binary/</guid>
+      <description>The saddle-binary module offers a saddle specific fast serialization format. Its main use is as a temporary format which can be parsed very efficiently. It can serialize Vecs, Mats, Series and Frames.
+The entry point of these APIs are the org.saddle.binary.Writer and Reader objects.
+The scaladoc documents the serialization format.
+An example:
+import org.saddle._ import org.saddle.order._ val frame = Frame( Mat(Vec(1d, 2d), Vec(3d, 4d), Vec(5d, 6d)), Index(&amp;#34;r1&amp;#34;, &amp;#34;r2&amp;#34;), Index(&amp;#34;c1&amp;#34;, &amp;#34;c2&amp;#34;, &amp;#34;c3&amp;#34;) ) // frame: Frame[String, String, Double] = [2 x 3] // c1 c2 c3 // ------ ------ ------ // r1 -&amp;gt; 1.</description>
+    </item>
+    
+  </channel>
+</rss>

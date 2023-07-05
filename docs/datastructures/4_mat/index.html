@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Matrix: Mat[T] #  import org.saddle._ import org.saddle.order._ A Mat[T] represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.
+The row-major layout is compatible with EJML, a linear algebra library running on the JVM. If you want to use a BLAS, you can take a look in saddle-linalg.
+Factories #  import org.saddle._ Mat(2,2, Array(1,2,3,4)) // res0: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // all same:  Mat(Array(Array(1,3), Array(2,4))) // res1: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Vec(1,3), Vec(2,4)) // res2: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Array(Vec(1,3), Vec(2,4))) // res3: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // identity matrix:  mat.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="2D array (matrix)" />
+<meta property="og:description" content="Matrix: Mat[T] #  import org.saddle._ import org.saddle.order._ A Mat[T] represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.
+The row-major layout is compatible with EJML, a linear algebra library running on the JVM. If you want to use a BLAS, you can take a look in saddle-linalg.
+Factories #  import org.saddle._ Mat(2,2, Array(1,2,3,4)) // res0: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // all same:  Mat(Array(Array(1,3), Array(2,4))) // res1: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Vec(1,3), Vec(2,4)) // res2: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  Mat(Array(Vec(1,3), Vec(2,4))) // res3: Mat[Int] = [2 x 2] // 1 2 // 3 4 //  // identity matrix:  mat." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pityka.github.io/saddle/docs/datastructures/4_mat/" /><meta property="article:section" content="docs" />
+
+
+
+<title>2D array (matrix) | SADDLE</title>
+<link rel="manifest" href="/saddle/manifest.json">
+<link rel="icon" href="/saddle/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/saddle/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
+  <script defer src="/saddle/flexsearch.min.js"></script>
+  <script defer src="/saddle/en.search.min.ab7d66b1eeaa63624aded07029357535a5749cb46f010bdf8fd0305c89d78d7c.js" integrity="sha256-q31mse6qY2JK3tBwKTV1NaV0nLRvAQvfj9AwXInXjXw=" crossorigin="anonymous"></script>
+
+  <script defer src="/saddle/sw.min.25cd2c10e05e54b3f070dd32a513baf694bd7bab88624b5a48dec54f36645671.js" integrity="sha256-Jc0sEOBeVLPwcN0ypRO69pS9e6uIYktaSN7FTzZkVnE=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/saddle/"><span>SADDLE</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/getting_started/" class="">Getting started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/imports/" class="">Imports</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/" class="">Data structures</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/2_vec/" class="">Vector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/3_series/" class="">Indexed vector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/4_mat/" class=" active">2D array (matrix)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/5_frame/" class="">Data frame</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/6_buffer/" class="">Mutable buffer</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/" class="">Getting data in and out of saddle</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/npy/" class="">NPY</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/binary/" class="">Binary</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/linalg/" class="">Linear algebra</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/saddle/api/" target="_blank" rel="noopener">
+        API
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/pityka/saddle" target="_blank" rel="noopener">
+        Code
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/saddle/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>2D array (matrix)</strong>
+
+  <label for="toc-control">
+    
+    <img src="/saddle/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#factories">Factories</a></li>
+    <li><a href="#binary-operations">Binary operations</a></li>
+    <li><a href="#linear-algebra">Linear algebra</a></li>
+    <li><a href="#operations">Operations</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="matrix-matt">
+  Matrix: Mat[T]
+  <a class="anchor" href="#matrix-matt">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.order._</span>
+</code></pre></div><p>A <code>Mat[T]</code> represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.</p>
+<p>The row-major layout is compatible with EJML, a linear algebra library running on the JVM.
+If you want to use a BLAS, you can take a look in <code>saddle-linalg</code>.</p>
+<h2 id="factories">
+  Factories
+  <a class="anchor" href="#factories">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+ <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span> <span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res0: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// all same:
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">)))</span>
+<span style="color:#60a0b0;font-style:italic">// res1: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res2: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">)))</span>
+<span style="color:#60a0b0;font-style:italic">// res3: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// identity matrix:
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>ident<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res4: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1.0000 0.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000 1.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// empty matrix:
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">.</span>empty<span style="color:#666">[</span><span style="color:#902000">Double</span><span style="color:#666">]</span>
+<span style="color:#60a0b0;font-style:italic">// res5: Mat[Double] = [0 x 0]
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// zeros:
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">[</span><span style="color:#902000">Int</span><span style="color:#666">](</span><span style="color:#40a070">2</span><span style="color:#666">,</span> <span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res6: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 0 0 
+</span><span style="color:#60a0b0;font-style:italic">// 0 0 
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>Again, sometimes we want to create instances filled with random observations. As to Vec, we can do the following:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">mat<span style="color:#666">.</span>rand<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>       
+<span style="color:#60a0b0;font-style:italic">// res7: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 0.9518 0.4129 
+</span><span style="color:#60a0b0;font-style:italic">// 0.8566 0.1953 
+</span><span style="color:#60a0b0;font-style:italic">//        
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>randp<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>      <span style="color:#60a0b0;font-style:italic">// random positive doubles
+</span><span style="color:#60a0b0;font-style:italic">// res8: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 0.4132 0.3251 
+</span><span style="color:#60a0b0;font-style:italic">// 0.8194 0.8266 
+</span><span style="color:#60a0b0;font-style:italic">//       // random positive doubles
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>randn<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>      <span style="color:#60a0b0;font-style:italic">// random normally distributed doubles
+</span><span style="color:#60a0b0;font-style:italic">// res9: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// -1.3042  0.6342 
+</span><span style="color:#60a0b0;font-style:italic">// -0.2290 -1.7302 
+</span><span style="color:#60a0b0;font-style:italic">//       // random normally distributed doubles
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>randn2<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">12</span><span style="color:#666">)</span> <span style="color:#60a0b0;font-style:italic">// random normally distributed with mean=3, stdev=12
+</span><span style="color:#60a0b0;font-style:italic">// res10: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 11.3638 -0.6032 
+</span><span style="color:#60a0b0;font-style:italic">// 30.9201  6.0665 
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>There are a few other factory methods available:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">mat<span style="color:#666">.</span>ones<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res11: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1.0000 1.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 1.0000 1.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>zeros<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res12: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000 0.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000 0.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>diag<span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res13: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1.0000 0.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000 2.0000 
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><h2 id="binary-operations">
+  Binary operations
+  <a class="anchor" href="#binary-operations">#</a>
+</h2>
+<p>Let’s look at some basic operations with Mat. As with Vec, you may perform calculations on two Mat instances, or on a Mat and a scalar value.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.ops.BinOps._</span>
+<span style="color:#60a0b0;font-style:italic">// element-wise multiplication
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span> <span style="color:#666">*</span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res14: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 4  2 
+</span><span style="color:#60a0b0;font-style:italic">// 6 12 
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><h2 id="linear-algebra">
+  Linear algebra
+  <a class="anchor" href="#linear-algebra">#</a>
+</h2>
+<p>Matrix multiplication, matrix-vector multiplication or other linear algebra operatoins need <code>saddle-linalg</code>, which depends on netlib-java. These work just on <code>Mat[Double]</code> and <code>Vec[Double]</code>.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.linalg._</span>
+<span style="color:#60a0b0;font-style:italic">// matrix multiplication
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span>d<span style="color:#666">,</span><span style="color:#40a070">2</span>d<span style="color:#666">,</span><span style="color:#40a070">3</span>d<span style="color:#666">,</span><span style="color:#40a070">4</span>d<span style="color:#666">))</span> mm <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">4</span>d<span style="color:#666">,</span><span style="color:#40a070">1</span>d<span style="color:#666">,</span><span style="color:#40a070">2</span>d<span style="color:#666">,</span><span style="color:#40a070">3</span>d<span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res15: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//  8.0000  7.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 20.0000 15.0000 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+
+<span style="color:#60a0b0;font-style:italic">// matrix-vector multiplication
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span>d<span style="color:#666">,</span><span style="color:#40a070">2</span>d<span style="color:#666">,</span><span style="color:#40a070">3</span>d<span style="color:#666">,</span><span style="color:#40a070">4</span>d<span style="color:#666">))</span> mv <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">2</span>d<span style="color:#666">,</span><span style="color:#40a070">1</span>d<span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res16: Vec[Double] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">//  4.0000
+</span><span style="color:#60a0b0;font-style:italic">// 10.0000
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// as expected
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span> <span style="color:#666">*</span> <span style="color:#40a070">2</span>
+<span style="color:#60a0b0;font-style:italic">// res17: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 2 4 
+</span><span style="color:#60a0b0;font-style:italic">// 6 8 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span> <span style="color:#666">+</span> <span style="color:#40a070">2</span>
+<span style="color:#60a0b0;font-style:italic">// res18: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 5 6 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span> <span style="color:#666">&lt;&lt;</span> <span style="color:#40a070">2</span>
+<span style="color:#60a0b0;font-style:italic">// res19: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//  4  8 
+</span><span style="color:#60a0b0;font-style:italic">// 12 16 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// etc...
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// transpose
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">)).</span>T
+<span style="color:#60a0b0;font-style:italic">// res20: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 3 
+</span><span style="color:#60a0b0;font-style:italic">// 2 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// properties of Mat
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">val</span> m <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// m: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>numRows
+<span style="color:#60a0b0;font-style:italic">// res21: Int = 2
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>numCols
+<span style="color:#60a0b0;font-style:italic">// res22: Int = 2
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>isSquare
+<span style="color:#60a0b0;font-style:italic">// res23: Boolean = true
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>isEmpty
+<span style="color:#60a0b0;font-style:italic">// res24: Boolean = false
+</span></code></pre></div><h2 id="operations">
+  Operations
+  <a class="anchor" href="#operations">#</a>
+</h2>
+<p>There are a few ways to extract values from a Mat.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">m<span style="color:#666">.</span>at<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res25: scalar.Scalar[Int] = Value(el = 2)
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// be careful with this one!
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>raw<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res26: Int = 2
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ m<span style="color:#666">.</span>takeRows<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res27: Mat[Int] = [1 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ m<span style="color:#666">.</span>withoutRows<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res28: Mat[Int] = [1 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 3 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ m<span style="color:#666">.</span>takeCols<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res29: Mat[Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1 
+</span><span style="color:#60a0b0;font-style:italic">// 3 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ m<span style="color:#666">.</span>col<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res30: Vec[Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>row<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res31: Vec[Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>rows
+<span style="color:#60a0b0;font-style:italic">// res32: IndexedSeq[Vec[Int]] = Vector(
+</span><span style="color:#60a0b0;font-style:italic">//   [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// ,
+</span><span style="color:#60a0b0;font-style:italic">//   [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// )
+</span><span style="color:#60a0b0;font-style:italic"></span> m<span style="color:#666">.</span>cols
+<span style="color:#60a0b0;font-style:italic">// res33: IndexedSeq[Vec[Int]] = Vector(
+</span><span style="color:#60a0b0;font-style:italic">//   [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// ,
+</span><span style="color:#60a0b0;font-style:italic">//   [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// )
+</span></code></pre></div><p>Some other interesting methods on Mat:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">val</span> m2 <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Mat</span><span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span>na<span style="color:#666">[</span><span style="color:#902000">Int</span><span style="color:#666">],</span><span style="color:#40a070">4</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// m2: Mat[Int] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// NA 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ m2<span style="color:#666">.</span>rowsWithNA
+<span style="color:#60a0b0;font-style:italic">// res34: Set[Int] = Set(1)
+</span><span style="color:#60a0b0;font-style:italic"></span> m2<span style="color:#666">.</span>dropRowsWithNA
+<span style="color:#60a0b0;font-style:italic">// res35: Mat[Int] = [1 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> m2<span style="color:#666">.</span>reshape<span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res36: Mat[Int] = [1 x 4]
+</span><span style="color:#60a0b0;font-style:italic">// 1 2 NA 4 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> mat<span style="color:#666">.</span>rand<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">).</span>roundTo<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res37: Mat[Double] = [2 x 2]
+</span><span style="color:#60a0b0;font-style:italic">// 0.6300 0.4700 
+</span><span style="color:#60a0b0;font-style:italic">// 0.6800 0.3800 
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/pityka/saddle/master/docs//content/docs/datastructures/4_mat.md" target="_blank" rel="noopener">
+      <img src="/saddle/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#factories">Factories</a></li>
+    <li><a href="#binary-operations">Binary operations</a></li>
+    <li><a href="#linear-algebra">Linear algebra</a></li>
+    <li><a href="#operations">Operations</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

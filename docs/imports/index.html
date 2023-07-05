@@ -3,14 +3,20 @@
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
+<meta name="description" content="Imports #  You most likely need the following two imports:
+import org.saddle._ import org.saddle.order._ Note that org.saddle.order._ imports cats.kernel.Order[_] typeclass instances into the scope. If you import cats instances an other way then you should not import org.saddle.order._.
+The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare.">
 <meta name="theme-color" content="#FFFFFF">
-<meta name="color-scheme" content="light dark"><meta property="og:title" content="Categories" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://pityka.github.io/saddle/categories/" />
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Imports" />
+<meta property="og:description" content="Imports #  You most likely need the following two imports:
+import org.saddle._ import org.saddle.order._ Note that org.saddle.order._ imports cats.kernel.Order[_] typeclass instances into the scope. If you import cats instances an other way then you should not import org.saddle.order._.
+The Order[Double] and Order[Float] instances in org.saddle.order define a total ordering and order NaN above all other values, consistent with java.lang.Double.compare." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pityka.github.io/saddle/docs/imports/" /><meta property="article:section" content="docs" />
 
-<title>Categories | SADDLE</title>
+
+
+<title>Imports | SADDLE</title>
 <link rel="manifest" href="/saddle/manifest.json">
 <link rel="icon" href="/saddle/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/saddle/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
@@ -18,7 +24,6 @@
   <script defer src="/saddle/en.search.min.ab7d66b1eeaa63624aded07029357535a5749cb46f010bdf8fd0305c89d78d7c.js" integrity="sha256-q31mse6qY2JK3tBwKTV1NaV0nLRvAQvfj9AwXInXjXw=" crossorigin="anonymous"></script>
 
   <script defer src="/saddle/sw.min.25cd2c10e05e54b3f070dd32a513baf694bd7bab88624b5a48dec54f36645671.js" integrity="sha256-Jc0sEOBeVLPwcN0ypRO69pS9e6uIYktaSN7FTzZkVnE=" crossorigin="anonymous"></script>
-<link rel="alternate" type="application/rss+xml" href="https://pityka.github.io/saddle/categories/index.xml" title="SADDLE" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -83,7 +88,7 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="https://pityka.github.io/saddle/docs/imports/" class="">Imports</a>
+    <a href="https://pityka.github.io/saddle/docs/imports/" class=" active">Imports</a>
   
 
         </li>
@@ -314,7 +319,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/saddle/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>Categories</strong>
+  <strong>Imports</strong>
 
   <label for="toc-control">
     
@@ -327,29 +332,17 @@ https://github.com/alex-shpak/hugo-book
   
   <aside class="hidden clearfix">
     
-  <nav>
+  
+<nav id="TableOfContents">
   <ul>
-  
-    
-    <li class="book-section-flat">
-      <strong>Categories</strong>
+    <li>
       <ul>
-      
+        <li><a href="#imports">Imports</a></li>
       </ul>
     </li>
-    
-  
-    
-    <li class="book-section-flat">
-      <strong>Tags</strong>
-      <ul>
-      
-      </ul>
-    </li>
-    
-  
   </ul>
 </nav>
+
 
 
   </aside>
@@ -359,9 +352,18 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-  
-
-  
+  <article class="markdown"><h3 id="imports">
+  Imports
+  <a class="anchor" href="#imports">#</a>
+</h3>
+<p>You most likely need the following two imports:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.order._</span>
+</code></pre></div><p>Note that <code>org.saddle.order._</code> imports <code>cats.kernel.Order[_]</code> typeclass instances into the scope.
+If you import cats instances an other way then you should not import <code>org.saddle.order._</code>.</p>
+<p>The <code>Order[Double]</code> and <code>Order[Float]</code> instances in <code>org.saddle.order</code> define a total ordering and
+order <code>NaN</code> above all other values, consistent with <code>java.lang.Double.compare</code>.</p>
+</article>
  
       
 
@@ -371,6 +373,13 @@ https://github.com/alex-shpak/hugo-book
 
 
 
+
+  <div>
+    <a class="flex align-center" href="https://github.com/pityka/saddle/master/docs//content/docs/imports.md" target="_blank" rel="noopener">
+      <img src="/saddle/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
 
 
 </div>
@@ -395,29 +404,17 @@ https://github.com/alex-shpak/hugo-book
     <aside class="book-toc">
       <div class="book-toc-content">
         
-  <nav>
+  
+<nav id="TableOfContents">
   <ul>
-  
-    
-    <li class="book-section-flat">
-      <strong>Categories</strong>
+    <li>
       <ul>
-      
+        <li><a href="#imports">Imports</a></li>
       </ul>
     </li>
-    
-  
-    
-    <li class="book-section-flat">
-      <strong>Tags</strong>
-      <ul>
-      
-      </ul>
-    </li>
-    
-  
   </ul>
 </nav>
+
 
  
       </div>

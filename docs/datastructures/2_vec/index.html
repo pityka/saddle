@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="1D vector: Vec[T] #  import org.saddle._ import org.saddle.order._ Factories #  import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.empty[Double] // res3: Vec[Double] = Empty Vec  vec.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Vector" />
+<meta property="og:description" content="1D vector: Vec[T] #  import org.saddle._ import org.saddle.order._ Factories #  import org.saddle._ Vec(1, 2, 3) // res0: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(1 to 3 : _*) // res1: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec(Array(1,2,3)) // res2: Vec[Int] = [3 x 1] // 1 // 2 // 3 // Vec.empty[Double] // res3: Vec[Double] = Empty Vec  vec." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pityka.github.io/saddle/docs/datastructures/2_vec/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Vector | SADDLE</title>
+<link rel="manifest" href="/saddle/manifest.json">
+<link rel="icon" href="/saddle/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/saddle/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
+  <script defer src="/saddle/flexsearch.min.js"></script>
+  <script defer src="/saddle/en.search.min.ab7d66b1eeaa63624aded07029357535a5749cb46f010bdf8fd0305c89d78d7c.js" integrity="sha256-q31mse6qY2JK3tBwKTV1NaV0nLRvAQvfj9AwXInXjXw=" crossorigin="anonymous"></script>
+
+  <script defer src="/saddle/sw.min.25cd2c10e05e54b3f070dd32a513baf694bd7bab88624b5a48dec54f36645671.js" integrity="sha256-Jc0sEOBeVLPwcN0ypRO69pS9e6uIYktaSN7FTzZkVnE=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/saddle/"><span>SADDLE</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/getting_started/" class="">Getting started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/imports/" class="">Imports</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/" class="">Data structures</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/2_vec/" class=" active">Vector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/3_series/" class="">Indexed vector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/4_mat/" class="">2D array (matrix)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/5_frame/" class="">Data frame</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/6_buffer/" class="">Mutable buffer</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/" class="">Getting data in and out of saddle</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/npy/" class="">NPY</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/binary/" class="">Binary</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/linalg/" class="">Linear algebra</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/saddle/api/" target="_blank" rel="noopener">
+        API
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/pityka/saddle" target="_blank" rel="noopener">
+        Code
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/saddle/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Vector</strong>
+
+  <label for="toc-control">
+    
+    <img src="/saddle/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#factories">Factories</a></li>
+    <li><a href="#operations">Operations</a></li>
+    <li><a href="#slicing">Slicing</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="1d-vector-vect">
+  1D vector: Vec[T]
+  <a class="anchor" href="#1d-vector-vect">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.order._</span>
+</code></pre></div><h2 id="factories">
+  Factories
+  <a class="anchor" href="#factories">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span> <span style="color:#40a070">2</span><span style="color:#666">,</span> <span style="color:#40a070">3</span><span style="color:#666">)</span>  
+<span style="color:#60a0b0;font-style:italic">// res0: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">//   
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span> to <span style="color:#40a070">3</span> <span style="color:#007020;font-weight:bold">:</span> <span style="color:#007020;font-weight:bold">_</span><span style="color:#902000">*</span><span style="color:#666">)</span>    
+<span style="color:#60a0b0;font-style:italic">// res1: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">//     
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Array</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res2: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">.</span>empty<span style="color:#666">[</span><span style="color:#902000">Double</span><span style="color:#666">]</span> 
+<span style="color:#60a0b0;font-style:italic">// res3: Vec[Double] = Empty Vec 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+vec<span style="color:#666">.</span>ones<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res4: Vec[Double] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1.0000
+</span><span style="color:#60a0b0;font-style:italic">// 1.0000
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>vec<span style="color:#666">.</span>zeros<span style="color:#666">(</span><span style="color:#40a070">3</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res5: Vec[Double] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000
+</span><span style="color:#60a0b0;font-style:italic">// 0.0000
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>vec<span style="color:#666">.</span>rand<span style="color:#666">(</span><span style="color:#40a070">20</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res6: Vec[Double] = [20 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 0.8793
+</span><span style="color:#60a0b0;font-style:italic">// 0.5506
+</span><span style="color:#60a0b0;font-style:italic">// 0.5385
+</span><span style="color:#60a0b0;font-style:italic">// 0.2425
+</span><span style="color:#60a0b0;font-style:italic">// 0.5928
+</span><span style="color:#60a0b0;font-style:italic">//  ... 
+</span><span style="color:#60a0b0;font-style:italic">// 0.7434
+</span><span style="color:#60a0b0;font-style:italic">// 0.8008
+</span><span style="color:#60a0b0;font-style:italic">// 0.0298
+</span><span style="color:#60a0b0;font-style:italic">// 0.5339
+</span><span style="color:#60a0b0;font-style:italic">// 0.1121
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><h2 id="operations">
+  Operations
+  <a class="anchor" href="#operations">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.ops.BinOps._</span>
+
+<span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#666">+</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">6</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res7: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 5
+</span><span style="color:#60a0b0;font-style:italic">// 7
+</span><span style="color:#60a0b0;font-style:italic">// 9
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#666">*</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">6</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res8: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">//  4
+</span><span style="color:#60a0b0;font-style:italic">// 10
+</span><span style="color:#60a0b0;font-style:italic">// 18
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#666">**</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">6</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res9: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">//   1
+</span><span style="color:#60a0b0;font-style:italic">//  32
+</span><span style="color:#60a0b0;font-style:italic">// 729
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>Note above, that you have to import that <code>BinOp</code> instances.</p>
+<p>An alternative set of instances are also available which inline the innermost in Mat and Vec operations:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#60a0b0;font-style:italic">// The macros package contains instances where the innermost loop is inlined.
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.macros.BinOps._</span>  
+<span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#666">+</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">6</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res11: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 5
+</span><span style="color:#60a0b0;font-style:italic">// 7
+</span><span style="color:#60a0b0;font-style:italic">// 9
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#666">*</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">6</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res12: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">//  4
+</span><span style="color:#60a0b0;font-style:italic">// 10
+</span><span style="color:#60a0b0;font-style:italic">// 18
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#666">**</span> <span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">6</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res13: Vec[Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">//   1
+</span><span style="color:#60a0b0;font-style:italic">//  32
+</span><span style="color:#60a0b0;font-style:italic">// 729
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><h2 id="slicing">
+  Slicing
+  <a class="anchor" href="#slicing">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.ops.BinOps._</span>
+<span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">).</span>at<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span> <span style="color:#60a0b0;font-style:italic">// Boxes and keeps NA
+</span><span style="color:#60a0b0;font-style:italic">// res15: scalar.Scalar[Int] = Value(el = 3) // Boxes and keeps NA
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">).</span>raw<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>  
+<span style="color:#60a0b0;font-style:italic">// res16: Int = 3  
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">).</span>apply<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span> <span style="color:#60a0b0;font-style:italic">// same as raw
+</span><span style="color:#60a0b0;font-style:italic">// res17: Int = 3 // same as raw
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">).</span>take<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res18: Vec[Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">).</span>take<span style="color:#666">(</span><span style="color:#40a070">1</span> <span style="color:#666">-&gt;</span> <span style="color:#666">*)</span>
+<span style="color:#60a0b0;font-style:italic">// res19: Vec[Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">).</span>take<span style="color:#666">(*</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res20: Vec[Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/pityka/saddle/master/docs//content/docs/datastructures/2_vec.md" target="_blank" rel="noopener">
+      <img src="/saddle/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#factories">Factories</a></li>
+    <li><a href="#operations">Operations</a></li>
+    <li><a href="#slicing">Slicing</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

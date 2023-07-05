@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="1D vector with index: Series[K,V] #  A Series combines a Vec with an Index that provides an ordered key-value mapping. We’ll talk more about the details of Index later.
+The key type of a must have a natural ordering (ie, an Ordering of that type within the implicit scope). However, the Series maintains the order in which its data was supplied unless ordered othewise.
+Let’s look at a few constructions:">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light dark"><meta property="og:title" content="Indexed vector" />
+<meta property="og:description" content="1D vector with index: Series[K,V] #  A Series combines a Vec with an Index that provides an ordered key-value mapping. We’ll talk more about the details of Index later.
+The key type of a must have a natural ordering (ie, an Ordering of that type within the implicit scope). However, the Series maintains the order in which its data was supplied unless ordered othewise.
+Let’s look at a few constructions:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://pityka.github.io/saddle/docs/datastructures/3_series/" /><meta property="article:section" content="docs" />
+
+
+
+<title>Indexed vector | SADDLE</title>
+<link rel="manifest" href="/saddle/manifest.json">
+<link rel="icon" href="/saddle/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/saddle/book.min.46181bc93375ba932026e753b37c40e6ff8bb16a9ef770c78bcc663e4577b1ba.css" integrity="sha256-RhgbyTN1upMgJudTs3xA5v&#43;LsWqe93DHi8xmPkV3sbo=" crossorigin="anonymous">
+  <script defer src="/saddle/flexsearch.min.js"></script>
+  <script defer src="/saddle/en.search.min.ab7d66b1eeaa63624aded07029357535a5749cb46f010bdf8fd0305c89d78d7c.js" integrity="sha256-q31mse6qY2JK3tBwKTV1NaV0nLRvAQvfj9AwXInXjXw=" crossorigin="anonymous"></script>
+
+  <script defer src="/saddle/sw.min.25cd2c10e05e54b3f070dd32a513baf694bd7bab88624b5a48dec54f36645671.js" integrity="sha256-Jc0sEOBeVLPwcN0ypRO69pS9e6uIYktaSN7FTzZkVnE=" crossorigin="anonymous"></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/saddle/"><span>SADDLE</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/getting_started/" class="">Getting started</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/imports/" class="">Imports</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/" class="">Data structures</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/2_vec/" class="">Vector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/3_series/" class=" active">Indexed vector</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/4_mat/" class="">2D array (matrix)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/5_frame/" class="">Data frame</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/datastructures/6_buffer/" class="">Mutable buffer</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/" class="">Getting data in and out of saddle</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/csv/" class="">CSV</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/json/" class="">JSON</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/npy/" class="">NPY</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/io/binary/" class="">Binary</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="https://pityka.github.io/saddle/docs/linalg/" class="">Linear algebra</a>
+  
+
+          
+  <ul>
+    
+  </ul>
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="/saddle/api/" target="_blank" rel="noopener">
+        API
+      </a>
+  </li>
+  
+  <li>
+    <a href="https://github.com/pityka/saddle" target="_blank" rel="noopener">
+        Code
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/saddle/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>Indexed vector</strong>
+
+  <label for="toc-control">
+    
+    <img src="/saddle/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown"><h1 id="1d-vector-with-index-serieskv">
+  1D vector with index: Series[K,V]
+  <a class="anchor" href="#1d-vector-with-index-serieskv">#</a>
+</h1>
+<p>A Series combines a Vec with an Index that provides an ordered key-value mapping. We’ll talk more about the details of Index later.</p>
+<p>The key type of a must have a natural ordering (ie, an Ordering of that type within the implicit scope). However, the Series maintains the order in which its data was supplied unless ordered othewise.</p>
+<p>Let’s look at a few constructions:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.order._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle._</span>
+<span style="color:#007020;font-weight:bold">import</span> <span style="color:#0e84b5;font-weight:bold">org.saddle.ops.BinOps._</span>
+<span style="color:#60a0b0;font-style:italic">// we already know we can convert a Vec
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">32</span><span style="color:#666">,</span> <span style="color:#40a070">12</span><span style="color:#666">,</span> <span style="color:#40a070">9</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res0: Series[Int, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 0 -&gt; 32
+</span><span style="color:#60a0b0;font-style:italic">// 1 -&gt; 12
+</span><span style="color:#60a0b0;font-style:italic">// 2 -&gt;  9
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// we can pass a pair of tuples
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">1</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">2</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;c&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">3</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res1: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// any series of tuples will work, eg:
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">List</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">1</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">2</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;c&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#40a070">3</span><span style="color:#666">)</span> <span style="color:#007020;font-weight:bold">:</span> <span style="color:#007020;font-weight:bold">_</span><span style="color:#902000">*</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res2: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// can pass data and index separately:
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res3: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// you can create an empty Series like so:
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">.</span>empty<span style="color:#666">[</span><span style="color:#902000">String</span>, <span style="color:#902000">Int</span><span style="color:#666">]</span>
+<span style="color:#60a0b0;font-style:italic">// res4: Series[String, Int] = Empty Series
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// supplied order is maintained:
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res5: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// unlike map, multiple keys are entirely fine:
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res6: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>With construction out of the way, let’s look at a few ways we can get data out of a Series.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">val</span> q <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// q: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// get the values or index
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>values
+<span style="color:#60a0b0;font-style:italic">// res7: Vec[Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>index
+<span style="color:#60a0b0;font-style:italic">// res8: Index[String] = [Index 4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c
+</span><span style="color:#60a0b0;font-style:italic">// b
+</span><span style="color:#60a0b0;font-style:italic">// a
+</span><span style="color:#60a0b0;font-style:italic">// b
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// extract value by numerical offset
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>at<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res9: scalar.Scalar[Int] = Value(el = 2)
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ q<span style="color:#666">.</span>at<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res10: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// or extract key
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>keyAt<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res11: scalar.Scalar[String] = Value(el = &#34;a&#34;)
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ q<span style="color:#666">.</span>keyAt<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res12: Index[String] = [Index 3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a
+</span><span style="color:#60a0b0;font-style:italic">// b
+</span><span style="color:#60a0b0;font-style:italic">// b
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// sort by index ordering
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>sortedIx
+<span style="color:#60a0b0;font-style:italic">// res13: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// sort by value ordering
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>sorted
+<span style="color:#60a0b0;font-style:italic">// res14: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// extract elements matching the index
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res15: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ q<span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res16: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// notice ordering subtleties:
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res17: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// get first or last values
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>first
+<span style="color:#60a0b0;font-style:italic">// res18: scalar.Scalar[Int] = Value(el = 1)
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>last
+<span style="color:#60a0b0;font-style:italic">// res19: scalar.Scalar[Int] = Value(el = 4)
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// or key
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>firstKey
+<span style="color:#60a0b0;font-style:italic">// res20: scalar.Scalar[String] = Value(el = &#34;c&#34;)
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>lastKey
+<span style="color:#60a0b0;font-style:italic">// res21: scalar.Scalar[String] = Value(el = &#34;b&#34;)
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// &#34;reindex&#34; to a new index:
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>reindex<span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;d&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res22: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// or just by a sequence of keys:
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>reindex<span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;d&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res23: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// notice that &#39;slicing&#39; ignores unknown keys:
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;d&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res24: Series[String, Int] = [1 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#60a0b0;font-style:italic">// we cannot reindex with &#34;b&#34;, because it isn&#39;t unique.
+</span><span style="color:#60a0b0;font-style:italic">// (the problem is, which &#34;b&#34; would we choose?)
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>reindex<span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// java.lang.IllegalArgumentException: requirement failed: Could not reindex unambiguously
+</span><span style="color:#60a0b0;font-style:italic">// 	at scala.Predef$.require(Predef.scala:337)
+</span><span style="color:#60a0b0;font-style:italic">// 	at org.saddle.Index.getIndexer(Index.scala:424)
+</span><span style="color:#60a0b0;font-style:italic">// 	at org.saddle.Index.getIndexer$(Index.scala:420)
+</span><span style="color:#60a0b0;font-style:italic">// 	at org.saddle.index.IndexAny.getIndexer(IndexAny.scala:27)
+</span><span style="color:#60a0b0;font-style:italic">// 	at org.saddle.Series$mcI$sp.reindex$mcI$sp(Series.scala:248)
+</span><span style="color:#60a0b0;font-style:italic">// 	at org.saddle.Series$mcI$sp.reindex$mcI$sp(Series.scala:257)
+</span><span style="color:#60a0b0;font-style:italic">// 	at repl.MdocSession$MdocApp$$anonfun$1.apply(3_series.md:102)
+</span><span style="color:#60a0b0;font-style:italic">// 	at repl.MdocSession$MdocApp$$anonfun$1.apply(3_series.md:102)
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#60a0b0;font-style:italic">// we can &#34;reset&#34; the index to integer labels
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>resetIndex
+<span style="color:#60a0b0;font-style:italic">// res25: Series[Int, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 0 -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 1 -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 2 -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 3 -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// or to a new index altogether
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>setIndex<span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;w&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;x&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;y&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;z&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// res26: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// w -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// x -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// y -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// z -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// to &#39;slice&#39;, we need a sorted index; slice is inclusive by default
+</span><span style="color:#60a0b0;font-style:italic"></span> <span style="color:#007020;font-weight:bold">val</span> s <span style="color:#007020;font-weight:bold">=</span> q<span style="color:#666">.</span>sortedIx
+<span style="color:#60a0b0;font-style:italic">// s: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> s<span style="color:#666">.</span>sliceBy<span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span> <span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res27: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// syntactic sugar is provided:
+</span><span style="color:#60a0b0;font-style:italic"></span> s<span style="color:#666">.</span>sliceBy<span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span> <span style="color:#666">-&gt;</span> <span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res28: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> s<span style="color:#666">.</span>sliceBy<span style="color:#666">(*</span> <span style="color:#666">-&gt;</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res29: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// where slice is by offset, exclusive by default, and the
+</span><span style="color:#60a0b0;font-style:italic">// index doesn&#39;t have to be sorted:
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>slice<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res30: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#60a0b0;font-style:italic">// there are head/tail methods:
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>head<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res31: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>tail<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res32: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>Aside from extracting values, there are many fun ways to compute with Series. Try the following:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">q<span style="color:#666">.</span>mapValues<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span> <span style="color:#666">+</span> <span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res33: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  5
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>mapIndex<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span> <span style="color:#666">+</span> <span style="color:#4070a0">&#34;x&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res34: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// cx -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// bx -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// ax -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// bx -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>shift<span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res35: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>filter<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span> <span style="color:#666">&gt;</span> <span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res36: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>filterIx<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span> <span style="color:#666">!=</span> <span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res37: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>filterAt <span style="color:#666">{</span> <span style="color:#007020;font-weight:bold">case</span> loc <span style="color:#007020;font-weight:bold">=&gt;</span> loc <span style="color:#666">!=</span> <span style="color:#40a070">1</span> <span style="color:#666">&amp;&amp;</span> loc <span style="color:#666">!=</span> <span style="color:#40a070">3</span> <span style="color:#666">}</span>
+<span style="color:#60a0b0;font-style:italic">// res38: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>find<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span> <span style="color:#666">==</span> <span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res39: Vec[Int] = [1 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>findKey <span style="color:#666">{</span> <span style="color:#007020;font-weight:bold">case</span> x <span style="color:#007020;font-weight:bold">=&gt;</span> x <span style="color:#666">==</span> <span style="color:#40a070">2</span> <span style="color:#666">||</span> x <span style="color:#666">==</span> <span style="color:#40a070">3</span> <span style="color:#666">}</span>
+<span style="color:#60a0b0;font-style:italic">// res40: Index[String] = [Index 2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b
+</span><span style="color:#60a0b0;font-style:italic">// a
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>findOneKey <span style="color:#666">{</span> <span style="color:#007020;font-weight:bold">case</span> x <span style="color:#007020;font-weight:bold">=&gt;</span> x <span style="color:#666">==</span> <span style="color:#40a070">2</span> <span style="color:#666">||</span> x <span style="color:#666">==</span> <span style="color:#40a070">3</span> <span style="color:#666">}</span>
+<span style="color:#60a0b0;font-style:italic">// res41: scalar.Scalar[String] = Value(el = &#34;b&#34;)
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>minKey
+<span style="color:#60a0b0;font-style:italic">// res42: scalar.Scalar[String] = Value(el = &#34;c&#34;)
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>contains<span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res43: Boolean = true
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>scanLeft<span style="color:#666">(</span><span style="color:#40a070">0</span><span style="color:#666">)</span> <span style="color:#666">{</span> <span style="color:#007020;font-weight:bold">case</span> <span style="color:#666">(</span>acc<span style="color:#666">,</span> v<span style="color:#666">)</span> <span style="color:#007020;font-weight:bold">=&gt;</span> acc <span style="color:#666">+</span> v <span style="color:#666">}</span>
+<span style="color:#60a0b0;font-style:italic">// res44: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  6
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt; 10
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>reversed
+<span style="color:#60a0b0;font-style:italic">// res45: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+<span style="color:#007020;font-weight:bold">val</span> ma <span style="color:#007020;font-weight:bold">=</span> q<span style="color:#666">.</span>mask<span style="color:#666">(</span>q<span style="color:#666">.</span>values <span style="color:#666">&gt;</span> <span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// ma: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>ma<span style="color:#666">.</span>hasNA
+<span style="color:#60a0b0;font-style:italic">// res46: Boolean = true
+</span><span style="color:#60a0b0;font-style:italic"></span>ma<span style="color:#666">.</span>dropNA
+<span style="color:#60a0b0;font-style:italic">// res47: Series[String, Int] = [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+q<span style="color:#666">.</span>rolling<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">,</span> <span style="color:#007020;font-weight:bold">_</span><span style="color:#666">.</span>minKey<span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res48: Series[String, scalar.Scalar[String]] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  c
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  a
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  a
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>splitAt<span style="color:#666">(</span><span style="color:#40a070">2</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res49: (Series[String, Int], Series[String, Int]) = (
+</span><span style="color:#60a0b0;font-style:italic">//   [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// ,
+</span><span style="color:#60a0b0;font-style:italic">//   [2 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// )
+</span><span style="color:#60a0b0;font-style:italic"></span>q<span style="color:#666">.</span>sortedIx<span style="color:#666">.</span>splitBy<span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res50: (Series[String, Int], Series[String, Int]) = (
+</span><span style="color:#60a0b0;font-style:italic">//   [1 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// ,
+</span><span style="color:#60a0b0;font-style:italic">//   [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic">// )
+</span></code></pre></div><p>We can of course convert to a Vec or a Seq if we need to. The Series.toSeq method yields a sequence of key/value tuples.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">q<span style="color:#666">.</span>toVec
+<span style="color:#60a0b0;font-style:italic">// res51: Vec[Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// 1
+</span><span style="color:#60a0b0;font-style:italic">// 3
+</span><span style="color:#60a0b0;font-style:italic">// 2
+</span><span style="color:#60a0b0;font-style:italic">// 4
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span> q<span style="color:#666">.</span>toSeq
+<span style="color:#60a0b0;font-style:italic">// res52: IndexedSeq[(String, Int)] = ArraySeq(
+</span><span style="color:#60a0b0;font-style:italic">//   (&#34;c&#34;, 1),
+</span><span style="color:#60a0b0;font-style:italic">//   (&#34;b&#34;, 3),
+</span><span style="color:#60a0b0;font-style:italic">//   (&#34;a&#34;, 2),
+</span><span style="color:#60a0b0;font-style:italic">//   (&#34;b&#34;, 4)
+</span><span style="color:#60a0b0;font-style:italic">// )
+</span></code></pre></div><p>We can also group by key in order to transform or combine the groupings, which themselves are Series. For example:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">q<span style="color:#666">.</span>groupBy<span style="color:#666">.</span>combine<span style="color:#666">(</span><span style="color:#007020;font-weight:bold">_</span><span style="color:#666">.</span>sum<span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res53: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  7
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+q<span style="color:#666">.</span>groupBy<span style="color:#666">.</span>transform<span style="color:#666">(</span>s <span style="color:#007020;font-weight:bold">=&gt;</span> s <span style="color:#666">-</span> s<span style="color:#666">.</span>mean<span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res54: Series[String, Double] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  0.0000
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt; -0.5000
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  0.0000
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  0.5000
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>You can also group by another index, or by a transformation of the current index, by passing an argument into groupBy. See the Saddle API for more info.</p>
+<p>The expressive nature of working with Series becomes apparent when you need to align data:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">val</span> a <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">3</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;d&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// a: Series[String, Int] = [4 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  3
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">val</span> b <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">8</span><span style="color:#666">,</span><span style="color:#40a070">7</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;c&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;d&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;e&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;f&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// b: Series[String, Int] = [5 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  5
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// e -&gt;  8
+</span><span style="color:#60a0b0;font-style:italic">// f -&gt;  7
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+a <span style="color:#666">+</span> b
+<span style="color:#60a0b0;font-style:italic">// res55: Series[String, Int] = [6 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  9
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// e -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// f -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>You see that the indexes have been aligned prior to operation being performed. Because there is a missing observation in each label of a, e, and f, the summation is not done and instead an NA value is inserted into the result.</p>
+<p>Generally, a full-outer join is performed. So, for instance:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala"><span style="color:#007020;font-weight:bold">val</span> c <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">1</span><span style="color:#666">,</span><span style="color:#40a070">4</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;a&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// c: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span><span style="color:#007020;font-weight:bold">val</span> d <span style="color:#007020;font-weight:bold">=</span> <span style="color:#0e84b5;font-weight:bold">Series</span><span style="color:#666">(</span><span style="color:#0e84b5;font-weight:bold">Vec</span><span style="color:#666">(</span><span style="color:#40a070">5</span><span style="color:#666">,</span><span style="color:#40a070">2</span><span style="color:#666">,</span><span style="color:#40a070">1</span><span style="color:#666">),</span> <span style="color:#0e84b5;font-weight:bold">Index</span><span style="color:#666">(</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;b&#34;</span><span style="color:#666">,</span><span style="color:#4070a0">&#34;d&#34;</span><span style="color:#666">))</span>
+<span style="color:#60a0b0;font-style:italic">// d: Series[String, Int] = [3 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  5
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  2
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  1
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+c <span style="color:#666">+</span> d
+<span style="color:#60a0b0;font-style:italic">// res56: Series[String, Int] = [6 x 1]
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  9
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  6
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  7
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt; NA
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div><p>Most basic math and boolean operations are supported between two Series, as well as between a Series and a scalar value.</p>
+<p>We mentioned joins. Let’s look at a few join operations; the result is a Frame, which we will touch on a bit later. These are similar in nature to SQL joins.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#f0f0f0;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-scala" data-lang="scala">a<span style="color:#666">.</span>join<span style="color:#666">(</span>b<span style="color:#666">,</span> how<span style="color:#007020;font-weight:bold">=</span>index<span style="color:#666">.</span><span style="color:#0e84b5;font-weight:bold">LeftJoin</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res57: Frame[String, Int, Int] = [4 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//       0  1 
+</span><span style="color:#60a0b0;font-style:italic">//      -- -- 
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1 NA 
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4  5 
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2  2 
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  3  1 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ a<span style="color:#666">.</span>join<span style="color:#666">(</span>b<span style="color:#666">,</span> how<span style="color:#007020;font-weight:bold">=</span>index<span style="color:#666">.</span><span style="color:#0e84b5;font-weight:bold">RightJoin</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res58: Frame[String, Int, Int] = [5 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//       0  1 
+</span><span style="color:#60a0b0;font-style:italic">//      -- -- 
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4  5 
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2  2 
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  3  1 
+</span><span style="color:#60a0b0;font-style:italic">// e -&gt; NA  8 
+</span><span style="color:#60a0b0;font-style:italic">// f -&gt; NA  7 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ a<span style="color:#666">.</span>join<span style="color:#666">(</span>b<span style="color:#666">,</span> how<span style="color:#007020;font-weight:bold">=</span>index<span style="color:#666">.</span><span style="color:#0e84b5;font-weight:bold">InnerJoin</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res59: Frame[String, Int, Int] = [3 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//       0  1 
+</span><span style="color:#60a0b0;font-style:italic">//      -- -- 
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4  5 
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2  2 
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  3  1 
+</span><span style="color:#60a0b0;font-style:italic">// 
+</span><span style="color:#60a0b0;font-style:italic"></span>
+ a<span style="color:#666">.</span>join<span style="color:#666">(</span>b<span style="color:#666">,</span> how<span style="color:#007020;font-weight:bold">=</span>index<span style="color:#666">.</span><span style="color:#0e84b5;font-weight:bold">OuterJoin</span><span style="color:#666">)</span>
+<span style="color:#60a0b0;font-style:italic">// res60: Frame[String, Int, Int] = [6 x 2]
+</span><span style="color:#60a0b0;font-style:italic">//       0  1 
+</span><span style="color:#60a0b0;font-style:italic">//      -- -- 
+</span><span style="color:#60a0b0;font-style:italic">// a -&gt;  1 NA 
+</span><span style="color:#60a0b0;font-style:italic">// b -&gt;  4  5 
+</span><span style="color:#60a0b0;font-style:italic">// c -&gt;  2  2 
+</span><span style="color:#60a0b0;font-style:italic">// d -&gt;  3  1 
+</span><span style="color:#60a0b0;font-style:italic">// e -&gt; NA  8 
+</span><span style="color:#60a0b0;font-style:italic">// f -&gt; NA  7 
+</span><span style="color:#60a0b0;font-style:italic">//
+</span></code></pre></div></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+  <div>
+    <a class="flex align-center" href="https://github.com/pityka/saddle/master/docs//content/docs/datastructures/3_series.md" target="_blank" rel="noopener">
+      <img src="/saddle/svg/edit.svg" class="book-icon" alt="Edit" />
+      <span>Edit this page</span>
+    </a>
+  </div>
+
+
+</div>
+
+
+
+  <script>(function(){function a(c){const a=window.getSelection(),b=document.createRange();b.selectNodeContents(c),a.removeAllRanges(),a.addRange(b)}document.querySelectorAll("pre code").forEach(b=>{b.addEventListener("click",function(c){a(b.parentElement),navigator.clipboard&&navigator.clipboard.writeText(b.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
