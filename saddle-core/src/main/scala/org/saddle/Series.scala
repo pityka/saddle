@@ -809,6 +809,9 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
       m1: ST[O1],
       m2: ST[O2]
   ): Frame[O1, O2, T] = {
+    if (!index.isUnique) {
+      throw new RuntimeException("Can't pivot non-unique index unambigously.")
+    }
     val (lft, rgt) = split(index)
 
     val rix = lft.uniques
@@ -833,8 +836,8 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
           .getOrElse(vals) //   map values to be in correspondence to rix
         result(loc) = v //   and save resulting col vec in array.
         loc += 1 // Increment offset into result array
+        
       }
-
       Frame(result.toVec, rix, Index(grpr.keys))
     }
   }
