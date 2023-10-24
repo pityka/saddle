@@ -31,7 +31,7 @@
  */
 package org.saddle.util
 
-/** Parses a {@code FloatValue} from a {@code char} array.
+/** Parses a {@@codeFloatValue} from a {@@codechar} array.
   */
 private[saddle] object FastDoubleParser {
 
@@ -46,7 +46,7 @@ private[saddle] object FastDoubleParser {
     '0' <= c && c <= '9'
   }
 
-  /** Parses a {@code DecimalFloatingPointLiteral} production.
+  /** Parses a {@@codeDecimalFloatingPointLiteral} production.
     *
     * @param str
     *   a string
@@ -270,8 +270,8 @@ private[saddle] object FastDoubleParser {
     return result;
   }
 
-  /** Tries to compute {@code significand * 10^power} exactly using a fast
-    * algorithm; and if {@code isNegative} is true, negate the result. <p> This
+  /** Tries to compute {@@codesignificand * 10^power} exactly using a fast
+    * algorithm; and if {@@codeisNegative} is true, negate the result. <p> This
     * function will only work in some cases, when it does not work it returns
     * NaN. This should work *most of the time* (like 99% of the time). We assume
     * that power is in the [{@value #DOUBLE_MIN_EXPONENT_POWER_OF_TEN}, {@value
@@ -285,7 +285,7 @@ private[saddle] object FastDoubleParser {
     * @param power
     *   the exponent number (the power)
     * @return
-    *   the computed double on success, {@link Double#NaN} on failure
+    *   the computed double on success, {@@linkDouble#NaN} on failure
     */
   private def tryDecFloatToDouble(
       isNegative: Boolean,
@@ -445,11 +445,11 @@ private[saddle] object FastDoubleParser {
     * 'Infinity' or '+Infinity' or '-Infinity'.
     *
     * @param str
-    *   a string containing a {@code FloatValueWithWhiteSpace}
+    *   a string containing a {@@codeFloatValueWithWhiteSpace}
     * @param offset
-    *   start offset of {@code FloatValueWithWhiteSpace} in {@code str}
+    *   start offset of {@@codeFloatValueWithWhiteSpace} in {@@codestr}
     * @param length
-    *   length of {@code FloatValueWithWhiteSpace} in {@code str}
+    *   length of {@@codeFloatValueWithWhiteSpace} in {@@codestr}
     * @return
     *   the parsed value
     * @throws NumberFormatException
@@ -500,7 +500,7 @@ private[saddle] object FastDoubleParser {
     );
   }
 
-  /** Parses a {@code Infinity} production with optional trailing white space
+  /** Parses a {@@codeInfinity} production with optional trailing white space
     * until the end of the text. <blockquote> <dl>
     * <dt><i>InfinityWithWhiteSpace:</i></dt> <dd>{@code Infinity}
     * <i>[WhiteSpace] EOT</i></dd> </dl> </blockquote>
@@ -542,14 +542,14 @@ private[saddle] object FastDoubleParser {
     return Double.NaN
   }
 
-  /** Parses a {@code Nan} production with optional trailing white space until
+  /** Parses a {@@codeNan} production with optional trailing white space until
     * the end of the text. Given that the String contains a 'N' character at the
-    * current {@code index}. <blockquote> <dl>
+    * current {@@codeindex} . <blockquote> <dl>
     * <dt><i>NanWithWhiteSpace:</i></dt> <dd>{@code NaN} <i>[WhiteSpace]
     * EOT</i></dd> </dl> </blockquote>
     *
     * @param str
-    *   a string that contains a "N" character at {@code index}
+    *   a string that contains a "N" character at {@@codeindex}
     * @param index
     *   index of the "N" character
     * @param endIndex
@@ -612,7 +612,7 @@ private[saddle] object FastDoubleParser {
   private val DOUBLE_MIN_EXPONENT_POWER_OF_TEN = -325;
 
   /** Largest power of 10 value of the exponent. <p> Any number of form w *
-    * 10^309 where {@literal w >= 1} is going to be infinite in a double, so we
+    * 10^309 where {@@literalw >= 1} is going to be infinite in a double, so we
     * never need to worry about powers of 10 greater than 308.
     */
   private val DOUBLE_MAX_EXPONENT_POWER_OF_TEN = 308;

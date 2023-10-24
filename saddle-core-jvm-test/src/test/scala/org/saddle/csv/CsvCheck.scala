@@ -62,7 +62,6 @@ class CsvCheck extends Specification with ScalaCheck {
     val data =
       s"""a,"b,c,d",e${crlf}1,25,36${crlf}4,55,"6"${crlf}5,9,38${crlf}7,"8","9""""
 
-
     val frame =
       CsvParser
         .parseString[String](data, bufferSize = 8, cols = List(1))
