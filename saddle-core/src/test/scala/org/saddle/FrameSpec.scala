@@ -17,7 +17,7 @@ package org.saddle
 import org.specs2.mutable.Specification
 import org.saddle.index.InnerJoin
 import org.saddle.ops.BinOps._
-import org.saddle.order._
+
 import cats.kernel.Order
 import org.saddle.scalar.Scalar
 import org.saddle.scalar.NA
@@ -287,10 +287,10 @@ class FrameSpec extends Specification {
     )
   }
   "sortedRows custom ord" in {
-    val ord = Order.reverse(cats.kernel.instances.int.catsKernelStdOrderForInt)
+    val ord = org.saddle.util.TotalOrder.fromCats(Order.reverse(cats.kernel.instances.int.catsKernelStdOrderForInt),org.saddle.scalar.ScalarTagInt)
     Frame(1 -> Series(4, 3, 2, 1)).sortedRows(0)(ord) must_== Frame(
-      1 -> Series(0 -> 4, 1 -> 3, 2 -> 2, 3 -> 1)
-    )
+      1 -> Series(0 -> 4, 1 -> 3, 2 -> 2, 3 -> 1))
+    
   }
   "sortedCols" in {
     Frame(1 -> Series(4, 3, 2, 1)).T.sortedCols(0) must_== Frame(
@@ -298,7 +298,7 @@ class FrameSpec extends Specification {
     ).T
   }
   "sortedCols custom ord" in {
-    val ord = Order.reverse(cats.kernel.instances.int.catsKernelStdOrderForInt)
+    val ord = org.saddle.util.TotalOrder.fromCats(Order.reverse(cats.kernel.instances.int.catsKernelStdOrderForInt),org.saddle.scalar.ScalarTagInt)
     Frame(1 -> Series(4, 3, 2, 1)).T.sortedCols(0)(ord) must_== Frame(
       1 -> Series(0 -> 4, 1 -> 3, 2 -> 2, 3 -> 1)
     ).T

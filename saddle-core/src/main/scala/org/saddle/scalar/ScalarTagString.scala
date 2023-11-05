@@ -25,12 +25,4 @@ object ScalarTagString extends ScalarTagBase[String] {
   override def parse(s: Array[Char], from: Int, to: Int): String =
     new String(s, from, to - from)
 }
-// object ScalarTagCharSequence
-//     extends ScalarTagBase[CharSequence] {
-//   override def toString = "ScalarTagCharSequence"
-//   def missing: CharSequence = null.asInstanceOf[CharSequence]
 
-//   def isMissing(v: CharSequence): Boolean = (v == missing)
-//   def clm = implicitly[CLM[CharSequence]]
-//   override def parse(s:Array[Char], from: Int, to: Int) : String = new String(s,from,to-from)
-// }

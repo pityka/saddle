@@ -15,7 +15,7 @@
 package org.saddle.index
 
 import org.saddle.{Index, ST, ORD, Vec}
-import org.saddle.order._
+// 
 
 /** An IndexMaker takes some input of type I and returns an Index whose elements
   * are of type O.

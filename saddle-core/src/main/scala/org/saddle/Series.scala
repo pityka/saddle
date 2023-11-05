@@ -24,7 +24,7 @@ import scalar.{NA, Scalar}
 import java.io.OutputStream
 import org.saddle.mat.MatCols
 import org.saddle.locator.Locator
-import org.saddle.order._
+// 
 import org.saddle.index.OuterJoin
 
 /** `Series` is an immutable container for 1D homogeneous data which is indexed

@@ -7,7 +7,6 @@ weight: 4
 
 ```scala
 import org.saddle._
-import org.saddle.order._
 ```
 
 A `Mat[T]` represents a matrix of values. Internally it is stored as a single contiguous array in row-major order.

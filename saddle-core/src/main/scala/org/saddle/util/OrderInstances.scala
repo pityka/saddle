@@ -1,31 +1,47 @@
 package org.saddle.util
 
 import org.saddle.ORD
+import org.saddle.util.TotalOrder
 import cats.kernel.Order
 import cats.kernel.Hash
+import org.saddle.scalar._
 
 object DoubleTotalOrder extends DoubleTotalOrderTrait
 object FloatTotalOrder extends FloatTotalOrderTrait
 
-/** An Order[Double] instance which produces a total order by ordering NaNs
-  * above all other Doubles
+/** An Order[Double] instance which produces a total order by ordering missing
+  * values below all other Doubles
   *
-  * Contrary to the specification of cats, the DoubleOrdering in cats.kernel is
-  * not total because NaN is not ordered (all comparisons return false). This
-  * behaviour is consistent with IEEE-754, but not very practical.
+  * Contrary to the specification of cats, the DoubleOrder in cats.kernel is not
+  * total because NaN is not ordered (all comparison with Order.lt return
+  * false). This behaviour is consistent with IEEE-754. DoubleOrder.comparison
+  * is a total order though, it orders NaN above all others. This latter
+  * behavior is consistent with java.lang.Double.compare.
   *
   * java.lang.Double.compare orders NaN to be largest of all Doubles.
+  *
+  * In saddle ordering is used extensively for sorting, including missing values
+  * thus having a proper total order is practical. 
+  * 
+  * I choose to order missing
+  * values below all other elements to keep consistency with existing saddle
+  * code which uses the minimum values of integer types as missing sentinels.
   *
   * See https://github.com/scala/scala/pull/8721 See
   * https://github.com/scala/scala/blob/39e82c3f904380f0b40d106723747faf881640d4/src/library/scala/math/Ordering.scala#L465
   */
 private[saddle] trait DoubleTotalOrderTrait
-    extends Order[Double]
+    extends TotalOrder[Double]
     with Hash[Double] {
 
   def hash(x: Double): Int = x.hashCode()
   def compare(x: Double, y: Double): Int =
-    java.lang.Double.compare(x, y)
+    if (x < y) -1
+    else if (x > y) 1
+    else if (x == y) 0
+    else if (x.isNaN && y.isNaN) 0
+    else if (x.isNaN) -1
+    else 1
 
   override def eqv(x: Double, y: Double): Boolean = compare(x, y) == 0
   override def neqv(x: Double, y: Double): Boolean = !eqv(x, y)
@@ -43,12 +59,17 @@ private[saddle] trait DoubleTotalOrderTrait
 /** See DoubleTotalOrder
   */
 private[saddle] trait FloatTotalOrderTrait
-    extends Order[Float]
+    extends TotalOrder[Float]
     with Hash[Float] {
 
   def hash(x: Float): Int = x.hashCode()
   def compare(x: Float, y: Float): Int =
-    java.lang.Float.compare(x, y)
+    if (x < y) -1
+    else if (x > y) 1
+    else if (x == y) 0
+    else if (x.isNaN && y.isNaN) 0
+    else if (x.isNaN) -1
+    else 1
 
   override def eqv(x: Float, y: Float): Boolean = compare(x, y) == 0
   override def neqv(x: Float, y: Float): Boolean = !eqv(x, y)
@@ -63,653 +84,92 @@ private[saddle] trait FloatTotalOrderTrait
     if (lteqv(x, y)) x else y
 }
 
-private[saddle] trait OrderInstances {
+private[saddle] trait LowPriorityOrderInstane {
+  /* Generic order which orders missing below all others */
+  implicit def fromOrdering[T <: AnyRef](implicit
+      ordering: Ordering[T],
+      clm: org.saddle.CLM[T]
+  ): ORD[T] = {
+    val ord1 = Order.fromOrdering(ordering)
+    val ord2 = new TotalOrder[T] {
+      private val st = new org.saddle.scalar.ScalarTagAnyRef[T]
+      def compare(x: T, y: T): Int = {
+        def m(x: T) = st.isMissing(x)
+        if (m(x) && !m(y)) -1
+        else if (!m(x) && m(y)) 1
+        else if (m(x) && m(y)) 0
+        else ord1.compare(x, y)
+      }
+    }
+    ord2
+  }
+}
+
+private[saddle] trait OrderInstances extends LowPriorityOrderInstane {
+
+  implicit def boolOrd: ORD[Boolean] =
+    TotalOrder.fromCats(
+      cats.kernel.instances.boolean.catsKernelStdOrderForBoolean,
+      ScalarTagBool
+    )
   implicit def intOrd: ORD[Int] =
-    cats.kernel.instances.int.catsKernelStdOrderForInt
+    TotalOrder.fromCats(
+      cats.kernel.instances.int.catsKernelStdOrderForInt,
+      ScalarTagInt
+    )
   implicit def longOrd: ORD[Long] =
-    cats.kernel.instances.long.catsKernelStdOrderForLong
+    TotalOrder.fromCats(
+      cats.kernel.instances.long.catsKernelStdOrderForLong,
+      ScalarTagLong
+    )
   implicit def doubleOrd: ORD[Double] = DoubleTotalOrder
   implicit def charOrd: ORD[Char] =
-    cats.kernel.instances.char.catsKernelStdOrderForChar
+    TotalOrder.fromCats(
+      cats.kernel.instances.char.catsKernelStdOrderForChar,
+      ScalarTagChar
+    )
   implicit def floatOrd: ORD[Float] = FloatTotalOrder
   implicit def byteOrd: ORD[Byte] =
-    cats.kernel.instances.byte.catsKernelStdOrderForByte
+    TotalOrder.fromCats(
+      cats.kernel.instances.byte.catsKernelStdOrderForByte,
+      ScalarTagByte
+    )
   implicit def shortOrd: ORD[Short] =
-    cats.kernel.instances.short.catsKernelStdOrderForShort
-  implicit def stringOrd: ORD[String] =
-    cats.kernel.instances.string.catsKernelStdOrderForString
+    TotalOrder.fromCats(
+      cats.kernel.instances.short.catsKernelStdOrderForShort,
+      ScalarTagShort
+    )
 
-  implicit def fromOrdering[T](implicit ordering: Ordering[T]): ORD[T] =
-    Order.fromOrdering(ordering)
+  /* String order which orders missing below all others */
+  implicit def stringOrd: ORD[String] = {
+    val ord1 = cats.kernel.instances.string.catsKernelStdOrderForString
+    val ord2 = new TotalOrder[String] {
+      def compare(x: String, y: String): Int = {
+        def m(x: String) = org.saddle.scalar.ScalarTagString.isMissing(x)
+        if (m(x) && !m(y)) -1
+        else if (!m(x) && m(y)) 1
+        else if (m(x) && m(y)) 0
+        else ord1.compare(x, y)
+      }
+    }
+    ord2
+  }
 
-  implicit def tuple1[T: ORD]: ORD[Tuple1[T]] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple1[T]
-  implicit def tuple2[T1: ORD, T2: ORD]: ORD[(T1, T2)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple2[T1, T2]
-  implicit def tuple3[T1: ORD, T2: ORD, T3: ORD]: ORD[(T1, T2, T3)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple3[T1, T2, T3]
-  implicit def tuple4[T1: ORD, T2: ORD, T3: ORD, T4: ORD]
-      : ORD[(T1, T2, T3, T4)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple4[T1, T2, T3, T4]
-  implicit def tuple5[T1: ORD, T2: ORD, T3: ORD, T4: ORD, T5: ORD]
-      : ORD[(T1, T2, T3, T4, T5)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple5[T1, T2, T3, T4, T5]
-  implicit def tuple6[T1: ORD, T2: ORD, T3: ORD, T4: ORD, T5: ORD, T6: ORD]
-      : ORD[(T1, T2, T3, T4, T5, T6)] =
-    cats.kernel.instances.tuple
-      .catsKernelStdOrderForTuple6[T1, T2, T3, T4, T5, T6]
-  implicit def tuple7[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7)] =
-    cats.kernel.instances.tuple
-      .catsKernelStdOrderForTuple7[T1, T2, T3, T4, T5, T6, T7]
-  implicit def tuple8[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8)] =
-    cats.kernel.instances.tuple
-      .catsKernelStdOrderForTuple8[T1, T2, T3, T4, T5, T6, T7, T8]
-  implicit def tuple9[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9)] =
-    cats.kernel.instances.tuple
-      .catsKernelStdOrderForTuple9[T1, T2, T3, T4, T5, T6, T7, T8, T9]
-  implicit def tuple10[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)] =
-    cats.kernel.instances.tuple
-      .catsKernelStdOrderForTuple10[T1, T2, T3, T4, T5, T6, T7, T8, T9, T10]
-  implicit def tuple11[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple11[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11
-    ]
-  implicit def tuple12[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple12[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12
-    ]
-  implicit def tuple13[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple13[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13
-    ]
-  implicit def tuple14[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple14[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14
-    ]
-  implicit def tuple15[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD
-  ]: ORD[(T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15)] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple15[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15
-    ]
-  implicit def tuple16[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD
-  ]: ORD[
-    (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16)
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple16[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16
-    ]
-  implicit def tuple17[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD,
-      T17: ORD
-  ]: ORD[
-    (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17)
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple17[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16,
-      T17
-    ]
-  implicit def tuple18[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD,
-      T17: ORD,
-      T18: ORD
-  ]: ORD[
-    (
-        T1,
-        T2,
-        T3,
-        T4,
-        T5,
-        T6,
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        T13,
-        T14,
-        T15,
-        T16,
-        T17,
-        T18
-    )
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple18[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16,
-      T17,
-      T18
-    ]
-  implicit def tuple19[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD,
-      T17: ORD,
-      T18: ORD,
-      T19: ORD
-  ]: ORD[
-    (
-        T1,
-        T2,
-        T3,
-        T4,
-        T5,
-        T6,
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        T13,
-        T14,
-        T15,
-        T16,
-        T17,
-        T18,
-        T19
-    )
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple19[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16,
-      T17,
-      T18,
-      T19
-    ]
-  implicit def tuple20[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD,
-      T17: ORD,
-      T18: ORD,
-      T19: ORD,
-      T20: ORD
-  ]: ORD[
-    (
-        T1,
-        T2,
-        T3,
-        T4,
-        T5,
-        T6,
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        T13,
-        T14,
-        T15,
-        T16,
-        T17,
-        T18,
-        T19,
-        T20
-    )
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple20[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16,
-      T17,
-      T18,
-      T19,
-      T20
-    ]
-  implicit def tuple21[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD,
-      T17: ORD,
-      T18: ORD,
-      T19: ORD,
-      T20: ORD,
-      T21: ORD
-  ]: ORD[
-    (
-        T1,
-        T2,
-        T3,
-        T4,
-        T5,
-        T6,
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        T13,
-        T14,
-        T15,
-        T16,
-        T17,
-        T18,
-        T19,
-        T20,
-        T21
-    )
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple21[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16,
-      T17,
-      T18,
-      T19,
-      T20,
-      T21
-    ]
-  implicit def tuple22[
-      T1: ORD,
-      T2: ORD,
-      T3: ORD,
-      T4: ORD,
-      T5: ORD,
-      T6: ORD,
-      T7: ORD,
-      T8: ORD,
-      T9: ORD,
-      T10: ORD,
-      T11: ORD,
-      T12: ORD,
-      T13: ORD,
-      T14: ORD,
-      T15: ORD,
-      T16: ORD,
-      T17: ORD,
-      T18: ORD,
-      T19: ORD,
-      T20: ORD,
-      T21: ORD,
-      T22: ORD
-  ]: ORD[
-    (
-        T1,
-        T2,
-        T3,
-        T4,
-        T5,
-        T6,
-        T7,
-        T8,
-        T9,
-        T10,
-        T11,
-        T12,
-        T13,
-        T14,
-        T15,
-        T16,
-        T17,
-        T18,
-        T19,
-        T20,
-        T21,
-        T22
-    )
-  ] =
-    cats.kernel.instances.tuple.catsKernelStdOrderForTuple22[
-      T1,
-      T2,
-      T3,
-      T4,
-      T5,
-      T6,
-      T7,
-      T8,
-      T9,
-      T10,
-      T11,
-      T12,
-      T13,
-      T14,
-      T15,
-      T16,
-      T17,
-      T18,
-      T19,
-      T20,
-      T21,
-      T22
-    ]
+  implicit def fromCatsOrder[T <: AnyRef](implicit
+      ordering: Order[T],
+      clm: org.saddle.CLM[T]
+  ): ORD[T] = {
+    val ord2 = new TotalOrder[T] {
+      private val st = new org.saddle.scalar.ScalarTagAnyRef[T]
+      def compare(x: T, y: T): Int = {
+        def m(x: T) = st.isMissing(x)
+        if (m(x) && !m(y)) -1
+        else if (!m(x) && m(y)) 1
+        else if (m(x) && m(y)) 0
+        else ordering.compare(x, y)
+      }
+    }
+    ord2
+  }
 
 }

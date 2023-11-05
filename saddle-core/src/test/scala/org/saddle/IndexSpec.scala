@@ -4,7 +4,7 @@ import org.specs2.mutable.Specification
 import scalar.Scalar
 import org.saddle.scalar.ScalarTagInt
 import cats.kernel.Order
-import org.saddle.order._
+
 import org.saddle.index.OuterJoin
 
 /** User: Adam Klein Date: 2/19/13 Time: 7:17 PM
@@ -327,7 +327,7 @@ class IndexSpec extends Specification {
     "Sort by reversed ord" in {
       val st = ScalarTagInt
       val ord =
-        Order.reverse(cats.kernel.instances.int.catsKernelStdOrderForInt)
+        org.saddle.util.TotalOrder.fromCats(Order.reverse(cats.kernel.instances.int.catsKernelStdOrderForInt), org.saddle.scalar.ScalarTagInt)
       val ix1 = Index.apply(3, 4, 1, 2)(st, ord)
       ix1.sorted must_== Index(4, 3, 2, 1)
     }

@@ -21,7 +21,7 @@ import org.saddle.{ST, Vec, array, NUM, util, ORD, PctMethod, RankTie, Mat}
 import org.saddle.index.Slice
 import org.saddle.index.IndexIntRange
 import java.io.OutputStream
-import org.saddle.order._
+// 
 import org.saddle.FillMethod
 import org.saddle.FillForward
 import org.saddle.FillBackward

@@ -138,6 +138,6 @@ object IndexIntRange {
     new IndexIntRange(
       length,
       from,
-      cats.kernel.instances.int.catsKernelStdOrderForInt
+      org.saddle.util.TotalOrder.intOrd
     )
 }

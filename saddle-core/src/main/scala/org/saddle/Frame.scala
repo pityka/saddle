@@ -32,8 +32,6 @@ import org.saddle.ops.{NumericOps, BinOpFrame}
 import scalar.Scalar
 import java.io.OutputStream
 import org.saddle.mat.MatCols
-import org.saddle.order._
-import _root_.cats.kernel.Order
 import org.saddle.array.Sorter.intSorter
 import org.saddle.ORD
 import org.saddle.ST
@@ -837,7 +835,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       f: Series[CX, T] => Q
   ): Frame[RX, CX, T] = {
     val perm =
-      intSorter.sorted(array.range(0, numRows))(Order.by(i => f(rowAt(i))))
+      intSorter.sorted(array.range(0, numRows))(
+        org.saddle.util.TotalOrder.by(i => f(rowAt(i)))
+      )
     rowAt(perm)
   }
 
@@ -853,7 +853,9 @@ class Frame[RX: ST: ORD, CX: ST: ORD, @spec(Int, Long, Double) T](
       f: Series[RX, T] => Q
   ): Frame[RX, CX, T] = {
     val perm =
-      intSorter.sorted(array.range(0, numCols))(Order.by(i => f(colAt(i))))
+      intSorter.sorted(array.range(0, numCols))(
+        org.saddle.util.TotalOrder.by(i => f(colAt(i)))
+      )
     colAt(perm)
   }
 

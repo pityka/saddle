@@ -16,7 +16,7 @@ package org.saddle
 
 import org.specs2.mutable.Specification
 import org.saddle.ops.BinOps._
-import org.saddle.order._
+
 
 class SeriesSpec extends Specification {
   "table works" in {

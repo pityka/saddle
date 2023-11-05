@@ -4,10 +4,9 @@ weight: 2
 ---
 
 ### Imports
-You most likely need the following two imports:
+You most likely need the following imports:
 ```scala
 import org.saddle._
-import org.saddle.order._
 ```
 
 Note that `org.saddle.order._` imports `cats.kernel.Order[_]` typeclass instances into the scope. 

@@ -15,7 +15,7 @@
 package org.saddle.binary
 import org.saddle._
 import org.scalatest.funsuite.AnyFunSuite
-import org.saddle.order._
+
 
 class BinarySuite extends AnyFunSuite {
 
