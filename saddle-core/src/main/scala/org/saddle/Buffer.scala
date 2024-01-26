@@ -25,10 +25,11 @@
 package org.saddle
 
 import scala.reflect.ClassTag
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.{Buffer => SBuffer}
+import scala.collection.mutable.ListBuffer
 
 final class Buffer[@specialized V] private[saddle] (
-    private var arrays: ArrayBuffer[Array[V]],
+    private var arrays: SBuffer[Array[V]],
     var length: Int
 )(implicit
     val ctV: ClassTag[V]
@@ -99,12 +100,13 @@ object Buffer {
 
   val INIT_CAPACITY = startSize
 
+
   def empty[@specialized(Int, Double, Boolean, Float) T: ClassTag]: Buffer[T] =
-    new Buffer(ArrayBuffer(new Array[T](startSize)), 0)
+    new Buffer(ListBuffer(new Array[T](startSize)), 0)
 
   def empty[@specialized(Int, Double, Boolean, Float) T: ClassTag](
       initSize: Int
   ): Buffer[T] =
-    new Buffer(ArrayBuffer(new Array[T](initSize)), 0)
+    new Buffer(ListBuffer(new Array[T](initSize)), 0)
 
 }
