@@ -25,7 +25,14 @@ import org.saddle.macros.BinOps._
 class VecCheck extends Specification with ScalaCheck {
 
   "Double Vec Tests" in {
-    implicit val vecA = Arbitrary(VecArbitraries.vecDoubleWithNA)
+    implicit val vecAD = Arbitrary(VecArbitraries.vecDoubleWithNA)
+    implicit val vecAF = Arbitrary(VecArbitraries.vecFloatWithNA)
+    implicit val vecAS = Arbitrary(VecArbitraries.vecShortWithNA)
+    implicit val vecAC = Arbitrary(VecArbitraries.vecCharWithNA)
+    implicit val vecAStr = Arbitrary(VecArbitraries.vecStringWithNA)
+    implicit val vecAB = Arbitrary(VecArbitraries.vecByteWithNA)
+    implicit val vecAL = Arbitrary(VecArbitraries.vecLongWithNA)
+    implicit val vecAI = Arbitrary(VecArbitraries.vecIntWithNA)
     "update" in {
       forAll { (v: Vec[Double], d: Double) =>
         (v.length > 0) ==> {
@@ -37,6 +44,78 @@ class VecCheck extends Specification with ScalaCheck {
 
       }
     }
+    "NaN are below all other" in {
+      "doubles" in {
+        forAll { (v: Vec[Double]) =>
+          val got = v.sorted.toSeq
+          val exp = (v.toSeq
+            .filter(_.isNaN) ++ v.toSeq.filterNot(_.isNaN).sorted)
+
+          if (got.toString != exp.toString) {
+            false
+          } else true
+
+        }
+      }
+      "floats" in {
+        forAll { (v: Vec[Float]) =>
+          v.sorted.toSeq.toString == (v.toSeq
+            .filter(_.isNaN) ++ v.toSeq.filterNot(_.isNaN).sorted).toString
+
+        }
+      }
+      "short" in {
+        forAll { (v: Vec[Short]) =>
+          v.sorted.toSeq == (v.toSeq
+            .filter(_.isNaN) ++ v.toSeq.filterNot(_.isNaN).sorted)
+
+        }
+      }
+      "char" in {
+        forAll { (v: Vec[Char]) =>
+          v.sorted.toSeq == (v.toSeq
+            .filter(_.isNaN) ++ v.toSeq.filterNot(_.isNaN).sorted)
+
+        }
+      }
+      "string" in {
+        forAll { (v: Vec[String]) =>
+          v.sorted.toSeq == (v.toSeq
+            .filter(implicitly[ST[String]].isMissing) ++ v.toSeq
+            .filterNot(implicitly[ST[String]].isMissing)
+            .sorted)
+
+        }
+      }
+      "int" in {
+        forAll { (v: Vec[Int]) =>
+          v.sorted.toSeq == (v.toSeq
+            .filter(implicitly[ST[Int]].isMissing) ++ v.toSeq
+            .filterNot(implicitly[ST[Int]].isMissing)
+            .sorted)
+
+        }
+      }
+      "byte" in {
+        forAll { (v: Vec[Byte]) =>
+          v.sorted.toSeq == (v.toSeq
+            .filter(implicitly[ST[Byte]].isMissing) ++ v.toSeq
+            .filterNot(implicitly[ST[Byte]].isMissing)
+            .sorted)
+
+        }
+      }
+      "long" in {
+        forAll { (v: Vec[Long]) =>
+          v.sorted.toSeq == (v.toSeq
+            .filter(implicitly[ST[Long]].isMissing) ++ v.toSeq
+            .filterNot(implicitly[ST[Long]].isMissing)
+            .sorted)
+
+        }
+      }
+    }
+
     "update in slice" in {
       val v = org.saddle.vec.ones(10)
       val v2 = v.slice(2, 5)

@@ -15,7 +15,7 @@
 package org.saddle.index
 
 import org.saddle.{ST, ORD, Index}
-import org.saddle.order._
+// 
 
 /** A Stacker operates on two input Index instances and produces a new output
   * Index whose entries are drawn from the Cartesian product of the elements of

@@ -17,7 +17,7 @@ package org.saddle.index
 import scala.{specialized => spec}
 
 import org.saddle._
-import org.saddle.order._
+
 import org.saddle.scalar._
 import org.saddle.locator._
 
@@ -53,7 +53,7 @@ class IndexTime(
   private def il2it(l: Index[Long]) = new IndexTime(l, tzone)
 
   implicit val ord: ORD[DateTime] =
-    Order.fromOrdering(implicitly[Ordering[DateTime]])
+    org.saddle.util.TotalOrder.fromCats(Order.fromOrdering(implicitly[Ordering[DateTime]]), org.saddle.scalar.ScalarTagTime)
 
   @transient lazy private val _locator = new Locator[DateTime] {
     lazy val _keys = times.uniques.map(l2t)
@@ -195,7 +195,7 @@ object IndexTime {
   def make(rrule: RRule, start: DateTime, end: DateTime): Index[DateTime] = {
     import time._
     implicit val ord: ORD[DateTime] =
-      Order.fromOrdering(implicitly[Ordering[DateTime]])
+      org.saddle.util.TotalOrder.fromCats(Order.fromOrdering(implicitly[Ordering[DateTime]]),org.saddle.scalar.ScalarTagTime)
     Index((rrule.copy(count = None) withUntil end from start).toSeq: _*)
   }
 

@@ -19,7 +19,7 @@ import org.specs2.ScalaCheck
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Prop._
 import scalar.Scalar
-import org.saddle.order._
+
 
 class IndexCheck extends Specification with ScalaCheck {
   "Int Index Tests" in {

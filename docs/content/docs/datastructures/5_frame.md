@@ -14,7 +14,6 @@ A Frame is represented internally as a sequence of column Vec instances all shar
 
 ```scala mdoc
 import org.saddle._
-import org.saddle.order._
 import org.saddle.ops.BinOps._
  val v = Vec(1, 2)                              // given the following
  val u = Vec(3, 4)

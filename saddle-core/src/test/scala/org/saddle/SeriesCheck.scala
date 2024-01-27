@@ -19,7 +19,7 @@ import org.specs2.ScalaCheck
 import org.scalacheck.{Gen, Arbitrary}
 import org.scalacheck.Prop._
 import org.saddle.ops.BinOps._
-import org.saddle.order._
+
 import org.saddle.Arbitraries._
 
 class SeriesCheck extends Specification with ScalaCheck {

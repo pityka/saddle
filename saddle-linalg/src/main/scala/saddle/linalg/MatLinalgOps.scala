@@ -959,7 +959,7 @@ class MatPimp(val self: Mat[Double]) {
 
     if (!success) throw new RuntimeException("Eigen decomposition failed")
 
-    import org.saddle.order._
+    
     val reindex = org.saddle.array.argsort(wr).reverse
     val wr2: Vec[Double] = Vec(wr).take(reindex)
     val wi2: Vec[Double] = Vec(wi).take(reindex)

@@ -14,7 +14,7 @@
   */
 package org.saddle.jsoniter
 import org.saddle._
-import org.saddle.order._
+
 import com.github.plokhotnyuk.jsoniter_scala.core._
 import com.github.plokhotnyuk.jsoniter_scala.macros._
 

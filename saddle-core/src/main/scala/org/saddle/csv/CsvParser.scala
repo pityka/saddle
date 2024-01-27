@@ -15,7 +15,7 @@
 package org.saddle.csv
 
 import org.saddle.{Frame, Vec, ST}
-import org.saddle.order._
+// 
 import org.saddle.Index
 import org.saddle.Buffer
 import scala.{specialized => spec}

@@ -8,7 +8,6 @@ weight: 2
 
 ```scala
 import org.saddle._
-import org.saddle.order._
 ```
 
 ## Factories

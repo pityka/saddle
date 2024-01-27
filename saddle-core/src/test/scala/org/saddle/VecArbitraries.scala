@@ -31,6 +31,39 @@ object VecArbitraries {
         Gen.frequency[Double]((9, Gen.chooseNum(-1e3, 1e3)), (1, na[Double]))
       )
     } yield Vec(lst: _*)
+  
+  def vecByteWithNA: Gen[Vec[Byte]] =
+    for {
+      n <- Gen.choose(0, 10)
+      lst <- Gen.listOfN(
+        n,
+        Gen.frequency[Byte]((9, Gen.chooseNum(-100.toByte, 100.toByte)), (1, na[Byte]))
+      )
+    } yield Vec(lst: _*)
+  def vecCharWithNA: Gen[Vec[Char]] =
+    for {
+      n <- Gen.choose(0, 10)
+      lst <- Gen.listOfN(
+        n,
+        Gen.frequency[Char]((9, Gen.chooseNum('a', 'z')), (1, na[Char]))
+      )
+    } yield Vec(lst: _*)
+  def vecShortWithNA: Gen[Vec[Short]] =
+    for {
+      n <- Gen.choose(0, 10)
+      lst <- Gen.listOfN(
+        n,
+        Gen.frequency[Short]((9, Gen.chooseNum(-1000, 1000)), (1, na[Short]))
+      )
+    } yield Vec(lst: _*)
+  def vecStringWithNA: Gen[Vec[String]] =
+    for {
+      n <- Gen.choose(0, 10)
+      lst <- Gen.listOfN(
+        n,
+        Gen.frequency[String]((9, Gen.alphaLowerStr), (1, na[String]))
+      )
+    } yield Vec(lst: _*)
 
   // Generates vec of length of up to 20 entries w/o NA's
   def vecDoubleWithoutNA: Gen[Vec[Double]] =

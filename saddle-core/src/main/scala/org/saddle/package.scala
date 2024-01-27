@@ -20,8 +20,8 @@ import org.saddle.index.{SliceAll, Slice, SliceFrom, SliceTo}
 // some typeclass interfaces we'll alias
 import org.saddle.scalar.ScalarTag
 import scala.reflect.ClassTag
-import cats.kernel.Order
-import org.saddle.order._
+// import cats.kernel.Order
+// 
 import org.saddle.index.SliceDefault
 
 /** ==Saddle==
@@ -55,7 +55,7 @@ package object saddle {
 
   /** Shorthand for ordering typeclass
     */
-  type ORD[C] = Order[C]
+  type ORD[C] = org.saddle.util.TotalOrder[C]
 
   /** Shorthand for numeric typeclass
     */

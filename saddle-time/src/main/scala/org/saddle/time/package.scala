@@ -22,7 +22,7 @@ import org.saddle.index.IndexTime
 import scala.Some
 import org.saddle.scalar.ScalarTagTime
 import cats.kernel.Order
-import org.saddle.order._
+
 
 /** Functionality to assist in TimeSeries related operations
   */
@@ -227,7 +227,7 @@ package object time {
   }
 
   implicit val ord: ORD[DateTime] =
-    Order.fromOrdering(implicitly[Ordering[DateTime]])
+    org.saddle.util.TotalOrder.fromCats(Order.fromOrdering(implicitly[Ordering[DateTime]]), org.saddle.scalar.ScalarTagTime)
 
   // Convenience methods for constructing ReadablePeriod instances
 
@@ -255,7 +255,7 @@ package object time {
     */
   def make(rrule: RRule, start: DateTime, end: DateTime): Index[DateTime] = {
     implicit val ord: ORD[DateTime] =
-      Order.fromOrdering(implicitly[Ordering[DateTime]])
+      org.saddle.util.TotalOrder.fromCats(Order.fromOrdering(implicitly[Ordering[DateTime]]),org.saddle.scalar.ScalarTagTime)
     Index((rrule.copy(count = None) withUntil end from start).toSeq: _*)
   }
 }

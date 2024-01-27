@@ -136,6 +136,12 @@ object Sorter {
     new Sorter[T] {
       def argSorted(arr: Array[T])(implicit ord: ORD[T]) = {
         val res = range(0, arr.length)
+        // val ord2 = new cats.kernel.Order[T] {
+        //   def compare(x: T, y: T): Int = if (x == null && y != null) 1 else 
+        //     if (x != null && y == null) -1 
+        //     else if (x == null && y == null) 0 
+        //     else ord.compare(x,y)
+        // }
         PermuteMergeSort.sort(arr, res)
         res
       }

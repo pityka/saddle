@@ -14,7 +14,7 @@
   */
 package org.saddle.array
 
-import org.saddle.order._
+// 
 import org.saddle._
 import org.specs2.ScalaCheck
 import org.specs2.mutable.Specification
@@ -65,6 +65,23 @@ class ArrayCheck extends Specification with ScalaCheck {
   "sort String" in {
     forAll { (ar: Array[String]) => array.sort(ar) must_== ar.sorted }
   }
+  "sort String with missing" in {
+    forAll { (ar: Array[String]) =>
+      val ar2 = ar ++ Array[String](null, null)
+      val s1 = array.sort(ar2)
+      val s2 =  Array[String](null, null) ++ ar2.filterNot(_ == null).sorted 
+      s1 must_== s2
+    }
+  }
+  "sort Double with missing" in {
+    forAll { (ar: Array[Double]) =>
+      val ar2 = ar ++ Array[Double](Double.NaN, Double.NaN)
+      val s1 = array.sort(ar2)
+      // ???
+      val s2 =  Array(Double.NaN, Double.NaN) ++ ar2.filterNot(_.isNaN).sorted 
+      s1 zip s2 forall { case (a,b) => if (a.isNaN && b.isNaN) true else a == b}
+    }
+  }
 
   "sort Double NaN" in {
     val arr = Array(
@@ -75,11 +92,11 @@ class ArrayCheck extends Specification with ScalaCheck {
       2d
     )
     val exp = Array(
+      Double.NaN,
       Double.NegativeInfinity,
       1d,
       2d,
       Double.PositiveInfinity,
-      Double.NaN
     )
     array
       .sort(arr)
@@ -113,11 +130,11 @@ class ArrayCheck extends Specification with ScalaCheck {
       2f
     )
     val exp = Array(
+      Float.NaN,
       Float.NegativeInfinity,
       1f,
       2f,
       Float.PositiveInfinity,
-      Float.NaN
     )
     (array
       .sort(

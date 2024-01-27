@@ -13,7 +13,6 @@ The key type of a must have a natural ordering (ie, an Ordering of that type wit
 Let’s look at a few constructions:
 
 ```scala mdoc
-import org.saddle.order._
 import org.saddle._
 import org.saddle.ops.BinOps._
 // we already know we can convert a Vec
