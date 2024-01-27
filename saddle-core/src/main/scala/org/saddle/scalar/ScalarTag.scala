@@ -18,6 +18,7 @@ import scala.reflect.ClassTag
 import scala.{specialized => spec}
 import org.saddle.{CLM, ORD, NUM, Vec, Mat, Index, ST}
 import org.saddle.locator.Locator
+import org.saddle.locatorall.LocatorAll
 import org.saddle.array.Sorter
 import org.saddle.Buffer
 import collection.immutable.ArraySeq
@@ -126,7 +127,8 @@ private[saddle] trait SpecializedFactory[
     @spec(Boolean, Int, Long, Float, Double) T
 ] {
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY): Buffer[T]
-  def makeLoc(sz: Int = Locator.INIT_CAPACITY): Locator[T]
+  private[saddle] def makeLoc(sz: Int = Locator.INIT_CAPACITY): Locator[T]
+  private[saddle] def makeLocAll(sz: Int = Locator.INIT_CAPACITY): LocatorAll[T]
   def makeVec(arr: Array[T]): Vec[T]
   def makeMat(r: Int, c: Int, arr: Array[T]): Mat[T]
   def makeIndex(vec: Vec[T])(implicit ord: ORD[T]): Index[T]

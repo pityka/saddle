@@ -17,6 +17,7 @@ package org.saddle.index
 import scala.{specialized => spec}
 import org.saddle.{ST, ORD, Index}
 import org.saddle.locator.Locator
+import org.saddle.locatorall.LocatorAll
 
 /** Helper class for Index instances
   */
@@ -31,8 +32,10 @@ private[saddle] object IndexImpl {
 
   def keys2map[@spec(Boolean, Int, Long, Double) T: ST: ORD](
       keys: Index[T]
-  ): (Locator[T], IndexProperties) = {
+  ): (Locator[T], IndexProperties, Option[LocatorAll[T]]) = {
     val map = Locator[T](keys.length)
+    val mapall = LocatorAll.apply[T](keys.length)
+    var mapallIsEmpty = true
     val sc = keys.scalarTag
     var i = 0
     var contiguous = true
@@ -42,13 +45,24 @@ private[saddle] object IndexImpl {
       if (map.inc(k) == 0) {
         map.put(k, i)
       } else {
-        if (k != keys.raw(i - 1))
-          contiguous = false
+        if (mapall.contains(k)) {
+          mapall.put(k, i)
+        } else {
+          mapallIsEmpty = false
+          mapall.put(k, map.get(k))
+          mapall.put(k, i)
+        }
+        if (k != keys.raw(i - 1)) { contiguous = false }
       }
       if (i > 0)
         monotonic &&= !sc.gt(keys.raw(i - 1), keys.raw(i))
       i += 1
     }
-    (map, IndexProperties(contiguous, monotonic))
+    (
+      map,
+      IndexProperties(contiguous, monotonic),
+      if (mapallIsEmpty || contiguous) None else Some(mapall)
+    )
   }
+
 }

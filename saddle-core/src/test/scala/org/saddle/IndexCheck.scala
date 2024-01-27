@@ -315,6 +315,38 @@ class IndexCheck extends Specification with ScalaCheck {
         }
       }
     }
+    "get works" in {
+      "int" in {
+        forAll { (ix: Index[Int]) =>
+          (ix.length > 0) ==> {
+            ix.toSeq.distinct.forall { k =>
+              ix.get(k)
+                .toList == ix.toSeq.zipWithIndex.filter(_._1 == k).map(_._2)
+            }
+          }
+        }
+      }
+      "double" in {
+        forAll { (ix: Index[Double]) =>
+          (ix.length > 0) ==> {
+            ix.toSeq.distinct.forall { k =>
+              ix.get(k)
+                .toList == ix.toSeq.zipWithIndex.filter(_._1 == k).map(_._2)
+            }
+          }
+        }
+      }
+      "long" in {
+        forAll { (ix: Index[Long]) =>
+          (ix.length > 0) ==> {
+            ix.toSeq.distinct.forall { k =>
+              ix.get(k)
+                .toList == ix.toSeq.zipWithIndex.filter(_._1 == k).map(_._2)
+            }
+          }
+        }
+      }
+    }
 
     "index joins work" in {
       forAll { (ix1: Index[Int], ix2: Index[Int]) =>

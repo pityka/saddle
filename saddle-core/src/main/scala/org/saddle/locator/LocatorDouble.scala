@@ -17,18 +17,18 @@ package org.saddle.locator
 import org.saddle.Buffer
 import org.saddle.util.DoubleMap
 @scala.annotation.nowarn
-class LocatorDouble(sz: Int = Locator.INIT_CAPACITY) extends Locator[Double] {
+private[saddle] class LocatorDouble(sz: Int = Locator.INIT_CAPACITY) extends Locator[Double] {
   val keyOrder = Buffer.empty[Double]
   val map = new DoubleMap
   val cts = new DoubleMap
 
-  def contains(key: Double): Boolean = map.get(key).isDefined
-  def get(key: Double): Int = map.get(key).getOrElse(-1)
+  def contains(key: Double): Boolean = map.contains(key)
+  def get(key: Double): Int = if (map.contains(key)) map.get(key) else -1 
   def put(key: Double, value: Int) = if (!contains(key)) {
     map.update(key, value)
     keyOrder.+=(key)
   }
-  def count(key: Double): Int = cts.get(key).getOrElse(0)
+  def count(key: Double): Int = if (cts.contains(key)) cts.get(key) else 0 
   def inc(key: Double): Int = {
     val u = count(key)
     cts.update(key, u + 1)

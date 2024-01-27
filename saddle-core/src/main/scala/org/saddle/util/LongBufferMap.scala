@@ -1,5 +1,7 @@
 package org.saddle.util
 
+import org.saddle.Buffer
+
 /*
  * Scala (https://www.scala-lang.org)
  *
@@ -35,14 +37,13 @@ package org.saddle.util
   * 500 million). The maximum capacity is 2^30, but performance will degrade
   * rapidly as 2^30 is approached.
   */
-private[saddle] final class LongMap(
-    defaultEntry: Long => Int,
+private[saddle] final class LongBufferMap(
     initialBufferSize: Int,
     initBlank: Boolean
 ) {
-  import LongMap._
+  import LongBufferMap._
 
-  def this() = this(LongMap.exceptionDefault, 16, true)
+  def this() = this(16, true)
 
   /** Creates a new `LongMap` with an initial buffer of specified size.
     *
@@ -50,22 +51,16 @@ private[saddle] final class LongMap(
     * before it requires resizing.
     */
   def this(initialBufferSize: Int) =
-    this(LongMap.exceptionDefault, initialBufferSize, true)
-
-  /** Creates a new `LongMap` with specified default values and initial buffer
-    * size.
-    */
-  def this(defaultEntry: Long => Int, initialBufferSize: Int) =
-    this(defaultEntry, initialBufferSize, true)
+    this(initialBufferSize, true)
 
   private[this] var mask = 0
   private[this] var extraKeys: Int = 0
-  private[this] var zeroValue: Int = Int.MinValue
-  private[this] var minValue: Int = Int.MinValue
+  private[this] var zeroValue: Buffer[Int] = Buffer.empty[Int]
+  private[this] var minValue: Buffer[Int] = Buffer.empty[Int]
   private[this] var _size = 0
   private[this] var _vacant = 0
   private[this] var _keys: Array[Long] = null
-  private[this] var _values: Array[Int] = null
+  private[this] var _values: Array[Buffer[Int]] = null
 
   if (initBlank) defaultInitialize(initialBufferSize)
 
@@ -76,18 +71,18 @@ private[saddle] final class LongMap(
         (((1 << (32 - java.lang.Integer
           .numberOfLeadingZeros(n - 1))) - 1) & 0x3fffffff) | 0x7
     _keys = new Array[Long](mask + 1)
-    _values = new Array[Int](mask + 1)
+    _values = new Array[Buffer[Int]](mask + 1)
   }
 
   def initializeTo(
       m: Int,
       ek: Int,
-      zv: Int,
-      mv: Int,
+      zv: Buffer[Int],
+      mv: Buffer[Int],
       sz: Int,
       vc: Int,
       kz: Array[Long],
-      vz: Array[Int]
+      vz: Array[Buffer[Int]]
   ): Unit = {
     mask = m; extraKeys = ek; zeroValue = zv; minValue = mv; _size = sz;
     _vacant = vc; _keys = kz; _values = vz
@@ -145,7 +140,7 @@ private[saddle] final class LongMap(
   }
 
   /* must call contains before */
-  def get(key: Long): Int = {
+  def get(key: Long): Buffer[Int] = {
     if (key == -key) {
       if ((((key >>> 63).toInt + 1) & extraKeys) == 0) throw new NoSuchElementException(key.toString)
       else if (key == 0) zeroValue
@@ -161,7 +156,7 @@ private[saddle] final class LongMap(
     val ov = _values
     mask = newMask
     _keys = new Array[Long](mask + 1)
-    _values = new Array[Int](mask + 1)
+    _values = new Array[Buffer[Int]](mask + 1)
     _vacant = 0
     var i = 0
     while (i < ok.length) {
@@ -198,10 +193,10 @@ private[saddle] final class LongMap(
   def update(key: Long, value: Int): Unit = {
     if (key == -key) {
       if (key == 0) {
-        zeroValue = value
+        zeroValue.+=(value)
         extraKeys |= 1
       } else {
-        minValue = value
+        minValue.+=(value)
         extraKeys |= 2
       }
     } else {
@@ -209,44 +204,41 @@ private[saddle] final class LongMap(
       if (i < 0) {
         val j = i & IndexMask
         _keys(j) = key
-        _values(j) = value
+        val _v = _values(j)
+        if (_v == null) {
+          val b = Buffer.empty[Int]
+          b += (value)
+          _values(j) = b
+        } else {
+          _v.+=(value)
+        }
         _size += 1
         if ((i & VacantBit) != 0) _vacant -= 1
         else if (imbalanced) repack()
       } else {
         _keys(i) = key
-        _values(i) = value
+        val _v = _values(i)
+        if (_v == null) {
+          val b = Buffer.empty[Int]
+          b += (value)
+          _values(i) = b
+        } else {
+          _v.+=(value)
+        }
       }
     }
   }
 
-  /** Applies a function to all keys of this map. */
-  def foreachKey[A](f: Long => A): Unit = {
-    if ((extraKeys & 1) == 1) f(0L)
-    if ((extraKeys & 2) == 2) f(Long.MinValue)
-    var i, j = 0
-    while (i < _keys.length & j < _size) {
-      val k = _keys(i)
-      if (k != -k) {
-        j += 1
-        f(k)
-      }
-      i += 1
-    }
-  }
 
 }
 
-private[saddle] object LongMap {
+private[saddle] object LongBufferMap {
   private final val IndexMask = 0x3fffffff
   private final val MissingBit = 0x80000000
   private final val VacantBit = 0x40000000
   private final val MissVacant = 0xc0000000
 
-  private val exceptionDefault: Long => Nothing = (k: Long) =>
-    throw new NoSuchElementException(k.toString)
-
   /** Creates a new empty `LongMap`. */
-  def empty = new LongMap
+  def empty = new LongBufferMap
 
 }

@@ -26,6 +26,7 @@ import index.{
 }
 import scalar.{Scalar, NA, ScalarTag}
 import locator.Locator
+import locatorall.LocatorAll
 import vec.VecImpl
 import java.io.OutputStream
 import collection.immutable.ArraySeq
@@ -35,6 +36,7 @@ import collection.immutable.ArraySeq
   */
 trait Index[@spec(Boolean, Int, Long, Double) T] {
   protected def locator: Locator[T]
+  protected def locatorAll: Option[LocatorAll[T]]
 
   /** Number of elements in the index
     */
@@ -288,7 +290,13 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
       -1
     else if (isContiguous) {
       loc + locator.count(key) - 1
+    } else if (locatorAll.isDefined) {
+      val la = locatorAll.get
+      if (la.contains(key)) {
+        la.get(key).max
+      } else loc
     } else {
+      
       var i = loc + 1
       var c = locator.count(key)
       while (c > 1 && i < length) {
@@ -312,7 +320,11 @@ trait Index[@spec(Boolean, Int, Long, Double) T] {
       Array(locator.get(key))
     } else if (isContiguous) {
       array.range(firstLoc, firstLoc + count)
-    } else {
+    } else if (locatorAll.isDefined) {
+      val la = locatorAll.get 
+      if (la.contains(key)) la.get(key)
+      else Array(locator.get(key))
+    }else {
       val result = Array.ofDim[Int](count)
       var loc = firstLoc
       var i = 0

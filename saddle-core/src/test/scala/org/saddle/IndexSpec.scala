@@ -11,6 +11,10 @@ import org.saddle.index.OuterJoin
   */
 class IndexSpec extends Specification {
   "Index methods" should {
+    "contiguous works" in {
+      val ix = Index(1,1,0,0)
+      ix.isContiguous must_== true
+    } 
     "over flow in join" in {
       val ix1 = Index(array.randInt(1000000, 0, 3))
       val ix2 = Index(array.randInt(10000, 0, 3))

@@ -21,6 +21,7 @@ import org.saddle.scalar.ScalarTagLong
 import org.saddle.index.IndexImpl.IndexProperties
 import org.saddle.vec.VecImpl
 import org.saddle.locator.Locator
+import org.saddle.locatorall.LocatorAll
 
 /** Index with long keys
   */
@@ -29,10 +30,11 @@ class IndexLong(keys: Vec[Long], val ord: ORD[Long]) extends Index[Long] {
 
   implicit private def o: ORD[Long] = ord
 
-  private lazy val (lmap, IndexProperties(contiguous, monotonic)) =
+  private lazy val (lmap, IndexProperties(contiguous, monotonic),_locatorAll) =
     IndexImpl.keys2map(this)
 
   protected def locator: Locator[Long] = lmap
+  protected def locatorAll: Option[LocatorAll[Long]] = _locatorAll
 
   def length: Int = keys.length
 

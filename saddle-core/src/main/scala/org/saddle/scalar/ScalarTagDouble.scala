@@ -53,6 +53,9 @@ object ScalarTagDouble extends ScalarTag[Double] {
   def makeBuf(sz: Int = org.saddle.Buffer.INIT_CAPACITY) =
     Buffer.empty[Double](sz)
   def makeLoc(sz: Int = Locator.INIT_CAPACITY) = new LocatorDouble(sz)
+
+  def makeLocAll(sz: Int = Locator.INIT_CAPACITY) =
+    new org.saddle.locatorall.LocatorAllDouble
   def makeVec(arr: Array[Double]) = Vec(arr)(this)
   def makeMat(r: Int, c: Int, arr: Array[Double]) = Mat(r, c, arr)(this)
   def makeIndex(vec: Vec[Double])(implicit ord: ORD[Double]): Index[Double] =

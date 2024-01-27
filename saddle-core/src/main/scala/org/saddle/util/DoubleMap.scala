@@ -15,6 +15,15 @@ private[saddle] class DoubleMap {
   }
   def contains(k: Double) = lmap.contains(JDouble.doubleToLongBits(k))
 }
+private[saddle] class DoubleBufferMap {
+  val lmap = new LongBufferMap
+  def contains(k: Double) = lmap.contains(JDouble.doubleToLongBits(k))
+  def update(key: Double, value: Int) = {
+    lmap.update(JDouble.doubleToLongBits(key), value)
+  }
+  def get(k: Double) = lmap.get(JDouble.doubleToLongBits(k))
+
+}
 
 private[saddle] class IntMap {
   val lmap = new LongMap
@@ -32,4 +41,15 @@ private[saddle] class IntMap {
       f(l.toInt)
     }
   }
+}
+private[saddle] class IntBufferMap {
+  val lmap = new LongBufferMap
+
+  def contains(k: Int) = lmap.contains(k)
+  def update(key: Int, value: Int) = {
+    lmap.update(key.toLong, value)
+  }
+  def get(k: Int) = lmap.get(k.toLong)
+
+  
 }

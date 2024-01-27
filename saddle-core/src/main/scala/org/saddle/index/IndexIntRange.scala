@@ -61,6 +61,8 @@ class IndexIntRange(val length: Int, val from: Int = 0, val ord: ORD[Int])
     def counts = cts
   }
 
+  protected def locatorAll = None
+
   private def guardLoc(loc: Int): Int =
     if (loc < 0 || loc >= length)
       throw new ArrayIndexOutOfBoundsException(

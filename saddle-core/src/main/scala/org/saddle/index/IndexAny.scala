@@ -20,6 +20,7 @@ import org.saddle.{ST, ORD, Vec, Index, array, util}
 import org.saddle.index.IndexImpl.IndexProperties
 import org.saddle.vec.VecImpl
 import org.saddle.locator.Locator
+import org.saddle.locatorall.LocatorAll
 
 /** An implementation of [[org.saddle.Index]] generic in type T for which there
   * is an Ordering[T] and a ST[T] available in the implicit context.
@@ -29,10 +30,12 @@ class IndexAny[T: ST: ORD](keys: Vec[T]) extends Index[T] {
 
   def ord: ORD[T] = implicitly[ORD[T]]
 
-  private lazy val (lmap, IndexProperties(contiguous, monotonic)) =
+  private lazy val (lmap, IndexProperties(contiguous, monotonic),_locatorAll) =
     IndexImpl.keys2map(this)
 
   protected def locator: Locator[T] = lmap
+
+  protected def locatorAll : Option[LocatorAll[T]] = _locatorAll
 
   def length: Int = keys.length
 

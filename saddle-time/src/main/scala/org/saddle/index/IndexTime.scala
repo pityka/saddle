@@ -55,8 +55,11 @@ class IndexTime(
   implicit val ord: ORD[DateTime] =
     Order.fromOrdering(implicitly[Ordering[DateTime]])
 
+  def locatorAll : Option[org.saddle.locatorall.LocatorAll[DateTime]]= None
+    
   @transient lazy private val _locator = new Locator[DateTime] {
     lazy val _keys = times.uniques.map(l2t)
+
 
     override def contains(key: DateTime) = times.contains(t2l(key))
     override def get(key: DateTime) = times.getFirst(t2l(key))

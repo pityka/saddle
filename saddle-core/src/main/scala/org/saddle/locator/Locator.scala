@@ -39,7 +39,7 @@ import org.saddle.ST
   * }}}
   * where s(t) = min(i) for any i such that f(i) = t.
   */
-trait Locator[@spec(Boolean, Int, Long, Double) T] {
+private[saddle] trait Locator[@spec(Boolean, Int, Long, Double) T] {
 
   /** Whether the instance contains the key
     * @param key
@@ -87,7 +87,7 @@ trait Locator[@spec(Boolean, Int, Long, Double) T] {
   def size: Int
 }
 
-object Locator {
+private[saddle] object Locator {
   val INIT_CAPACITY = 16
 
   /** Factory method to create a new Locator instance.

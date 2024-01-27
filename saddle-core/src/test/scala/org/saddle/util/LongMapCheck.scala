@@ -27,9 +27,19 @@ class LongMapCheck extends Specification with ScalaCheck {
       val hmap = scala.collection.mutable.HashMap[Long, Int]()
       a1.foreach { case (k, v) => lmap.update(k, v) }
       a1.foreach { case (k, v) => hmap.update(k, v) }
-      a1.forall { case (k, _) => lmap.get(k) == hmap.get(k) } and
-        a1.forall { case (k, _) => lmap.get(k + 1) == hmap.get(k + 1) } and
-        a1.forall { case (k, _) => lmap.get(k - 1) == hmap.get(k - 1) }
+      a1.forall { case (k, _) => lmap.get(k) == hmap.get(k).get } and
+        a1.forall { case (k, _) =>
+          lmap.contains(k + 1) == hmap.contains(k + 1) && {
+            if (lmap.contains(k + 1)) lmap.get(k + 1) == hmap.get(k + 1).get
+            else true
+          }
+        } and
+        a1.forall { case (k, _) =>
+          lmap.contains(k - 1) == hmap.contains(k - 1) && {
+            if (lmap.contains(k - 1)) lmap.get(k - 1) == hmap.get(k - 1).get
+            else true
+          }
+        }
 
     }
   }
@@ -39,9 +49,20 @@ class LongMapCheck extends Specification with ScalaCheck {
       val hmap = scala.collection.mutable.HashMap[Double, Int]()
       a1.foreach { case (k, v) => lmap.update(k, v) }
       a1.foreach { case (k, v) => hmap.update(k, v) }
-      a1.forall { case (k, _) => lmap.get(k) == hmap.get(k) } and
-        a1.forall { case (k, _) => lmap.get(k + 1) == hmap.get(k + 1) } and
-        a1.forall { case (k, _) => lmap.get(k - 1) == hmap.get(k - 1) }
+      a1.forall { case (k, _) => lmap.get(k) == hmap.get(k).get } and
+        a1.forall { case (k, _) => lmap.get(k) == hmap.get(k).get } and
+        a1.forall { case (k, _) =>
+          lmap.contains(k + 1) == hmap.contains(k + 1) && {
+            if (lmap.contains(k + 1)) lmap.get(k + 1) == hmap.get(k + 1).get
+            else true
+          }
+        } and
+        a1.forall { case (k, _) =>
+          lmap.contains(k - 1) == hmap.contains(k - 1) && {
+            if (lmap.contains(k - 1)) lmap.get(k - 1) == hmap.get(k - 1).get
+            else true
+          }
+        }
     }
   }
   "IntMap" in {
@@ -50,9 +71,20 @@ class LongMapCheck extends Specification with ScalaCheck {
       val hmap = scala.collection.mutable.HashMap[Int, Int]()
       a1.foreach { case (k, v) => lmap.update(k, v) }
       a1.foreach { case (k, v) => hmap.update(k, v) }
-      a1.forall { case (k, _) => lmap.get(k) == hmap.get(k) } and
-        a1.forall { case (k, _) => lmap.get(k + 1) == hmap.get(k + 1) } and
-        a1.forall { case (k, _) => lmap.get(k - 1) == hmap.get(k - 1) }
+      a1.forall { case (k, _) => lmap.get(k) == hmap.get(k).get } and
+        a1.forall { case (k, _) => lmap.get(k) == hmap.get(k).get } and
+        a1.forall { case (k, _) =>
+          lmap.contains(k + 1) == hmap.contains(k + 1) && {
+            if (lmap.contains(k + 1)) lmap.get(k + 1) == hmap.get(k + 1).get
+            else true
+          }
+        } and
+        a1.forall { case (k, _) =>
+          lmap.contains(k - 1) == hmap.contains(k - 1) && {
+            if (lmap.contains(k - 1)) lmap.get(k - 1) == hmap.get(k - 1).get
+            else true
+          }
+        }
     }
   }
 }

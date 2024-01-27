@@ -21,6 +21,7 @@ import org.saddle.scalar.ScalarTagDouble
 import org.saddle.index.IndexImpl.IndexProperties
 import org.saddle.vec.VecImpl
 import org.saddle.locator.Locator
+import org.saddle.locatorall.LocatorAll
 
 /** Index with double keys
   */
@@ -30,10 +31,12 @@ class IndexDouble(keys: Vec[Double], val ord: ORD[Double])
 
   implicit private def o: ORD[Double] = ord
 
-  private lazy val (kmap, IndexProperties(contiguous, monotonic)) =
+  private lazy val (kmap, IndexProperties(contiguous, monotonic),_locatorAll) =
     IndexImpl.keys2map(this)
 
   protected def locator: Locator[Double] = kmap
+
+  protected def locatorAll : Option[LocatorAll[Double]] = _locatorAll
 
   def length: Int = keys.length
 

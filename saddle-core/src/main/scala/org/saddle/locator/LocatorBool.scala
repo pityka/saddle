@@ -16,7 +16,7 @@ package org.saddle.locator
 
 /** A bool-to-integer hash map
   */
-class LocatorBool extends Locator[Boolean] {
+private[saddle] class LocatorBool extends Locator[Boolean] {
   val map = Array.fill[Int](2)(-1)
   val cts = Array.ofDim[Int](2)
 

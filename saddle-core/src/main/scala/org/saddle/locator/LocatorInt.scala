@@ -18,18 +18,18 @@ import org.saddle.Buffer
 import org.saddle.util.IntMap
 
 @scala.annotation.nowarn
-class LocatorInt(sz: Int = Locator.INIT_CAPACITY) extends Locator[Int] {
+private[saddle] class LocatorInt(sz: Int = Locator.INIT_CAPACITY) extends Locator[Int] {
   val keyOrder = Buffer.empty[Int]
   val map = new IntMap
   val cts = new IntMap
 
   def contains(key: Int): Boolean = map.contains(key)
-  def get(key: Int): Int = map.get(key).getOrElse(-1)
+  def get(key: Int): Int = if (map.contains(key)) map.get(key) else -1 
   def put(key: Int, value: Int) = if (!contains(key)) {
     map.update(key, value)
     keyOrder.+=(key)
   }
-  def count(key: Int): Int = cts.get(key).getOrElse(0)
+  def count(key: Int): Int = if (cts.contains(key)) cts.get(key) else 0 
   def inc(key: Int): Int = {
     val u = count(key)
     cts.update(key, u + 1)

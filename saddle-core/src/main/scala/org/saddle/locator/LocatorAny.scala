@@ -18,7 +18,7 @@ import org.saddle.ST
 import org.saddle.Buffer
 
 @scala.annotation.nowarn
-class LocatorAny[T: ST](sz: Int = Locator.INIT_CAPACITY) extends Locator[T] {
+private[saddle] class LocatorAny[T: ST](sz: Int = Locator.INIT_CAPACITY) extends Locator[T] {
   val keyOrder = Buffer.empty[T]
   val map = new scala.collection.mutable.HashMap[T, Int]
   val cts = new scala.collection.mutable.HashMap[T, Int]
