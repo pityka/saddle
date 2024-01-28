@@ -172,6 +172,16 @@ class Series[X: ST: ORD, @spec(Int, Long, Double) T: ST](
     if (loc == -1) NA else at(loc)
   }
 
+  /** If a key exists, get the value associated with the
+    * first occurrence of that key.
+    * If the key does not exists, then throw.
+    * @return
+    */
+  def getRaw(key: X): T = {
+    val loc = index.getFirst(key)
+    raw(loc)
+  }
+
   /** Get the last value of the Series
     */
   def last: Scalar[T] = values.last

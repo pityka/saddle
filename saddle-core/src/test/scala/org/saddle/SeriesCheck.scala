@@ -283,6 +283,19 @@ class SeriesCheck extends Specification with ScalaCheck {
         }
       }
     }
+    "get raw (key) works" in {
+      implicit val ser = Arbitrary(SeriesArbitraries.dupSeriesDoubleWithNA)
+
+      forAll { (s: Series[Int, Double]) =>
+        (s.length > 0) ==> {
+          val loc = Gen.choose(0, s.length - 1)
+          forAll(loc) { i =>
+            val idx = s.index.raw(i)
+            s.getRaw(idx).toString must_== s.values.raw(s.index.findOne(_ == idx)).toString
+          }
+        }
+      }
+    }
 
     "last (key) works" in {
       implicit val ser = Arbitrary(SeriesArbitraries.dupSeriesDoubleWithNA)
