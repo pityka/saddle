@@ -23,6 +23,19 @@ class CsvCheck extends Specification with ScalaCheck {
   val crlf = "\r\n"
   val lf = "\n"
 
+  "csv99" in {
+    val data =
+      s"""-------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf--------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf---------,-,----,-,--,------,$crlf---------,-,----,-,-,,"""
+
+      println(data.toCharArray().map(_.toInt).toList.grouped(20).toList.mkString("\n"))
+    val src = ByteChannel(data)
+
+      println(CsvParser
+        .parseFromChannel[String](src, bufferSize = 20))
+    // frame.colAt(0) must_== Series("a", "", "")
+    1 must_== 1
+  }
+
   "csv string parsing works cols, empty" in {
     val data =
       s"""""""
