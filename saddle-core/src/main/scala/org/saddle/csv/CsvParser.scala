@@ -304,7 +304,8 @@ object CsvParser {
         s: Array[Char],
         from: Array[Int],
         to: Array[Int],
-        len: Int
+        len: Int,
+        eol: Array[Int]
     ): org.saddle.io.csv.Control = {
       var i = 0
 
@@ -344,7 +345,7 @@ object CsvParser {
           }
         }
 
-        if (toi < 0) {
+        if (toi < 0 || eol(i) < 0) {
           if (line == 0 && !emptyLoc && headerLocFields != locs.length) {
             error = true
             errorString =

@@ -1028,7 +1028,8 @@ private[csv] object DataBuffer {
       recordSeparatorMask: BitSet,
       quoteMask: BitSet,
       from: Array[Int],
-      to: Array[Int]
+      to: Array[Int],
+      eol: Array[Int]
   ): Int = {
     var i = 0
     from(i) = 0
@@ -1052,6 +1053,7 @@ private[csv] object DataBuffer {
         }
       }
       to(i) = (next + offset) * p
+      eol(i) = p
 
       i += 1
       from(i) = next + 1
@@ -1068,7 +1070,8 @@ private[csv] object DataBuffer {
       recordSeparatorMask: BitSet,
       quoteMask: BitSet,
       from: Array[Int],
-      to: Array[Int]
+      to: Array[Int],
+      eol: Array[Int]
   ): Int = {
     var i = 0
     from(i) = 0
@@ -1091,6 +1094,7 @@ private[csv] object DataBuffer {
         }
       }
       to(i) = (next + offset) * p
+      eol(i) = p
 
       i += 1
       from(i) = next + 1
@@ -1121,8 +1125,8 @@ private[csv] sealed trait DataBuffer {
     *     arrays. Elements present in the index array after this length are
     *     should not get read.
     */
-  def nextBatch: (Array[Char], Array[Int], Array[Int], Int)
-  def emitRest: (Array[Char], Array[Int], Array[Int], Int)
+  def nextBatch: (Array[Char], Array[Int], Array[Int], Int, Array[Int])
+  def emitRest: (Array[Char], Array[Int], Array[Int], Int, Array[Int])
 }
 
 private[csv] final class DataBuffer1(
@@ -1141,6 +1145,7 @@ private[csv] final class DataBuffer1(
 
   private val outputFrom = Array.ofDim[Int](bufferSize + 2)
   private val outputTo = Array.ofDim[Int](bufferSize + 2)
+  private val outputEol = Array.ofDim[Int](bufferSize + 2)
   private val quoteMask = BitSet.allocate(bufferSize)
   private val lfMask = BitSet.allocate(bufferSize)
   private val fieldSeparatorMask = BitSet.allocate(bufferSize)
@@ -1159,7 +1164,7 @@ private[csv] final class DataBuffer1(
 
   final def nextBatch = {
     filledNewData = false
-    (outputChars, outputFrom, outputTo, outputLength)
+    (outputChars, outputFrom, outputTo, outputLength, outputEol)
   }
 
   final def emitRest =
@@ -1167,21 +1172,23 @@ private[csv] final class DataBuffer1(
       if (filledNewData || !lineClosed) {
         val from = outputFrom(outputLength)
         val to = outputTo(outputLength)
+        val eol = outputEol(outputLength)
         outputFrom(0) = from
         outputTo(0) = to
+        outputEol(0) = eol
         // check unclosed quotes
         if (from >= 1 && outputChars(from - 1) == quoteChar) {
           if (to > from && outputChars(to - 1) == quoteChar) {
             outputTo(0) -= 1
-            (outputChars, outputFrom, outputTo, 1)
+            (outputChars, outputFrom, outputTo, 1, outputEol)
           } else {
-            (outputChars, outputFrom, outputTo, -2)
+            (outputChars, outputFrom, outputTo, -2, outputEol)
           }
-        } else (outputChars, outputFrom, outputTo, 1)
+        } else (outputChars, outputFrom, outputTo, 1, outputEol)
       } else {
-        (outputChars, outputFrom, outputTo, 0)
+        (outputChars, outputFrom, outputTo, 0, outputEol)
       }
-    } else ((outputChars, outputFrom, outputTo, outputLength))
+    } else ((outputChars, outputFrom, outputTo, outputLength, outputEol))
 
   private def fillBuffer(): Boolean = {
     if (!data.hasNext) {
@@ -1243,7 +1250,8 @@ private[csv] final class DataBuffer1(
           recordSeparatorMask = recordSeparatorMask,
           quoteMask = quoteMask,
           from = outputFrom,
-          to = outputTo
+          to = outputTo,
+          eol = outputEol
         )
 
         if (recordSeparatorMask.contains(next.limit() - 1)) {
@@ -1282,6 +1290,7 @@ private[csv] final class DataBuffer2(
 
   private val outputFrom = Array.ofDim[Int](bufferSize + 2)
   private val outputTo = Array.ofDim[Int](bufferSize + 2)
+  private val outputEol = Array.ofDim[Int](bufferSize + 2)
   private val quoteMask = BitSet.allocate(bufferSize)
   private val crMask = BitSet.allocate(bufferSize)
   private val lfMask = BitSet.allocate(bufferSize)
@@ -1299,7 +1308,7 @@ private[csv] final class DataBuffer2(
 
   final def nextBatch = {
     filledNewData = false
-    (outputChars, outputFrom, outputTo, outputLength)
+    (outputChars, outputFrom, outputTo, outputLength, outputEol)
   }
 
   final def emitRest =
@@ -1307,21 +1316,22 @@ private[csv] final class DataBuffer2(
       if (filledNewData || !lineClosed) {
         outputFrom(0) = outputFrom(outputLength)
         outputTo(0) = outputTo(outputLength)
+        outputEol(0) = outputEol(outputLength)
         val from = outputFrom(0)
         val to = outputTo(0)
         // check unclosed quotes
         if (from >= 1 && outputChars(from - 1) == quoteChar) {
           if (to > from && outputChars(to - 1) == quoteChar) {
             outputTo(0) -= 1
-            (outputChars, outputFrom, outputTo, 1)
+            (outputChars, outputFrom, outputTo, 1, outputEol)
           } else {
-            (outputChars, outputFrom, outputTo, -2)
+            (outputChars, outputFrom, outputTo, -2, outputEol)
           }
-        } else (outputChars, outputFrom, outputTo, 1)
+        } else (outputChars, outputFrom, outputTo, 1, outputEol)
       } else {
-        (outputChars, outputFrom, outputTo, 0)
+        (outputChars, outputFrom, outputTo, 0, outputEol)
       }
-    } else (outputChars, outputFrom, outputTo, outputLength)
+    } else (outputChars, outputFrom, outputTo, outputLength, outputEol)
 
   private def fillBuffer(): Boolean = {
     if (!data.hasNext) false
@@ -1383,7 +1393,8 @@ private[csv] final class DataBuffer2(
           recordSeparatorMask = recordSeparatorMask,
           quoteMask = quoteMask,
           from = outputFrom,
-          to = outputTo
+          to = outputTo,
+          eol = outputEol
         )
 
         if (recordSeparatorMask.contains(next.limit() - 1)) {

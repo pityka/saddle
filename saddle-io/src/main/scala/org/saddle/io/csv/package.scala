@@ -30,6 +30,9 @@ package object csv {
       * @param to
       *   Int array of indices of end (exclusive) offsets of tokens in the
       *   `char` array. Owned by the parser.
+      * @param eoll
+      *   Int array of indices of markers of end of line (true if == -1) in the
+      *   `char` array. Owned by the parser.
       * @param len
       *   Number of tokens. Do not read the index arrays beyond this number.
       * @return
@@ -40,7 +43,8 @@ package object csv {
         chars: Array[Char],
         from: Array[Int],
         to: Array[Int],
-        len: Int
+        len: Int,
+        eol: Array[Int]
     ): Control
   }
 
@@ -104,8 +108,8 @@ package object csv {
       var done = false
       var errorString = ""
       while (data.hasNext && !error && !done) {
-        val (chars, from, to, len) = data.nextBatch
-        callback(chars, from, to, len) match {
+        val (chars, from, to, len, eol) = data.nextBatch
+        callback(chars, from, to, len, eol) match {
           case Done => done = true
           case Next => ()
           case Error(err) =>
@@ -120,8 +124,8 @@ package object csv {
       }
 
       if (!error && !done) {
-        val (chars, from, to, len) = data.emitRest
-        callback(chars, from, to, len) match {
+        val (chars, from, to, len, eol) = data.emitRest
+        callback(chars, from, to, len, eol) match {
           case Error(err) =>
             error = true
             errorString = err

@@ -25,14 +25,12 @@ class CsvCheck extends Specification with ScalaCheck {
 
   "csv99" in {
     val data =
-      s"""-------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf--------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf---------,-,----,-,--,------,$crlf---------,-,----,-,-,,"""
+      s"""-------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf--------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf---------,-,----,-,--,,---$crlf---------,-,----,-,--,-----A,$crlf?--------,-,----,-,-,,"""
 
-      println(data.toCharArray().map(_.toInt).toList.grouped(20).toList.mkString("\n"))
     val src = ByteChannel(data)
 
-      println(CsvParser
-        .parseFromChannel[String](src, bufferSize = 20))
-    // frame.colAt(0) must_== Series("a", "", "")
+      CsvParser
+        .parseFromChannel[String](src, bufferSize = 20).toOption.get._1.numRows must_== 7
     1 must_== 1
   }
 
