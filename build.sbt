@@ -1,6 +1,6 @@
 import com.typesafe.tools.mima.core._
 
-lazy val scalaTestVersion = "3.2.18"
+lazy val scalaTestVersion = "3.2.19"
 
 lazy val scalaVersion213 = "2.13.10"
 lazy val scalaVersion3 = "3.3.0"
