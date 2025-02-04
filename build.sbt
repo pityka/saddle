@@ -169,7 +169,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     ) ++ specs ++ (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) => Nil
       case Some((2, _)) =>
-        List("org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0")
+        List("org.scala-lang.modules" %% "scala-collection-compat" % "2.13.0")
     })
   )
   .jsSettings(
@@ -181,7 +181,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) => Nil
       case Some((2, _)) =>
-        List("org.scala-lang.modules" %%% "scala-collection-compat" % "2.7.0")
+        List("org.scala-lang.modules" %%% "scala-collection-compat" % "2.13.0")
     })
   )
   .dependsOn(spire, io)
@@ -241,7 +241,7 @@ lazy val time = project
   .settings(
     name := "saddle-time",
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %% "scala-collection-compat" % "2.7.0",
+      "org.scala-lang.modules" %% "scala-collection-compat" % "2.13.0",
       "joda-time" % "joda-time" % "2.1",
       "org.joda" % "joda-convert" % "1.2",
       "org.scala-saddle" % "google-rfc-2445" % "20110304"
