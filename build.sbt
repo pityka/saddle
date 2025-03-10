@@ -165,7 +165,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
   .jvmSettings(
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-kernel" % "2.6.1"
+      "org.typelevel" %% "cats-kernel" % "2.13.0"
     ) ++ specs ++ (CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((3, _)) => Nil
       case Some((2, _)) =>
@@ -175,7 +175,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .jsSettings(
     fork := false,
     libraryDependencies ++= Seq(
-      "org.typelevel" %%% "cats-core" % "2.6.1",
+      "org.typelevel" %%% "cats-core" % "2.13.0",
       "org.specs2" %%% "specs2-core" % "4.19.2" % "test",
       "org.specs2" %%% "specs2-scalacheck" % "4.19.2" % "test"
     ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
