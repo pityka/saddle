@@ -51,9 +51,8 @@ import com.google.ical.compat.jodatime.DateTimeIteratorFactory
   * Please note:
   *
   * Some of the javadoc descriptions of RFC2445 fields are courtesy of python
-  * dateutil 2.1:
-  * -- http://labix.org/python-dateutil
-  * -- https://pypi.python.org/pypi/python-dateutil
+  * dateutil 2.1: -- http://labix.org/python-dateutil --
+  * https://pypi.python.org/pypi/python-dateutil
   */
 case class RRule private[saddle] (
     freq: Frequency,

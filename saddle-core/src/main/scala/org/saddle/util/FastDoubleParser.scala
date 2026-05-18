@@ -544,7 +544,7 @@ private[saddle] object FastDoubleParser {
 
   /** Parses a {@code Nan} production with optional trailing white space until
     * the end of the text. Given that the String contains a 'N' character at the
-    * current {@code index}. <blockquote> <dl>
+    * current {@code index} . <blockquote> <dl>
     * <dt><i>NanWithWhiteSpace:</i></dt> <dd>{@code NaN} <i>[WhiteSpace]
     * EOT</i></dd> </dl> </blockquote>
     *
